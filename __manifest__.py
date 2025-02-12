@@ -75,6 +75,7 @@
         "views/web/certificados_equipo.xml",
         "views/web/servicios_ejecucion.xml",
         "views/web/index_servicios_ejecuccion.xml",
+        "views/pmant_view_inherit_kanban.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
         "views/ventas/create_mantenimiento.xml",
         "views/ventas/sale_order_views.xml",

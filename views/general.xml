@@ -148,6 +148,8 @@
 				<header>
 					<field name="state_id" widget="statusbar" options="{'clickable': '1'}" invisible="archive" />
 					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico" icon="fa-envelope" />
+					<!-- CREAR BOTON DE CREAR OT -->
+					<button name="create_ot" string="Crear Ot" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
 				</header>
 				<sheet>
 					<group>

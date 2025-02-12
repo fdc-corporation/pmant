@@ -253,13 +253,30 @@ class Tarea(models.Model):
                 'context': ctx,
             }
 
+    def create_ot(self):
+        ot = self.env["maintenance.request"].create({
+            "name": self.name,
+            "tarea": self.id,
+            "empresa": self.cliente.id,
+            "ubicacion": self.ubicacion.id,
+            "order_compra" : self.oc_id.id
+        })
+
+        self.oc_id.ot_servicio = ot.id
+
+        return {
+            "type" : "ir.actions.act_window",
+            "name" : "Crear Solicitud de Mantenimiento",
+            "res_model" : "maintenance.request",
+            "view_mode" : "form",
+            "res_id" : ot.id,
+
+        }
+
+
 
 
     # @api.multi
-    
-            
-
-   
     # @api.onchange('state_id')
     # def fecha_prox_equipo(self):
     #     for record in self:

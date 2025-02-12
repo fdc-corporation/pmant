@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pmant_kanban_oc_inherit_module_name" model="ir.ui.view">
+        <field name="name">oc.compras.view.form.inherit</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="inside">
+                <field name="oc_cliente" />
+            </xpath>
+            <xpath expr="//span[@name='schedule_date']" position="before">
+                <span t-if="record.oc_cliente">OC: <field name="oc_cliente" /></span>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="form_pmant_oc_inherit_module_name" model="ir.ui.view">
+        <field name="name">oc.compras.view.form.inherit</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_compra']" position="before">
+                <field name="oc_cliente" string="OC cliente" invisible="not order_compra" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

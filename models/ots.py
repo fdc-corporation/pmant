@@ -37,6 +37,7 @@ class OTS(models.Model):
     is_tecnico = fields.Boolean(
         compute="_compute_is_tecnico", string="Is Técnico", store=False
     )
+    oc_cliente = fields.Char(related="order_compra.oc", store=True)
     not_oc = fields.Boolean(string="No tiene OC?")
 
     @api.depends("estado")
@@ -44,7 +45,7 @@ class OTS(models.Model):
         if self.estado:
             self.tex = "Urgente"
 
-    @api.depends("tarea", "order_compra")
+    @api.onchange("tarea", "order_compra")
     def _compute_order_compra(self):
         for record in self:
             if record.tarea and record.tarea.oc_id:
