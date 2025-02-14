@@ -46,7 +46,8 @@
 									</g>
 								</svg>
 								<span>
-									<span t-esc="equipo.ubicacion.parent_id.name">
+								
+									<span t-esc="equipo.ubicacion.parent_id.name or ''">
 									</span>
 									/
 									<span t-esc="equipo.ubicacion.name" />

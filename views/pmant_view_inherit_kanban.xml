@@ -10,7 +10,7 @@
                 <field name="oc_cliente" />
             </xpath>
             <xpath expr="//span[@name='schedule_date']" position="before">
-                <span t-if="record.oc_cliente">OC: <field name="oc_cliente" /></span>
+                <span t-if="record.oc_cliente">OC: <field name="oc_cliente" /></span><br></br>
             </xpath>
         </field>
     </record>

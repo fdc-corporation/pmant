@@ -4,7 +4,7 @@ odoo.define('website.website',function(require){
 
   document.querySelector()
 
-  document.addEventListener("click", e  => {
-    document.removeChild()
-  })
+  document.addEventListener("load")
 })
+
+ 
