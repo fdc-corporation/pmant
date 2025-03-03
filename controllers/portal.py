@@ -279,7 +279,7 @@ class PortalPmant(http.Controller):
         headers = [
                 ('Content-Type', 'application/pdf'),
                 ('Content-Length', len(content)),
-                ('Content-Disposition', 'attachment; filename=' + "OT-" + tarea.name + ".pdf;")
+                ('Content-Disposition', 'attachment; filename=' + "Reporte Tecnico.pdf;")
         ]
         return request.make_response(content, headers=headers)
 
