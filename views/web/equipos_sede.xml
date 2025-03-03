@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'fdccorp.com.pe'">
+							<t t-if="dominio_web == 'equiposindustriales.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -18,7 +18,7 @@
 									Compresores de Tornillo S.A.C.
 								</span>
 							</t>
-							<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -81,7 +81,7 @@
 							<div class="condicion-estado">
 								<span>
 									<strong>
-										Conficion :
+										Condición :
 									</strong>
 									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
 								</span>
@@ -110,14 +110,22 @@
 					</div>
 				</div>
 				<div class="main-card-equipos">
-					<div>
-                        <h3>Mis Sedes</h3>
-                    </div>
+					<div class="titulo-seccion" style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
+						<h3>
+							Mis Equipos
+						</h3>
+						<form style=" display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/equipos/'" method="get" class="form-inline ">
+							<input type="text" name="filtro" class="form-control mr-2" placeholder="Buscar equipos..." t-att-value="filtro or ''" />
+							<button type="submit" class="btn btn-primary">
+								Buscar
+							</button>
+						</form>
+					</div>
 					<div class="main-equipos">
 						<t t-if="len(equipos) > 0">
 							<t t-foreach="equipos" t-as="equipo">
 								<a t-att-href="'/my/equipos/' + str(equipo.id) + '/detalles'" class="card-equipo">
-                                    <img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % equipo.id" alt="Sede Image"/>
+									<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % equipo.id" alt="Sede Image" />
 									<div class="text-card-equipo">
 										<span t-esc="equipo.name" />
 										<span t-esc="equipo.marca" />
@@ -127,7 +135,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Lo sentimos.. al parecer no cuenta con sedes registrados a su cuenta de usuario.
+							Lo sentimos... Al parecer, no cuenta con equipos registradas a su cuenta de usuario.
 						</t>
 					</div>
 					<!-- Paginación -->
@@ -136,8 +144,9 @@
 							<ul class="pagination">
 								<li t-if="pagina_actual &gt; 1" class="page-item">
 									<a t-att-href="'/my/sede/%s/equipos/page/%s' % (ubicacion.id, pagina_actual - 1)" class="page-link" aria-label="Previous">
-										<span class="page-link">« Anterior</span>
-
+										<span class="page-link">
+											« Anterior
+										</span>
 									</a>
 								</li>
 								<!-- Enlaces a las páginas -->
@@ -151,7 +160,9 @@
 								<!-- Enlace a la página siguiente -->
 								<li t-if="pagina_actual &lt; total_paginas" class="page-item">
 									<a t-att-href="'/my/sede/%s/equipos/page/%s' % (ubicacion.id, pagina_actual + 1)" class="page-link" aria-label="Next">
-										<span class="page-link">Siguiente »</span>
+										<span class="page-link">
+											Siguiente »
+										</span>
 									</a>
 								</li>
 							</ul>

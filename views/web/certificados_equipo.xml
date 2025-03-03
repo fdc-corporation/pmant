@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'fdccorp.com.pe'">
+							<t t-if="dominio_web == 'equiposindustriales.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -18,7 +18,7 @@
 									Compresores de Tornillo S.A.C.
 								</span>
 							</t>
-							<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -39,7 +39,7 @@
 						<div class="detalle-equipo-header">
 							<div class="name-equipo">
 								<label>
-									Nombre
+									Propitario
 								</label>
 								<h4 t-esc="equipo.name">
 								</h4>
@@ -63,14 +63,14 @@
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Propitario :
+										Propietario :
 									</label>
 									<span t-esc="equipo.propietario.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Ubicacion :
+										Ubicación :
 									</label>
 									<span t-esc="equipo.ubicacion.name">
 									</span>
@@ -86,7 +86,7 @@
 								</div>
 								<div class="propiedad">
 									<label>
-										Fecha Asignada :
+										Fecha asignada :
 									</label>
 									<span t-esc="equipo.assign_date">
 									</span>
@@ -97,29 +97,14 @@
 				</div>
 				<div class="main-card-sedes">
                     <div>
-                        <h3>Certificados de Operatividad</h3>
+                        <h3>Certificados de operatividad</h3>
                     </div>
 					<div class="main-adjuntos">
 						<t t-if="len(equipo.certificados) > 0">
 							<t t-foreach="equipo.certificados" t-as="adjunto">
 								<t t-set="extension" t-value="adjunto.name.split('.')[-1].lower()" />
 								<div class="card-adjunto" >
-									<t t-if="extension == 'pdf'">
-										<img src="/pmant/static/src/img/pdf.webp" alt="PDF Icon" />
-									</t>
-									<!-- Icono para imágenes -->
-									<t t-if="extension in ['jpg', 'jpeg', 'png', 'gif']">
-										<img style="padding: 10px;" src="/pmant/static/src/img/png.png" alt="Image Icon" />
-									</t>
-									<!-- Icono para documentos de Word -->
-									<t t-if="extension in ['doc', 'docx']">
-										<img src="/pmant/static/src/img/docx.png" alt="Word Icon" />
-									</t>
-									<!-- Icono para otros tipos de archivos -->
-									<t t-if="extension not in ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx']">
-										<img src="/pmant/static/src/img/archivo.jpg" alt="File Icon" />
-									</t>
-                                    
+									<img src="/pmant/static/src/css/iconos/certificado.png" />
                                     <span t-esc="adjunto.write_date" t-options="{&quot;widget&quot;: &quot;date&quot;}" class="fecha_generada bg-primary"></span>
 									<p t-esc="adjunto.name" > </p>
 									<a t-att-href="'/descargas/certificado/equipo/' + str(adjunto.id)" class="bg-primary">
@@ -132,11 +117,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Aun no cuenta con Adjuntos registrados en el equipo, solicite un nuevo Adjunto para este equipo
-							<a t-att-href="'/my/equipos/' + str(equipo.id) + '/detalles'">
-								Aqui
-							</a>
-							.
+							Aún no cuenta con certificados registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo. 
 						</t>
 					</div>
 					

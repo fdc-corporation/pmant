@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+	<record id="view_maintenance_request_filter" model="ir.ui.view">
+		<field name="name">maintenance.request.search</field>
+		<field name="model">maintenance.request</field>
+		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_search"/>
+		<field name="arch" type="xml">
+			<search>
+			<field name="order_compra" />
+				<filter name="filter_my_orders" groups="pmant.group_pmant_tecnico" string="Mis Órdenes" domain="[('user_id', '=', uid)]"/>
+                <filter string="N° de OC" name="filter_oc" domain="[('order_compra','=', order_compra)]"/>
+			</search>		
+		</field>
+	</record>
+	 <record id="maintenance.hr_equipment_request_action" model="ir.actions.act_window">
+            <field name="context" eval="{'search_default_filter_my_orders': 1}"/>
+    </record>
+
 	  <!-- Definición de la Secuencia -->
 	  <record id="seq_ot_mantenimiento" model="ir.sequence">
 		<field name="name">OT mantenimiento</field>
@@ -22,9 +39,6 @@
 				<button name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
 				<button name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
 			</xpath>
-			<!-- <xpath expr="//div[@class='oe_title']/h1" position="before">
-				<field name="sequence" readonly="1" style="width: auto; margin-right: 10px;"/>
-			</xpath> -->
 		
 			<xpath expr="//field[@name='maintenance_type']" position="after">
 				<field name="id" invisible="1" />
@@ -36,10 +50,12 @@
 				<field name="empresa" readonly="1" />
 				<field name="ubicacion" readonly="1" />
 				<field name="oportunidad" readonly="1"/>
-				<field name="order_compra" invisible="stage_id in (1, 2)" />
+				<field name="is_tecnico" invisible="1"/>
+				<field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('cliente', '=', empresa)]" />
+				<field name="not_oc" />
 				<field name="selec_sunat" invisible="stage_id in (1, 2, 3)" />
-				<field name="factura_sunat" invisible="not selec_sunat" />
-                <field name="factura" invisible="stage_id in (1, 2, 3) and selec_sunat" />
+				<field name="factura_sunat"  invisible="not selec_sunat"/>
+                <field name="factura"  invisible="stage_id in (1, 2, 3) and selec_sunat or is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('partner_id', '=', empresa)]"  />
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="after">
 				<field name="subodinados" widget="many2many_tags" ></field>
@@ -47,11 +63,14 @@
 			<xpath expr="//field[@name='schedule_date']" position="before">
 				<field name="event_id" readonly="1" ></field>
 			</xpath>
-			<xpath expr="//field[@name='maintenance_type']" position="attributes">
-				<attribute name="invisible">
-					1
-				</attribute>
+
+
+
+			<!-- LIMITRAR VISIVILIDA DE CAMPOSEN ORDENER DE TRABAJO -->
+			<xpath expr="//field[@name='maintenance_team_id']" position="attributes">
+				<attribute name="invisible" >is_tecnico</attribute>
 			</xpath>
+			
 			<xpath expr="//field[@name='close_date']" position="attributes">
 				<attribute name="invisible">
 					1
@@ -67,7 +86,38 @@
 					1
 				</attribute>
 			</xpath>
+			<xpath expr="//field[@name='maintenance_type']" position="attributes">
+				<attribute name="invisible">
+					1
+				</attribute>
+			</xpath>
+
+			<!-- CAMPOS SOLO LECTURA EN EL MODELO ORDENES DE MANTENIMIENTO -->
+			<xpath expr="//field[@name='employee_id']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='user_id']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='schedule_date']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='subodinados']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
 			
+			<xpath expr="//field[@name='duration']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='priority']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='email_cc']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
+			<xpath expr="//field[@name='company_id']" position="attributes">
+				<attribute name="readonly" >is_tecnico</attribute>
+			</xpath>
 		</field>
 	</record>
 	<!-- FIN VISTA MAINTANCE REQUEST -->

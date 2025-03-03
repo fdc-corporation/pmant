@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'fdccorp.com.pe'">
+							<t t-if="dominio_web == 'equiposindustriales.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -18,7 +18,7 @@
 									Compresores de Tornillo S.A.C.
 								</span>
 							</t>
-							<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -63,14 +63,14 @@
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Propitario :
+										Propietario :
 									</label>
 									<span t-esc="equipo.propietario.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Ubicacion :
+										Ubicación :
 									</label>
 									<span t-esc="equipo.ubicacion.name">
 									</span>
@@ -79,14 +79,14 @@
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Categoria :
+										Categoría :
 									</label>
 									<span t-esc="equipo.category_id.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Fecha Asignada :
+										Fecha asignada :
 									</label>
 									<span t-esc="equipo.assign_date">
 									</span>
@@ -96,9 +96,39 @@
 					</div>
 				</div>
 				<div class="main-card-sedes">
-                    <div>
-                        <h3>Historial de Mantenimiento</h3>
-                    </div>
+					<div style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
+						<h3>
+							Historial de mantenimiento
+						</h3>
+						<div style="display:flex; gap:10px;">
+							<!-- Example single danger button -->
+							<div class="btn-group">
+								<div>
+									<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+										Filtros de Fechas
+									</button>
+									<ul class="dropdown-menu">
+										<li>
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=fecha_ejec'">
+												Ordenar por fecha ejecutada
+											</a>
+										</li>
+										<li>
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=fecha_ejecprox'">
+												Ordenar por fecha proxima
+											</a>
+										</li>
+									</ul>
+								</div>
+								<!--
+								<form>
+								
+								
+								</form>
+								-->
+							</div>
+						</div>
+					</div>
 					<div class="main-sedes">
 						<t t-if="len(equipo.planequipo) > 0">
 							<t t-foreach="equipo.planequipo" t-as="plan">
@@ -115,7 +145,7 @@
 											</span>
 											<span>
 												<span>
-													Fecha de ejecucion :
+													Fecha de ejecución :
 												</span>
 												<span t-esc="plan.fecha_ejec" />
 											</span>
@@ -127,7 +157,7 @@
 											</span>
 										</div>
 									</div>
-									<a t-att-href="'/descargas/reporte/mantenimiento/%d' % plan.id" class="bg-primary">
+									<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.tarea.id)" class="bg-primary">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
 											<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
 											<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
@@ -137,11 +167,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Aun no cuenta con servicios registrados en este equipo, solicta
-							<a t-att-href="'/my/equipos/%d/detalles' % equipo.id">
-								Aqui
-							</a>
-							un nuevo servicio.
+							Aún no cuenta con Servicios registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
 						</t>
 					</div>
 					<!-- Paginación -->

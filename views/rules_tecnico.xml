@@ -20,19 +20,31 @@
             <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
             <field name="perm_read" eval="1"/>
             <field name="perm_write" eval="1"/>
-            <field name="perm_create" eval="0"/>
+            <field name="perm_create" eval="1"/>
             <field name="perm_unlink" eval="0"/>
             <field name="domain_force">
-                 ['&amp;',('tarea.ots','!=',False),('tarea.ots.user_id','!=',False),('tarea.ots.user_id','=',user.id),('ots.stage_id.id','in',(1,2))]
+                 ['&amp;',('tarea.ots','!=',False),('tarea.ots.user_id','!=',False),('tarea.ots.user_id','=',user.id)]
             </field>
     </record>
+
+     <record id="only_ot_mantenimiento_ver" model="ir.rule">
+        <field name="name">Ver las OT de mantenimiento</field>
+        <field name="model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+        </record>
+
+    
     <record id="only_otsid_can_vere2" model="ir.rule">
             <field name="name">Only OTS can modify ver</field>
             <field name="model_id" ref="model_planequipo_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
             <field name="perm_read" eval="1"/>
             <field name="perm_write" eval="1"/>
-            <field name="perm_create" eval="0"/>
+            <field name="perm_create" eval="1"/>
             <field name="perm_unlink" eval="0"/>
             <field name="domain_force">
             ['&amp;',('tarea.create_uid','=',user.id),'|',('tarea.ots','=',False),('tarea.ots.user_id','=',user.id)]
@@ -61,7 +73,7 @@
             <field name="perm_create" eval="0"/>
             <field name="perm_unlink" eval="0"/>
             <field name="domain_force">
-            ['&amp;',('ots','!=',False),('ots.user_id','!=',False),('ots.user_id','=',user.id),('ots.stage_id.id','in',(1,2))]
+            ['&amp;',('ots','!=',False),('ots.user_id','!=',False),('ots.user_id','=',user.id)]
             </field>
     </record>
     <record id="tecnico_tareaid" model="ir.rule">

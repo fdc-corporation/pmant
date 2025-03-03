@@ -4,28 +4,28 @@
            <field name="name">Personalv.view</field>
            <field name="model">hr.employee</field>
            <field name="inherit_id" ref="hr.view_employee_form"/>
-     <field name="arch" type="xml">
-        
-         <xpath expr="//sheet[1]" position="after"> 
+      <field name="arch" type="xml">
+          
+          <xpath expr="//sheet[1]" position="after"> 
 
-           <sheet>
-             <notebook> 
-              <page string="Firma">
-                 <field name="firma" string="Firma" widget="image" class="col-sm-2 col-md-3"/>
-                 <group>
-                   <field name="dni"/>
-                 </group>
-              </page>
-              
-            </notebook>
-           </sheet>
-         </xpath>
-     </field>
+            <sheet>
+              <notebook> 
+                <page string="Firma">
+                  <field name="firma" string="Firma" widget="image" class="col-sm-2 col-md-3"/>
+                  <group>
+                    <field name="dni"/>
+                  </group>
+                </page>
+                
+              </notebook>
+            </sheet>
+          </xpath>
+      </field>
 
    </record>
    
 
-
+  
 
 
    <!--FIN VISTA MAINTANCE REQUEST -->
@@ -35,4 +35,3 @@
 
 
 </odoo>
-

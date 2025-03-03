@@ -17,45 +17,46 @@
 				<t t-call="web.external_layout">
 					<div class="page">
 						<h2 style="text-align: left;color:black !important;">
-							Reporte Técnico
-						</h2>
+								Reporte Técnico
+							</h2>
 						<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 							<tr>
 								<td colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
-										Orden de Trabajo
+											Orden de Trabajo
+											
 										
-									
+										
 									<!--
-										<div style="width:100%; height:4.5px; background-image: linear-gradient(to right, #3191C5, #22629D, #E31E24, #000000);" />
-										-->
+											<div style="width:100%; height:4.5px; background-image: linear-gradient(to right, #3191C5, #22629D, #E31E24, #000000);" />
+											-->
 								</td>
 							</tr>
 							<!-- Informacion del documento -->
 							<tr>
 								<td class="col-6">
 									<strong>
-											N° de Orden:
-										</strong>
+												N° de Orden:
+											</strong>
 									<span t-field="doc.name"/>
 								</td>
 								<td class="col-6">
 									<strong>
-											Tipo de servicio:
-										</strong>
+												Tipo de servicio:
+											</strong>
 									<span t-field="doc.tipo"/>
 								</td>
 							</tr>
 							<tr>
 								<td class="col-6">
 									<strong>
-											Fecha Programada:
-										</strong>
+												Fecha Programada:
+											</strong>
 									<span t-field="doc.ots.schedule_date"/>
 								</td>
 								<td class="col-6">
 									<strong>
-											Fecha Ejecutada:
-										</strong>
+												Fecha Ejecutada:
+											</strong>
 									<t t-if="doc.planequipo">
 										<span t-field="doc.planequipo[0].fecha_ejec"/>
 									</t>
@@ -65,100 +66,113 @@
 							<tr>
 								<td class="col-6">
 									<strong>
-											Detalles del cliente
-										</strong>
+												Detalles del cliente
+											</strong>
 									<br/>
-										Cliente:
+											Cliente:
+											
 										
-									
+										
 									<span t-field="doc.cliente"/>
 									<br/>
-										Teléfono:
+											Teléfono:
+											
 										
-									
+										
 									<span t-field="doc.cliente.mobile"/>
 									<br/>
-										Email:
+											Email:
+											
 										
-									
+										
 									<span t-field="doc.cliente.email"/>
 								</td>
 								<td class="col-6">
 									<strong>
-											Dirección:
-										</strong>
+												Dirección:
+											</strong>
 									<span t-field="doc.cliente.street"/>
 									<span t-field="doc.cliente.street2"/>
 									<br/>
 									<span t-field="doc.cliente.l10n_pe_district"/>
-										-
+											-
+											
 										
-									
+										
 									<span t-field="doc.cliente.city_id"/>
-										-
+											-
+											
 										
-									
+										
 									<span t-field="doc.cliente.state_id"/>
-										-
+											-
+											
 										
-									
+										
 									<span t-field="doc.cliente.country_id"/>
 								</td>
 							</tr>
 							<tr>
 								<td class="col-6">
 									<strong>
-											Detalles del Servicio
-										</strong>
+												Detalles del Servicio
+											</strong>
 									<br/>
-										Prioridad :
+											Prioridad :
+											
 										
-									
+										
 									<span t-field="doc.ots.priority"/>
 								</td>
 								<td class="col-6">
 									<br/>
-										Duracion :
+											Duracion :
+											
+										
+										
+									<span t-field="doc.ots.duration"/>
+											horas
 										
 									
-									<span t-field="doc.ots.duration"/>
-										horas
 									
-								
 								</td>
 							</tr>
 							<!-- DETALLER DE LA COMPAÑIA -->
 							<tr style="margin-bottom: 0px;">
 								<td class="col-6">
 									<strong>
-											Detalles de la compañía
-										</strong>
+												Detalles de la compañía
+											</strong>
 									<br/>
-										Compañía:
+											Compañía:
+											
 										
-									
+										
 									<span t-field="doc.ots.company_id"/>
 									<br/>
-										Responsable:
+											Responsable:
+											
 										
-									
+										
 									<span t-field="doc.ots.user_id"/>
 									<!-- <br/>Supervisor: -->
 									<!-- <span t-field="doc.supervisor_id"/> -->
 								</td>
 								<td class="col-6">
 									<strong>
-											Detalles del Equipo de Mantenimiento
-										</strong>
+												Detalles del Equipo de Mantenimiento
+											</strong>
 									<br/>
-										Responsable:
+											Responsable:
+											
 										
-									
+										
 									<span t-field="doc.ots.maintenance_team_id"/>
 									<br/>
-										Técnico:
+											Técnico:
+											
 										
-									
+										
 									<span t-field="doc.ots.user_id"/>
 								</td>
 							</tr>
@@ -170,13 +184,14 @@
 										<tr>
 											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
 												<strong>
-														Activos
-													</strong>
+															Activos
+														</strong>
 											</td>
 										</tr>
 										<tr>
 											<td colspan="2">
-													Plan de Tarea :
+														Plan de Tarea :
+														
 													
 												<span t-field="doc.ots.tarea"/>
 											</td>
@@ -184,8 +199,8 @@
 												<center>
 													<img t-attf-src="data:image/jpg;base64,{{ pe.equipo.qr_image }}" style="width:80px;height:80px;display:block;"/>
 													<span>
-															Historial del Equipo
-														</span>
+																Historial del Equipo
+															</span>
 												</center>
 											</td>
 										</tr>
@@ -193,60 +208,110 @@
 										<tr>
 											<td>
 												<strong>
-														Detalles de la máquina
-													</strong>
+															Detalles de la máquina
+														</strong>
 												<br/>
-													Máquina:
+														Máquina:
+														
 													
 												<span t-field="pe.equipo"/>
-													-
+														-
+														
 													
 												<span t-field="pe.equipo.marca"/>
 												<br/>
-													Propietario:
+														Propietario:
+														
 													
 												<span t-field="pe.equipo.propietario"/>
 												<br/>
-													Ubicacion:
+														Ubicacion:
+														
 													
 												<span t-field="pe.equipo.ubicacion"/>
 											</td>
 											<td>
-													Marca de la máquina:
+														Marca de la máquina:
+														
 													
 												<span t-field="pe.equipo.marca"/>
 												<br/>
-													MFG Year:
+														MFG Year:
+														
 													
 												<span t-field="pe.equipo.effective_date"/>
 												<br/>
-													N° de Serie:
+														N° de Serie:
+														
 													
 												<span t-field="pe.equipo.serial_no"/>
 											</td>
 										</tr>
 									</table>
 									<br/>
+										<t t-if="doc.is_evaluacion">
+											<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+												<thead>
+													<tr class="no-wrap">
+														<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+															<strong>
+																Historial de Recepción
+															</strong>
+														</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+															<strong>Datos del Receptor </strong>
+														</th>
+														<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+															<strong>Comentarios de recepción</strong>
+														</th>
+													</tr>
+													<tr>
+														<td style="whidth:50%;">
+															<strong>
+															Receptor:
+															</strong>
+															<span t-esc="doc.create_user.name"/>
+														</td>
+														<td style="whidth:50%;">
+															<span t-esc="doc.comentario_tecnico"/>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+											<ul>
+												<t t-foreach="doc.adjuntos_evaluaciones" t-as="imagen">
+													<li>
+														<span style="font-size:12px;" t-esc="imagen.comentario"/>
+													</li>
+												</t>
+											</ul>
+										</t>
+	
 									<div>
 										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 											<tr>
 												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
-														Procesos
-													</td>
+															Procesos del servicio
+														</td>
 											</tr>
 											<tr>
 												<th scope="col">
-														Grupo
-													</th>
+															Grupo
+														</th>
 												<th scope="col">
-														Proceso
-													</th>
+															Proceso
+														</th>
 												<th scope="col">
-														Resultado
-													</th>
+															Resultado
+														</th>
 												<th scope="col">
-														Comentario
-													</th>
+															Comentario
+														</th>
 											</tr>
 											<t t-foreach="pe.procesos" t-as="pr">
 												<tr>
@@ -258,16 +323,10 @@
 													</td>
 													<td>
 														<center>
-															<t t-if="pr.estado.name == 'OK'">
-																<img src="https://fdc-corporation.com/public/assets/img/erp/1.png" style="width:16px;"/>
-															</t>
-															<t t-if="pr.estado.name == 'NO'">
-																<img src="https://fdc-corporation.com/public/assets/img/erp/2.png" style="width:16px;"/>
-															</t>
-															<t t-if="pr.estado.name == 'N/A'">
-																<img src="https://fdc-corporation.com/public/assets/img/erp/3.png" style="width:16px;"/>
-															</t>
-														</center>
+                                                            <t t-if="pr.estado">
+                                                                <img t-attf-src="data:image/jpg;base64,{{ pr.estado.icono }}" alt="" class="" style="width:16px;"/>
+                                                            </t>
+                                                        </center>
 														<!-- <span t-field="pr.estado"/> -->
 													</td>
 													<td>
@@ -281,17 +340,17 @@
 										<tr>
 											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
 												<font style="vertical-align: inherit;">
-														Detalles de Procesos
-													</font>
+															Detalles de Procesos
+														</font>
 											</td>
 										</tr>
 										<tr>
 											<th style="text-align:center;">
-													Comentarios
-												</th>
+														Comentarios
+													</th>
 											<th scope="col" style="text-align:center;">
-													Adjuntos
-												</th>
+														Adjuntos
+													</th>
 										</tr>
 									</table>
 									<t t-foreach="pe.procesos" t-as="pr">
@@ -301,14 +360,14 @@
 												<tr>
 													<td>
 														<strong>
-																Proceso:
-															</strong>
+																	Proceso:
+																</strong>
 														<span t-field="pr.proceso"/>
 													</td>
 													<td>
 														<strong>
-																Descripcion:
-															</strong>
+																	Descripcion:
+																</strong>
 														<span t-field="pr.descripcion"/>
 													</td>
 												</tr>
@@ -317,8 +376,8 @@
 														<td class="col-6">
 															<t t-if="ad.comentario != null">
 																<strong>
-																		Comentario de la imagen:
-																	</strong>
+																			Comentario de la imagen:
+																		</strong>
 																<span t-field="ad.comentario"/>
 															</t>
 														</td>
@@ -345,8 +404,8 @@
 						<div>
 							<div style="width:250px;font-size=12px; float:left;">
 								<span style="font-size:12px;">
-										Firma digital del cliente
-									</span>
+											Firma digital del cliente
+										</span>
 								<div class="" style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
 									<t t-if="not doc.adjunto">
 										<img t-attf-src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;"/>
@@ -357,19 +416,19 @@
 								</div>
 								<p style="margin:0px; 0px -5px 0px;font-size:12px">
 									<strong style="font-size:12px;">
-											Firmado por:
-										</strong>
+												Firmado por:
+											</strong>
 									<t t-esc="doc.namefirma"/>
 								</p>
 								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
 									<strong style="font-size:12px;">
-											DNI:
-										</strong>
+												DNI:
+											</strong>
 									<t t-esc="doc.dni"/>
 								</p>
 								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
 									<strong>Comentario:</strong>
-								<t t-esc="doc.comentario"/>
+									<t t-esc="doc.comentario"/>
 								</p>
 							</div>
 						</div>

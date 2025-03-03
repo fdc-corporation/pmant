@@ -57,47 +57,29 @@
 							<field name="avisado_prox" invisible="1" />
 						</group>
 					</page>
-					<!-- <page string="Consumibles">
-						<field name="consumibles">
-                            <tree editable="bottom" readonly="0">
-								<field name="producto_id" string="Nombre" readonly="0"/>
-								<field name="descripcion" string="Descripcion" readonly="0"/>
-								<field name="cantidad" string="Cantidad" readonly="0"/>
-							</tree>
-                        </field>					
-					</page> -->
-					<!-- <page string="Mantenimientos Correctivos">
-						<field name="ot_correctivos" readonly="1">
-							<tree >
-								<field name="maquina" string="Maquina"></field>
-								<field name="plan_trabajo" string="Plan de trabajo"></field>
-								<field name="state_ot" string="Estado"></field>
-								<field name="f_solicitud" string="Fecha de solicitud"></field>
-								<field name="fecha_cierre" string="Fecha de cierre"></field>
-							</tree>
-						</field>
-					</page> -->
-					<page string="Adjuntos">
-						<field name="adjunto" string="Adjunto" />
-					</page>
 					<page string="Certificados">
 						<field name="certificados" string="Certificados" >
-							<tree >
+							<tree>
 								<field name="name" string="Nombre del archivo"/>
 								<field name="type" string="Tipo de archivo"/>
 								<field name="mimetype" string="Tipo de archivo"/>
 								<field name="write_date" string="Fecha Generada"/>
-								<!-- <button name="download_file" type="object" string="Descargar archivo" /> -->
-
 							</tree>
+							 
 						</field>
 					</page>
 					<page string="QR Imagen">
 						<group>
-							<field name="qr_image" string="QR IMAGEN" widget="image" class="col-sm-2 col-md-3" />
+							<field name="qr_image" string="QR IMAGEN" widget="image" class="col-sm-2 col-md-3" options="{'preview_image': 'qr_image', 'size': [0, 90]}"  />
 							<field name="qr_image2" string="Descargar QR" />
 							<field name="url_qr" string="URL QR" />
 						</group>
+					</page>
+					<page string="Adjuntos">
+						<field name="adjunto" string="Adjunto" />
+					</page>
+					<page string="Documentos">
+						<field name="documentos" string="Documentos" />
 					</page>
 				</notebook>
 			</xpath>
@@ -117,21 +99,6 @@
 					True
 				</attribute>
 			</xpath>
-			<!-- <xpath expr="//field[@name='next_action_date']" position="attributes">
-				<attribute name="invisible">
-					True
-				</attribute>
-			</xpath> -->
-			<!-- <xpath expr="//field[@name='period']" position="attributes">
-				<attribute name="invisible">
-					True
-				</attribute>
-			</xpath> -->
-			<!-- <xpath expr="//field[@name='maintenance_duration']" position="attributes">
-				<attribute name="invisible">
-					True
-				</attribute>
-			</xpath> -->
 			<xpath expr="//page[3]" position="attributes">
 				<attribute name="invisible">
 					True

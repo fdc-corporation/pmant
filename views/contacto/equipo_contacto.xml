@@ -9,8 +9,9 @@
               </xpath>
             <!-- Inserta una nueva página en el notebook -->
             <xpath expr="//notebook" position="inside">
-                <page string="Equipos">
-                    <field name="equipos_ubicacion">
+                <page string="Equipos" invisible="is_tecnico" >
+                    <field name="is_tecnico" invisible="true"></field>
+                    <field name="equipos_ubicacion" >
                         <tree string="Equipos">
                             <field name="name"/>
                             <field name="assign_date"/>
@@ -24,6 +25,24 @@
                     </field>
                 </page>
             </xpath>
+            <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">is_tecnico</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='equipos']" position="attributes">
+                <attribute name="invisible">is_tecnico</attribute>
+            </xpath>
+            <!-- <xpath expr="//page[@name='sunat_details']" position="attributes">
+                <attribute name="invisible">is_tecnico</attribute>
+            </xpath> -->
+            <xpath expr="//page[@name='accounting']" position="attributes">
+                <attribute name="invisible">is_tecnico</attribute>
+            </xpath>
         </field>
     </record>
+
+
+
+
+
+
 </odoo>

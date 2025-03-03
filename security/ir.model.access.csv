@@ -28,18 +28,19 @@ pmant_cliente_emp_acc12,CLIENTE_PROCESO,model_proceso_mantenimiento,pmant.group_
 
 
 pmant_tecnico_acc,TECNICO_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
-pmant_tecnico_acc2,TECNICO_PLAN,model_plan_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
+pmant_tecnico_acc2,TECNICO_PLAN,model_plan_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
 pmant_tecnico_acc3,TECNICO_TAREA,model_tarea_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
 pmant_tecnico_acc4,TECNICO_TIPO_TAREA,model_tipotarea_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc6,TECNICO_PROCESOS,model_proceso_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
 pmant_tecnico_acc7,TECNICO_ESTADOPROCESO,model_estadoproceso_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
-pmant_tecnico_acc8,TECNICO_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_acc8,TECNICO_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
 pmant_tecnico_acc9,TECNICO_OTS,model_maintenance_request,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc10,TECNICO_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc11,TECNICO_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc12,TECNICO_ADJUNTO,model_adjunto_mantenimiento,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc13,TECNICO_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc14,TECNICO_IMAGENES,model_adjuntoimage_mantenimiento,pmant.group_pmant_tecnico,1,1,1,1
+pmant_tecnico_acc15,TECNICO_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_tecnico,1,1,1,1
 
 
 
@@ -54,13 +55,13 @@ pmant_admin_acc5,ADMIN_IMAGENES,model_adjuntoimage_mantenimiento,pmant.group_pma
 pmant_admin_acc6,ADMIN_PROCESOS,model_proceso_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc7,ADMIN_ESTADOPROCESO,model_estadoproceso_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc8,ADMIN_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_admin,1,1,1,1
-pmant_admin_acc9,ADMIN_OTS,model_maintenance_request,pmant.group_pmant_admin,1,1,1,1
+pmant_admin_acc9,ADMIN_OTS,model_maintenance_request,pmant.group_pmant_admin,1,1,0,1
 pmant_admin_acc10,ADMIN_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc11,ADMIN_GRUPO_PROCESO,model_grupoproceso_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc12,ADMIN_PRIORIDAD,model_prioridad_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc13,ADMIN_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc14,ADMIN_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_admin,1,1,1,1
-pmant_admin_acc15,ADMIN_CERTIFICADO,model_certificado_wizard,pmant.group_pmant_admin,1,1,1,1
+pmant_admin_acc15,ADMIN_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_admin,1,1,1,1
 
 
 access_wizard_equipment_selection,wizard.equipment.selection,model_wizard_equipment_selection,,1,1,1,1

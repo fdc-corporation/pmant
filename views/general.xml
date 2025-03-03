@@ -1,206 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-        <record model="ir.actions.act_window" id="planes_list_action">
-            <field name="name">Planes de Mantenimiento</field>
-            <field name="res_model">plan.mantenimiento</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primer Plan de Tarea
-                </p>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="Planv_form_view">
-            <field name="name">plan.form</field>
-            <field name="model">plan.mantenimiento</field>
-            <field name="arch" type="xml">
-                <form string="Tarea Form">
-                    <sheet>
-                         <group>
-                            <field name="name"/>
-                            <field name="descripcion"/>
-			                <field name="proceso"  readonly="0">
-				               <tree editable="bottom">
-					              <field name="grupo" readonly="0"/>
-					              <field name="name" readonly="0"/>
-                                  <field name="descripcion" />
-				               </tree>
-			               </field>
-                         </group>
-                         <group>
-                            <field name="frecuencia"/>
-                            <field name="tipo"/>
-                            <field name="alarm_ids" widget="many2many_tags"/>
-                         </group>
-                </sheet>
-                </form>
-            </field>
-         </record>
-	    <menuitem id="plantarea_menuv" name="Planes de mantenimiento"  parent="maintenance.menu_m_request"  action="planes_list_action"/>
-        
-        <record model="ir.actions.act_window" id="tipoplan_list_action">
-            <field name="name">Tipo Plan Fecuencia</field>
-            <field name="res_model">tipoplan.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primer Tipo Plan Frecuencia
-                </p>
-            </field>
-        </record>
-	    <menuitem id="tipoplan_menu" name="Tipo Plan Frecuencia"  parent="maintenance.menu_maintenance_configuration" action="tipoplan_list_action"/>
-
-        <record model="ir.actions.act_window" id="proceso_list_action">
-            <field name="name">Proceso de Tarea</field>
-            <field name="res_model">proceso.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primer Proceso
-                </p>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="Procesov_form_view">
-            <field name="name">Proceso.form</field>
-            <field name="model">proceso.mantenimiento</field>
-            <field name="arch" type="xml">
-                <form string="Tarea Form">
-                    <sheet>
-                         <group>
-                            <field name="name"/>
-                            <field name="grupo"/>
-                        </group>
-                </sheet>
-                </form>
-            </field>
-         </record>
-
-	    <record model="ir.actions.act_window" id="grupoproceso_list_action">
-            <field name="name">Grupo Procesos</field>
-            <field name="res_model">grupoproceso.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primer Proceso
-                </p>
-            </field>
-        </record>
-        <menuitem id="grupoprocesos_menuv" name="Grupo Procesos"  parent="maintenance.menu_maintenance_configuration"  action="grupoproceso_list_action"/>
-        
-        <record model="ir.actions.act_window" id="tipotarea_list_action">
-            <field name="name">Tipo Tareas</field>
-            <field name="res_model">tipotarea.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primer Tipo Tarea
-                </p>
-            </field>
-        </record>       
-
-
-
-
-        <record model="ir.actions.act_window" id="tarea_list_action">
-            <field name="name">Tareas</field>
-            <field name="res_model">tarea.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primera Tarea
-                </p>
-            </field>
-        </record>
-
-        <record model="ir.actions.act_window" id="reporte_tecnico_list_action">
-            <field name="name">Reporte Tecnico</field>
-            <field name="res_model">tarea.mantenimiento</field>
-            <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">Crea tu primera Tarea
-                </p>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="Tareav_tree_view">
-            <field name="name">Tareav.form</field>
-            <field name="model">tarea.mantenimiento</field>
-            <field name="arch" type="xml">
-                <tree string="Tarea Tree">
-			        <field name="name"/>
-			        <field name="state_id"/>   
-                </tree>
-            </field>
-         </record>
-
-        <record model="ir.ui.view" id="Tareav_form_view">
-            <field name="name">Tareav.form</field>
-            <field name="model">tarea.mantenimiento</field>
-            <field name="arch" type="xml">
-                <form string="Tarea Form">
-                    <header>
-                        <field name="state_id" widget="statusbar" options="{'clickable': '1'}" invisible="archive" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico"/>
-                    </header>
-                    <sheet>
-                        <group>
-                            <group>
-                                <field name="id" invisible="1"/>
-                                <field name="name"/>
-                                <field name="cliente"/>
+	<record model="ir.actions.act_window" id="planes_list_action">
+		<field name="name">Planes de Mantenimiento</field>
+		<field name="res_model">plan.mantenimiento</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primer Plan de Tarea
+			</p>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="Planv_form_view">
+		<field name="name">plan.form</field>
+		<field name="model">plan.mantenimiento</field>
+		<field name="arch" type="xml">
+			<form string="Tarea Form">
+				<sheet>
+					<group>
+						<field name="name" />
+						<field name="descripcion" />
+						<field name="proceso" readonly="0">
+							<tree editable="bottom">
+								<field name="grupo" readonly="0" />
+								<field name="name" readonly="0" />
+								<field name="descripcion" />
+							</tree>
+						</field>
+					</group>
+					<group>
+						<field name="frecuencia" />
+						<field name="tipo" />
+						<field name="alarm_ids" widget="many2many_tags" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<menuitem id="plantarea_menuv" name="Planes de mantenimiento" parent="maintenance.menu_m_request" action="planes_list_action" />
+	<record model="ir.actions.act_window" id="tipoplan_list_action">
+		<field name="name">Tipo Plan Fecuencia</field>
+		<field name="res_model">tipoplan.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primer Tipo Plan Frecuencia
+			</p>
+		</field>
+	</record>
+	<menuitem id="tipoplan_menu" name="Tipo Plan Frecuencia" parent="maintenance.menu_maintenance_configuration" action="tipoplan_list_action" />
+	<record model="ir.actions.act_window" id="proceso_list_action">
+		<field name="name">Proceso de Tarea</field>
+		<field name="res_model">proceso.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primer Proceso
+			</p>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="Procesov_form_view">
+		<field name="name">Proceso.form</field>
+		<field name="model">proceso.mantenimiento</field>
+		<field name="arch" type="xml">
+			<form string="Tarea Form">
+				<sheet>
+					<group>
+						<field name="name" />
+						<field name="grupo" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.actions.act_window" id="grupoproceso_list_action">
+		<field name="name">Grupo Procesos</field>
+		<field name="res_model">grupoproceso.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primer Proceso
+			</p>
+		</field>
+	</record>
+	<menuitem id="grupoprocesos_menuv" name="Grupo Procesos" parent="maintenance.menu_maintenance_configuration" action="grupoproceso_list_action" />
+	<record model="ir.actions.act_window" id="tipotarea_list_action">
+		<field name="name">Tipo Tareas</field>
+		<field name="res_model">tipotarea.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primer Tipo Tarea
+			</p>
+		</field>
+	</record>
+	<record model="ir.actions.act_window" id="tarea_list_action">
+		<field name="name">Tareas</field>
+		<field name="res_model">tarea.mantenimiento</field>
+		<field name="context">{'search_default_filter_ot_null': 1}</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primera Tarea
+			</p>
+		</field>
+	</record>
+	<record model="ir.actions.act_window" id="reporte_tecnico_list_action">
+		<field name="name">Reporte Tecnico</field>
+		<field name="res_model">tarea.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primera Tarea
+			</p>
+		</field>
+	</record>
+	<record id="view_tarea_search" model="ir.ui.view">
+		<field name="name">model.search</field>
+		<field name="model">tarea.mantenimiento</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<!-- Filtro llamado inactivos -->
+				<filter string="Sin Ot" name="filter_ot_null" domain="[('ots','=', False)]" />
+			</search>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="Tareav_tree_view">
+		<field name="name">Tareav.tree</field>
+		<field name="model">tarea.mantenimiento</field>
+		<field name="arch" type="xml">
+			<tree string="Tarea Tree">
+				<field name="name" />
+				<field name="state_id" />
+			</tree>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="Tareav_form_view">
+		<field name="name">Tareav.form</field>
+		<field name="model">tarea.mantenimiento</field>
+		<field name="arch" type="xml">
+			<form string="Tarea Form">
+				<header>
+					<field name="state_id" widget="statusbar" options="{'clickable': '1'}" invisible="archive" />
+					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico" icon="fa-envelope" />
+					<!-- CREAR BOTON DE CREAR OT -->
+					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
+				</header>
+				<sheet>
+					<group>
+						<group>
+							<field name="id" invisible="1" />
+							<field name="name" />
+							<field name="cliente" />
+							<field name="oc_id" />
+						</group>
+						<group>
+							<field name="tipo" />
+							<field name="is_evaluacion" />
+							<field name="is_tecnico" invisible="1" />
+							<field name="ubicacion" domain="[('parent_id','=',cliente)]" />
+						</group>
+						<field name="planequipo" invisible="is_tecnico and state_id == 3" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
+							<tree>
+								<field name="equipo" />
+								<field name="plan" />
+								<field name="fecha_ejec" />
+								<field name="estado" />
+								<button name="create_certificado_operatividad" string="Generar Certificado" type="object" groups="pmant.group_pmant_admin" class="btn-primary" />
+							</tree>
+						</field>
+					</group>
+					<notebook>
+						<page name="firma" string="Datos del firmante">
+							<group>
+								<field name="adjunto" string="Firma" widget="signature" />
+								<field name="namefirma" />
+								<field name="comentario" />
+								<field name="archive" invisible="1" />
+								<field name="id_tipo" invisible="1" />
+								<field name="fecha_hoy" invisible="1" />
+							</group>
+						</page>
+						<page name="calificacion" string="Calificaciones">
+							<group>
+								<field name="clasi1" />
+								<field name="clasi2" />
+							</group>
+						</page>
+						<page string="OTs" invisible="is_tecnico">
+							<field name="ots" />
+						</page>
+						<page string="Hoja de Recepcion" invisible="not is_evaluacion or state_id not in [1,2]">
+							<group>
+								<field name="create_user" />
+								<field name="fecha_entrada" />
+								<field name="adjuntos_evaluaciones">
+									<tree editable="bottom">
+										<field name="adjuntoimage" string="Imagen de evaluacion" />
+										<field name="comentario" string="Comentario de la imagen" />
+									</tree>
+								</field>
+								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
+                                	<field name="firma_evaluacion" string="Firma" widget="signature" />
+                                    <field name="firmante" />
+                                    <field name="comentario_firma" />
                             </group>
-                            <group>
-                                <field name="tipo"/>
-                                <field name="ubicacion" domain="[('parent_id','=',cliente)]"/>
-                            </group>
-                            <field name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
-                                <tree>
-                                    <field name="equipo" />
-                                    <field name="plan" />
-                                    <field name="fecha_ejec" />
-                                    <field name="estado" />
-                                    <button name="create_certificado_operatividad" string="Generar Certificado" type="object" class="btn-primary"/>
-                                </tree>
-                            </field>
-                        </group>
-                        <notebook>
-                            <page name="firma" string="Datos del firmante">
-                                <group>
-                                    <field name="adjunto" string="Firma" widget="signature"/>
-                                    <field name="namefirma"/>
-                                    <field name="comentario"/>
-                                    <field name="archive" invisible="1"/>
-                                    <field name="id_tipo" invisible="1"/>
-                                    <field name="fecha_hoy" invisible="1"/>
-                                </group>
-                            </page>
-                            <page name="calificacion" string="Calificaciones">
-                                <group>
-                                    <field name="clasi1"/>
-                                    <field name="clasi2"/>
-                                </group>
-                            </page>
-                            <page string="OTs ">
-                                <field name="ots" groups="pmant.group_pmant_admin"/>
-                            </page>
-                            <page string="Hoja de Recepcion" invisible="id_tipo == 0">
-                                <group>
-                                    <field name="create_user"/>
-                                    <field name="fecha_entrada"/>
-                                    <field name="adjuntos_evaluaciones"/>
-                                    <field name="comentario_tecnico" placeholder="Comentario de recepcion" />
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <!-- <sheet  groups="pmant.group_pmant_admin" ><field name="ots" groups="pmant.group_pmant_admin"/></sheet> -->
-                </form>
-            </field>
-         </record>
-
-        <menuitem id="tarea_menuv" name="Tareas"  parent="maintenance.menu_m_request"  action="tarea_list_action" />
-
-        <menuitem id="tarea_menuv_2" name="Reporte Tecnico"  parent="maintenance.menu_maintenance_title"  action="reporte_tecnico_list_action" />
-
- </odoo>
+						</page>
+					</notebook>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" />
+					<field name="activity_ids" widget="mail_activity" />
+					<field name="message_ids" widget="mail_thread" />
+				</div>
+			</form>
+		</field>
+	</record>
+	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="tarea_list_action" />
+	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request" action="tarea_list_action" />
+	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title" action="reporte_tecnico_list_action" />
+</odoo>

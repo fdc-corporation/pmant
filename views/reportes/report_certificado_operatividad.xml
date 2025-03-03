@@ -16,7 +16,7 @@
 			<t t-name="web.basic_layout">
 				<t t-foreach="docs" t-as="doc">
 					<t t-call="web.html_container">
-                        <div class="article" style="height: 100vh; position:relative;" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+						<div class="article" style="height: 100vh; position:relative;" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
 							<center>
 								<img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png" style="width:190px;"/>
 							</center>
@@ -24,27 +24,28 @@
 							<p style="text-align: right;border:0px;" t-esc="doc.fecha_hoy"/>
 							<p>
 								<span>Señores:</span>
-								<strong t-esc="doc.cliente.name"/>
+								<strong t-esc="doc.tarea.cliente.name"/>
 							</p>
 							<p>
 								<span>RUC: </span>
-								<span t-esc="doc.cliente.vat"/>
+								<span t-esc="doc.tarea.cliente.vat"/>
 							</p>
 							<p>
 								<span>Direccion: </span>
-								<span t-esc="doc.cliente.street"/>
+								<span t-esc="doc.tarea.cliente.street"/>
 							</p>
 							<br/>
 							<h1 class="text-center" style="font-weight: bold; font-size: 30px;">CERTIFICADO DE OPERATIVIDAD Y GARANTÍA</h1>
 							<br/>
 							<p>
-										Mediante la presente FDC CORP extiende el certificado de operatividad del 
-										equipo en referencia, el cual cuenta con las condiciones óptimas de funcionamiento 
-										en base a las recomendaciones indicadas para su próximo mantenimiento. El equipo 
-										se encuentra ubicado en 
+												Mediante la presente FDC CORP extiende el certificado de operatividad del 
+												equipo en referencia, el cual cuenta con las condiciones óptimas de funcionamiento 
+												en base a las recomendaciones indicadas para su próximo mantenimiento. El equipo 
+												se encuentra ubicado en 
+												
+												
 										
-										
-								<span t-esc="doc.ubicacion.street"/>
+								<span t-esc="doc.tarea.ubicacion.street"/>
 							</p>
 							<br/>
 							<p>
@@ -85,9 +86,10 @@
 							<p>Realizar el mantenimiento preventivo de acuerdo a programa</p>
 							<p style="font-size:12px;">*Términos y condiciones del documento</p>
 							<p style="font-size:12px;">indicados en 
+												
+												
 										
-										
-								<a href="hhttps://fdccorp.com.pe/terms/">https://fdccorp.com.pe/terms</a>
+								<a href="hhttps://equiposindustriales.pe/terms/">https://equiposindustriales.pe/terms</a>
 							</p>
 							<img style="width:100%; margin-top:-60px; right: 0px;left: 0px; position:absolute;" src="https://fdc-corporation.com/public/assets/img/erp/footer.png"/>
 						</div>

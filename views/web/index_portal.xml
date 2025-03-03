@@ -11,15 +11,7 @@
                 <t t-set="config_card" t-value="True"/>
             </t>
             <br/>
-            <t t-call="portal.portal_docs_entry">
-                
-                <t t-set="icon" t-value="'/project/static/src/img/tasks.svg'"/>
-                <t t-set="title">Certificados de Operatividad</t>
-                <t t-set="text">Obten informacion sobre los certificados de operatividad</t>
-                <t t-set="url">/my/sedes</t>
-                <t t-set="config_card" t-value="True"/>
-            </t>
-            <br/>
+            <br />
         </xpath>
     </template>
   </data>

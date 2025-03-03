@@ -13,6 +13,4 @@ from . import ventas_mant
 from . import wizard
 from . import product
 from . import crm
-# from . import ot_correctivo
-# from . import estados_correctivos
 from . import evento

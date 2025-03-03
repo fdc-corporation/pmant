@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'fdccorp.com.pe'">
+							<t t-if="dominio_web == 'equiposindustriales.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -18,7 +18,7 @@
 									Compresores de Tornillo S.A.C.
 								</span>
 							</t>
-							<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 								<span>
 									FDC CORPORATION E.I.R.L.
@@ -63,14 +63,14 @@
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Propitario :
+										Propietario :
 									</label>
 									<span t-esc="equipo.propietario.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Ubicacion :
+										Ubicación :
 									</label>
 									<span t-esc="equipo.ubicacion.name">
 									</span>
@@ -86,7 +86,7 @@
 								</div>
 								<div class="propiedad">
 									<label>
-										Fecha Asignada :
+										Fecha asignada :
 									</label>
 									<span t-esc="equipo.assign_date">
 									</span>
@@ -96,14 +96,16 @@
 					</div>
 				</div>
 				<div class="main-card-sedes">
-                    <div>
-                        <h3>Adjuntos del Equipo</h3>
-                    </div>
+					<div>
+						<h3>
+							Adjuntos del Equipo
+						</h3>
+					</div>
 					<div class="main-adjuntos">
 						<t t-if="len(equipo.adjunto) > 0">
 							<t t-foreach="equipo.adjunto" t-as="adjunto">
 								<t t-set="extension" t-value="adjunto.name.split('.')[-1].lower()" />
-								<div class="card-adjunto" >
+								<div class="card-adjunto">
 									<t t-if="extension == 'pdf'">
 										<img src="/pmant/static/src/img/pdf.webp" alt="PDF Icon" />
 									</t>
@@ -123,8 +125,6 @@
 									<t t-if="extension not in ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx']">
 										<img src="/pmant/static/src/img/archivo.jpg" alt="File Icon" />
 									</t>
-                                    
-                                    
 									<p t-esc="adjunto.name" />
 									<a t-att-href="'/descargas/adjuntos/equipo/' + str(adjunto.id)" class="bg-primary">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down" viewBox="0 0 16 16">
@@ -135,40 +135,71 @@
 								</div>
 							</t>
 						</t>
+						<t t-if="len(equipo.documentos) > 0">
+							<t t-foreach="equipo.documentos" t-as="documentos">
+								<t t-set="extension" t-value="documentos.name.split('.')[-1].lower()" />
+								<div class="card-adjunto">
+									<t t-if="extension == 'pdf'">
+										<img src="/pmant/static/src/img/pdf.webp" alt="PDF Icon" />
+									</t>
+									<!-- Icono para imágenes -->
+									<t t-if="extension in ['jpg', 'jpeg', 'png', 'gif']">
+										<img style="padding: 10px;" src="/pmant/static/src/img/png.png" alt="Image Icon" />
+									</t>
+									<!-- Icono para documentos de Word -->
+									<t t-if="extension in ['doc', 'docx']">
+										<img src="/pmant/static/src/img/docx.png" alt="Word Icon" />
+									</t>
+									<!-- Icono para documentos de Excel -->
+									<t t-if="extension in ['xls', 'xlsx']">
+										<img src="/pmant/static/src/img/xlsx.png" alt="Excel Icon" />
+									</t>
+									<!-- Icono para otros tipos de archivos -->
+									<t t-if="extension not in ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx']">
+										<img src="/pmant/static/src/img/archivo.jpg" alt="File Icon" />
+									</t>
+									<p t-esc="documentos.name" />
+									<a t-att-href="'/descargas/documento/equipo/' + str(documentos.id)" class="bg-primary">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708z" />
+											<path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383m.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+										</svg>
+									</a>
+								</div>
+							</t>
+						</t>
 						<t t-else="">
-							Aun no cuenta con Adjuntos registrados en el equipo, solicite un nuevo Adjunto para este equipo
-							<a t-att-href="'/my/equipos/' + str(equipo.id) + '/detalles'">
-								Aqui
-							</a>
-							.
+							Aún no cuenta con Adjuntos registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
 						</t>
 					</div>
 					<nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <!-- Enlace a la página anterior -->
-                            <li t-if="pager['has_prev']" class="page-item">
-                                <a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] - 1)" class="page-link" aria-label="Previous">
-                                    <span aria-hidden="true">«</span>
-                                </a>
-                            </li>
-            
-                            <!-- Enlaces a las páginas -->
-                            <t t-foreach="range(1, pager['size'] + 1)" t-as="page">
-                                <li t-att-class="'page-item %s' % ('active' if page == pager['page'] else '')">
-                                    <a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, page)" class="page-link">
-                                        <t t-esc="page"/>
-                                    </a>
-                                </li>
-                            </t>
-            
-                            <!-- Enlace a la página siguiente -->
-                            <li t-if="pager['has_next']" class="page-item">
-                                <a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] + 1)" class="page-link" aria-label="Next">
-                                    <span aria-hidden="true">»</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+						<ul class="pagination justify-content-center">
+							<!-- Enlace a la página anterior -->
+							<li t-if="pager['has_prev']" class="page-item">
+								<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] - 1)" class="page-link" aria-label="Previous">
+									<span aria-hidden="true">
+										«
+									</span>
+								</a>
+							</li>
+							<!-- Enlaces a las páginas -->
+							<t t-foreach="range(1, pager['size'] + 1)" t-as="page">
+								<li t-att-class="'page-item %s' % ('active' if page == pager['page'] else '')">
+									<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, page)" class="page-link">
+										<t t-esc="page" />
+									</a>
+								</li>
+							</t>
+							<!-- Enlace a la página siguiente -->
+							<li t-if="pager['has_next']" class="page-item">
+								<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] + 1)" class="page-link" aria-label="Next">
+									<span aria-hidden="true">
+										»
+									</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</t>

@@ -16,9 +16,8 @@ class PortalPmant(http.Controller):
 
 
 
-    # INICIO DE CONDICIONAL - PORTAL USER
     @http.route(['/my/sedes/', '/my/sedes/page/<int:pagina>'], type='http', auth="user", website=True)
-    def sedes_portal(self, pagina=1):
+    def sedes_portal(self, pagina=1, search=None):
         user_partner = request.env.user.partner_id
         _logger.info(f"User Partner: {user_partner}")
         dominio_web = request.httprequest.host
@@ -27,14 +26,21 @@ class PortalPmant(http.Controller):
         registros_por_pagina = 15
 
         if user_partner.is_company:
+            # Crear dominio base para filtrar las sedes
+            dominio = [('parent_id', '=', user_partner.id), ("type", "=", "delivery")]
+            
+            # Si hay un término de búsqueda, agregarlo al dominio
+            if search:
+                dominio.append(('name', 'ilike', search))
+
             # Obtener el total de sedes y calcular el número de páginas
-            total_sedes = request.env['res.partner'].sudo().search_count([('parent_id', '=', user_partner.id)])
+            total_sedes = request.env['res.partner'].sudo().search_count(dominio)
             total_paginas = math.ceil(total_sedes / registros_por_pagina)
 
             # Obtener las sedes para la página actual
             offset = (pagina - 1) * registros_por_pagina
             sedes = request.env['res.partner'].sudo().search(
-                [('parent_id', '=', user_partner.id)], 
+                dominio, 
                 limit=registros_por_pagina, 
                 offset=offset
             )
@@ -46,10 +52,10 @@ class PortalPmant(http.Controller):
                 'dominio': dominio_web,
                 'pagina_actual': pagina,
                 'total_paginas': total_paginas,
+                'search': search or '',
             })
         else:
             return request.redirect(f"/my/sede/{user_partner.id}/equipos/")
-
 
 
 
@@ -88,17 +94,23 @@ class PortalPmant(http.Controller):
 
 
     # EQUIPOS REGISTRADOS AL USUARIO DE LA CENTRAL
+
     @http.route(['/my/<int:empresa_id>/equipos/', '/my/<int:empresa_id>/equipos/page/<int:pagina>'], type="http", auth="user", website=True)
-    def equipos_portal(self, empresa_id, pagina=1):
+    def equipos_portal(self, empresa_id, pagina=1, search=None):
         user_partner = request.env.user.partner_id
         per_page = 15  # Número de registros por página
 
-        # Definir el dominio para la búsqueda
+        # Definir el dominio base para la búsqueda
         domain = [
-            ('propietario', '=', empresa_id),
-            ('ubicacion', '=', False)
-        ]
+            ('propietario', '=', empresa_id)        ]
+
+        # Si hay un término de búsqueda, agregarlo al dominio
+        if search:
+            domain.append(('name', 'ilike', search))
+
+        # Obtener ubicaciones del usuario
         ubicaciones = request.env['res.partner'].sudo().search([('parent_id', '=', user_partner.id)])
+
         # Obtener el total de registros y calcular el número de páginas
         total_equipos = request.env['maintenance.equipment'].sudo().search_count(domain)
         total_paginas = math.ceil(total_equipos / per_page)
@@ -114,10 +126,10 @@ class PortalPmant(http.Controller):
             'user_partner': user_partner,
             'pagina_actual': pagina,
             'total_paginas': total_paginas,
-            'ubicaciones' : ubicaciones,
-            'empresa_id': empresa_id
+            'ubicaciones': ubicaciones,
+            'empresa_id': empresa_id,
+            'search': search or ''
         })
-
 
     # SOLICITUD DE REGISTRO DE EQUIPO - SEDE -  CENTRAL
     @http.route(['/solicitud/equipo/'], type='http', auth="user", methods=['POST'], website=True)
@@ -198,21 +210,37 @@ class PortalPmant(http.Controller):
     def detalle_equipo(self, equipo_id, filtro=None, pagina=1, **kw):
         user_partner = request.env.user.partner_id
         equipo = request.env['maintenance.equipment'].sudo().browse(equipo_id)
-        return request.render('pmant.detalle_equipo', {
-            'equipo': equipo,
-        })
+        domain = request.httprequest.host
+        numero = '51908912551'
+        if domain == 'compresores.com.pe':
+            numero = '51993694375'
+        if equipo :
+            texto = f"""Hola FDC CORPORATION E.I.R.L. 
+            Deseo solicitar un servicio nuevo para mi equipo {equipo.name if equipo.name else 'N/A'} modelo {equipo.model} marca {equipo.marca}, ubicado en {equipo.ubicacion.street if equipo.ubicacion.street else 'N/A' } empresa {equipo.propietario.name if equipo.propietario.name else 'N/A'}"""
+
+            # Codificar el texto para URL
+            texto_url = urllib.parse.quote(texto)
+
+            # Construir la URL de WhatsApp
+            whatsapp_url = f"https://wa.me/{numero}?text={texto_url}"
+            return request.render('pmant.detalle_equipo', {
+                'equipo': equipo,
+                'whatsapp_url': whatsapp_url,
+            })
 
 
 
 
 
     # DETALLES DE HISTORIALD E MNATENIMIENTO - EQUIPO
-    @http.route(['/my/equipo/<int:equipo_id>/historial', '/my/equipo/<int:equipo_id>/historial/page/<int:pagina>'], type="http", auth="user", website=True)
-    def historial_mantenimiento(self, equipo_id, pagina=1):
+    @http.route(['/my/equipo/<int:equipo_id>/historial', '/my/equipo/<int:equipo_id>/historial/page/<int:pagina>'], type="http", methods=['GET'], auth="user", website=True)
+    def historial_mantenimiento(self, equipo_id, pagina=1, **kwargs):
         equipo = request.env['maintenance.equipment'].sudo().browse(equipo_id)
         per_page = 10  # Registros por página
-
         # Filtrar historial de mantenimiento relacionado con el equipo
+        filtro = kwargs.get('filtro', False)
+        if filtro == False : 
+            filtro = "fecha_ejec"
         domain = [("equipo", "=", equipo_id)]
         total = request.env['planequipo.mantenimiento'].sudo().search_count(domain)
         total_paginas = math.ceil(total / per_page)
@@ -225,7 +253,9 @@ class PortalPmant(http.Controller):
 
         # Obtener registros de la página actual
         offset = (pagina - 1) * per_page
-        historial = request.env['planequipo.mantenimiento'].sudo().search(domain, offset=offset, limit=per_page)
+        filtro = f"{filtro} desc" 
+
+        historial = request.env['planequipo.mantenimiento'].sudo().search(domain, offset=offset, limit=per_page, order=filtro)
 
         return request.render('pmant.historial_mantenimiento', {
             'equipo': equipo,
@@ -236,8 +266,22 @@ class PortalPmant(http.Controller):
         })
 
 
-    
 
+
+    @http.route(['/my/servicios/ejecucion'], type="http", auth="user", website=True)
+    def get_servicio_ejecucion (self):
+        user = request.env.user.partner_id
+        # Filtrar servicios ejecutados por el usuario
+        domain = ["|", ("ubicacion", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
+        equipos = request.env["maintenance.equipment"].sudo().search(domain)
+        # print(equipos)
+        return request.render('pmant.servicios_ejecucion', {
+            'equipo': equipos,
+        })
+
+
+
+    
 
     @http.route(['/my/equipo/<int:equipo_id>/adjuntos', '/my/equipo/<int:equipo_id>/adjuntos/page/<int:pagina>'], type="http", auth="user", website=True)
     def adjuntos_equipo(self, equipo_id, pagina=1):
@@ -269,24 +313,28 @@ class PortalPmant(http.Controller):
         })
 
     
-    @http.route(['/descargas/reporte/mantenimiento/<int:tarea_id>'], type='http', auth="user", website=True)
+    @http.route('/descargas/reporte/mantenimiento/<int:tarea_id>', type='http', auth='user', website=True,  methods=['GET'])
     def descarga_reporte_mantenimiento(self, tarea_id, **kw):
         report_action = http.request.env['ir.actions.report'].sudo()
         tarea = request.env['tarea.mantenimiento'].sudo().browse(tarea_id)
         for record in tarea :
             content, _content_type = report_action._render_qweb_pdf('pmant.action_ot_mantenimiento', res_ids=record.ids)
-
+        filename = f"Reporte Tecnico.pdf"
         headers = [
                 ('Content-Type', 'application/pdf'),
                 ('Content-Length', len(content)),
+<<<<<<< HEAD
                 ('Content-Disposition', 'attachment; filename=' + "Reporte Tecnico.pdf;")
+=======
+                ('Content-Disposition', f'attachment; filename={filename}')
+>>>>>>> 787ff199492f437a8de89f559c061ffd48eea0cf
         ]
         return request.make_response(content, headers=headers)
 
 
 
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
-    @http.route(['/descargas/adjuntos/equipo/<int:id_adjunto>'], type="http", auth="user", website=True)
+    @http.route(['/descargas/adjuntos/equipo/<int:id_adjunto>'], type="http", auth="user", methods=['GET'], website=True)
     def descarga_adjuntos_equipo(self, id_adjunto):
         adjunto = request.env['adjunto.mantenimiento'].sudo().browse(id_adjunto)
         if not adjunto or not adjunto.adjunto:
@@ -305,6 +353,27 @@ class PortalPmant(http.Controller):
         return request.make_response(file_content_decoded, headers=headers)
 
 
+    # RUTA PARA DESCARGA DE DOCUMENTOS DEL EQUIPO
+    @http.route(['/descargas/documento/equipo/<int:id_equipo>'], type="http", auth="user", methods=['GET'], website=True)
+    def descarga_documento_equipo(self, id_equipo):
+        documento = request.env['documents.document'].sudo().browse(id_equipo)
+        if not documento or not documento.datas:
+            return request.not_found()
+
+        # Decodificar el contenido binario del archivo adjunto
+        file_content_decoded = base64.b64decode(documento.datas)
+
+        # Generar encabezado manualmente
+        filename = urllib.parse.quote(documento.name or 'archivo.bin')
+        headers = [
+            ('Content-Type', 'application/octet-stream'),
+            ('Content-Disposition', f'attachment; filename="{filename}"')
+        ]
+
+        return request.make_response(file_content_decoded, headers=headers)
+
+
+
     # RUTA PARA LOS CERTIFICADOS DE OPERATIVIDAD DEL EQUIPO
     @http.route(['/my/equipo/<int:id_equipo>/certificados'], type="http", auth="user", website=True)
     def certificados_operatividad_equipo (self,id_equipo):
@@ -312,7 +381,7 @@ class PortalPmant(http.Controller):
         return request.render('pmant.certificados_equipo', {'equipo' : equipo})
 
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
-    @http.route(['/descargas/certificado/equipo/<int:id_adjunto>'], type="http", auth="user", website=True)
+    @http.route(['/descargas/certificado/equipo/<int:id_adjunto>'], type="http", methods=['GET'], auth="user", website=True)
     def descarga_certificado_equipo(self, id_adjunto):
         attachment = request.env['ir.attachment'].sudo().browse(id_adjunto)
         file_content_decoded = base64.b64decode(attachment.datas)
@@ -522,7 +591,7 @@ class PortalPmant(http.Controller):
         offset = (pagina - 1) * per_page  # Calcular el inicio de la página actual
 
         # Obtener todas las tareas relacionadas con el equipo y con tipo "Evaluación"
-        domain = ["&", ("planequipo.equipo", "=", id_equipo), ("tipo.name", "=", "Evaluacion")]
+        domain = ["&", ("planequipo.equipo", "=", id_equipo), ("is_evaluacion", "=", "True")]
         total_tareas = request.env['tarea.mantenimiento'].sudo().search_count(domain)  # Total de tareas
         tareas = request.env['tarea.mantenimiento'].sudo().search(domain, limit=per_page, offset=offset)  # Tareas por página
 
@@ -541,7 +610,7 @@ class PortalPmant(http.Controller):
 
     
     # DECARGA DE LA HOJA DE EVALUACION
-    @http.route(['/descargas/reporte/evaluacion/<int:tarea_id>'], type='http', auth="user", website=True)
+    @http.route(['/descargas/reporte/evaluacion/<int:tarea_id>'], type='http', auth="user", methods=['GET'], website=True)
     def descarga_reporte_evaluacion(self, tarea_id, **kw):
         report_action = http.request.env['ir.actions.report'].sudo()
         tarea = request.env['tarea.mantenimiento'].sudo().browse(tarea_id)
@@ -592,3 +661,5 @@ class PortalPmant(http.Controller):
 
         # Retornar la respuesta para descargar el archivo
         return request.make_response(pdf, headers=pdfhttpheaders)
+
+

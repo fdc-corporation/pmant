@@ -1,0 +1,16 @@
+<data>
+    <template id="portal_my_home_inherit_servicios" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="before">
+            <br></br>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/project/static/src/img/folder.svg'"/>
+                <t t-set="title">Servicios en Ejecución</t>
+                <t t-set="text">Siga, vea sus servicios programados y en ejecución.</t>
+                <t t-set="url">/my/servicios/ejecucion</t>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+            <br/>
+        </xpath>
+    </template>
+  </data>
+  

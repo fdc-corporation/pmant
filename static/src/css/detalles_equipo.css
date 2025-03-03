@@ -26,6 +26,8 @@
     flex-flow: column;
     gap: 20px;
     margin-bottom: 15px;
+    text-align: right;
+    
 }
 
 .main-detalles-equipo .main_detalles .nombre_equipo {

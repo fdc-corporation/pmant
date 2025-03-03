@@ -2,6 +2,8 @@ from odoo import models, fields, api, exceptions
 from datetime import date, datetime, timedelta
 from odoo.exceptions import UserError
 import logging
+from odoo.exceptions import UserError
+import base64
 
 _logger = logging.getLogger(__name__)
 
@@ -10,9 +12,9 @@ class AdjuntoEvaluacion (models.Model):
     _name = 'adjunto.evaluacion'
     _description = 'Adjuntos de evaluación'
 
-    tarea  = fields.Many2one('tarea.mantenimiento', string="Tarea", invisible=True)
+    tarea  = fields.Many2one('tarea.mantenimiento', string="Tarea")
     adjuntoimage     = fields.Binary()
-
+    comentario       = fields.Text()
 
 
 class TipoTarea(models.Model):
@@ -27,8 +29,8 @@ class Tarea(models.Model):
     
     name = fields.Char(size=60, required=True, string='Nombre', write=['pmant.group_pmant_admin'])
     tipo = fields.Many2one('tipotarea.mantenimiento', string="Tipo")
-    cliente = fields.Many2one('res.partner', string="Cliente", domain=[('is_company', '=', 'True')], required=False)
-    ubicacion = fields.Many2one('res.partner', string="Ubicacion")
+    cliente = fields.Many2one('res.partner', string="Cliente", tracking=True, domain=[('is_company', '=', 'True')], required=False)
+    ubicacion = fields.Many2one('res.partner', string="Ubicacion", tracking=True)
     planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True, store=True)
     clasi1 = fields.Char(size=50, string="Clasificacion 1")
     clasi2 = fields.Char(size=50, string="Clasificacion 2")
@@ -36,7 +38,7 @@ class Tarea(models.Model):
     adjunto = fields.Binary()
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
-    state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True)
+    state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True, tracking=True)
     revisar = fields.Boolean()
     archive = fields.Boolean(related="ots.archive", store=True)
     namefirma = fields.Char(string="Nombre del Firmante")
@@ -51,6 +53,17 @@ class Tarea(models.Model):
     adjuntos_evaluaciones     = fields.One2many("adjunto.evaluacion", 'tarea', string='Adjuntos de Evaluacion')
     id_tipo = fields.Integer()
     fecha_hoy = fields.Char(string="Fecha Formateada", compute="_fecha_formateada")
+    is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
+    oc_id = fields.Many2one('oc.compras', string="OC")
+    is_tecnico = fields.Boolean(
+        compute='_compute_is_tecnico',
+        string='Is Técnico',
+        store=False
+    )
+    firma_evaluacion = fields.Binary()
+    firmante = fields.Char(string="Nombre del firmante")
+    comentario_firma = fields.Text('Comentario del firmante')
+
 
     @api.onchange('tipo')
     def tipo_click(self):
@@ -107,10 +120,12 @@ class Tarea(models.Model):
                     # Actualizar solicitudes de mantenimiento relacionadas
                     ot = self.env['maintenance.request'].search([('tarea', '=', record.id)])
                     if ot:
-                        ot.stage_id = record.state_id.id
-                        if record.state_id.sequence == 3:
-                            fecha_actual = fields.Date.today()
-                            ot.fecha_ejec = fecha_actual
+                        if ot.stage_id.sequence != record.state_id.sequence:
+                            ot.stage_id = record.state_id.id
+                            if record.state_id.sequence == 3:
+                                fecha_actual = fields.Date.today()
+                                ot.fecha_ejec = fecha_actual
+
                 # Si el estado tiene una secuencia específica (por ejemplo, 3)
                 if record.state_id.sequence == 3:
                     record._fecha_ejecutada()
@@ -141,7 +156,9 @@ class Tarea(models.Model):
                 equipo.write({'fecha_ejec': fecha_actual})
 
 
-
+    def _compute_is_tecnico(self):
+        for record in self:
+            record.is_tecnico = self.env.user.has_group('pmant.group_pmant_tecnico')
 
     def _evento_calendario_proximo_servicio(self):
         for record in self:
@@ -186,11 +203,80 @@ class Tarea(models.Model):
                     if alertas:
                         event.alarm_ids = [(4, alarma.id) for alarma in alertas]
 
-    # @api.multi
-    
-            
+    def action_send_email_recepcion(self):
+        template = self.env.ref('pmant.email_template_hoja_recepcion')
+        statement_report_action = self.env.ref('pmant.action_reporte_recepcion')
+        ir_actions_report_sudo = self.env['ir.actions.report'].sudo()
 
-   
+        if not template or not statement_report_action:
+            raise UserError("No se encuentra la plantilla o el reporte configurado.")
+
+        for record in self:
+            # Generar el reporte PDF
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report_action, [record.id]
+            )
+
+            # Crear el archivo adjunto
+            # attachment = self.env['ir.attachment'].create({
+            #     'name': f'Hoja_Recepcion_{record.name}.pdf',  # Nombre del archivo
+            #     'type': 'binary',
+            #     'datas': base64.b64encode(content).decode('utf-8'),  # Codificar el PDF a base64
+            #     'res_model': record._name,  # Modelo relacionado
+            #     'res_id': record.id,  # ID del registro relacionado
+            #     'mimetype': 'application/pdf',
+            #     'public': True,
+            # })
+
+            # Preparar el contexto para enviar el correo
+            ctx = {
+                'default_model': 'tarea.mantenimiento',  # Modelo actual
+                'default_res_ids': [record.id],  # ID del registro
+                'default_use_template': True,
+                'default_template_id': template.id,
+                'default_composition_mode': 'comment',  # Modo de composición
+                'force_email': True,
+                # 'attachment_ids': [(4, attachment.id)],  # Agregar el archivo adjunto
+            }
+
+            # Verificar el contexto (Debugging)
+            print("Contexto de envío:", ctx)
+
+            # Retornar la acción para abrir el asistente de composición de correos
+            return {
+                'type': 'ir.actions.act_window',
+                'view_mode': 'form',
+                'res_model': 'mail.compose.message',
+                'views': [(False, 'form')],
+                'view_id': False,
+                'target': 'new',
+                'context': ctx,
+            }
+
+    def create_ot(self):
+        ot = self.env["maintenance.request"].create({
+            "name": self.name,
+            "tarea": self.id,
+            "empresa": self.cliente.id,
+            "ubicacion": self.ubicacion.id,
+            "order_compra" : self.oc_id.id
+        })
+
+        self.oc_id.ot_servicio = ot.id
+
+        return {
+            "type" : "ir.actions.act_window",
+            "name" : "Crear Solicitud de Mantenimiento",
+            "res_model" : "maintenance.request",
+            "view_mode" : "form",
+            "res_id" : ot.id,
+
+        }
+
+
+
+
+    # @api.multi
     # @api.onchange('state_id')
     # def fecha_prox_equipo(self):
     #     for record in self:

@@ -62,7 +62,7 @@ class Equipo(models.Model):
 	#ruta_web = configuracion['ruta_web']
     	configuracion = self.env['res.config.settings'].sudo().get_values()
     	ruta_web = configuracion.get('ruta_web')
-    	base_url = ruta_web if ruta_web else 'http://fdccorp.com.pe'
+    	base_url = ruta_web if ruta_web else 'http://equiposindustriales.pe'
     	base_url += '/web#id=%d&view_type=form&model=%s' % (self.id, self._name)
     	self.qr_image = generate_qr_code(base_url)
     	self.qr_image2 = self.qr_image

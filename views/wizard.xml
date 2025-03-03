@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record model="ir.ui.view" id="wizard_form_view">
+	<!-- <record model="ir.ui.view" id="wizard_form_view">
 		<field name="name">wizard.form</field>
         <field name="model">certificado.wizard</field>
 		<field name="type">form</field>
@@ -29,7 +29,7 @@
 			</footer>
 		    </form>
 		</field>
-	</record>
+	</record> -->
 
     <!-- <act_window id="launch_session_wizard"
         name="Generar Certificado"
@@ -37,7 +37,7 @@
         view_mode="form"
         target="new"
 		key2="client_action_multi"/>  -->
-
+<!-- 
 	<record model="ir.actions.act_window" id="launch_session_wizard">
         <field name="name">Generar Certificado</field>
         <field name="res_model">certificado.wizard</field>
@@ -46,6 +46,6 @@
         <field name="target">new</field>
     </record>
 
-	 <menuitem id="wizard_menuv" name="Generar Certificado" parent="maintenance.menu_maintenance_title" action="launch_session_wizard" sequence="12"/>
+	 <menuitem id="wizard_menuv" name="Generar Certificado" parent="maintenance.menu_maintenance_title" action="launch_session_wizard" sequence="12"/> -->
 
 </odoo>

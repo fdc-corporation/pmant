@@ -34,8 +34,8 @@
 						<field name="ubicacion" invisible="0" readonly="1" />
 						<field name="is_admin" invisible="1" />
 						<field name="tarea" invisible="1" />
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]"  readonly="not is_admin"/>
-						<field name="plan" string="Plan de mantenimiento"  readonly="not is_admin" />
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]"  readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="plan" string="Plan de mantenimiento"  readonly="not is_admin and not tarea.is_evaluacion" />
 						<field name="fecha_ejec" />
 						<field name="fecha_ejecprox" string="Proxima Fecha de Mantenimiento" />
 						<field name="fecha_hoy" invisible="1"/>

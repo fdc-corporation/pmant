@@ -11,44 +11,43 @@
     <!-- Plantilla del reporte -->
     <template id="pmant.reporte_recepcion">
         <t t-call="web.html_container">
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="web.external_layout">                
-                    <div class="page">
-                        <h2 style="text-align:center;">Hoja de Recepción</h2>
-                        <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:30px;">
-                            <tr>
-                                <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
-                                    <span>Datos de la Empresa</span>
-                                </th>
-                                <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
-                                    <span>Datos del Cliente</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center;">Hoja de Recepción</h2>
+                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:30px;">
+                        <tr>
+                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <span>Datos de la Empresa</span>
+                            </th>
+                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <span>Datos del Cliente</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
                                                         Nombre:
                                                     </strong>
-                                    <span t-field="doc.compania.name"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.compania.name"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Ruc:
                                                     </strong>
-                                    <span t-field="doc.compania.vat"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.compania.vat"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Nombre:
                                                     </strong>
-                                    <span t-field="doc.cliente.name"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.cliente.name"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Identificacion:
                                                     </strong>
-                                    <span t-field="doc.cliente.l10n_latam_identification_type_id"/>-
+                                <span t-field="doc.cliente.l10n_latam_identification_type_id"/>-
                                     
                                     
                                     
@@ -62,75 +61,75 @@
                                     
                                     
                                     
-                                    <span t-field="doc.cliente.vat"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>
+                                    
+                                <span t-field="doc.cliente.vat"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
                                                         Direccion:
                                                     </strong>
-                                    <span t-field="doc.compania.street"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.compania.street"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Correo Electronico:
                                                     </strong>
-                                    <span t-field="doc.compania.email"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.compania.email"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Direccion:
                                                     </strong>
-                                    <span t-field="doc.cliente.street"/>
-                                </td>
-                                <td>
-                                    <strong>
+                                <span t-field="doc.cliente.street"/>
+                            </td>
+                            <td>
+                                <strong>
                                                         Correo Electronico:
                                                     </strong>
-                                    <span t-field="doc.cliente.email"/>
-                                </td>
-                            </tr>
-                        </table>
-                        <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
-                            <tr>
-                                <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
-                                    <strong>Datos del Receptor </strong>
-                                </th>
-                                <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
-                                    <strong>Comentarios de recepción</strong>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td style="whidth:50%;">
-                                    <strong>
+                                <span t-field="doc.cliente.email"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+                        <tr>
+                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <span>Datos del Receptor </span>
+                            </th>
+                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <span>Comentarios de recepción</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="whidth:50%;">
+                                <strong>
                                                         Receptor:
                                                     </strong>
-                                    <span t-field="doc.create_user.name"/>
-                                </td>
-                                
-                                   <td style="whidth:50%;">
-                                    <span t-esc="doc.comentario_tecnico"/>
-                                </td> 
-                            </tr>
-                        </table>
-                        <t t-foreach="doc.planequipo" t-as="pe">
+                                <span t-field="doc.create_user.name"/>
+                            </td>
+                            <td style="whidth:50%;">
+                                <span t-esc="doc.comentario_tecnico"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <t t-foreach="doc.planequipo" t-as="pe">
+                        <div>
                             <div>
-                                <div>
-                                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
-                                        <tr>
-                                            <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
-                                                <strong>
+                                <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+                                    <tr>
+                                        <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                                            <strong>
                                                                     Datos del Equipo
                                                                 </strong>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
                                                                     Detalles de la máquina
                                                                 </strong>
-                                                <br/>
+                                            <br/>
                                                                 Máquina:
                                                                 
                                                             
@@ -146,7 +145,8 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo"/>
+                                                
+                                            <span t-field="pe.equipo"/>
                                                                 -
                                                                 
                                                             
@@ -162,8 +162,9 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.marca"/>
-                                                <br/>
+                                                
+                                            <span t-field="pe.equipo.marca"/>
+                                            <br/>
                                                                 Propietario:
                                                  
                                                 
@@ -177,8 +178,9 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.propietario.name"/>
-                                                <br/>
+                                                
+                                            <span t-field="pe.equipo.propietario.name"/>
+                                            <br/>
                             Fecha de ingreso:
                                                  
                                                 
@@ -192,10 +194,11 @@
                                                 
                                                 
                                                 
-                                                <span t-field="doc.fecha_entrada"/>
-                                                <br/>
-                                            </td>
-                                            <td>
+                                                
+                                            <span t-field="doc.fecha_entrada"/>
+                                            <br/>
+                                        </td>
+                                        <td>
                                                                 Marca de la máquina:
                                                                 
                                                             
@@ -211,8 +214,9 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.marca"/>
-                                                <br/>
+                                                
+                                            <span t-field="pe.equipo.marca"/>
+                                            <br/>
                                                                 MFG Year:
                                                                 
                                                             
@@ -228,8 +232,9 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.effective_date"/>
-                                                <br/>
+                                                
+                                            <span t-field="pe.equipo.effective_date"/>
+                                            <br/>
                                                                 N° de Serie:
                                                                 
                                                             
@@ -245,8 +250,9 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.serial_no"/>
-                                                <br/>
+                                                
+                                            <span t-field="pe.equipo.serial_no"/>
+                                            <br/>
                                                                 Fecha de compra:
                                                                 
                                                             
@@ -262,77 +268,76 @@
                                                 
                                                 
                                                 
-                                                <span t-field="pe.equipo.effective_date"/>
-                                            </td>
-                                            <td rowspan="2">
-                                                <center>
-                                                    <img t-attf-src="data:image/jpg;base64,{{ pe.equipo.qr_image }}" style="width:80px;height:80px;display:block;"/>
-                                                    <span>
+                                                
+                                            <span t-field="pe.equipo.effective_date"/>
+                                        </td>
+                                        <td rowspan="1">
+                                            <center>
+                                                <img t-attf-src="data:image/jpg;base64,{{ pe.equipo.qr_image2 }}" style="width:80px;height:80px;display:block;"/>
+                                                <span>
                                                                         Historial del Equipo
                                                                     </span>
-                                                </center>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <br/>
-                                </div>
+                                            </center>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
                             </div>
-                        </t>
-                         <t t-set="counter" t-value="0"/>
-                        <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
-                            <tr>
-                                <th colspan="2" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                        </div>
+                    </t>
+                    <t t-set="counter" t-value="0"/>
+                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+                        <tr>
+                            <th colspan="2" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
                                 Fotos de recepción
                             </th>
-                            </tr>
-                            <!-- Inicializamos el contador -->
-                        </table>
-                        <div class="row">
-                            <t t-foreach="doc.adjuntos_evaluaciones" t-as="imagen">
-                               <div class="col-6">
-                                   <center>
-                                                <img t-attf-src="data:image/jpg;base64,{{ imagen.adjuntoimage }}" style="width:230px;height:230px;display:block;margin-bottom:10px;"/>
-                                            </center>
-                               </div>             
-                            </t>
-                        </div>
-
-                        <div>
-							<div style="width:250px;font-size=12px; float:left;">
-								<span style="font-size:12px;">
+                        </tr>
+                        <!-- Inicializamos el contador -->
+                    </table>
+                    <div class="row">
+                        <t t-foreach="doc.adjuntos_evaluaciones" t-as="imagen">
+                            <div class="col-6">
+                                <center>
+                                    <img t-attf-src="data:image/jpg;base64,{{ imagen.adjuntoimage }}" style="width:220px;height:220px;display:block;margin-bottom:10px;"/>
+                                    <p style="font-size:12px; " t-esc="imagen.comentario"/>
+                                </center>
+                            </div>
+                        </t>
+                    </div>
+                    <div>
+                        <div style="width:250px;font-size=12px; float:left;">
+                            <span style="font-size:12px;">
 										Firma digital del cliente
 									</span>
-								<div class="" style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
-									<t t-if="not doc.adjunto">
-										<img t-attf-src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;"/>
-									</t>
-									<t t-else="">
-										<img t-attf-src="data:image/jpg;base64,{{ doc.adjunto }}" class="card-img-top" style="height:100px;margin:0px 0px 0px 0px;"/>
-									</t>
-								</div>
-								<p style="margin:0px; 0px -5px 0px;font-size:12px">
-									<strong style="font-size:12px;">
+                            <div class="" style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
+                                <t t-if="not doc.firma_evaluacion">
+                                    <img t-attf-src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;"/>
+                                </t>
+                                <t t-else="">
+                                    <img t-attf-src="data:image/jpg;base64,{{ doc.firma_evaluacion }}" class="card-img-top" style="height:100px;margin:0px 0px 0px 0px;"/>
+                                </t>
+                            </div>
+                            <p style="margin:0px; 0px -5px 0px;font-size:12px">
+                                <strong style="font-size:12px;">
 											Firmado por:
 										</strong>
-									<t t-esc="doc.namefirma"/>
-								</p>
-								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
-									<strong style="font-size:12px;">
-											DNI:
-										</strong>
-									<t t-esc="doc.dni"/>
-								</p>
-								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
-                                    <strong>Comentario:</strong>
-								<t t-esc="doc.comentario"/>
-								</p>
-							</div>
-						</div>
-                        
+                                <t t-esc="doc.firmante"/>
+                            </p>
+                            <!--<p style="margin:0px; 0px -5px 0px;font-size:12px;">-->
+                            <!--	<strong style="font-size:12px;">-->
+                            <!--			DNI:-->
+                            <!--		</strong>-->
+                            <!--	<t t-esc="doc.dni"/>-->
+                            <!--</p>-->
+                            <p style="margin:0px; 0px -5px 0px;font-size:12px;">
+                                <strong>Comentario:</strong>
+                                <t t-esc="doc.comentario_firma"/>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                </t>
             </t>
-
         </t>
+    </t>
     </template>
 </odoo>

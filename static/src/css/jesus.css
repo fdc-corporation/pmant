@@ -151,4 +151,21 @@ a {
   left: 45%;
   display: inline-block;
   bottom: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.707);
+  position: fixed;
+  background: url("https://equiposindustriales.pe/web/image/82251-0a5baca9/NUEVO%20TAMA%C3%91OPost%20para%20redes%20%281080%20x%201350%20px%29.png?height=256");
+  background-position: center;
+  background-size: cover;
+  width: 800px;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: center;
+  width: 30px;
+  background-color:#2c8ec4 ;
+  height: 80vh;
+  float: right;
+  
 }

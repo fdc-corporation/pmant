@@ -7,7 +7,7 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'fdccorp.com.pe'">
+								<t t-if="dominio_web == 'equiposindustriales.pe'">
 									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 									<span>
 										FDC CORPORATION E.I.R.L.
@@ -19,7 +19,7 @@
 										Compresores de Tornillo S.A.C.
 									</span>
 								</t>
-								<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 									<span>
 										FDC CORPORATION E.I.R.L.
@@ -50,13 +50,14 @@
 									</span>
 									/
 									<span t-esc="equipo.ubicacion.name" />
-								</span>							</div>
+								</span>
+							</div>
 							<hr>
 							</hr>
 							<div class="body-text-info">
 								<span>
 									<strong>
-										Direccion :
+										Dirección :
 									</strong>
 									<t t-esc="equipo.ubicacion.street" />
 								</span>
@@ -81,7 +82,7 @@
 								<div class="condicion-estado">
 									<span>
 										<strong>
-											Conficion :
+											Condicion :
 										</strong>
 										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
 									</span>
@@ -93,8 +94,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aun no cuenta con el registro de alguna de sus sedes, solicita el
-									registro de la sede a FDCCORP para ver su historial de servicios
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -110,7 +110,7 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'fdccorp.com.pe'">
+								<t t-if="dominio_web == 'equiposindustriales.pe'">
 									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 									<span>
 										FDC CORPORATION E.I.R.L.
@@ -122,7 +122,7 @@
 										Compresores de Tornillo S.A.C.
 									</span>
 								</t>
-								<t t-if="dominio_web != 'fdccorp.com.pe' and dominio_web != 'compresores.com.pe'">
+								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
 									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
 									<span>
 										FDC CORPORATION E.I.R.L.
@@ -155,7 +155,7 @@
 							<div class="body-text-info">
 								<span>
 									<strong>
-										Direccion :
+										Dirección :
 									</strong>
 									<t t-esc="equipo.propietario.street" />
 								</span>
@@ -180,7 +180,7 @@
 								<div class="condicion-estado">
 									<span>
 										<strong>
-											Conficion :
+											Condición :
 										</strong>
 										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
 									</span>
@@ -192,8 +192,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aun no cuenta con el registro de alguna de sus sedes, solicita el
-									registro de la sede a FDCCORP para ver su historial de servicios
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -214,30 +213,40 @@
 								</label>
 								<h4 t-esc="equipo.name">
 								</h4>
-								<button href="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
-									Solicitar servicio
-								</button>
+								<div style="display:flex;gap: 10px;">
+									<button href="" type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+										Solicitar servicio
+									</button>
+									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
+										Whatsapp
+									</a>
+								</div>
 							</div>
 							<div class="img-header-equipo">
 								<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % equipo.id" alt="Imagen del equipo" />
 								<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=qr_image' % equipo.id" alt="Qr del equipo" />
 							</div>
-							<button href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
-								Solicitar servicio
-							</button>
+							<div style="display:flex;gap: 10px;">
+								<button href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+									Solicitar servicio
+								</button>
+								<a class="btn-whatssap btn btn-primary" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
+										Whatsapp
+								</a>
+							</div>
 						</div>
 						<div class="descripcion-propieadades-equipo">
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Propitario :
+										Propietario :
 									</label>
 									<span t-esc="equipo.propietario.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Ubicacion :
+										Ubicación :
 									</label>
 									<span t-esc="equipo.ubicacion.name">
 									</span>
@@ -246,14 +255,14 @@
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Categoria :
+										Categoría :
 									</label>
 									<span t-esc="equipo.category_id.name">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Fecha Asignada :
+										Fecha asignada :
 									</label>
 									<span t-esc="equipo.assign_date">
 									</span>
@@ -262,19 +271,18 @@
 						</div>
 					</div>
 					<div class="main-card-detalles-equipo">
-						
 						<div class="descripcion-propieadades-equipo">
 							<div class="propiedades-contenedor">
 								<div class="propiedad">
 									<label>
-										Horas de uso Promedio diario :
+										Horas de uso promedio diario :
 									</label>
 									<span t-esc="equipo.time_uso">
 									</span>
 								</div>
 								<div class="propiedad">
 									<label>
-										Proximo mantenimiento :
+										Próximo mantenimiento  :
 									</label>
 									<span t-esc="equipo.fecha_prox">
 									</span>
@@ -306,9 +314,9 @@
 								</div>
 								<div class="propiedad">
 									<label>
-										Fracha efectiva :
+										Fecha efectiva  :
 									</label>
-									<span t-esc="equipo.model">
+									<span t-esc="equipo.effective_date">
 									</span>
 								</div>
 							</div>
@@ -316,28 +324,43 @@
 					</div>
 					<div class="contenedor-enalces-mantenimiento">
 						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial'" class="item-enlace">
-							<img src="/pmant/static/src/css/iconos/reporte.png"  />
-							<span>Historial de <br></br> mantenimientos</span>
+							<img src="/pmant/static/src/css/iconos/reporte.png" />
+							<span>
+								Historial de
+								<br>
+								</br>
+								mantenimientos
+							</span>
 						</a>
 						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/adjuntos'" class="item-enlace">
 							<img src="/pmant/static/src/css/iconos/adjunto-archivo.png" />
-							<span>Adjuntos del equipo</span>
+							<span>
+								Adjuntos del equipo
+							</span>
 						</a>
 						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/evaluaciones'" class="item-enlace">
 							<img src="/pmant/static/src/css/iconos/evaluacion.png" />
-							<span>Evaluaciones del equipo</span>
+							<span>
+								Evaluaciones del equipo
+							</span>
 						</a>
 						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/certificados'" class="item-enlace">
 							<img src="/pmant/static/src/css/iconos/certificado.png" />
-							<span>Certificados de <br></br> operatividad</span>
+							<span>
+								Certificados de
+								<br>
+								</br>
+								operatividad
+							</span>
 						</a>
-						<br></br>
+						<br>
+						</br>
 					</div>
 				</div>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" style="max-width: 500px !important;">
+				<div class="modal-dialog" style="max-width: max-content !important;height: auto !important;">
 					<div class="modal-content">
 						<form action="/solicitud/mantenimiento/servicio" method="POST" enctype="multipart/form-data">
 							<div class="modal-header">
@@ -358,33 +381,33 @@
 								<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
 								<input type="hidden" name="id_equipo" t-att-value="equipo.id" />
 								<input type="hidden" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
-								<input type="text" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled"  placeholder="Ubicacion del Equipo" />
+								<input type="text" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
 								<select name="tipo_servicio" class="form-control">
 									<option value="">
 										Seleccionar tipo de Servicio
 									</option>
-										<option value="">
-											Select. Servicio
-										</option>
-										<option value="Preventivo">
-											Preventivo
-										</option>
-										<option value="Instalación">
-											Instalación
-										</option>
-										<option value="Mantenimiento">
-											Mantenimiento
-										</option>
-										<option value="Modificación">
-											Modificación
-										</option>
+									<option value="">
+										Select. Servicio
+									</option>
+									<option value="Preventivo">
+										Preventivo
+									</option>
+									<option value="Instalación">
+										Instalación
+									</option>
+									<option value="Mantenimiento">
+										Mantenimiento
+									</option>
+									<option value="Modificación">
+										Modificación
+									</option>
 								</select>
-								<input type="text" name="nombre_equipo" t-att-value="equipo.name" disabled="disabled"  placeholder="Nombre del equipo" />
-								<input type="text" name="marca_equipo" t-att-value="equipo.marca" disabled="disabled"   placeholder="Marca del equipo" />
-								<input type="text" name="modelo" t-att-value="equipo.model" disabled="disabled"  placeholder="Modelo del equipo" />
-								<input type="text" name="numero_serie" t-att-value="equipo.serial_no" disabled="disabled"   placeholder="N° de serie" />
+								<input type="text" name="nombre_equipo" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
+								<input type="text" name="marca_equipo" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
+								<input type="text" name="modelo" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
+								<input type="text" name="numero_serie" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
 								<input type="date" name="fecha_servicio" placeholder="Fecha de Servicio" />
-								<textarea placeholder="Detalles del problema" name="razon" rows="4"   ></textarea>
+								<textarea placeholder="Detalles del problema" name="razon" rows="4"></textarea>
 								<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
 							</div>
 							<div class="modal-footer">

@@ -76,7 +76,7 @@ class PlanEquipo(models.Model):
         for statement in self:
             statement_report = statement_report_action.sudo()
             content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=statement.ids)
-            self.env['ir.attachment'].create({
+            certificado = self.env['ir.attachment'].create({
                 'name': "Certificado-operatividad-" + statement.equipo.name + ".pdf",
                 'type': 'binary',
                 'mimetype': 'application/pdf',
@@ -85,6 +85,8 @@ class PlanEquipo(models.Model):
                 'res_id': statement.id,
                 'id_equipo': statement.equipo.id,
             })
+
+            statement.equipo.certificados = [(4, certificado.id)]
 
 
 

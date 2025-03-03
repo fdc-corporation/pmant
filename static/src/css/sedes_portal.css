@@ -136,7 +136,7 @@
 }
 .main .card-contacto-main .info-empresa .body-text-info span strong {
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   line-height: normal;
 }
 .main .card-contacto-main .info-empresa .body-text-info .condicion-estado {
@@ -284,6 +284,18 @@
     display: block;
   }
 }
+.main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
+.main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
+.main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
+  display: none;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
+  .main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
+  .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
+    display: block;
+  }
+}
 .main .main-card-sedes .detalle-equipo-header .img-header-equipo,
 .main .main-card-equipos .detalle-equipo-header .img-header-equipo,
 .main .main-card-detalles-equipo .detalle-equipo-header .img-header-equipo {
@@ -323,6 +335,18 @@
     display: none;
   }
 }
+.main .main-card-sedes .detalle-equipo-header .btn-whatssap,
+.main .main-card-equipos .detalle-equipo-header .btn-whatssap,
+.main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
+  display: block;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .btn-whatssap,
+  .main .main-card-equipos .detalle-equipo-header .btn-whatssap,
+  .main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
+    display: none;
+  }
+}
 .main .main-card-sedes .descripcion-propieadades-equipo,
 .main .main-card-equipos .descripcion-propieadades-equipo,
 .main .main-card-detalles-equipo .descripcion-propieadades-equipo {
@@ -351,6 +375,8 @@
 .main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label,
 .main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label {
   width: 200px;
+  font-weight: 600;
+  font-size: 14px;
 }
 .main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad span,
 .main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad span,
@@ -361,7 +387,7 @@
 .main .main-card-equipos .titulo-seccion,
 .main .main-card-detalles-equipo .titulo-seccion {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   gap: 10px;
 }
 .main .main-card-sedes .titulo-seccion button,
@@ -695,6 +721,9 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+.modal-body input[disabled=disabled] {
+  background-color: lavender !important;
 }
 
 .modal-footer button {
