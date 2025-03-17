@@ -6,8 +6,8 @@
     "description": """
         Long description of module's purpose
     """,
-    "author": "My Company",
-    "website": "http://www.yourcompany.com",
+    "author": "Yostin Palacios Calle",
+    "website": "http://fdc-corporation.com",
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
@@ -92,6 +92,8 @@
         "views/email/email_sucursal_ot.xml",
         "views/email/email_hoja_recepcion.xml",
         "views/contacto/equipo_contacto.xml",
+        "views/email/service_finalizado.xml",
+        "views/email/calificacion_service.xml",
         # VISTAS DE MODELO DE EVENTO
         "views/eventos/eventos-mant.xml",
         "views/adjunto/it_attchment_inherit.xml",

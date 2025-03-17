@@ -152,6 +152,9 @@
 					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
 				</header>
 				<sheet>
+					<div class="alert alert-warning" role="alert" invisible="ots or is_evaluacion">
+                        Alerta: Esta tarea ya puede ser programada / Crea una OT 
+                    </div>
 					<group>
 						<group>
 							<field name="id" invisible="1" />

@@ -115,17 +115,21 @@ class OTS(models.Model):
                         _("Debe registrar la OC en el mudlo de Orden de compras")
                     )
 
-            elif record.stage_id.sequence == 5:
+            elif record.stage_id.sequence == 5:                    
                 if not record.selec_sunat and not record.factura:
                     raise UserError(_("Debe registrar la factura"))
                 elif record.selec_sunat and not record.factura_sunat:
                     raise UserError(_("Debe registrar la factura Sunat"))
 
     def send_reporte_final(self):
-        template = self.env.ref("pmant.email_template_custom_sucursal")
+        template_servicio = self.env.ref("pmant.email_template_servicio_finalizado")
+        calificacion = self.env.ref("pmant.email_template_calificacion_servicio")
 
-        if template:
-            template.send_mail(self.id, force_send=True)
+        if template_servicio:
+            template_servicio.send_mail(self.id, force_send=True)
+
+        if calificacion:
+            calificacion.send_mail(self.id, force_send=True)
 
     def send_report_empresa(self):
         try:
