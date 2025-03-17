@@ -659,3 +659,14 @@ class PortalPmant(http.Controller):
         return request.make_response(pdf, headers=pdfhttpheaders)
 
 
+    @http.route('/rate_service', type='http', auth="public", website=True)
+    def set_calificacion (self, **kwargs):
+        calificacion = kwargs.get("rating")
+        order_id = kwargs.get("order_id")
+        
+        tarea = request.env["tarea.mantenimiento"].sudo().search([("id", "=", order_id)])
+
+        tarea.sudo().write({
+            "clasi1" : calificacion
+        })
+        return request.redirect("/contactus-thank-you")
