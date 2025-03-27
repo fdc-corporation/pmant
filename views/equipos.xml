@@ -49,7 +49,15 @@
 			<xpath expr="//sheet/notebook[1]" position="after">
 				<notebook>
 					<page string="Mantenimientos">
-						<field name="planequipo" string="Mantenimientos Realizados" />
+						<field name="planequipo" string="Mantenimientos Realizados" >
+							<tree>
+								<field name="equipo" />
+								<field name="plan" />
+								<field name="estado" />
+								<field name="fecha_ejec" />
+								<button name="create_report_equipo" string="Generar Reporte" type="object" class="oe_highlight" />
+							</tree>
+						</field>
 						<group>
 							<field name="fecha_prox" string="Proximo Mantenimiento" />
 							<field name="hoy" invisible="1" />

@@ -45,7 +45,7 @@
         "views/herencia.xml",
         "views/configuracion.xml",
         "views/wizard.xml",
-        # 'views/reportecertificado.xml',
+        'views/reportes/report_planequipo.xml',
         "views/reporteticket.xml",
         "views/planequipo_reporte.xml",
         "views/planequipo.xml",

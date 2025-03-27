@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	
+	<record id="action_report_equipo" model="ir.actions.report">
+		<field name="name">Reporte de Mantenimiento</field>
+		<field name="model">planequipo.mantenimiento</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">pmant.report_action_equipo</field>
+		<field name="print_report_name">'Reporte - %s' % (object.equipo.name)</field>
+	</record>
+
+
+	<template id="pmant.report_action_equipo">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page">
+						<h2 style="text-align: left;color:black !important;">
+								Reporte Técnico
+							</h2>
+						<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+							<tr>
+								<td colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
+											Orden de Trabajo
+											
+										
+										
+									<!--
+											<div style="width:100%; height:4.5px; background-image: linear-gradient(to right, #3191C5, #22629D, #E31E24, #000000);" />
+											-->
+								</td>
+							</tr>
+							<!-- Informacion del documento -->
+							<tr>
+								<td class="col-6">
+									<strong>
+												N° de Orden:
+											</strong>
+									<span t-field="doc.tarea.name"/>
+								</td>
+								<td class="col-6">
+									<strong>
+												Tipo de servicio:
+											</strong>
+									<span t-field="doc.tarea.tipo"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-6">
+									<strong>
+												Fecha Programada:
+											</strong>
+									<span t-field="doc.ots[0].schedule_date"/>
+								</td>
+								<td class="col-6">
+									<strong>
+												Fecha Ejecutada:
+											</strong>
+									<t t-if="doc.fecha_ejec">
+										<span t-field="doc.tarea.fecha_ejec"/>
+									</t>
+								</td>
+							</tr>
+							<!-- DATOS DEL CLIENTE -->
+							<tr>
+								<td class="col-6">
+									<strong>
+												Detalles del cliente
+											</strong>
+									<br/>
+											Cliente:
+											
+										
+										
+									<span t-field="doc.tarea.cliente"/>
+									<br/>
+											Teléfono:
+											
+										
+										
+									<span t-field="doc.tarea.cliente.mobile"/>
+									<br/>
+											Email:
+											
+										
+										
+									<span t-field="doc.tarea.cliente.email"/>
+								</td>
+								<td class="col-6">
+									<strong>
+												Dirección:
+											</strong>
+									<span t-field="doc.tarea.cliente.street"/>
+									<span t-field="doc.tarea.cliente.street2"/>
+									<br/>
+									<span t-field="doc.tarea.cliente.l10n_pe_district"/>
+											-
+											
+										
+										
+									<span t-field="doc.tarea.cliente.city_id"/>
+											-
+											
+										
+										
+									<span t-field="doc.tarea.cliente.state_id"/>
+											-
+											
+										
+										
+									<span t-field="doc.tarea.cliente.country_id"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-6">
+									<strong>
+												Detalles del Servicio
+											</strong>
+									<br/>
+											Prioridad :
+											
+										
+										
+									<span t-field="doc.ots[0].priority"/>
+								</td>
+								<td class="col-6">
+									<br/>
+											Duracion :
+											
+										
+										
+									<span t-field="doc.ots[0].duration"/>
+											horas
+										
+									
+									
+								</td>
+							</tr>
+							<!-- DETALLER DE LA COMPAÑIA -->
+							<tr style="margin-bottom: 0px;">
+								<td class="col-6">
+									<strong>
+												Detalles de la compañía
+											</strong>
+									<br/>
+											Compañía:
+											
+										
+										
+									<span t-field="doc.ots[0].company_id"/>
+									<br/>
+											Responsable:
+											
+										
+										
+									<span t-field="doc.ots[0].user_id"/>
+									<!-- <br/>Supervisor: -->
+									<!-- <span t-field="doc.supervisor_id"/> -->
+								</td>
+								<td class="col-6">
+									<strong>
+												Detalles del Equipo de Mantenimiento
+											</strong>
+									<br/>
+											Responsable:
+											
+										
+										
+									<span t-field="doc.ots[0].maintenance_team_id"/>
+									<br/>
+											Técnico:
+											
+										
+										
+									<span t-field="doc.ots[0].user_id"/>
+								</td>
+							</tr>
+						</table>
+							<div>
+								<div>
+									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+										<tr>
+											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+												<strong>
+															Activos
+														</strong>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+														Plan de Tarea :
+														
+													
+												<span t-field="doc.ots[0].tarea"/>
+											</td>
+											<td rowspan="2">
+												<center>
+													<img t-attf-src="data:image/jpg;base64,{{ doc.equipo.qr_image }}" style="width:80px;height:80px;display:block;"/>
+													<span>
+																Historial del Equipo
+															</span>
+												</center>
+											</td>
+										</tr>
+										<!-- DETALLES DE LA MAQUINA (ACTIVOS) -->
+										<tr>
+											<td>
+												<strong>
+															Detalles de la máquina
+														</strong>
+												<br/>
+														Máquina:
+														
+													
+												<span t-field="doc.equipo"/>
+														-
+														
+													
+												<span t-field="doc.equipo.marca"/>
+												<br/>
+														Propietario:
+														
+													
+												<span t-field="doc.equipo.propietario"/>
+												<br/>
+														Ubicacion:
+														
+													
+												<span t-field="doc.equipo.ubicacion"/>
+											</td>
+											<td>
+														Marca de la máquina:
+														
+													
+												<span t-field="doc.equipo.marca"/>
+												<br/>
+														MFG Year:
+														
+													
+												<span t-field="doc.equipo.effective_date"/>
+												<br/>
+														N° de Serie:
+														
+													
+												<span t-field="doc.equipo.serial_no"/>
+											</td>
+										</tr>
+									</table>
+									<br/>
+										<t t-if="doc.tarea.is_evaluacion">
+											<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+												<thead>
+													<tr class="no-wrap">
+														<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+															<strong>
+																Historial de Recepción
+															</strong>
+														</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+															<strong>Datos del Receptor </strong>
+														</th>
+														<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+															<strong>Comentarios de recepción</strong>
+														</th>
+													</tr>
+													<tr>
+														<td style="whidth:50%;">
+															<strong>
+															Receptor:
+															</strong>
+															<span t-esc="doc.tarea.create_user.name"/>
+														</td>
+														<td style="whidth:50%;">
+															<span t-esc="doc.tarea.comentario_tecnico"/>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+											<ul>
+												<t t-foreach="doc.tarea.adjuntos_evaluaciones" t-as="imagen">
+													<li>
+														<span style="font-size:12px;" t-esc="imagen.comentario"/>
+													</li>
+												</t>
+											</ul>
+										</t>
+	
+									<div>
+										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+											<tr>
+												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+															Procesos del servicio
+														</td>
+											</tr>
+											<tr>
+												<th scope="col">
+															Grupo
+														</th>
+												<th scope="col">
+															Proceso
+														</th>
+												<th scope="col">
+															Resultado
+														</th>
+												<th scope="col">
+															Comentario
+														</th>
+											</tr>
+											<t t-foreach="doc.procesos" t-as="pr">
+												<tr>
+													<td>
+														<span t-field="pr.proceso.grupo"/>
+													</td>
+													<td>
+														<span t-field="pr.proceso"/>
+													</td>
+													<td>
+														<center>
+                                                            <t t-if="pr.estado">
+                                                                <img t-attf-src="data:image/jpg;base64,{{ pr.estado.icono }}" alt="" class="" style="width:16px;"/>
+                                                            </t>
+                                                        </center>
+														<!-- <span t-field="pr.estado"/> -->
+													</td>
+													<td>
+														<span t-field="pr.descripcion"/>
+													</td>
+												</tr>
+											</t>
+										</table>
+									</div>
+									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+										<tr>
+											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+												<font style="vertical-align: inherit;">
+															Detalles de Procesos
+														</font>
+											</td>
+										</tr>
+										<tr>
+											<th style="text-align:center;">
+														Comentarios
+													</th>
+											<th scope="col" style="text-align:center;">
+														Adjuntos
+													</th>
+										</tr>
+									</table>
+									<t t-foreach="doc.procesos" t-as="pr">
+										<t t-if="pr.adjuntos">
+											<br/>
+											<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+												<tr>
+													<td>
+														<strong>
+																	Proceso:
+																</strong>
+														<span t-field="pr.proceso"/>
+													</td>
+													<td>
+														<strong>
+																	Descripcion:
+																</strong>
+														<span t-field="pr.descripcion"/>
+													</td>
+												</tr>
+												<t t-foreach="pr.adjuntos" t-as="ad">
+													<tr>
+														<td class="col-6">
+															<t t-if="ad.comentario != null">
+																<strong>
+																			Comentario de la imagen:
+																		</strong>
+																<span t-field="ad.comentario"/>
+															</t>
+														</td>
+														<td class="col-6" style="margin:0px auto 0px auto;">
+															<t t-if="ad.adjunto != null">
+																<center>
+																	<img t-attf-src="data:image/jpg;base64,{{ ad.adjunto }}" style="width:150px;height:150px;display:block;"/>
+																</center>
+															</t>
+															<t t-else="">
+																<center>
+																	<img t-attf-src="https://www.cams-it.com/wp-content/uploads/2015/05/default-placeholder-200x200.png" style="width:150px;height:150px;display:block;"/>
+																</center>
+															</t>
+														</td>
+													</tr>
+												</t>
+											</table>
+										</t>
+									</t>
+								</div>
+							</div>
+						<div>
+							<div style="width:250px;font-size=12px; float:left;">
+								<span style="font-size:12px;">
+											Firma digital del cliente
+										</span>
+								<div class="" style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
+									<t t-if="not doc.tarea.adjunto">
+										<img t-attf-src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;"/>
+									</t>
+									<t t-else="">
+										<img t-attf-src="data:image/jpg;base64,{{ doc.tarea.adjunto }}" class="card-img-top" style="height:100px;margin:0px 0px 0px 0px;"/>
+									</t>
+								</div>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px">
+									<strong style="font-size:12px;">
+												Firmado por:
+											</strong>
+									<t t-esc="doc.tarea.namefirma"/>
+								</p>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
+									<strong style="font-size:12px;">
+												DNI:
+											</strong>
+									<t t-esc="doc.tarea.dni"/>
+								</p>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
+									<strong>Comentario:</strong>
+									<t t-esc="doc.tarea.comentario"/>
+								</p>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

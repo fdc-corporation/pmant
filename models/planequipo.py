@@ -95,3 +95,7 @@ class PlanEquipo(models.Model):
     def create_certificado_operatividad(self):
         self._create_certificado_operatividad()
         return self.env.ref('pmant.action_reporte_cert_operatividad').report_action(self)
+
+
+    def create_report_equipo (self) : 
+        return self.env.ref('pmant.action_report_equipo').report_action(self)
