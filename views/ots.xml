@@ -51,7 +51,7 @@
 				<field name="ubicacion" readonly="1" />
 				<field name="oportunidad" readonly="1"/>
 				<field name="is_tecnico" invisible="1"/>
-				<field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('cliente', '=', empresa)]" />
+				<field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="['|', ('cliente', '=', empresa), ('cliente', '=', ubicacion)]" />
 				<field name="not_oc" />
 				<field name="selec_sunat" invisible="stage_id in (1, 2, 3)" />
 				<field name="factura_sunat"  invisible="not selec_sunat"/>
