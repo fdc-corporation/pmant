@@ -51,7 +51,7 @@ class OTS(models.Model):
             if record.tarea and record.tarea.oc_id:
                 record.order_compra = record.tarea.oc_id.id
                 if record.tarea.oc_id:
-                    record.tarea.oc_id.ot_servicio = record.id
+                    record.tarea.oc_id.ot_servicio = self.id
             else:
                 record.order_compra = False
 
@@ -78,6 +78,8 @@ class OTS(models.Model):
 
     def write(self, vals):
         res = super(OTS, self).write(vals)
+        
+
         if not self.event_id:
             self._create_calendar_event()
         if "stage_id" in vals:

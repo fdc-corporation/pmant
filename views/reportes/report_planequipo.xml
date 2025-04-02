@@ -58,7 +58,7 @@
 												Fecha Ejecutada:
 											</strong>
 									<t t-if="doc.fecha_ejec">
-										<span t-field="doc.tarea.fecha_ejec"/>
+										<span t-field="doc.fecha_ejec"/>
 									</t>
 								</td>
 							</tr>

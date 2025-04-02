@@ -264,7 +264,7 @@
 									<label>
 										Fecha asignada :
 									</label>
-									<span t-esc="equipo.assign_date">
+									<span t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else ''">
 									</span>
 								</div>
 							</div>
@@ -282,9 +282,9 @@
 								</div>
 								<div class="propiedad">
 									<label>
-										Próximo mantenimiento  :
+										Próximo mantenimiento :
 									</label>
-									<span t-esc="equipo.fecha_prox">
+									<span t-esc="equipo.fecha_prox.strftime('%d/%m/%Y') if equipo.fecha_prox else ''">
 									</span>
 								</div>
 							</div>
@@ -316,7 +316,7 @@
 									<label>
 										Fecha efectiva  :
 									</label>
-									<span t-esc="equipo.effective_date">
+									<span t-esc="equipo.effective_date.strftime('%d/%m/%Y')">
 									</span>
 								</div>
 							</div>

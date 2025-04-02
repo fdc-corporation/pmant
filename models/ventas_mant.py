@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 
-
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
@@ -20,83 +19,71 @@ class SaleOrder(models.Model):
                     product.product_template_id.detailed_type == "service"
                     for product in order.order_line
                 ):
-
                     # Crear el registro de mantenimiento
                     valores = {
                         "name": order.name + " - Servicios de mantenimiento",
                         "cliente": order.partner_id.id,
                         "ubicacion": order.partner_shipping_id.id,
-                        "oc_id": order.oc_id.id,
+                        "oc_id": order.oc_id.id if order.oc_id else False,
                     }
                     mantenimiento = self.env["tarea.mantenimiento"].create(valores)
 
-                    # Obtener el ID del mantenimiento creado
-                    mantenimiento_id = mantenimiento.id
-
                     # Crear una lista de líneas de equipos a añadir
-                    lines_to_add = []  # Lista para agregar las líneas
+                    lines_to_add = []
                     for line in order.order_line:
-                        if (
-                            line.display_type == "line_section"
-                        ):  # Verificar si la línea es una sección
-                            # Asegúrate de tener correctamente la cadena con 'name / serial_no'
-                            cadena = (
-                                line.name
-                            )  # Suponiendo que el campo line.name tiene la estructura 'name / serial_no'
-
-                            partes = cadena.split(
-                                " / "
-                            )  # Dividir la cadena en base a la barra '/'
-
+                        if line.display_type == "line_section":
+                            partes = line.name.split(" / ")
                             if len(partes) > 1:
-                                valor_despues_barra = partes[
-                                    1
-                                ]  # Obtener la parte después de la barra '/'
-
-                                # Buscar el equipo según el serial_no
+                                serial_no = partes[1].strip()
                                 equipo = self.env["maintenance.equipment"].search(
-                                    [("serial_no", "=", valor_despues_barra)], limit=1
+                                    [("serial_no", "=", serial_no)], limit=1
                                 )
-
-                                if equipo:  # Verificar si se encontró el equipo
-                                    equipo_id = equipo.id
-
-                                    # Añadir la línea a la lista solo si es una sección
-                                    lines_to_add.append(
-                                        (
-                                            0,
-                                            0,
-                                            {
-                                                "equipo": equipo_id,
-                                            },
-                                        )
-                                    )
+                                if equipo:
+                                    planequipo_vals = {
+                                        "tarea": mantenimiento.id,
+                                        "cliente": order.partner_id.id,
+                                        "ubicacion": order.partner_shipping_id.id,
+                                        "equipo": equipo.id,
+                                    }
+                                    lines_to_add.append((0, 0, planequipo_vals))
 
                     # Añadir todas las líneas a la tarea de mantenimiento
-                    mantenimiento.write({"planequipo": lines_to_add})
-                    estado = self.env.ref(
-                        "oc_compras.estado_servicios", raise_if_not_found=False
-                    )
-                    self.ots.oc_id = self.oc_id.id
-                    self.oc_id.state = estado.id
-                    self.write({"ots": mantenimiento_id})
-            except UserError as e:
-                raise UserError(
-                    f"Ups, no se logró crear una nueva solicitud de mantenimiento: {str(e)}"
-                )
+                    if lines_to_add:
+                        mantenimiento.write({"planequipo": lines_to_add})
+
+                    # Asignar la tarea de mantenimiento al pedido de venta
+                    order.ots = mantenimiento
+
+                    # Actualizar el estado del pedido de compra si existe
+                    if order.oc_id:
+                        estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
+                        if estado:
+                            order.oc_id.state = estado.id
+                return {
+                    "type": "ir.actions.act_window",
+                    "name": "Tareas",
+                    "view_mode": "form",
+                    "res_model": "tarea.mantenimiento",
+                    "res_id": self.ots.id,
+                    "context": {"create": False},
+                }
+            except Exception as e:
+                raise UserError(f"Ups, no se logró crear la solicitud de mantenimiento: {str(e)}")
 
     def action_view_services(self):
+        self.ensure_one()
         return {
             "type": "ir.actions.act_window",
             "name": "Tareas",
             "view_mode": "form",
             "res_model": "tarea.mantenimiento",
             "res_id": self.ots.id,
-            "context": "{'create' : False}",
+            "context": {"create": False},
         }
 
+    @api.depends("ots")
     def _total_tareas(self):
         for record in self:
             record.servicios_cantidad = self.env["tarea.mantenimiento"].search_count(
-                [("id", "=", self.ots.id)]
+                [("id", "=", record.ots.id)]
             )
