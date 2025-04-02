@@ -51,7 +51,7 @@
 									<strong>
 												Fecha Programada:
 											</strong>
-									<span t-field="doc.ots[0].schedule_date"/>
+									<span t-field="doc.ots.schedule_date"/>
 								</td>
 								<td class="col-6">
 									<strong>
@@ -122,7 +122,7 @@
 											
 										
 										
-									<span t-field="doc.ots[0].priority"/>
+									<span t-field="doc.ots.priority"/>
 								</td>
 								<td class="col-6">
 									<br/>
@@ -130,7 +130,7 @@
 											
 										
 										
-									<span t-field="doc.ots[0].duration"/>
+									<span t-field="doc.ots.duration"/>
 											horas
 										
 									
@@ -148,13 +148,13 @@
 											
 										
 										
-									<span t-field="doc.ots[0].company_id"/>
+									<span t-field="doc.ots.company_id"/>
 									<br/>
 											Responsable:
 											
 										
 										
-									<span t-field="doc.ots[0].user_id"/>
+									<span t-field="doc.ots.user_id"/>
 									<!-- <br/>Supervisor: -->
 									<!-- <span t-field="doc.supervisor_id"/> -->
 								</td>
@@ -167,13 +167,13 @@
 											
 										
 										
-									<span t-field="doc.ots[0].maintenance_team_id"/>
+									<span t-field="doc.ots.maintenance_team_id"/>
 									<br/>
 											Técnico:
 											
 										
 										
-									<span t-field="doc.ots[0].user_id"/>
+									<span t-field="doc.ots.user_id"/>
 								</td>
 							</tr>
 						</table>
@@ -192,7 +192,7 @@
 														Plan de Tarea :
 														
 													
-												<span t-field="doc.ots[0].tarea"/>
+												<span t-field="doc.ots.tarea"/>
 											</td>
 											<td rowspan="2">
 												<center>
