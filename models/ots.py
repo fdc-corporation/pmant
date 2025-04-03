@@ -55,6 +55,21 @@ class OTS(models.Model):
             else:
                 record.order_compra = False
 
+    def action_open_wizard(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Enviar por WhatsApp',
+            'res_model': 'acrux.chat.message.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_partner_id': self.empresa.id,
+                'full_name': True,
+            }
+        }
+
+
+
     @api.depends_context("uid")
     def _compute_is_tecnico(self):
         for record in self:

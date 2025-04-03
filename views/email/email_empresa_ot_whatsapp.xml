@@ -12,49 +12,46 @@
 		<field name="body_html">
 			<![CDATA[
                <!-- Traducción de días -->
-<t t-set="days_translation" t-value="{
-    'Monday': 'Lunes',
-    'Tuesday': 'Martes',
-    'Wednesday': 'Miércoles',
-    'Thursday': 'Jueves',
-    'Friday': 'Viernes',
-    'Saturday': 'Sábado',
-    'Sunday': 'Domingo'
-}"/>
+                <t t-set="days_translation" t-value="{
+                    'Monday': 'Lunes',
+                    'Tuesday': 'Martes',
+                    'Wednesday': 'Miércoles',
+                    'Thursday': 'Jueves',
+                    'Friday': 'Viernes',
+                    'Saturday': 'Sábado',
+                    'Sunday': 'Domingo'
+                }"/>
+                <!-- Asignar día, fecha y hora si hay schedule_date -->
+                <t t-if="object.schedule_date">
+                    <t t-set="day_of_week" t-value="object.schedule_date.strftime('%A')"/>
+                    <t t-set="fecha" t-value="object.schedule_date.strftime('%d/%m/%Y')"/>
+                    <t t-set="hora" t-value="format_time(time=object.schedule_date, tz=mail_tz, time_format='short', lang_code=object.env.lang)"/>
+                </t>
+                <!-- Contenido -->
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">👋 *Estimado/a* <t t-out="object.empresa.name or 'cliente'"/>:</p>
 
-<!-- Asignar día, fecha y hora si hay schedule_date -->
-<t t-if="object.schedule_date">
-    <t t-set="day_of_week" t-value="object.schedule_date.strftime('%A')"/>
-    <t t-set="fecha" t-value="object.schedule_date.strftime('%d/%m/%Y')"/>
-    <t t-set="hora" t-value="format_time(time=object.schedule_date, tz=mail_tz, time_format='short', lang_code=object.env.lang)"/>
-</t>
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">📌 *Se ha agendado una orden de servicio en su ubicación:*  
+                <t t-out="object.ubicacion.name"/></p>
 
-<!-- Contenido -->
-<p style="box-sizing:border-box;margin:0 0 16px 0;">👋 *Estimado/a* <t t-out="object.empresa.name or 'cliente'"/>:</p>
+                <t t-if="object.schedule_date">
+                    <p style="box-sizing:border-box;margin:0 0 16px 0;">🗓 *Fecha programada:*  
+                    <t t-out="days_translation.get(day_of_week, day_of_week)"/> <t t-out="fecha"/> a las <t t-out="hora or '08:00'"/></p>
+                </t>
 
-<p style="box-sizing:border-box;margin:0 0 16px 0;">📌 *Se ha agendado una orden de servicio en su ubicación:*  
-<t t-out="object.ubicacion.name"/></p>
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">👨‍🔧 *Técnico responsable:* <t t-out="object.user_id.name"/></p>
 
-<t t-if="object.schedule_date">
-    <p style="box-sizing:border-box;margin:0 0 16px 0;">🗓 *Fecha programada:*  
-    <t t-out="days_translation.get(day_of_week, day_of_week)"/> <t t-out="fecha"/> a las <t t-out="hora or '08:00'"/></p>
-</t>
+                <t t-if="object.subodinados">
+                    <p style="box-sizing:border-box;margin:0 0 16px 0;">👥 *Técnicos asistentes:*</p>
+                    <t t-foreach="object.subodinados" t-as="res">
+                        <p style="box-sizing:border-box;margin:0 0 8px 16px;">• <t t-out="res.name"/></p>
+                    </t>
+                </t>
 
-<p style="box-sizing:border-box;margin:0 0 16px 0;">👨‍🔧 *Técnico responsable:* <t t-out="object.user_id.name"/></p>
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">⚠️ *Importante:* Le solicitamos que el área de trabajo esté *libre y accesible* en la fecha y hora programada para facilitar el servicio técnico.</p>
 
-<t t-if="object.subodinados">
-    <p style="box-sizing:border-box;margin:0 0 16px 0;">👥 *Técnicos asistentes:*</p>
-    <t t-foreach="object.subodinados" t-as="res">
-        <p style="box-sizing:border-box;margin:0 0 8px 16px;">• <t t-out="res.name"/></p>
-    </t>
-</t>
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">📄 *Una vez finalizado el servicio, se le enviará el reporte técnico al correo*.</p>
 
-<p style="box-sizing:border-box;margin:0 0 16px 0;">⚠️ *Importante:* Le solicitamos que el área de trabajo esté *libre y accesible* en la fecha y hora programada para facilitar el servicio técnico.</p>
-
-<p style="box-sizing:border-box;margin:0 0 16px 0;">📄 *Una vez finalizado el servicio, se le enviará el reporte técnico al correo*.</p>
-
-<p style="box-sizing:border-box;margin:0 0 16px 0;">Gracias por confiar en nuestro equipo.</p>
-
+                <p style="box-sizing:border-box;margin:0 0 16px 0;">Gracias por confiar en nuestro equipo.</p>
 			]]>
 		</field>
 	</record>
