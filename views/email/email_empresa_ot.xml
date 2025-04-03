@@ -113,9 +113,9 @@
                                                         </li>
                                                         <li>Duración: <t t-out="object.duration"> horas</t>
                                                         </li>
-                                                        <li>Responsable: <t t-out="object.user_id.name"></t>
+                                                        <li>Tecnico responsable: <t t-out="object.user_id.name"></t>
                                                         </li>
-                                                        <li>Asistentes:
+                                                        <li>Tecnicos:
                                                             <ul>
                                                                 <t t-foreach="object.subodinados" t-as="res">
                                                                     <li>

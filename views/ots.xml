@@ -38,6 +38,9 @@
 				<button name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
 				<button name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
 				<button name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
+				<button class="oe_stat_button" type="action" name="951" icon="fa-whatsapp" context="{'default_partner_id': empresa.id, 'full_name': True}">
+                    <span class="o_stat_info">Enviar</span>
+                </button>
 			</xpath>
 		
 			<xpath expr="//field[@name='maintenance_type']" position="after">
