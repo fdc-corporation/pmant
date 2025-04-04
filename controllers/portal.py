@@ -268,8 +268,7 @@ class PortalPmant(http.Controller):
 
 
 
-
-    @http.route(['/my/servicios/ejecucion'], type="http", auth="user", website=True)
+    @http.route(['/my/servicios/ejecucion', '/my/servicios/ejecucion/page/<int:page>'], type="http", auth="user", website=True)
     def get_servicio_ejecucion(self, page=1, **kw):
         user = request.env.user.partner_id
         domain = []
@@ -281,7 +280,7 @@ class PortalPmant(http.Controller):
 
         equipo_model = request.env["maintenance.equipment"].sudo()
 
-        # --- PAGINACIÓN ---
+        # Paginación
         page = int(page)
         page_size = 12
         total = equipo_model.search_count(domain)
@@ -301,6 +300,7 @@ class PortalPmant(http.Controller):
             'user': user,
             'pager': pager,
         })
+
 
 
 
