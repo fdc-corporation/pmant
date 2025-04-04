@@ -10,7 +10,6 @@ import base64
 import math
 import urllib.parse
 import base64
-from odoo.tools.misc import query_url_encode
 
 _logger = logging.getLogger(__name__)
 
