@@ -263,6 +263,26 @@
 							Aún no cuenta con Servicios registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
 						</t>
 					</div>
+					<t t-if="pager">
+						<div class="text-center mt-4">
+							<ul class="pagination justify-content-center">
+								<li t-if="pager['page'] &gt; 1" class="page-item">
+									<a t-att-href="pager['url'].replace('&amp;', '&amp;') + '&amp;page=' + str(pager['page'] - 1)" class="page-link">Anterior</a>
+								</li>
+								<t t-foreach="pager['pages']" t-as="p">
+									<li t-att-class="'page-item%s' % (' active' if p['num'] == pager['page'] else '')">
+										<a t-att-href="p['url'].replace('&amp;', '&amp;')" class="page-link">
+											<t t-esc="p['num']"/>
+										</a>
+									</li>
+								</t>
+								<li t-if="pager['page'] &lt; pager['page_count']" class="page-item">
+									<a t-att-href="pager['url'].replace('&amp;', '&amp;') + '&amp;page=' + str(pager['page'] + 1)" class="page-link">Siguiente</a>
+								</li>
+							</ul>
+						</div>
+					</t>
+
 				</div>
 			</div>
 		</t>

@@ -10,6 +10,8 @@ import base64
 import math
 import urllib.parse
 import base64
+from odoo.tools.misc import query_url_encode
+
 _logger = logging.getLogger(__name__)
 
 class PortalPmant(http.Controller):
@@ -269,19 +271,36 @@ class PortalPmant(http.Controller):
 
 
     @http.route(['/my/servicios/ejecucion'], type="http", auth="user", website=True)
-    def get_servicio_ejecucion (self):
+    def get_servicio_ejecucion(self, page=1, **kw):
         user = request.env.user.partner_id
-        domain = ""
+        domain = []
+
         if user.company_type == "person":
-            # Filtrar servicios ejecutados por el usuario
             domain = [("ubicacion", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
-        else :
+        else:
             domain = [("propietario", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
-        equipos = request.env["maintenance.equipment"].sudo().search(domain)
-        # print(equipos)
-        return request.render('pmant.servicios_ejecucion', {
+
+        equipo_model = request.env["maintenance.equipment"].sudo()
+
+        # --- PAGINACIÓN ---
+        page = int(page)
+        page_size = 12
+        total = equipo_model.search_count(domain)
+        equipos = equipo_model.search(domain, offset=(page - 1) * page_size, limit=page_size)
+
+        pager = request.website.pager(
+            url="/my/servicios/ejecucion",
+            total=total,
+            page=page,
+            step=page_size,
+            scope=5,
+            url_args=kw,
+        )
+
+        return request.render("pmant.servicios_ejecucion", {
             'equipo': equipos,
             'user': user,
+            'pager': pager,
         })
 
 
