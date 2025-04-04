@@ -271,8 +271,12 @@ class PortalPmant(http.Controller):
     @http.route(['/my/servicios/ejecucion'], type="http", auth="user", website=True)
     def get_servicio_ejecucion (self):
         user = request.env.user.partner_id
-        # Filtrar servicios ejecutados por el usuario
-        domain = ["|", ("ubicacion", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
+        domain = ""
+        if user.company_type == "person":
+            # Filtrar servicios ejecutados por el usuario
+            domain = ["|", ("ubicacion", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
+        else :
+            domain = ["|", ("empresa", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
         equipos = request.env["maintenance.equipment"].sudo().search(domain)
         # print(equipos)
         return request.render('pmant.servicios_ejecucion', {

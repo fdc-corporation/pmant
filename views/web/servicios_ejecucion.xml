@@ -218,10 +218,15 @@
 									<t t-foreach="plan.tarea.ots" t-as="ot">
 										<t t-if="ot.stage_id.id in [1, 2]">
 											<div class="card-mantenimiento">
-												<div style="display:flex; gap:5px;align-items:center;">
-													<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
+												<div style="display:flex; gap:5px;align-items:start;">
+													<t t-if="">
+														<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % plan.equipo.id" alt="Imagen del equipo" />
+													</t>
+													<t t-else="">
+														<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=qr_image' % plan.equipo.id" alt="Qr del equipo" />
+													</t>
 													<div class="text-card-mantenimiento">
-														<strong t-esc="plan.tarea.name" />
+														<strong t-esc="plan.equipo.name" />
 														<span>
 															<span>
 																Plan de Mant. :
@@ -232,7 +237,7 @@
 															<span>
 																Fecha programada :
 															</span>
-																<span t-esc="ot.schedule_date" />
+																<span t-esc="ot.schedule_date.strftime('%d/%m/%Y') if ot.schedule_date else ''" />
 														</span>
 														<span>
 															<span>
@@ -242,7 +247,7 @@
 														</span>
 													</div>
 												</div>
-												<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.tarea.id)" class="bg-primary">
+												<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.id)" class="bg-primary">
 													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
 														<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
 														<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
