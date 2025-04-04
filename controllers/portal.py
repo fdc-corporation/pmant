@@ -281,6 +281,7 @@ class PortalPmant(http.Controller):
         # print(equipos)
         return request.render('pmant.servicios_ejecucion', {
             'equipo': equipos,
+            'user': user,
         })
 
 

@@ -3,7 +3,7 @@
 	<template id="servicios_ejecucion" name="Mis servicios programadors">
 		<t t-call="website.layout">
 			<div class="main">
-				<t t-if="equipo.ubicacion">
+				<t t-if="user.company_type == 'person'">
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
@@ -47,10 +47,10 @@
 								</svg>
 								<span>
 								
-									<span t-esc="equipo.ubicacion.parent_id.name or ''">
+									<span t-esc="user.parent_id.name or ''">
 									</span>
 									/
-									<span t-esc="equipo.ubicacion.name" />
+									<span t-esc="user.name" />
 								</span>
 							</div>
 							<hr>
@@ -60,25 +60,25 @@
 									<strong>
 										Dirección :
 									</strong>
-									<t t-esc="equipo.ubicacion.street" />
+									<t t-esc="user.street" />
 								</span>
 								<span>
 									<strong>
 										RUC :
 									</strong>
-									<t t-esc="equipo.ubicacion.vat" />
+									<t t-esc="user.vat" />
 								</span>
 								<span>
 									<strong>
 										Celular :
 									</strong>
-									<t t-esc="equipo.ubicacion.mobile" />
+									<t t-esc="user.mobile" />
 								</span>
 								<span>
 									<strong>
 										Correo :
 									</strong>
-									<t t-esc="equipo.ubicacion.email" />
+									<t t-esc="user.email" />
 								</span>
 								<div class="condicion-estado">
 									<span>
@@ -149,7 +149,7 @@
 										<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
 									</g>
 								</svg>
-								<span t-esc="equipo.propietario.name" />
+								<span t-esc="user.name" />
 							</div>
 							<hr>
 							</hr>
@@ -158,25 +158,25 @@
 									<strong>
 										Dirección :
 									</strong>
-									<t t-esc="equipo.propietario.street" />
+									<t t-esc="user.street" />
 								</span>
 								<span>
 									<strong>
 										RUC :
 									</strong>
-									<t t-esc="equipo.propietario.vat" />
+									<t t-esc="user.vat" />
 								</span>
 								<span>
 									<strong>
 										Celular :
 									</strong>
-									<t t-esc="equipo.propietario.mobile" />
+									<t t-esc="user.mobile" />
 								</span>
 								<span>
 									<strong>
 										Correo :
 									</strong>
-									<t t-esc="equipo.propietario.email" />
+									<t t-esc="user.email" />
 								</span>
 								<div class="condicion-estado">
 									<span>
