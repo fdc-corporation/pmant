@@ -270,8 +270,10 @@
 						<div class="text-center mt-4">
 							<ul class="pagination justify-content-center">
 								<li t-if="page_number &gt; 1" class="page-item">
-									<a t-att-href="pager['url'] + '&amp;page=' + str(page_number - 1)" class="page-link">Anterior</a>
+									<t t-set="prev_url" t-value="pager['pages'][page_number - 2]['url']"/>
+									<a t-att-href="prev_url" class="page-link">Anterior</a>
 								</li>
+
 								<t t-foreach="pager['pages']" t-as="p">
 									<li t-att-class="'page-item%s' % (' active' if p['num'] == page_number else '')">
 										<a t-att-href="p['url']" class="page-link">
@@ -279,12 +281,15 @@
 										</a>
 									</li>
 								</t>
+
 								<li t-if="page_number &lt; page_count" class="page-item">
-									<a t-att-href="pager['url'] + '&amp;page=' + str(page_number + 1)" class="page-link">Siguiente</a>
+									<t t-set="next_url" t-value="pager['pages'][page_number]['url']"/>
+									<a t-att-href="next_url" class="page-link">Siguiente</a>
 								</li>
 							</ul>
 						</div>
 					</t>
+
 
 
 				</div>
