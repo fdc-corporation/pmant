@@ -264,24 +264,28 @@
 						</t>
 					</div>
 					<t t-if="pager">
+						<t t-set="page_number" t-value="pager['page']['num']"/>
+						<t t-set="page_count" t-value="pager['page_count']"/>
+
 						<div class="text-center mt-4">
 							<ul class="pagination justify-content-center">
-								<li t-if="pager['page'] &gt; 1" class="page-item">
-									<a t-att-href="pager['url'].replace('&amp;', '&amp;') + '&amp;page=' + str(pager['page'] - 1)" class="page-link">Anterior</a>
+								<li t-if="page_number &gt; 1" class="page-item">
+									<a t-att-href="pager['url'] + '&amp;page=' + str(page_number - 1)" class="page-link">Anterior</a>
 								</li>
 								<t t-foreach="pager['pages']" t-as="p">
-									<li t-att-class="'page-item%s' % (' active' if p['num'] == pager['page'] else '')">
-										<a t-att-href="p['url'].replace('&amp;', '&amp;')" class="page-link">
+									<li t-att-class="'page-item%s' % (' active' if p['num'] == page_number else '')">
+										<a t-att-href="p['url']" class="page-link">
 											<t t-esc="p['num']"/>
 										</a>
 									</li>
 								</t>
-								<li t-if="pager['page'] &lt; pager['page_count']" class="page-item">
-									<a t-att-href="pager['url'].replace('&amp;', '&amp;') + '&amp;page=' + str(pager['page'] + 1)" class="page-link">Siguiente</a>
+								<li t-if="page_number &lt; page_count" class="page-item">
+									<a t-att-href="pager['url'] + '&amp;page=' + str(page_number + 1)" class="page-link">Siguiente</a>
 								</li>
 							</ul>
 						</div>
 					</t>
+
 
 				</div>
 			</div>
