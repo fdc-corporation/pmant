@@ -276,7 +276,7 @@ class PortalPmant(http.Controller):
             # Filtrar servicios ejecutados por el usuario
             domain = [("ubicacion", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
         else :
-            domain = [("empresa", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
+            domain = [("propietario", "=", user.id), ("planequipo.tarea.ots.stage_id", "in", [1, 2])]
         equipos = request.env["maintenance.equipment"].sudo().search(domain)
         # print(equipos)
         return request.render('pmant.servicios_ejecucion', {
