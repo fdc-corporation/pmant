@@ -40,6 +40,7 @@ class OTS(models.Model):
     oc_cliente = fields.Char(related="order_compra.oc", store=True)
     not_oc = fields.Boolean(string="No tiene OC?")
 
+
     @api.depends("estado")
     def _get_tex(self):
         if self.estado:

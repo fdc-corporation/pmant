@@ -63,6 +63,7 @@ class Tarea(models.Model):
     firma_evaluacion = fields.Binary()
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
+    tab_horas = fields.One2many("programacion.mantenimiento", 'ot_id', string="Hoja de horas")
 
 
     @api.onchange('tipo')
@@ -272,7 +273,6 @@ class Tarea(models.Model):
             "res_id" : ot.id,
 
         }
-
 
 
 

@@ -89,7 +89,7 @@
 	<record model="ir.actions.act_window" id="tipotarea_list_action">
 		<field name="name">Tipo Tareas</field>
 		<field name="res_model">tipotarea.mantenimiento</field>
-		<!-- <field name="view_type">form</field> -->
+		<!-- <field name="view_type">fom</field> -->
 		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
@@ -141,7 +141,7 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Tareav_form_view">
-		<field name="name">Tareav.form</field>
+		<field name="name" >Tareav.form</field>
 		<field name="model">tarea.mantenimiento</field>
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
@@ -153,8 +153,8 @@
 				</header>
 				<sheet>
 					<div class="alert alert-warning" role="alert" invisible="ots or is_evaluacion">
-                        Alerta: Esta tarea ya puede ser programada / Crea una OT 
-                    </div>
+						Alerta: Esta tarea ya puede ser programada / Crea una OT
+					</div>
 					<group>
 						<group>
 							<field name="id" invisible="1" />
@@ -209,10 +209,26 @@
 									</tree>
 								</field>
 								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
-                                	<field name="firma_evaluacion" string="Firma" widget="signature" />
-                                    <field name="firmante" />
-                                    <field name="comentario_firma" />
-                            </group>
+								<field name="firma_evaluacion" string="Firma" widget="signature" />
+								<field name="firmante" />
+								<field name="comentario_firma" />
+							</group>
+						</page>
+						<page string="Programacion">
+								<field name="tab_horas">
+									<tree editable="bottom">
+										<field name="fecha_date" />
+										<field name="duracion" widget="float_time"  />
+										<field name="event_calendario" readonly="1"  />
+										<field name="horas_active" column_invisible="1"  />
+										<field name="fecha_inicio" readonly="1"  />
+										<field name="fecha_fin" readonly="1" />
+										<field name="horas_trabajado" widget="float_time" readonly="1" />
+										<button name="init_cronograma" invisible="horas_active" class="btn btn-link" type="object" string="Iniciar"></button>
+										<button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button>
+										<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->
+									</tree>
+								</field>
 						</page>
 					</notebook>
 				</sheet>
