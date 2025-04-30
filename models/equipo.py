@@ -56,8 +56,27 @@ class Equipo(models.Model):
     image        = fields.Binary("Image", attachment=True)
     certificados = fields.Many2many('ir.attachment', 'id_equipo', string="Certificados de operatividad" )
     documentos   = fields.Many2many('documents.document', 'equipo', string="Documentos")
+    cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
 
+    
+    def action_view_cotizaciones(self):
+        for record in self:
+            cotizaciones = self.env["sale.order"].search([
+                ("order_line.name", "ilike", record.serial_no)
+            ])
+            return {
+                "name": "Cotizaciones",
+                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
+                "domain": [("id", "in", cotizaciones.ids)],
+                "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                "res_model": "sale.order",
+                "context": {'create': False},
+            }
 
+    def _total_cotizaciones(self):
+        for record in self:
+            cotizaciones = self.env["sale.order"].search([("order_line.name", "ilike", record.serial_no )])
+            record.cotizacion_cantidad = len(cotizaciones)
     @api.model
     def _generate_qr_code(self):
         for record in self:
