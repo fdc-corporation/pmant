@@ -61,9 +61,8 @@ class Equipo(models.Model):
     
     def action_view_cotizaciones(self):
         for record in self:
-            cotizaciones = self.env["sale.order"].search([
-                ("order_line.name", "ilike", record.serial_no)
-            ])
+            name_domain = record.name + ' / ' + record.serial_no
+            cotizaciones = self.env["sale.order"].search([("order_line.name", "=", name_domain )])
             return {
                 "name": "Cotizaciones",
                 "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
@@ -75,7 +74,8 @@ class Equipo(models.Model):
 
     def _total_cotizaciones(self):
         for record in self:
-            cotizaciones = self.env["sale.order"].search([("order_line.name", "ilike", record.serial_no )])
+            name_domain = record.name + ' / ' + record.serial_no
+            cotizaciones = self.env["sale.order"].search([("order_line.name", "=", name_domain )])
             record.cotizacion_cantidad = len(cotizaciones)
     @api.model
     def _generate_qr_code(self):
