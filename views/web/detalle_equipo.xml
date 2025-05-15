@@ -431,7 +431,6 @@
 			<div id="notificacion-error" class="notificacion-error" style="display: none;">
 				Ocurrió un error al guardar la medición.
 			</div>
-			
 			<!-- Modal -->
 			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" style="max-width: max-content !important;height: auto !important;">

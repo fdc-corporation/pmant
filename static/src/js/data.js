@@ -11,7 +11,6 @@ document
       presion: document.getElementById("presion").value,
       tem_ambiente: document.getElementById("tem_ambiente").value,
     };
-    console.log(data)
     try {
       const response = await fetch("/guardar/medicion/equipo", {
         method: "POST",
@@ -22,7 +21,6 @@ document
       });
 
       const result = await response.json();
-      console.log(result)
       if (result.result.success) {
         mostrarNotificacion("notificacion-exito");
       } else {
