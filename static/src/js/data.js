@@ -37,5 +37,6 @@ function mostrarNotificacion(id) {
   noti.style.display = "block";
   setTimeout(() => {
     noti.style.display = "none";
+    window.location.reload()
   }, 4000);
 }
