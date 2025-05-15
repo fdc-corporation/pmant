@@ -111,7 +111,7 @@
     "assets": {
         "web.assets_frontend": [
             "pmant/static/src/css/sedes_portal.css",
-#            "pmant/static/src/js/data.js",
+           "pmant/static/src/js/data.js",
         ],
     },
     "installable": True,
