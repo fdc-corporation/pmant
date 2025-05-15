@@ -41,13 +41,13 @@
 			<xpath expr="//field[@name='fecha_compra']" position="after">
 				<field name="fabricante" string="Fabricante" />
 			</xpath>
-			<xpath expr="//field[@name='fabricante']" position="after">
+			<!-- <xpath expr="//field[@name='fabricante']" position="after">
 				<field name="otro1" string="Clasificacion 1" />
 			</xpath>
 			<xpath expr="//field[@name='otro1']" position="after">
 				<field name="otro2" string="Clasificacion 2" />
-			</xpath>
-			<xpath expr="//field[@name='otro2']" position="after">
+			</xpath> -->
+			<xpath expr="//field[@name='fabricante']" position="after">
 				<field name="time_uso" string="Horas de uso Promedio diario" widget="float_time" />
 			</xpath>
             <xpath expr="//field[@name='time_uso']" position="after">
@@ -71,6 +71,18 @@
 							<field name="avisado" invisible="1" />
 							<field name="avisado_prox" invisible="1" />
 						</group>
+					</page>
+					<page string="Mediciones del equipo">
+						<field name="mediciones" >
+							<tree editable="bottom">
+								<field name="hora_uso" />
+								<field name="temperatura_elemento" />
+								<field name="presion_actual" />
+								<field name="temperatura_ambiente" />
+								<!-- <field name="equipo_id" /> -->
+								<field name="fecha_registro" />
+							</tree>
+						</field>
 					</page>
 					<page string="Certificados">
 						<field name="certificados" string="Certificados" >

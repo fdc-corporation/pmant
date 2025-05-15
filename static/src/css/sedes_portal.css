@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
@@ -5,6 +6,7 @@
 
 .main {
   width: 90vw;
+  max-width: 1360px;
   margin-top: 50px;
   margin-bottom: 12px;
   display: flex;
@@ -212,6 +214,8 @@
   align-items: center;
   justify-content: center;
   box-shadow: -1px 2px 9px 0px rgba(0, 0, 0, 0.3019607843);
+  text-decoration: none;
+  color: black;
 }
 .main .contenedor-enalces-mantenimiento .item-enlace img {
   width: 70px;
@@ -362,7 +366,7 @@
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 0px;
+  gap: 15px;
 }
 .main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad,
 .main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad,
@@ -374,7 +378,7 @@
 .main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label,
 .main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label,
 .main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label {
-  width: 200px;
+  width: 180px;
   font-weight: 600;
   font-size: 14px;
 }
@@ -699,31 +703,7 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-}
-.modal-body input,
-.modal-body select,
-.modal-body textarea {
-  width: 100%;
-  height: 38px;
-  border-radius: 5px;
-  border: 0px;
-  background: #fff;
-  box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.25) inset;
-  outline: none;
-  padding-left: 10px;
-}
-.modal-body input ::placeholder,
-.modal-body select ::placeholder,
-.modal-body textarea ::placeholder {
-  color: black;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-.modal-body input[disabled=disabled] {
-  background-color: lavender !important;
+  gap: 9px;
 }
 
 .modal-footer button {
@@ -762,6 +742,26 @@
 
 .display-none {
   display: none;
+}
+
+.notificacion-exito, .notificacion-error {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.notificacion-exito {
+  background-color: #28a745; /* Verde éxito */
+}
+
+.notificacion-error {
+  background-color: #dc3545; /* Rojo error */
 }
 
 /*# sourceMappingURL=sedes_portal.css.map */

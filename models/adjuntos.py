@@ -19,6 +19,22 @@ class Adjunto_Atchmento(models.Model):
 
     id_equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
 
+class FirmasElectronica (models.Model):
+    _inherit="sign.template"
+    
+    ot_id = fields.Many2one("maintenance.request", string="Orden de trabajo")
+    
+class DocumentoFirmado(models.Model):
+    _inherit="sign.request"
+
+    ot_id = fields.Many2one("maintenance.request", related="template_id.ot_id", string="Orden de trabajo")
+
+class ModelFirma(models.TransientModel):
+    _inherit="sign.send.request"
+
+    ot_id = fields.Many2one("maintenance.request", related="template_id.ot_id", string="Orden de trabajo")
+
+
 # class AdjuntoImagw(models.Model):
 #     _name        = 'adjuntoimage.mantenimiento'
 #     name         = fields.Char(size=60,string='Referencia Archivo')

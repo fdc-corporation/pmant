@@ -30,6 +30,7 @@
         "hr_maintenance",
         "web_digital_sign",
         "calendar",
+        "sign"
     ],
     # always loaded
     "data": [
@@ -76,6 +77,9 @@
         "views/web/servicios_ejecucion.xml",
         "views/web/index_servicios_ejecuccion.xml",
         "views/pmant_view_inherit_kanban.xml",
+        "views/web/pagijna_gracias_web.xml",
+        "views/web/form_calificacion.xml",
+        "views/documents/documneto_firmado.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
         "views/ventas/create_mantenimiento.xml",
         "views/ventas/sale_order_views.xml",
@@ -101,11 +105,13 @@
         # Vista en el modelo de DOCUMENTS
         "views/documents/documentos_inherit.xml",
         "views/code/compartir.xml",
+        "views/code/cron_programacion.xml",
         "wizard/wizard-share.xml",
     ],
     "assets": {
         "web.assets_frontend": [
             "pmant/static/src/css/sedes_portal.css",
+            "pmant/static/src/js/data.js",
         ],
     },
     "installable": True,

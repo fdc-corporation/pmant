@@ -32,8 +32,8 @@ class Tarea(models.Model):
     cliente = fields.Many2one('res.partner', string="Cliente", tracking=True, domain=[('is_company', '=', 'True')], required=False)
     ubicacion = fields.Many2one('res.partner', string="Ubicacion", tracking=True)
     planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True, store=True)
-    clasi1 = fields.Char(size=50, string="Clasificacion 1")
-    clasi2 = fields.Char(size=50, string="Clasificacion 2")
+    # clasi1 = fields.Char(size=50, string="Clasificacion 1")
+    # clasi2 = fields.Char(size=50, string="Clasificacion 2")
     prioridad = fields.Selection(related="ots.priority")
     adjunto = fields.Binary()
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
@@ -63,7 +63,6 @@ class Tarea(models.Model):
     firma_evaluacion = fields.Binary()
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
-    tab_horas = fields.One2many("programacion.mantenimiento", 'ot_id', string="Hoja de horas")
 
 
     @api.onchange('tipo')
@@ -187,22 +186,33 @@ class Tarea(models.Model):
                     planes_por_fecha[fecha_ejecprox] = []
 
                 planes_por_fecha[fecha_ejecprox].append((equipo, alertas))
-
+            # for planequipo in self.planequipo:
+            #     print("DATOS DEL EQUIPO FECHAS  PROXIMAS DE SERVICIO")
+            #     print(planequipo.equipo.fecha_prox)
             for fecha, equipos_alertas in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([equipo for equipo, _ in equipos_alertas])
-                event = self.env['calendar.event'].create({
-                    'name': f'Servicio de {cliente}',
-                    'start': fecha,
-                    'stop': fecha,
-                    'allday': False,
-                    'location': ubicacion,
-                    'description': f'Servicios de equipos: {descripcion_equipos}',
-                    'partner_ids': [(6, 0, partner_ids)],
-                })
+                
+                existing_event = self.env['calendar.event'].search([
+                    ('name', '=', f'Proximo servicio - {cliente}'),
+                    ('start', '=', fecha),
+                    ('ots_id', '=', record.ots[0].id if record.ots else False),
+                ], limit=1)
+                
+                if not existing_event :
+                    event = self.env['calendar.event'].create({
+                        'name': f'Proximo servicio - {cliente}',
+                        'start': fecha,
+                        'stop': fecha,
+                        'allday': False,
+                        'ots_id': record.ots[0].id if record.ots else False,
+                        'location': ubicacion,
+                        'description': f'Servicios de equipos: {descripcion_equipos}',
+                        'partner_ids': [(6, 0, partner_ids)],
+                    })
 
-                for _, alertas in equipos_alertas:
-                    if alertas:
-                        event.alarm_ids = [(4, alarma.id) for alarma in alertas]
+                    for _, alertas in equipos_alertas:
+                        if alertas:
+                            event.alarm_ids = [(4, alarma.id) for alarma in alertas]
 
     def action_send_email_recepcion(self):
         template = self.env.ref('pmant.email_template_hoja_recepcion')

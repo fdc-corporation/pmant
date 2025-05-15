@@ -3,6 +3,7 @@
 	<template id="detalle_equipo" name="Detalles de Equipo">
 		<t t-call="website.layout">
 			<div class="main">
+
 				<t t-if="equipo.ubicacion">
 					<div class="card-contacto-main">
 						<div class="card-contacto">
@@ -217,7 +218,7 @@
 									<button href="" type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
 										Solicitar servicio
 									</button>
-									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
+									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;">
 										Whatsapp
 									</a>
 								</div>
@@ -230,8 +231,8 @@
 								<button href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
 									Solicitar servicio
 								</button>
-								<a class="btn-whatssap btn btn-primary" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
-										Whatsapp
+								<a class="btn-whatssap btn btn-primary" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;">
+									Whatsapp
 								</a>
 							</div>
 						</div>
@@ -321,6 +322,16 @@
 								</div>
 							</div>
 						</div>
+						<div style="padding:10px;">
+							<a class="btn btn-primary" style="font-size:13px !important;" data-bs-toggle="modal" data-bs-target="#ModelEditInfo">
+								<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
+									<path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+									<path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+									<path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+								</svg>
+								Ingresar horas de trabajo
+							</a>
+						</div>
 					</div>
 					<div class="contenedor-enalces-mantenimiento">
 						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial'" class="item-enlace">
@@ -358,6 +369,69 @@
 					</div>
 				</div>
 			</div>
+			<!-- MODEL PARA EDITAR INFORMACION POR PARTE DEL CLIENTE -->
+			<div class="modal" id="ModelEditInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="max-width: 500px !important;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<div>
+								<h3 class="modal-title text-primary" id="exampleModalLabel">
+									Edicion de informacion
+								</h3>
+								<p style="font-size:12px;">
+									Esta informacion sera manejada por FDCCORP para poder realizar reportes, dashboard que optimize el analisis de su equipo.
+								</p>
+							</div>
+							<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+						</div>
+						<form id="form-medicion-equipo" class="form-control border-0 p-0">
+							<input type="hidden" name="equipo_id" id="equipo_id" t-att-value="equipo.id" />
+							<div class="modal-body">
+								<div class="w-100">
+									<label for="uso_promedio">
+										Hora de uso promedio diario
+									</label>
+									<input type="number" name="uso_promedio" id="uso_promedio" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="temperatura">
+										Temperatura del elemento
+									</label>
+									<input type="number" name="temperatura" id="temperatura" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="presion">
+										Presión actual
+									</label>
+									<input type="number" name="presion" id="presion" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="tem_ambiente">
+										Temperatura del ambiente
+									</label>
+									<input type="number" name="tem_ambiente" id="tem_ambiente" class="form-control" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" id="enviar_medicion" class="btn btn-primary">
+									Enviar
+								</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Cerrar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="notificacion-exito" class="notificacion-exito" style="display: none;">
+				Medición guardada de manera exitosa.
+			</div>
+			
+			<div id="notificacion-error" class="notificacion-error" style="display: none;">
+				Ocurrió un error al guardar la medición.
+			</div>
+			
 			<!-- Modal -->
 			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" style="max-width: max-content !important;height: auto !important;">
@@ -378,37 +452,83 @@
 								-->
 							</div>
 							<div class="modal-body">
-								<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-								<input type="hidden" name="id_equipo" t-att-value="equipo.id" />
-								<input type="hidden" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
-								<input type="text" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
-								<select name="tipo_servicio" class="form-control">
-									<option value="">
-										Seleccionar tipo de Servicio
-									</option>
-									<option value="">
-										Select. Servicio
-									</option>
-									<option value="Preventivo">
-										Preventivo
-									</option>
-									<option value="Instalación">
-										Instalación
-									</option>
-									<option value="Mantenimiento">
-										Mantenimiento
-									</option>
-									<option value="Modificación">
-										Modificación
-									</option>
-								</select>
-								<input type="text" name="nombre_equipo" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
-								<input type="text" name="marca_equipo" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
-								<input type="text" name="modelo" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
-								<input type="text" name="numero_serie" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
-								<input type="date" name="fecha_servicio" placeholder="Fecha de Servicio" />
-								<textarea placeholder="Detalles del problema" name="razon" rows="4"></textarea>
-								<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+								<input type="hidden" class="form-control" name="csrf_token" t-att-value="request.csrf_token()" />
+								<input type="hidden" class="form-control" name="id_equipo" t-att-value="equipo.id" />
+								<input type="hidden" class="form-control" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
+								<div class="w-100">
+									<label for="ubicacion" style="font-size: 16px;margin-bottom: 0px;">
+										Ubicacion del equipo
+									</label>
+									<input type="text" class="form-control" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
+								</div>
+								<div class="w-100">
+									<label for="tipo_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Tipo de servicio
+									</label>
+									<select name="tipo_servicio" class="form-control">
+										<option value="">
+											Seleccionar tipo de Servicio
+										</option>
+										<option value="">
+											Select. Servicio
+										</option>
+										<option value="Preventivo">
+											Preventivo
+										</option>
+										<option value="Instalación">
+											Instalación
+										</option>
+										<option value="Mantenimiento">
+											Mantenimiento
+										</option>
+										<option value="Modificación">
+											Modificación
+										</option>
+									</select>
+								</div>
+								<div class="w-100">
+									<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Nombre del equipo
+									</label>
+									<input type="text" name="nombre_equipo" class="form-control" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Marca
+									</label>
+									<input type="text" name="marca_equipo" class="form-control" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">
+										Modelo
+									</label>
+									<input type="text" name="modelo" class="form-control" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">
+										Numero de serie
+									</label>
+									<input type="text" name="numero_serie" class="form-control" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
+								</div>
+								<div class="w-100">
+									<label for="fecha_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Fecha para el servicio
+									</label>
+									<input type="date" name="fecha_servicio" class="form-control" placeholder="Fecha de Servicio" />
+								</div>
+								<div class="w-100">
+									<label for="razon" style="font-size: 16px;margin-bottom: 0px;">
+										Detalles del problema
+									</label>
+									<textarea class="form-control" name="razon" rows="4">
+									</textarea>
+								</div>
+								<div class="w-100">
+									<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">
+										Imagen referente
+									</label>
+									<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="submit" class="btn btn-primary">

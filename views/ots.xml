@@ -69,10 +69,45 @@
 				<field name="subodinados" widget="many2many_tags" ></field>
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="before">
-				<field name="event_id" readonly="1" ></field>
+				<field name="is_active_programacion" invisible="1" ></field>
 			</xpath>
-
-
+			<xpath expr="//page" position="after">
+				<page string="Programacion">
+						<field name="tab_horas">
+							<tree editable="bottom">
+								<field name="fecha_date" />
+								<field name="duracion" widget="float_time"  />
+								<field name="event_calendario" readonly="1"  />
+								<field name="horas_active" column_invisible="1"  />
+								<field name="fecha_inicio" readonly="1"  />
+								<field name="fecha_fin" readonly="1" />
+								<field name="horas_trabajado" widget="float_time" readonly="1" />
+								<button name="init_cronograma" invisible="horas_active" class="btn btn-link" type="object" string="Iniciar"></button>
+								<button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button>
+								<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->
+							</tree>
+						</field>
+				</page>
+				<page string="Calificaciones">
+					<group >
+						<field name="rating_p1" />
+						<field name="rating_p2" />
+						<field name="rating_p3" />
+						<field name="rating_comment" />
+					</group>
+				</page>
+				<!-- <page string="Acta firmado">
+					<field name="acta_firmado" widget="pdf_viewer"/>
+				</page> -->
+			</xpath>
+			<xpath expr="//sheet/div[@invisible='not archive']" position="before">
+				<div class="oe_button_box" name="button_box">
+						<button class="oe_stat_button" type="object" name="action_view_documentos"
+								icon="fa-file-text-o">
+								<field string="Documentos firmados" name="document_count" widget="statinfo"/>
+						</button>
+				</div>
+			</xpath>
 
 			<!-- LIMITRAR VISIVILIDA DE CAMPOSEN ORDENER DE TRABAJO -->
 			<xpath expr="//field[@name='maintenance_team_id']" position="attributes">
@@ -81,22 +116,26 @@
 			
 			<xpath expr="//field[@name='close_date']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
+			<xpath expr="//field[@name='email_cc']" position="attributes">
+				<attribute name="invisible">
+					True
+				</attribute>			</xpath>
 			<xpath expr="//field[@name='category_id']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 			<xpath expr="//field[@name='equipment_id']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 			<xpath expr="//field[@name='maintenance_type']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 

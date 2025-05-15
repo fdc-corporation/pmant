@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="page_gracias_form" name="Pagina de gracios">
+		<t t-call="website.layout">
+			<div id="wrap" class="oe_structure oe_empty">
+				<section class="s_text_block pt40 pb40 o_colored_level" data-snippet="s_text_block" data-name="Texto" style="background-image: none;">
+					<div class="container s_allow_columns">
+						<div class="row o_grid_mode" data-row-count="11">
+							<div class="me-lg-auto o_colored_level o_grid_item g-col-lg-6 g-height-11 col-lg-6" style="z-index: 1; grid-area: 1 / 4 / 12 / 10;">
+								<img src="/pmant/static/src/img/check.gif" alt="" class="d-block mx-auto img img-fluid o_we_custom_image" data-mimetype="image/png" data-original-id="2820" data-original-src="/web/image/2820-051ecf7e/41340ab1a4529c7dd753f03268087e08%20%281%29%20%281%29%20%281%29.gif" data-mimetype-before-conversion="image/gif" />
+								<br />
+								<h1 style="text-align: center;">
+									¡Gracias!
+								</h1>
+								<p>
+								</p>
+								<div class="pb16 pt16 s_hr" data-snippet="s_hr" data-name="Separator">
+									<hr class="mx-auto border-top w-50 border-dark text-center" />
+								</div>
+								<h5 class="text-center">
+									<span class="fa fa-check-circle" />
+									<span style="font-size: 1.0625rem;">
+										&amp;nbsp;Su calificacion&amp;nbsp;se ha enviado&amp;nbsp;
+									</span>
+									<b>
+										<span style="font-size: 1.0625rem;">
+											correctamente
+										</span>
+									</b>
+								</h5>
+								<p class="text-center">
+									<span class="o_small-fs">
+										Le damos las gracias por comentar sobre nuestro servicio.
+									</span>
+								</p>
+								<p class="text-center">
+									<a class="btn btn-primary btn-bizople_button_4" href="/">
+										Regresar al inicio
+									</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<!-- <input t-if="website.plausible_shared_key" type="hidden" class="js_plausible_push" data-event-name="Lead Generation" data-event-params="{&quot;CTA&quot;: &quot;Contact Us&quot;}" /> -->
+		</t>
+	</template>
+</odoo>

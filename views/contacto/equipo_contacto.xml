@@ -4,6 +4,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/> <!-- Asegúrate de que el ID sea correcto -->
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='website']" position="before">
+                <field name="email_jefe" />
+            </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='equipos']" position="attributes">
                 <attribute name="invisible">parent_id</attribute>
               </xpath>
@@ -20,7 +23,6 @@
                             <field name="category_id"/>
                             <field name="serial_no"/>
                             <field name="company_id"/>
-                            <!-- Añade otros campos de maintenance.equipment que desees mostrar -->
                         </tree>                        
                     </field>
                 </page>

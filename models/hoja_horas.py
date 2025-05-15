@@ -9,7 +9,7 @@ class HojaHoras(models.Model):
     _description = "Hoja de horas de servicios tecnicos"
 
     fecha_date = fields.Datetime(string="Fecha programado")
-    ot_id = fields.Many2one("tarea.mantenimiento", string="Ot")
+    ot_id = fields.Many2one("maintenance.request", string="Ot")
     duracion = fields.Float(string="Duracion (H)")
     event_calendario = fields.Many2one(
         "calendar.event", compute="_set_evento", string="Evento calendario"
@@ -22,20 +22,20 @@ class HojaHoras(models.Model):
     @api.depends("fecha_date", "duracion")
     def _set_evento(self):
         for record in self:
-            if record.ot_id.ots:
+            if record.ot_id.id:
                 if record.fecha_date and record.duracion:
                     partner_ids = []
                     if self.env.user.partner_id:
                         partner_ids.append(self.env.user.partner_id.id)
-                    if record.ot_id.ots.user_id:
-                        partner_ids.append(record.ot_id.ots.user_id.partner_id.id)
+                    if record.ot_id.user_id:
+                        partner_ids.append(record.ot_id.user_id.partner_id.id)
                     else:
                         raise UserError(
                             _("El usuario actual '%s' no tiene un partner asociado.")
                             % self.env.user.name
                         )
 
-                    for user in record.ot_id.ots.subodinados:
+                    for user in record.ot_id.subodinados:
                         if user.partner_id:
                             partner_ids.append(user.partner_id.id)
                         else:
@@ -47,13 +47,13 @@ class HojaHoras(models.Model):
                     if partner_ids:
                         evento_id = self.env["calendar.event"].create(
                             {
-                                "name": "Servicio / " + record.ot_id.ots.name
+                                "name": "Servicio programado / " + record.ot_id.name
                                 or record.name,
                                 "start": record.fecha_date,
                                 "stop": record.fecha_date
                                 + timedelta(hours=record.duracion),
                                 "duration": record.duracion,
-                                "ots_id": record.ot_id.ots.id,
+                                "ots_id": record.ot_id.id,
                             }
                         )
                         record.event_calendario = evento_id.id

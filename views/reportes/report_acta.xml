@@ -107,7 +107,7 @@
                                             <strong>Fecha de Fin del Servicio:</strong>
                                             <br/>
                                             <p>
-                                                <span t-field="doc.tarea.planequipo[0].fecha_ejec">-</span>  
+                                                <span t-if="doc.tarea.planequipo" t-field="doc.tarea.planequipo[0].fecha_ejec">-</span>  
                                                 
                                             </p>
                                         </td>

@@ -9,6 +9,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
 
 .main {
   width: 90vw;
+  max-width: 1360px;
   // height: calc(100vh - 50px);
   //   padding: 10px;
   margin-top: 50px;
@@ -217,6 +218,8 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
       align-items: center;
       justify-content: center;
       box-shadow: -1px 2px 9px 0px #0000004d;
+      text-decoration: none;
+      color: black;
       img {
         width: 70px;
       }
@@ -331,13 +334,13 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         flex-flow: row wrap;
         align-items: center;
         justify-content: flex-start;
-        gap: 0px;
+        gap: 15px;
         .propiedad {
           display: flex !important;
           flex-flow: row wrap;
           gap: 10px;
           label {
-            width: 200px;
+            width: 180px;
             font-weight: 600;
             font-size: 14px;
           }
@@ -532,30 +535,30 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  input,
-  select,
-  textarea {
-    width: 100%;
-    height: 38px;
-    border-radius: 5px;
-    border: 0px;
-    background: #fff;
-    box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.25) inset;
-    outline: none;
-    padding-left: 10px;
-    ::placeholder {
-      color: black;
-      // font-family: Poppins;
-      font-size: 13px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-    }
-  }
-  input[disabled="disabled"]{
-    background-color: lavender !important;
-  }
+  gap: 9px;
+  // input,
+  // select,
+  // textarea {
+  //   width: 100%;
+  //   height: 38px;
+  //   border-radius: 5px;
+  //   border: 0px;
+  //   background: #fff;
+  //   box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.25) inset;
+  //   outline: none;
+  //   padding-left: 10px;
+  //   ::placeholder {
+  //     color: black;
+  //     // font-family: Poppins;
+  //     font-size: 13px;
+  //     font-style: normal;
+  //     font-weight: 500;
+  //     line-height: normal;
+  //   }
+  // }
+  // input[disabled="disabled"]{
+  //   background-color: lavender !important;
+  // }
 }
 .modal-footer {
   button {
@@ -595,4 +598,23 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
 
 .display-none {
   display: none;
+}
+.notificacion-exito, .notificacion-error {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.notificacion-exito {
+  background-color: #28a745; /* Verde éxito */
+}
+
+.notificacion-error {
+  background-color: #dc3545; /* Rojo error */
 }

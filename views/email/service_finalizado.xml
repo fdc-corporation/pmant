@@ -32,8 +32,7 @@
                             style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;padding: 10px;">
                             Hola <t t-esc="object.empresa.name">FDC CORP</t> <br>
                             Queremos informarte que tu servicio <strong style="box-sizing:border-box;font-weight:bolder;"
-                                t-esc="object.name">MC
-                                reparación de hidro lavadora</strong>&nbsp;ya se
+                                t-esc="object.name"></strong>&nbsp;ya se
                             finalizo,
                             puedes consultar la información del servicio por equipo en nuestro portal:
                         </td>
@@ -51,7 +50,7 @@
                                     <li><strong style="box-sizing:border-box;font-weight:bolder;"><span class="base-fs"
                                                 style="box-sizing:border-box;font-size:14px;">Equipo: </span></strong><span
                                             t-esc="equipo.equipo.name" class="base-fs"
-                                            style="box-sizing:border-box;font-size:14px;">Hidrolavadora Karcher 10/25</span>
+                                            style="box-sizing:border-box;font-size:14px;"></span>
                                         <a t-att-href="object.get_base_url() + '/my/equipo/' + str(equipo.equipo.id) + '/historial/'"
                                             class="bg-primary"
                                             style="background-color: #714b67; box-sizing: border-box; text-decoration: none; color: white; padding: 2px 4px; border-radius: 3px;"><span
@@ -62,23 +61,22 @@
                                     <li><strong style="box-sizing:border-box;font-weight:bolder;"><span class="base-fs"
                                                 style="box-sizing:border-box;font-size:14px;">Marca: </span></strong><span
                                             class="base-fs" style="box-sizing:border-box;font-size:14px;"
-                                            t-esc="equipo.equipo.marca">Samsung</span>
+                                            t-esc="equipo.equipo.marca"></span>
                                     </li>
                                     <li><strong style="box-sizing:border-box;font-weight:bolder;"><span class="base-fs"
                                                 style="box-sizing:border-box;font-size:14px;">Modelo: </span></strong><span
                                             class="base-fs" style="box-sizing:border-box;font-size:14px;"
-                                            t-esc="equipo.equipo.model">Monitor</span>
+                                            t-esc="equipo.equipo.model"></span>
                                     </li>
                                     <li><strong style="box-sizing:border-box;font-weight:bolder;"><span class="base-fs"
                                                 style="box-sizing:border-box;font-size:14px;">N° de serie: </span></strong><span
                                             class="base-fs" style="box-sizing:border-box;font-size:14px;"
-                                            t-esc="equipo.equipo.serial_no">DS-23433</span></li>
+                                            t-esc="equipo.equipo.serial_no"></span></li>
                                     <li><strong style="box-sizing:border-box;font-weight:bolder;"><span class="base-fs"
                                                 style="box-sizing:border-box;font-size:14px;">Plan de
                                                 mantenimiento:
                                             </span></strong><span t-esc="equipo.plan.name" class="base-fs"
-                                            style="box-sizing:border-box;font-size:14px;">Plan
-                                            de 800 horas</span></li>
+                                            style="box-sizing:border-box;font-size:14px;"></span></li>
                                 </ul>
                             </t>
 
