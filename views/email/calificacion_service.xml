@@ -23,7 +23,7 @@
 
                     <tr>
                         <td style="padding-bottom: 20px;">
-                            Hola <strong t-out="object.empresa.name">FDC CORP</strong>,<br/>
+                            Hola <strong t-out="object.empresa.name">Compresores de Tornillo S.A.C.</strong>,<br/>
                             Nos encantaría conocer su calificación sobre la calidad y atención de nuestro servicio:
                             <strong t-out="object.name">Orden de trabajo</strong>.
                         </td>

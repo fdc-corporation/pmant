@@ -6,24 +6,10 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'equiposindustriales.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
-							<t t-if="dominio_web == 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-								<span>
-									Compresores de Tornillo S.A.C.
-								</span>
-							</t>
-							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
+							<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+							<span>
+								Compresores de Tornillo S.A.C.
+							</span>
 						</div>
 						<div class="contactar">
 							<a href="/contactus" class="bg-primary">
@@ -88,7 +74,7 @@
 								</span>
 							</div>
 							<span class="text-informativo">
-								Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
+								Si aún no cuenta con el registro de alguna de sus equipos, solicita el registro del equipo a Compresores de Tornillo S.A.C. para ver su historial de servicios.
 							</span>
 							<!--
 							<div class="contenedor-button-info">
@@ -192,7 +178,9 @@
 									<div class="modal-body">
 										<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
 										<div class="mb-3 w-100">
-											<label for="ubicacion_id" class="form-label">Sede a la que pertenece</label>
+											<label for="ubicacion_id" class="form-label">
+												Sede a la que pertenece
+											</label>
 											<select name="ubicacion_id" class="form-control">
 												<option value="">
 													Seleccione una ubicación
@@ -202,36 +190,52 @@
 														<t t-esc="ubicacion.name" />
 													</option>
 												</t>
-											</select>										
+											</select>
 										</div>
 										<div class="w-100">
-											<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">Nombre del equipo</label>
+											<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">
+												Nombre del equipo
+											</label>
 											<input type="text" class="form-control" name="nombre_equipo" />
 										</div>
 										<div class="w-100">
-											<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">Marca del equipo</label>
+											<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">
+												Marca del equipo
+											</label>
 											<input type="text" class="form-control" name="marca_equipo" placeholder="Marca del equipo" />
 										</div>
 										<div class="w-100">
-											<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">Modelo</label>
-											<input type="text" class="form-control" name="modelo"  />
+											<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">
+												Modelo
+											</label>
+											<input type="text" class="form-control" name="modelo" />
 										</div>
 										<div class="w-100">
-											<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">N° de serie</label>
+											<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">
+												N° de serie
+											</label>
 											<input type="text" class="form-control" name="numero_serie" />
 										</div>
 										<div class="w-100">
-											<label for="fecha_registro" style="font-size: 16px;margin-bottom: 0px;">Fecha de registro</label>
+											<label for="fecha_registro" style="font-size: 16px;margin-bottom: 0px;">
+												Fecha de registro
+											</label>
 											<input type="date" class="form-control" name="fecha_registro" placeholder="Fecha de registro" />
 										</div>
 										<div class="w-100">
-											<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">Imagen del equipo</label>
+											<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">
+												Imagen del equipo
+											</label>
 											<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
 										</div>
 									</div>
 									<div class="modal-footer">
-										<button type="submit" class="btn btn-primary">Enviar</button>
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+										<button type="submit" class="btn btn-primary">
+											Enviar
+										</button>
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+											Cerrar
+										</button>
 									</div>
 								</form>
 							</div>

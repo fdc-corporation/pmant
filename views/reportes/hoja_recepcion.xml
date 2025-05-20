@@ -17,10 +17,10 @@
                     <h2 style="text-align:center;">Hoja de Recepción</h2>
                     <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:30px;">
                         <tr>
-                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid red;">
                                 <span>Datos de la Empresa</span>
                             </th>
-                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                            <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid red;">
                                 <span>Datos del Cliente</span>
                             </th>
                         </tr>
@@ -94,10 +94,10 @@
                     </table>
                     <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
                         <tr>
-                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid red;">
                                 <span>Datos del Receptor </span>
                             </th>
-                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
+                            <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid red;">
                                 <span>Comentarios de recepción</span>
                             </th>
                         </tr>
@@ -118,7 +118,7 @@
                             <div>
                                 <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
                                     <tr>
-                                        <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                                        <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  red;">
                                             <strong>
                                                                     Datos del Equipo
                                                                 </strong>
@@ -288,7 +288,7 @@
                     <t t-set="counter" t-value="0"/>
                     <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
                         <tr>
-                            <th colspan="2" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                            <th colspan="2" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  red;">
                                 Fotos de recepción
                             </th>
                         </tr>

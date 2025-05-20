@@ -2,7 +2,7 @@
     <template id="error_template" name="Error Template">
         <div class="container mt-5">
             <h1>Error</h1>
-            <p>We encountered an error while processing your request.</p>
+            <p>Encontramos un error al procesar su solicitud.</p>
             <p t-if="error_message" t-esc="error_message"/>
         </div>
     </template>

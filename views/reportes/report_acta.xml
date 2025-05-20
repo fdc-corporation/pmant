@@ -19,7 +19,7 @@
                                             Acta de Conformidad
                                         </h2>
                             <table class="table" style="width: 100%; font-size: 11px;">
-                                <thead colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;background-color: #3191C5;font-bold:800;">
+                                <thead colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid red;background-color: red;font-bold:800;">
                                     <th colspan="3" style="text-aling:left;">
                                                         1. Datos
                                                     </th>
@@ -63,7 +63,7 @@
                                             <p t-field="doc.order_compra">-</p>
                                         </td>
                                     </tr>
-                                    <tr colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;background-color: #3191C5;font-bold:800;">
+                                    <tr colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid red;background-color: red;font-bold:800;">
                                         <td colspan="3">
                                                         2. Motivo del Trabajo    
                                                         </td>
@@ -74,7 +74,7 @@
                                                 <p style="text-align:center;" t-field="doc.name"/></p>
                                         </td>
                                     </tr>
-                                    <tr style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;background-color: #3191C5;font-bold:800;">
+                                    <tr style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid red;background-color: red;font-bold:800;">
                                         <td colspan="3">
                                                         3. Detalle de
                 Trabaio
@@ -112,7 +112,7 @@
                                             </p>
                                         </td>
                                     </tr>
-                                    <tr style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;background-color: #3191C5;font-bold:800;">
+                                    <tr style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: left; font-size: 13px; border: 0px;border-bottom:4.5px solid red;background-color: red;font-bold:800;">
                                         <td colspan="3">
                                                         3. Detalle de
                 Trabaio

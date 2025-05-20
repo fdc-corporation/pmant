@@ -18,7 +18,7 @@
                     <table class="table " style="width: 100%; font-size: 11px;">
                         <tbody>
                             <tr class="">
-                                <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
 									Orden de Trabajo
 								</td>
                             </tr>
@@ -295,7 +295,7 @@
                                     <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
                                         <thead>
                                             <tr class="no-wrap">
-                                                <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                                <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
                                                     <strong>
 																Historial de Recepción 
 															</strong>
@@ -337,7 +337,7 @@
                                 <div>
                                     <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
                                         <tr class="no-wrap">
-                                            <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                            <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 													Procesos del servicio
 												</td>
                                         </tr>
@@ -382,7 +382,7 @@
                                     <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
                                         <tbody>
                                             <tr class="no-wrap">
-                                                <td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                                <td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
                                                     <font style="vertical-align: inherit;">
 														Detalles de Procesos
 													</font>
@@ -402,14 +402,14 @@
                                         <t t-if="pr.adjuntos">
                                             <br/>
                                             <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                                <tr class="no-wrap" style=" background-color:  #F7F7F7;">
-                                                    <td style="background-color:  #F7F7F7;border:0px 0px 0px 0px !important;border-top:0px !important;">
+                                                <tr class="no-wrap" style=" background-color:  red;">
+                                                    <td style="background-color:  red;border:0px 0px 0px 0px !important;border-top:0px !important;">
                                                         <strong>
 																Proceso:
 															</strong>
                                                         <span t-field="pr.proceso"/>
                                                     </td>
-                                                    <td style=" background-color:  #F7F7F7;border-top:0px;">
+                                                    <td style=" background-color:  red;border-top:0px;">
                                                         <strong>
 																Descripcion:
 															</strong>

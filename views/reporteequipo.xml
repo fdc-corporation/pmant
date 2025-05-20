@@ -15,7 +15,7 @@
 			<t t-foreach="docs" t-as="doc">
 				<t t-call="web.external_layout">      
 				<div class="" style="width: 100%;margin:40px 0px 0px 0px;height: 100%;display: flex;align-items: center;flex-flow: row;stify-content: start;position: relative;">
-					<img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png" style="width:90px;position: absolute;right: 10px;bottom:15px;"/>
+					<img src="https://compresores.com.pe/web/image/website/1/logo/Compresores%20de%20tornillo%20SAC?unique=142b74c" style="width:90px;position: absolute;right: 10px;bottom:15px;"/>
 					<div style="width: 100%;height: 100%;display: flex;align-items: start;flex-flow: row;stify-content: start;">
 						<img t-attf-src="data:image/jpg;base64,{{doc.qr_image}}" style="align:left; width:170px;"/>
 						<div>

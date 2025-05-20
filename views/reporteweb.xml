@@ -12,7 +12,7 @@
                     <table class="table " style="width: 100%; font-size: 11px;">
                         <tbody>
                             <tr class="">
-                                <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
+                                <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
 									Orden de Trabajo
 								</td>
                             </tr>
@@ -187,7 +187,7 @@
                         <div>
                             <div>
                                 <table class="table" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
-                                    <thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                                    <thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  red;">
                                         <tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
                                             <td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
                                                 <strong>
@@ -289,7 +289,7 @@
                                     <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
                                         <thead>
                                             <tr class="no-wrap">
-                                                <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                                <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
                                                     <strong>
 																Historial de Recepción 
 															</strong>
@@ -331,7 +331,7 @@
                                 <div>
                                     <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
                                         <tr class="no-wrap">
-                                            <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                            <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 													Procesos del servicio
 												</td>
                                         </tr>
@@ -376,7 +376,7 @@
                                     <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
                                         <tbody>
                                             <tr class="no-wrap">
-                                                <td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+                                                <td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
                                                     <font style="vertical-align: inherit;">
 														Detalles de Procesos
 													</font>
@@ -651,7 +651,7 @@
 								<div>
 									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 										<tr>
-											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  red;">
 												<strong>
 															Activos
 														</strong>
@@ -722,7 +722,7 @@
 											<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
 												<thead>
 													<tr class="no-wrap">
-														<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+														<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 															<strong>
 																Historial de Evaluacion
 															</strong>
@@ -764,7 +764,7 @@
 									<div>
 										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 											<tr>
-												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 															Procesos
 														</td>
 											</tr>
@@ -807,7 +807,7 @@
 									</div>
 									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 										<tr>
-											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 												<font style="vertical-align: inherit;">
 															Detalles de Procesos
 														</font>

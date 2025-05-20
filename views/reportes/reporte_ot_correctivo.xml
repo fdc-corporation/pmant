@@ -10,7 +10,7 @@
 						</h2>
 						<table class="table " style="width: 100%; font-size: 11px;">
 							<tr class="no-wrap">
-								<td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
+								<td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
 									Orden de Trabajo
 								</td>
 							</tr>
@@ -179,7 +179,7 @@
 								<div>
 									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
 										<tr class="no-wrap">
-											<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 												Procesos
 											</td>
 										</tr>
@@ -227,7 +227,7 @@
 								<div>
 									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
 										<tr class="no-wrap">
-											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 												<font style="vertical-align: inherit;">
 													Panel Fotografico
 												</font>
@@ -275,7 +275,7 @@
 								<div>
 									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
 										<tr class="no-wrap" style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
-											<td scope="col" colspan="5" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<td scope="col" colspan="5" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
 												Conusmible del Servicio
 											</td>
 										</tr>

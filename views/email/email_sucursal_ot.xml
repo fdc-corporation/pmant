@@ -54,26 +54,26 @@
 
                         <table border="0" cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-collapse:collapse; border:0px !important;">
                             <tbody>
-                                <tr style="background-color:#1ea8e7;color:#ffffff;font-weight:bold;text-align:center; border:1px solid #1ea8e7;">
+                                <tr style="background-color:red;color:#ffffff;font-weight:bold;text-align:center; border:1px solid red;">
                                     <td width="130px">
                                         <t t-out="days_translation.get(day_of_week, day_of_week)">
                                         </t>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="130px" style="font-size:48px;text-align:center;color:#5F5F5F;background-color:#F8F8F8;border:1px solid #1ea8e7;">
+                                    <td width="130px" style="font-size:48px;text-align:center;color:#5F5F5F;background-color:#F8F8F8;border:1px solid red;">
                                         <t t-out="object.schedule_date.strftime('%d')">
                                         </t>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="130px" style="font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#1ea8e7;border:1px solid #1ea8e7;">
+                                    <td width="130px" style="font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:red;border:1px solid red;">
                                         <t t-out="object.schedule_date.strftime('%B %Y')">
                                         </t>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size:12px;text-align:center;color:#5F5F5F;border:1px solid #1ea8e7;">
+                                    <td style="font-size:12px;text-align:center;color:#5F5F5F;border:1px solid red;">
                                         <div>
                                             <t t-out="format_time(time=object.schedule_date, tz=mail_tz, time_format='short', lang_code=object.env.lang) or '8:00'">
                                             </t>
@@ -120,20 +120,20 @@
                                         <li>
                                             Puedes revisar el reporte técnico con puntos a revisar en el siguiente
                                             link:
-                                            <a t-att-href="'https://equiposindustriales.pe/reporte?id=' + str(object.id)">Reporte
+                                            <a t-att-href="'https://compresores.com.pe/reporte?id=' + str(object.id)">Reporte
                                                 del servicio</a>
 
                                         </li>
                                         <li>
                                             Si desea ver el historial de mantenimiento de sus equipos, puede revisar
-                                            <a href="https://equiposindustriales.pe/my/home">Ver historial de equipos</a>
+                                            <a href="https://compresores.com.pe/my/home">Ver historial de equipos</a>
                                         </li>
                                     </ul>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <p>Si desea no recibir más correos como estos, comuníquese con <a href="mailto:fdccorp@fdc-corporation.com">fdccorp@fdc-corporation.com</a>.</p>
+                    <p>Si desea no recibir más correos como estos, comuníquese con <a href="mailto:servicios@compresoresdetornillo.com.pe">servicios@compresoresdetornillo.com.pe</a>.</p>
                 </td>
             </tr>
         </tbody>

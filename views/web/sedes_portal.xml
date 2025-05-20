@@ -6,24 +6,10 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'equiposindustriales.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
-							<t t-if="dominio_web == 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-								<span>
-									Compresores de Tornillo S.A.C.
-								</span>
-							</t>
-							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
+							<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+							<span>
+								Compresores de Tornillo S.A.C.
+							</span>
 						</div>
 						<div class="contactar">
 							<a href="/contactus" class="bg-primary">
@@ -89,7 +75,7 @@
 							</div>
 							<span class="text-informativo">
 								Si aun no cuenta con el registro de alguna de sus sedes, solicita el
-								registro de la sede a FDCCORP para ver su historial de servicios
+								registro de la sede a Compresores de Tornillo S.A.C. para ver su historial de servicios
 							</span>
 							<div class="contenedor-button-info">
 								<a t-att-href="'/my/' + str(user_partner.id) + '/equipos'" class="bg-primary">

@@ -3,29 +3,14 @@
 	<template id="detalle_equipo" name="Detalles de Equipo">
 		<t t-call="website.layout">
 			<div class="main">
-
 				<t t-if="equipo.ubicacion">
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
+								<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+								<span>
+									Compresores de Tornillo S.A.C.
+								</span>
 							</div>
 							<div class="contactar">
 								<a href="/contactus" class="bg-primary">
@@ -95,7 +80,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a Compresores de Tornillo S.A.C. para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -111,24 +96,10 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
+								<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+								<span>
+									Compresores de Tornillo S.A.C.
+								</span>
 							</div>
 							<div class="contactar">
 								<a href="/contactus" class="bg-primary">
@@ -193,7 +164,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a Compresores de Tornillo S.A.C. para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -379,7 +350,7 @@
 									Edicion de informacion
 								</h3>
 								<p style="font-size:12px;">
-									Esta informacion sera manejada por FDCCORP para poder realizar reportes, dashboard que optimize el analisis de su equipo.
+									Esta informacion sera manejada por Compresores de Tornillo S.A.C. para poder realizar reportes, dashboard que optimize el analisis de su equipo.
 								</p>
 							</div>
 							<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
@@ -427,11 +398,9 @@
 			<div id="notificacion-exito" class="notificacion-exito" style="display: none;">
 				Medición guardada de manera exitosa.
 			</div>
-			
 			<div id="notificacion-error" class="notificacion-error" style="display: none;">
 				Ocurrió un error al guardar la medición.
 			</div>
-			
 			<!-- Modal -->
 			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" style="max-width: max-content !important;height: auto !important;">
