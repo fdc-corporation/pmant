@@ -66,24 +66,30 @@
                 <field name="factura"  invisible="stage_id in (1, 2, 3) and selec_sunat or is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('partner_id', '=', empresa)]"  />
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="after">
-				<field name="subodinados" widget="many2many_tags" ></field>
+				<field name="subodinados" widget="many2many_avatar_user" ></field>
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="before">
 				<field name="is_active_programacion" invisible="1" ></field>
 			</xpath>
 			<xpath expr="//page" position="after">
-				<page string="Programacion">
-						<field name="tab_horas">
+				<page string="Programación">
+					<div class="oe_button_box" name="button_box" invisible="is_tecnico">
+						<button name="action_view_incidencias" type="object" class="oe_stat_button" icon="fa-file-text-o">
+							<field name="cantidad_inconvenientes" string="Incidencias" widget="statinfo"/>
+						</button>
+					</div>
+						<field name="tab_horas" readonly="is_tecnico">
 							<tree editable="bottom">
 								<field name="fecha_date" />
 								<field name="duracion" widget="float_time"  />
+								<field name="tecnicos" widget="many2many_avatar_user"  />
 								<field name="event_calendario" readonly="1"  />
 								<field name="horas_active" column_invisible="1"  />
 								<field name="fecha_inicio" readonly="1"  />
 								<field name="fecha_fin" readonly="1" />
 								<field name="horas_trabajado" widget="float_time" readonly="1" />
-								<button name="init_cronograma" invisible="horas_active" class="btn btn-link" type="object" string="Iniciar"></button>
-								<button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button>
+								<button name="action_view_registro" class="btn btn-link" type="object" string="Detalles"></button>
+								<!-- <button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button> -->
 								<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->
 							</tree>
 						</field>
@@ -113,7 +119,9 @@
 			<xpath expr="//field[@name='maintenance_team_id']" position="attributes">
 				<attribute name="invisible" >is_tecnico</attribute>
 			</xpath>
-			
+			<xpath expr="//field[@name='subodinados']" position="attributes">
+				<attribute name="user_id">many2many_avatar_user</attribute>
+			  </xpath>
 			<xpath expr="//field[@name='close_date']" position="attributes">
 				<attribute name="invisible">
 					True
@@ -155,6 +163,7 @@
 			
 			<xpath expr="//field[@name='duration']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
+				<attribute name="required" >1</attribute>
 			</xpath>
 			<xpath expr="//field[@name='priority']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
