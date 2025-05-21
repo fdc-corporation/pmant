@@ -15,22 +15,8 @@
     "version": "1.9",
     # any module necessary for this one to work correctly
     "depends": [
-        "base",
-        "sale",
-        "web",
-        "documents",
-        "oc_compras",
-        "product",
-        "crm",
-        "portal",
-        "mail",
-        "maintenance",
-        "hr",
-        "contacts",
-        "hr_maintenance",
-        "web_digital_sign",
-        "calendar",
-        "sign"
+        "base","sale","web","documents","oc_compras","product","crm","portal","mail",
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign"
     ],
     # always loaded
     "data": [
@@ -49,6 +35,7 @@
         'views/reportes/report_planequipo.xml',
         "views/reporteticket.xml",
         "views/planequipo_reporte.xml",
+        "views/horas_trabajo.xml",
         "views/planequipo.xml",
         "views/equipos.xml",
         "views/rules_cliente.xml",
@@ -107,11 +94,12 @@
         "views/code/compartir.xml",
         "views/code/cron_programacion.xml",
         "wizard/wizard-share.xml",
+        "wizard/wizard_inconvenientes.xml",
     ],
     "assets": {
         "web.assets_frontend": [
             "pmant/static/src/css/sedes_portal.css",
-            "pmant/static/src/js/data.js",
+           "pmant/static/src/js/data.js",
         ],
     },
     "installable": True,

@@ -1,10 +1,9 @@
 from odoo import models, fields, api, exceptions
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from odoo.exceptions import UserError
 import logging
 from odoo.exceptions import UserError
 import base64
-
 _logger = logging.getLogger(__name__)
 
 
@@ -32,8 +31,8 @@ class Tarea(models.Model):
     cliente = fields.Many2one('res.partner', string="Cliente", tracking=True, domain=[('is_company', '=', 'True')], required=False)
     ubicacion = fields.Many2one('res.partner', string="Ubicacion", tracking=True)
     planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True, store=True)
-    # clasi1 = fields.Char(size=50, string="Clasificacion 1")
-    # clasi2 = fields.Char(size=50, string="Clasificacion 2")
+    clasi1 = fields.Char(size=50, string="Clasificacion 1")
+    clasi2 = fields.Char(size=50, string="Clasificacion 2")
     prioridad = fields.Selection(related="ots.priority")
     adjunto = fields.Binary()
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
@@ -63,7 +62,7 @@ class Tarea(models.Model):
     firma_evaluacion = fields.Binary()
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
-
+    action_servicio = fields.Boolean(string="Is init servicio")
 
     @api.onchange('tipo')
     def tipo_click(self):
@@ -103,6 +102,8 @@ class Tarea(models.Model):
     @api.model
     def create(self, vals):
         record = super(Tarea, self).create(vals)
+        etapa = self.env["maintenance.stage"].search([("sequence", "=", 1)], limit=1).id
+        record.state_id = etapa
         if 'state_id' in vals:
             record._notify_on_change()
         if 'create_user' not in vals:
@@ -139,7 +140,7 @@ class Tarea(models.Model):
     
     def _notify_on_change(self):
         for record in self:
-            if record.state_id.id == 3:
+            if record.state_id.sequence == 3:
                 message = f"La tarea {record.name} se cambió a {record.state_id.name}. Verificar estado de la tarea realizada."
                 partners_to_notify = [ot.user_id.partner_id.id for ot in record.ots if ot.user_id and ot.user_id.partner_id]
                 if partners_to_notify and record.id:  # Asegurarse de que el registro está guardado
@@ -285,6 +286,30 @@ class Tarea(models.Model):
         }
 
 
+    def init_servicio (self):
+        for record in self:
+            if record.ots:
+                record.action_servicio = True
+                horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "=", False)], limit=1)
+                horas.fecha_inicio = datetime.now()
+                record.state_id = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1).id
+                # hoja_horas._compute_horas_trabajado()
+        # return ''
+    
+    def cancel_servicio(self):
+        for record in self:
+            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "!=", False)], limit=1)
+            return {
+                "type": "ir.actions.act_window",
+                "name": "Finalizar actividad",
+                "res_model": "wizars.inconvenientes",
+                "view_mode": "form",
+                "target": "new",
+                "context": {
+                    "default_programacion_id": horas.id,  # si estás dentro de programacion.mantenimiento
+                    "default_ot_id": self.id,  # si estás dentro de programacion.mantenimiento
+                },
+            }
 
     # @api.multi
     # @api.onchange('state_id')

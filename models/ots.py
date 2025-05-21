@@ -50,6 +50,7 @@ class OTS(models.Model):
     document_count = fields.Integer(
         string="Documentos firmados", compute="get_cantidad_documentos"
     )
+    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
 
     @api.depends("estado")
     def _get_tex(self):
@@ -81,6 +82,7 @@ class OTS(models.Model):
                 "default_ot_id": self.id,
             },
         }
+
     # OBTENER LA CANTIDAD DE DOCUMENTOS FIRMADOS SE TIENE RELACIONADO
     def get_cantidad_documentos(self):
         documentos_firmados = self.env["sign.request"].search_count(
@@ -122,18 +124,37 @@ class OTS(models.Model):
             self._change_createui()
         if "tarea" in vals:
             self._compute_order_compra()
+        if "schedule_date" in vals:
+            self.action_programacion_inicial()
+        if "duration" in vals or "subodinados" in vals or "user_id" in vals:
+            self.action_programacion_inicial()
         return res
 
     def action_programacion_inicial(self):
         for record in self:
-            if record.schedule_date and record.duration:
-                self.env["programacion.mantenimiento"].create({
-                    "fecha_date" : record.schedule_date,
-                    "duracion" : record.duration,
-                    "ot_id" : record.id
-                })
+            # Obtener lista de IDs de técnicos asignados
+            lista_user = []
+            if record.user_id:
+                lista_user.append(record.user_id.id)
+            lista_user += record.subodinados.ids  # optimizado
+
+            # Validar datos obligatorios
+            if not record.schedule_date or not record.duration or record.duration <= 0:
+                raise UserError(_("Para crear una Orden de Trabajo debes colocar la fecha programada y una duración mayor a 0."))
+
+            valores = {
+                "fecha_date": record.schedule_date,
+                "duracion": record.duration,
+                "ot_id": record.id,
+                "tecnicos": [(6, 0, lista_user)],
+            }
+
+            if not record.tab_horas:
+                print("CREAR UN EVENTO NUEVO")
+                self.env["programacion.mantenimiento"].create(valores)
             else:
-                raise UserError(_("Para crear una Orden de Trabajo debes colocar la fecha programada y la duracion en horas."))
+                print("ACTUALIZAR EL EVENTO EXISTENTE")
+                record.tab_horas[0].write(valores)
 
     # CUANDO SE CREA UNA OT ESTA FUNCION SE EJECUTARA PARA EL ENVIO DE CORREO AL CLIENTE
     def send_programacion_inicial(self):
@@ -147,16 +168,19 @@ class OTS(models.Model):
                 # Publicar el contenido del correo en el Chatter
                 self.message_post(
                     body=f"✅ Correo de programación enviado exitosamente a la sucursal.",
-                    subtype_xmlid="mail.mt_comment"
+                    subtype_xmlid="mail.mt_comment",
                 )
             else:
                 self.message_post(
                     body="⚠️ No se pudo enviar el correo: Plantilla no encontrada.",
-                    subtype_xmlid="mail.mt_comment"
+                    subtype_xmlid="mail.mt_comment",
                 )
         except Exception as e:
             _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-            self.message_post(body=f"❌ Error al enviar el correo: {str(e)}", subtype_xmlid="mail.mt_comment")
+            self.message_post(
+                body=f"❌ Error al enviar el correo: {str(e)}",
+                subtype_xmlid="mail.mt_comment",
+            )
 
     # ESTA FUNCION EJECUTA FUCIONES PARA ACTUALIZACION DE ESTADOS, FECHAS DE EJECUCION
     def _change_createui(self):
@@ -166,10 +190,11 @@ class OTS(models.Model):
                 record.tarea.write({"state_id": record.stage_id.id})
             if self.stage_id.sequence == 3:
                 self._fecha_estado()
-                self.action_open_wizard()
+                # self.action_open_wizard()
             if self.stage_id.sequence == 5:
                 self.send_reporte_final()
-                self.action_open_wizard()
+                # self.action_open_wizard()
+
     # CREAR LA FECHA DE EJECUCION DE LA OT
     def _fecha_estado(self):
         # Obtener la fecha actual
@@ -426,17 +451,23 @@ class OTS(models.Model):
                 else:
                     raise UserError(_("No hay asistentes válidos para el evento."))
             else:
-                raise UserError(_("Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."))
+                raise UserError(
+                    _(
+                        "Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."
+                    )
+                )
 
     # ESTA FUNCION EJECUTA MEDIANTE ACCIONES DE SERVIDOR
     def _set_email_programacion(self):
         try:
             fecha_objetivo = date.today() + timedelta(days=2)
             # Buscar las órdenes donde la fecha programada coincide solo en fecha (no en hora)
-            ordenes = self.env["maintenance.request"].search([
-                ("schedule_date", ">=", fecha_objetivo),
-                ("schedule_date", "<", fecha_objetivo + timedelta(days=1))
-            ])
+            ordenes = self.env["maintenance.request"].search(
+                [
+                    ("schedule_date", ">=", fecha_objetivo),
+                    ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
+                ]
+            )
 
             for orden in ordenes:
                 correos = []
@@ -454,7 +485,11 @@ class OTS(models.Model):
                 ).with_context(email_to=email_to)
 
                 if template and orden.tarea and orden.schedule_date:
-                    template.send_mail(orden.id, force_send=True, email_values={'email_from': orden.employee_id.work_email})
+                    template.send_mail(
+                        orden.id,
+                        force_send=True,
+                        email_values={"email_from": orden.employee_id.work_email},
+                    )
                 else:
                     orden.message_post(
                         body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
@@ -490,3 +525,19 @@ class OTS(models.Model):
                 "active_id": active_id,
             },
         }
+
+
+    def _get_cantidad_incidencias(self):
+        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
+        self.cantidad_inconvenientes = len(cant_data)
+
+    def action_view_incidencias(self):
+        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
+        return {
+                "name": "Incidencias",
+                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
+                "domain": [("id", "in", cant_data.ids)],
+                "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                "res_model": "inconveniente.servicio",
+                "context": {"create": False},
+            }

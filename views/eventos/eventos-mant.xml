@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='event_tz']" position="before">
                 <field name="ots_id" readonly="1"/>
+                <field name="programacion_id" readonly="1"/>
             </xpath>
             <xpath expr="//sheet" position="before">
                 <header>
