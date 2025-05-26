@@ -24,4 +24,5 @@ class WizardInconvenientes(models.TransientModel):
 
             record.programacion_id.fecha_fin = datetime.now()
             record.ot_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
+            record.ot_id.action_servicio = False
             record.programacion_id._compute_horas_trabajado()
