@@ -50,7 +50,7 @@ class OTS(models.Model):
     document_count = fields.Integer(
         string="Documentos firmados", compute="get_cantidad_documentos"
     )
-    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
+    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias", store=True)
 
     @api.depends("estado")
     def _get_tex(self):
