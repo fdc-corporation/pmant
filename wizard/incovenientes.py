@@ -19,7 +19,7 @@ class WizardInconvenientes(models.TransientModel):
                 "programacion_id" : record.programacion_id.id,
                 "file_ref" : record.file_ref ,
                 "comentario" : record.comentario,
-                "ot_id" : record.ot_id,
+                "ot_id" : record.ot_id.id,
             })
 
             record.programacion_id.fecha_fin = datetime.now()

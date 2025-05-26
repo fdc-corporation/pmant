@@ -63,6 +63,21 @@ class Tarea(models.Model):
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
     action_servicio = fields.Boolean(string="Is init servicio")
+    active_servicio =  fields.Boolean(string="Tiene Programacion?", compute="_set_action")
+
+
+    def _set_action(self):
+        """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""
+        for record in self:
+            record.active_servicio = False
+            print("INICIO DE LA FUNCION ACTIVESERVICIO")
+            if record.ots:
+                primera_ot = record.ots[0].tab_horas
+                print("DATOPS DE LA PROGRAMACION")
+                print(primera_ot)
+                print(len(primera_ot))                
+                if len(primera_ot) > 0:
+                    record.active_servicio = True
 
     @api.onchange('tipo')
     def tipo_click(self):
