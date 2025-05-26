@@ -528,16 +528,18 @@ class OTS(models.Model):
 
 
     def _get_cantidad_incidencias(self):
-        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
-        self.cantidad_inconvenientes = len(cant_data)
+        for record in self:
+            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
+            self.cantidad_inconvenientes = len(cant_data)
 
     def action_view_incidencias(self):
-        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
-        return {
-                "name": "Incidencias",
-                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
-                "domain": [("id", "in", cant_data.ids)],
-                "view_mode": "tree,form",  # puedes permitir también la vista formulario
-                "res_model": "inconveniente.servicio",
-                "context": {"create": False},
-            }
+        for record in self:
+            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
+            return {
+                    "name": "Incidencias",
+                    "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
+                    "domain": [("id", "in", cant_data.ids)],
+                    "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                    "res_model": "inconveniente.servicio",
+                    "context": {"create": False},
+                }
