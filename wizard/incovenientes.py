@@ -17,13 +17,13 @@ class WizardInconvenientes(models.TransientModel):
 
     def action_set_data(self):
         for record in self:
-            self.env["inconveniente.servicio"].create({
-                "programacion_id" : record.programacion_id.id,
-                "file_ref" : record.file_ref ,
-                "comentario" : record.comentario,
-                "ot_id" : record.ot_id.id,
-            })
-
+            if not record.is_finalizo_servicio:
+                self.env["inconveniente.servicio"].create({
+                    "programacion_id" : record.programacion_id.id,
+                    "file_ref" : record.file_ref ,
+                    "comentario" : record.comentario,
+                    "ot_id" : record.ot_id.id,
+                })
             record.programacion_id.fecha_fin = datetime.now()
             if record.is_finalizo_servicio:
                 record.tarea_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
