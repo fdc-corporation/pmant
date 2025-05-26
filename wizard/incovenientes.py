@@ -9,6 +9,7 @@ class WizardInconvenientes(models.TransientModel):
 
     programacion_id = fields.Many2one("programacion.mantenimiento", default=lambda self: self._context.get("programacion_id"), string="Hoja de horas")
     ot_id = fields.Many2one("maintenance.request", default=lambda self: self._context.get("ot_id"), string="OT")
+    tarea_id = fields.Many2one("tarea.mantenimiento", default=lambda self: self._context.get("tarea_id"), string="OT")
     file_ref = fields.Binary(string="Imagen de ref.")
     comentario = fields.Text(string="Comentario del inconveniente")
 
@@ -23,6 +24,6 @@ class WizardInconvenientes(models.TransientModel):
             })
 
             record.programacion_id.fecha_fin = datetime.now()
-            record.ot_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
-            record.ot_id.action_servicio = False
+            record.tarea_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
+            record.tarea_id.action_servicio = False
             record.programacion_id._compute_horas_trabajado()

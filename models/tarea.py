@@ -323,6 +323,7 @@ class Tarea(models.Model):
                 "context": {
                     "default_programacion_id": horas.id,  # si estás dentro de programacion.mantenimiento
                     "default_ot_id": self.ots[0].id,  # si estás dentro de programacion.mantenimiento
+                    "default_tarea_id": self.id,  # si estás dentro de programacion.mantenimiento
                 },
             }
 
