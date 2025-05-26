@@ -529,7 +529,7 @@ class OTS(models.Model):
             },
         }
 
-    @api.depends('id')  # Puedes cambiar esto por un campo más adecuado si tienes un trigger real
+    @api.depends('tab_horas')  # Puedes cambiar esto por un campo más adecuado si tienes un trigger real
     def _get_cantidad_incidencias(self):
         for record in self:
             cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
