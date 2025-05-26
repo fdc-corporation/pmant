@@ -7,6 +7,7 @@
                 <group>
                     <field name="programacion_id" readonly="1" />
                     <field name="ot_id" readonly="1" />
+                    <field name="tarea_id" readonly="1" />
                     <field name="file_ref" />
                     <field name="comentario" />
                 </group>
