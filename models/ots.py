@@ -50,8 +50,11 @@ class OTS(models.Model):
     document_count = fields.Integer(
         string="Documentos firmados", compute="get_cantidad_documentos"
     )
-    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias", store=True)
-
+    cantidad_inconvenientes = fields.Integer(
+            string="Incidencias",
+            compute="_get_cantidad_incidencias",
+            store=True
+        )
     @api.depends("estado")
     def _get_tex(self):
         if self.estado:
@@ -526,10 +529,10 @@ class OTS(models.Model):
             },
         }
 
-    @api.model
+    @api.depends('id')  # Puedes cambiar esto por un campo más adecuado si tienes un trigger real
     def _get_cantidad_incidencias(self):
         for record in self:
-            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "in", [record.id])])
+            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
             record.cantidad_inconvenientes = len(cant_data)
 
     def action_view_incidencias(self):
