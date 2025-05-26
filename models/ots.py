@@ -529,7 +529,7 @@ class OTS(models.Model):
 
     def _get_cantidad_incidencias(self):
         for record in self:
-            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
+            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "in", record.id)])
             record.cantidad_inconvenientes = len(cant_data)
 
     def action_view_incidencias(self):
