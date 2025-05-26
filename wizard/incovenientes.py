@@ -8,7 +8,7 @@ class WizardInconvenientes(models.TransientModel):
     _description = "Model para los inconvenientes de Servicios"
 
     programacion_id = fields.Many2one("programacion.mantenimiento", default=lambda self: self._context.get("programacion_id"), string="Hoja de horas")
-    ot_id = fields.Many2one("maintenance.request", default=lambda self: self._context.get("ot_id"), string="Tarea")
+    ot_id = fields.Many2one("maintenance.request", default=lambda self: self._context.get("ot_id"), string="OT")
     file_ref = fields.Binary(string="Imagen de ref.")
     comentario = fields.Text(string="Comentario del inconveniente")
 
