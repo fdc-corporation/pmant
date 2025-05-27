@@ -16,7 +16,6 @@ class Inconvenientes(models.Model):
     file_ref = fields.Binary(string="Imagen de ref.")
     comentario = fields.Text(string="Comentario del inconveniente")
 
-
 class HojaHoras(models.Model):
     _name = "programacion.mantenimiento"
     _description = "Hoja de horas de servicios tecnicos"
@@ -29,10 +28,12 @@ class HojaHoras(models.Model):
     )
     fecha_inicio = fields.Datetime(string="Fecha de inicio")
     fecha_fin = fields.Datetime(string="Fecha de finalización")
-    horas_trabajado = fields.Float(string="Horas trabajadas")
+    horas_trabajado = fields.Float(string="Horas marcadas")
     horas_active = fields.Boolean(string="Horas activo")
     tecnicos = fields.Many2many("res.users", string="Tecnicos", required=True)
     tab_comentarios = fields.One2many("inconveniente.servicio", "programacion_id", string="Incidencias")
+    h_finish = fields.Float(string="Horas trabajadas")
+    es_servicio_finalizado = fields.Boolean(string="Servicio finalizado?")
 
     def unlink(self):
         for record in self:
@@ -104,9 +105,13 @@ class HojaHoras(models.Model):
             if record.fecha_inicio and record.fecha_fin:
                 diferencia = record.fecha_fin - record.fecha_inicio
                 horas = diferencia.total_seconds() / 3600  # Pasar de segundos a horas
-                record.horas_trabajado = round(horas, 2)
+                if record.es_servicio_finalizado : 
+                    record.h_finish = round(horas, 2)
+                else : 
+                    record.horas_trabajado = round(horas, 2)
             else:
                 record.horas_trabajado = 0.0
+                record.h_finish = 0.0
 
     def action_view_registro(self):
         return {
@@ -116,3 +121,10 @@ class HojaHoras(models.Model):
             "view_mode" : "form",
             "res_id" : self.id
         }
+
+
+    def action_validacion_time(self):
+        return ''
+
+    def action_validacion_time_cancel(self):
+        return ''

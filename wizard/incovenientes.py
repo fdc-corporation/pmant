@@ -24,6 +24,7 @@ class WizardInconvenientes(models.TransientModel):
                     "comentario" : record.comentario,
                     "ot_id" : record.ot_id.id,
                 })
+            record.programacion_id.es_servicio_finalizado = record.is_finalizo_servicio
             record.programacion_id.fecha_fin = datetime.now()
             if record.is_finalizo_servicio:
                 record.tarea_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id

@@ -87,7 +87,7 @@
 								<field name="horas_active" column_invisible="1"  />
 								<field name="fecha_inicio" readonly="1"  />
 								<field name="fecha_fin" readonly="1" />
-								<field name="horas_trabajado" widget="float_time" readonly="1" />
+								<field name="h_finish" widget="float_time" readonly="1" />
 								<button name="action_view_registro" class="btn btn-link" type="object" string="Detalles"></button>
 								<!-- <button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button> -->
 								<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->

@@ -5,10 +5,24 @@
 		<field name="model">maintenance.equipment</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_kanban" />
 		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="propietario" />
+				<field name="ubicacion" />
+			</xpath>
+			<xpath expr="//div[@t-if='record.serial_no.raw_value']" position="after">
+				<div t-if="record.propietario">
+					Propietario: <field name="propietario" />
+				</div>
+				<div t-if="record.ubicacion">
+					Ubicacion: <field name="ubicacion" />
+				</div>
+			</xpath>
 			<xpath expr="//div[@class='o_kanban_record_body']" position="after">
 				<div class="">
 					<span class="text-danger">
 						<field name="avisado_prox" />
+						<!-- <field name="propietario" />
+						<field name="ubicacion" /> -->
 					</span>
 				</div>
 			</xpath>

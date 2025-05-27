@@ -286,24 +286,26 @@ class OTS(models.Model):
 
     # ACCION PARA EL ENVIO DE REPORTE A LA SUCURSAL
     def send_report_sucursal(self):
-        self.ensure_one()
         try:
             # Verificar que existe la plantilla
             template = self.env.ref("pmant.email_template_custom_sucursal")
             if template:
                 ctx = {
-                    "default_model": "maintenance.request",
-                    "default_res_id": self.id,
+                    "default_model": "maintenance.request",  # Modelo actual
+                    "default_res_ids": self.id,  # Se asegura de que es un entero
+                    "default_res_ids": [
+                        self.id
+                    ],  # res_ids debe ser una lista de enteros
                     "default_template_id": template.id,
-                    "default_use_template": True,
-                    "default_composition_mode": "comment",
+                    "default_composition_mode": "comment",  # Modo de composición
                     "force_email": True,
                 }
                 return {
                     "type": "ir.actions.act_window",
-                    "name": "Enviar Correo de Programación",
-                    "res_model": "mail.compose.message",
                     "view_mode": "form",
+                    "res_model": "mail.compose.message",
+                    "views": [(False, "form")],
+                    "view_id": False,
                     "target": "new",
                     "context": ctx,
                 }
@@ -468,7 +470,7 @@ class OTS(models.Model):
             ordenes = self.env["maintenance.request"].search(
                 [
                     ("schedule_date", ">=", fecha_objetivo),
-                    ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
+                    ("schedule_date", "<", fecha_objetivo + timedelta(days=2)),
                 ]
             )
 
@@ -480,6 +482,8 @@ class OTS(models.Model):
                     correos.append(orden.ubicacion.email)
                 if orden.empresa and orden.empresa.email:
                     correos.append(orden.empresa.email)
+                if orden.employee_id and orden.employee_id.work_email:
+                    correos.append(orden.employee_id.work_email)
 
                 email_to = ",".join(filter(None, correos))
 
