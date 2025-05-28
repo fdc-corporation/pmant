@@ -17,16 +17,33 @@ class WizardInconvenientes(models.TransientModel):
 
     def action_set_data(self):
         for record in self:
+            print("DATOS DE FINALIZACION DE SERVICIO")
+            print(record.is_finalizo_servicio)
+            # Registrar inconveniente solo si el servicio no fue finalizado
             if not record.is_finalizo_servicio:
                 self.env["inconveniente.servicio"].create({
-                    "programacion_id" : record.programacion_id.id,
-                    "file_ref" : record.file_ref ,
-                    "comentario" : record.comentario,
-                    "ot_id" : record.ot_id.id,
+                    "programacion_id": record.programacion_id.id,
+                    "file_ref": record.file_ref,
+                    "comentario": record.comentario,
+                    "ot_id": record.ot_id.id,
                 })
-            record.programacion_id.es_servicio_finalizado = record.is_finalizo_servicio
-            record.programacion_id.fecha_fin = datetime.now()
+
+            
+
+            # Si finaliza, mover etapa
             if record.is_finalizo_servicio:
-                record.tarea_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
-            record.tarea_id.action_servicio = False
+                print("EL SERVICIO ESTA FINALIZADO")
+                print(datetime.now())
+                etapa_final = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1)
+                if etapa_final:
+                    record.tarea_id.state_id = etapa_final.id
+                    # Actualizar si finalizó el servicio
+                record.programacion_id.write({
+                    "es_servicio_finalizado": True,
+                    "fecha_fin": datetime.now(),
+                })
+                # Desactivar acción de servicio
+                record.tarea_id.action_servicio = False
+
+            # Recalcular horas trabajadas
             record.programacion_id._compute_horas_trabajado()

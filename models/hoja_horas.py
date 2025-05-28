@@ -32,9 +32,10 @@ class HojaHoras(models.Model):
     horas_active = fields.Boolean(string="Horas activo")
     tecnicos = fields.Many2many("res.users", string="Tecnicos", required=True)
     tab_comentarios = fields.One2many("inconveniente.servicio", "programacion_id", string="Incidencias")
-    h_finish = fields.Float(string="Horas trabajadas")
+    h_faltantes = fields.Float(string="Horas faltantes")
     es_servicio_finalizado = fields.Boolean(string="Servicio finalizado?")
-
+    h_optimizado = fields.Float(string="Horas de trabajo optimizado")
+    
     def unlink(self):
         for record in self:
             if record.event_calendario:
@@ -105,13 +106,11 @@ class HojaHoras(models.Model):
             if record.fecha_inicio and record.fecha_fin:
                 diferencia = record.fecha_fin - record.fecha_inicio
                 horas = diferencia.total_seconds() / 3600  # Pasar de segundos a horas
-                if record.es_servicio_finalizado : 
-                    record.h_finish = round(horas, 2)
-                else : 
-                    record.horas_trabajado = round(horas, 2)
+                record.horas_trabajado = round(horas, 2)
+                if record.es_servicio_finalizado:
+                    record.h_optimizado = record.duracion - record.horas_trabajado
             else:
                 record.horas_trabajado = 0.0
-                record.h_finish = 0.0
 
     def action_view_registro(self):
         return {
@@ -124,7 +123,18 @@ class HojaHoras(models.Model):
 
 
     def action_validacion_time(self):
-        return ''
+        for record in self:
+            if not record.horas_trabajado:
+                raise UserError(_("No puedes aceptar una incidencia sin horas trabajadas"))
+            if record.es_servicio_finalizado :
+                record.h_optimizado = record.duracion - record.horas_trabajado
+                record.h_faltantes = 0.00
+            else :
+                record.h_faltantes = record.duracion - record.horas_trabajado
+                record.h_optimizado = 0.00
+
 
     def action_validacion_time_cancel(self):
-        return ''
+        for record in self:
+            record.h_optimizado = 0.00
+            record.h_faltantes = 0.00

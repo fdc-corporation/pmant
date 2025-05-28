@@ -313,7 +313,7 @@ class Tarea(models.Model):
     
     def cancel_servicio(self):
         for record in self:
-            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "!=", False)], limit=1)
+            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_fin", "=", False)], limit=1)
             return {
                 "type": "ir.actions.act_window",
                 "name": "Finalizar actividad",

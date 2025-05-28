@@ -8,8 +8,8 @@
         <field name="arch" type="xml">
             <form string="Evento de Mantenimiento">
                 <header>
-                    <button invisible="not tab_comentarios" string="Aceptar incidencia" name="action_validacion_time" type="object" class="oe_highlight"/>
-                    <button invisible="not tab_comentarios" string="Cancelar incidencia" name="action_validacion_time_cancel" type="object" class="oe_highlight"/>
+                    <button invisible="not tab_comentarios or h_faltantes" string="Aceptar incidencia" name="action_validacion_time" type="object" class="oe_highlight"/>
+                    <button invisible="not tab_comentarios or h_optimizado" string="Cancelar incidencia" name="action_validacion_time_cancel" type="object" class="oe_highlight"/>
                 </header>
                 <sheet>
                     <group>
@@ -19,17 +19,19 @@
                             <field name="event_calendario" readonly="1"/>                         
                         </group>
                         <group>
-                            <field name="duracion" required="1"/>
+                            <field name="duracion" required="1" widget="float_time" />
                             <field name="fecha_fin" readonly="1"/>
-                            <field name="horas_trabajado" readonly="1"/>
+                            <field name="horas_trabajado" readonly="1" widget="float_time" />
                         </group>
                         <group>
                             <field name="tecnicos" widget="many2many_avatar_user" required="1"/>
-                            <field name="h_finish" readonly="1"/>
+                            <field name="h_faltantes" widget="float_time" readonly="1"/>
 
                         </group>
                         <group>
                             <field name="ot_id"  readonly="1"/>
+                            <field name="es_servicio_finalizado"  readonly="1"/>
+                            <field name="h_optimizado" widget="float_time"  readonly="1"/>
                         </group>
                     </group>
                     <notebook>
