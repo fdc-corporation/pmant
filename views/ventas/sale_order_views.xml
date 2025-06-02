@@ -28,6 +28,29 @@
         </field>
     </record>
 
+    <record id="view_inhrit_tree_sale_order" model="ir.ui.view">
+        <field name="name">sale.order.sale_order_tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_shipping_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_sale_order_search" model="ir.ui.view">
+        <field name="name">sale.order.view.search.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search[1]/field[@name='name']" position="after">
+                <field name="partner_shipping_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
     <!-- Vista de orden de venta para añadir el botón -->
     <record id="view_sale_order_form_inherit_with_equipment" model="ir.ui.view">
         <field name="name">sale.order.form.inherit.with.equipment</field>

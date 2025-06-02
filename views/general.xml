@@ -200,7 +200,19 @@
 							</group>
 						</page> -->
 						<page string="OTs" invisible="is_tecnico">
-							<field name="ots" />
+							<field name="ots" >
+								<tree>
+									<field name="name" />
+									<field name="employee_id" />
+									<field name="request_date" />
+									<field name="empresa" />
+									<field name="ubicacion" />
+									<field name="schedule_date" />
+									<field name="duration" />
+									<field name="user_id" />
+									<button name="action_view_ots" class="btn btn-link" type="object" string="Ver detalles"></button>
+								</tree>
+							</field>
 						</page>
 						<page string="Hoja de Recepcion" invisible="not is_evaluacion or state_id not in [1,2]">
 							<group>

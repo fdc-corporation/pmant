@@ -550,3 +550,14 @@ class OTS(models.Model):
                     "res_model": "inconveniente.servicio",
                     "context": {"create": False},
                 }
+
+
+    def action_view_ots(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Orden de trabajo",
+            "view_mode": "form",
+            "res_model": "maintenance.request",
+            "res_id": self.id,
+            "context": "{'create' : False}",
+        }

@@ -72,14 +72,15 @@ class DataEquipo(models.Model):
 class Equipo(models.Model):
     _name = "maintenance.equipment"
     _inherit = "maintenance.equipment"
+
     propietario = fields.Many2one(
         "res.partner",
         string="Propietario",
         required=True,
-        domain=[("is_company", "=", "True")],
+        domain=[("is_company", "=", "True")], tracking=True,
     )
     parent_id = fields.Integer(related="propietario.id")
-    ubicacion = fields.Many2one("res.partner", string="Ubicacion")
+    ubicacion = fields.Many2one("res.partner", string="Ubicacion", tracking=True)
     fabricante = fields.Char(size=60)
     marca = fields.Char(size=60)
     frecuencia_m = fields.Integer(string="Frecuencia de Mantenimiento")
@@ -92,7 +93,7 @@ class Equipo(models.Model):
         "adjunto.mantenimiento", "equipo", string="Archivos Adjuntos"
     )
     planequipo = fields.One2many(
-        "planequipo.mantenimiento", "equipo", string="Planes Equipos"
+        "planequipo.mantenimiento", "equipo", string="Planes Equipos", tracking=True
     )
     qr_image = fields.Binary(
         "QR equipo", compute="_generate_qr_code", attachment=True, store=True
