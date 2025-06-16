@@ -28,30 +28,81 @@
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<sheet>
+					<field name="is_admin" invisible="1" />
 					<group>
-						<field name="id" invisible="1" />
-						<field name="cliente" invisible="0" readonly="1" />
-						<field name="ubicacion" invisible="0" readonly="1" />
-						<field name="is_admin" invisible="1" />
-						<field name="tarea" invisible="1" />
-						<field name="ots" invisible="1" />
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]"  readonly="not is_admin and not tarea.is_evaluacion"/>
-						<field name="plan" string="Plan de mantenimiento"  readonly="not is_admin and not tarea.is_evaluacion" />
-						<field name="fecha_ejec" />
-						<field name="fecha_ejecprox" string="Proxima Fecha de Mantenimiento" />
+						<!-- Campos de cabecera -->
+						<field name="id" invisible="1"/>
+						<field name="cliente" invisible="1" readonly="1"/>
+						<field name="ubicacion" invisible="1" readonly="1"/>
+						<field name="tarea" invisible="1"/>
+						<field name="ots" invisible="1"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="plan" string="Plan de mantenimiento" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="fecha_ejec"/>
+						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
 						<field name="fecha_hoy" invisible="1"/>
-
 					</group>
-					<field name="procesos" invisible="is_admin">
-						<tree responsive="1">
-							<field name="estado"/>
-							<field name="proceso" />
-							<field name="descripcion" />
-							<field name="is_admin" column_invisible="True"/>
-						</tree>
-    				</field>
+					<notebook>
+						<!-- Procesos de mantenimiento -->
+						<page string="Procesos de Mantenimiento" invisible="is_admin" >
+							<field name="procesos" nolabel="1" >
+								<tree >
+									<field name="estado"/>
+									<field name="proceso"/>
+									<field name="descripcion"/>
+								</tree>
+							</field>
+						</page>
+						<!-- Voltaje -->
+						<page string="Voltaje de Alimentación" invisible="is_admin" >
+							<field name="voltaje_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="l1_l2"/>
+									<field name="l2_l3"/>
+									<field name="l1_l3"/>
+									<field name="l1_gnd"/>
+									<field name="l2_gnd"/>
+									<field name="l3_gnd"/>
+									<field name="supply"/>
+								</tree>
+							</field>
+						</page>
+						<!-- Amperaje -->
+						<page string="Corriente de Motor Principal" invisible="is_admin" >
+							<field name="amperaje_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="linea"/>
+									<field name="carga_linea"/>
+									<field name="descarga_linea"/>
+									<field name="fase"/>
+									<field name="carga_fase"/>
+									<field name="descarga_fase"/>
+								</tree>
+							</field>
+						</page>
+						<!-- Parámetros de operación -->
+						<page string="Parámetros de operación del compresor" invisible="is_admin" >
+							<field name="parametro_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="paremetro_id"/>
+									<field name="valor_trabajo"/>
+									<field name="valor_parada"/>
+									<field name="unidad_medida"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Conclusiones" invisible="is_admin">
+							<group>
+								<field name="nota_observaciones" widget="html" invisible="is_admin" />
+								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />
+								<field name="nota_recomendaciones" widget="html" invisible="is_admin" />
+							</group>
+						</page>
+					</notebook>
+					
 				</sheet>
 			</form>
+
 		</field>
 	</record>
 	<record model="ir.ui.view" id="planequipo_kanban">

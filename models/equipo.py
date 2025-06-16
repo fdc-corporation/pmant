@@ -76,7 +76,7 @@ class Equipo(models.Model):
         "res.partner",
         string="Propietario",
         required=True,
-        domain=[("is_company", "=", "True")],
+        # domain=[("is_company", "=", "True")],
     )
     parent_id = fields.Integer(related="propietario.id")
     ubicacion = fields.Many2one("res.partner", string="Ubicacion")
@@ -115,7 +115,7 @@ class Equipo(models.Model):
     documentos = fields.Many2many("documents.document", "equipo", string="Documentos")
     cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
     mediciones = fields.One2many("medicion.equipo", "equipo_id", string="Mediciones")
-
+    otros_mantenimento = fields.One2many("mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
 
     def action_view_cotizaciones(self):
         for record in self:
@@ -131,6 +131,21 @@ class Equipo(models.Model):
                 "res_model": "sale.order",
                 "context": {"create": False},
             }
+
+    def set_servico_tecnico(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Agregar Mantenimiento",
+            "res_model": "wiizard.mantenimiento",
+            "view_mode": "form",
+            "view_type": "form",
+            "target": "new",
+            "context": {
+                "default_equipo_id": self.id,
+                # "default_url": self.id,
+                # "active_id": active_id,
+            },
+        }
 
     def _total_cotizaciones(self):
         for record in self:
@@ -233,3 +248,17 @@ class DocuemntosEquipo(models.Model):
     _inherit = "documents.document"
 
     equipo = fields.Many2many("maintenance.equipment", string="Equipo")
+
+class MasMantenimiento (models.Model):
+    _name = "mantenimento.equipo.otros"
+    _descriptiion = "Mas mantenimitnos externos"
+
+    name = fields.Char(string="Nombre", required="1")
+    planequipo = fields.Many2one("planequipo.mantenimiento", string="Plan de mantenimiento")
+    fecha_ejec = fields.Date(string="Fecha ejecutada")
+    file_adjunto = fields.Binary(string="Reporte Tecnico")
+    file_name = fields.Char(string="Nombre de archivo")
+    tipo = fields.Many2one("tipotarea.mantenimiento", string="tipo de mantenimiento")
+    equipo = fields.Many2one("maintenance.equipment", string="Equipo")
+
+    

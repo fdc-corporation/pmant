@@ -25,6 +25,7 @@ class PortalPmant(http.Controller):
     )
     def sedes_portal(self, pagina=1, search=None):
         user_partner = request.env.user.partner_id
+
         _logger.info(f"User Partner: {user_partner}")
         dominio_web = request.httprequest.host
 
@@ -80,6 +81,7 @@ class PortalPmant(http.Controller):
         # Número de registros por página
         per_page = 15
         domain = [("ubicacion", "=", sede_id)]
+        user_partner = request.env.user.partner_id
 
         # Aplicar filtro si existe
         if filtro:
@@ -88,6 +90,10 @@ class PortalPmant(http.Controller):
         # Calcular el total de equipos y el número total de páginas
         total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
         total_paginas = math.ceil(total_equipos / per_page)
+        if total_equipos == 0:
+            domain = [("propietario", "=", sede_id)]
+            total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
+            total_paginas = math.ceil(total_equipos / per_page)
 
         # Calcular el offset para la página actual
         offset = (pagina - 1) * per_page
@@ -108,6 +114,7 @@ class PortalPmant(http.Controller):
                 "filtro": filtro,
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
+                "user_partner" : user_partner,
             },
         )
 
@@ -309,41 +316,70 @@ class PortalPmant(http.Controller):
     )
     def historial_mantenimiento(self, equipo_id, pagina=1, **kwargs):
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
-        per_page = 10  # Registros por página
-        # Filtrar historial de mantenimiento relacionado con el equipo
-        filtro = kwargs.get("filtro", False)
-        if filtro == False:
-            filtro = "fecha_ejec"
-        domain = [("equipo", "=", equipo_id)]
-        total = request.env["planequipo.mantenimiento"].sudo().search_count(domain)
-        total_paginas = math.ceil(total / per_page)
+        per_page = 10
+        offset = (pagina - 1) * per_page
 
-        # Paginador
+        # Obtener orden de filtro: ascendente o descendente
+        orden = kwargs.get("filtro", "desc").lower()
+        reverse_sort = True if orden == "desc" else False
+
+        # Dominio por equipo_id
+        domain = [("equipo", "=", equipo_id)]
+
+        # Buscar en ambos modelos
+        historial_1 = request.env["planequipo.mantenimiento"].sudo().search(domain)
+        historial_2 = request.env["mantenimento.equipo.otros"].sudo().search(domain)
+        print("--------------------DATOS PORTAL-----------------------")
+        print(historial_1)
+        print(historial_2)
+        # Convertir en lista con campo auxiliar
+        historial_1_list = [
+            {
+                "record": rec,
+                "fecha_ejec": rec.fecha_ejec,
+                "is_otro": False,
+            }
+            for rec in historial_1
+        ]
+
+        historial_2_list = [
+            {
+                "record": rec,
+                "fecha_ejec": rec.fecha_ejec,
+                "is_otro": True,
+            }
+            for rec in historial_2
+        ]
+        print(historial_1_list)
+        print(historial_2_list)
+
+        # Combinar listas y ordenar por fecha
+        historial_combinado = historial_1_list + historial_2_list
+        historial_ordenado = sorted(historial_combinado, key=lambda x: x["fecha_ejec"], reverse=reverse_sort)
+
+        # Paginación
+        total = len(historial_ordenado)
+        total_paginas = math.ceil(total / per_page)
+        historial_paginado = historial_ordenado[offset:offset + per_page]
+        print(historial_paginado)
+        # Generar el pager
         pager = {
             "page": pagina,
             "size": total_paginas,
         }
 
-        # Obtener registros de la página actual
-        offset = (pagina - 1) * per_page
-        filtro = f"{filtro} desc"
-
-        historial = (
-            request.env["planequipo.mantenimiento"]
-            .sudo()
-            .search(domain, offset=offset, limit=per_page, order=filtro)
-        )
-
         return request.render(
             "pmant.historial_mantenimiento",
             {
                 "equipo": equipo,
-                "historial": historial,
+                "historial": historial_paginado,
                 "pager": pager,
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
+                "filtro": orden,
             },
         )
+
 
     @http.route(
         ["/my/servicios/ejecucion", "/my/servicios/ejecucion/page/<int:page>"],
@@ -394,6 +430,28 @@ class PortalPmant(http.Controller):
             },
         )
 
+
+    @http.route('/descargas/reporte/mantenimiento/<int:record_id>/otros', type='http', auth='user')
+    def descargar_reporte_otro(self, record_id, **kwargs):
+        record = request.env['mantenimento.equipo.otros'].sudo().browse(record_id)
+        if not record.exists() or not record.file_adjunto:
+            return request.not_found()
+
+        # Preparar nombre y datos del archivo
+        filecontent = base64.b64decode(record.file_adjunto)
+        filename = record.file_name or f'reporte_mantenimiento_{record.equipo.name}.pdf'
+
+        return request.make_response(
+            filecontent,
+            headers=[
+                ('Content-Type', 'application/octet-stream'),
+                ('Content-Disposition', f'attachment; filename="{filename}"')
+            ]
+        )
+
+
+
+
     @http.route(
         [
             "/my/equipo/<int:equipo_id>/adjuntos",
@@ -432,13 +490,15 @@ class PortalPmant(http.Controller):
         }
 
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
-
+        print("TOTAL DE ADJUNTOS")
+        print(total_adjuntos)
         return request.render(
             "pmant.adjuntos_equipo",
             {
                 "equipo": equipo,
                 "adjuntos": adjuntos,
                 "pager": pager,
+                "total_adjuntos" : total_adjuntos,
             },
         )
 

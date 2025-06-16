@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+							<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="Icono Compresores de tornillo" />
 							<span>
 								Compresores de Tornillo S.A.C.
 							</span>
@@ -120,7 +120,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Lo sentimos... Al parecer, no cuenta con equipos registradas a su cuenta de usuario.
+							Lo sentimos... Al parecer no cuenta con equipos registradas a su cuenta de usuario.
 						</t>
 					</div>
 					<!-- Paginación -->
@@ -243,50 +243,6 @@
 					</div>
 				</div>
 			</div>
-			<!--
-			<div style="display:flex;flex-flow:row;justify-content: end;">
-			<form method="get" style="width:30%;display:flex;flex-flow: row;align-items: center;justify-content: end;gap: 15px;">
-			<input type="text" class="form-control" name="filtro" t-att-value="filtro" placeholder="Buscar tu equipo..." />
-			<button class="btn btn-primary" type="submit">
-			Buscar
-			</button>
-			</form>
-			</div>
-			<div class="main-equipos-sede">
-			<t t-if="equipos">
-			<t t-foreach="equipos" t-as="equipo">
-			<div class="card-equipo">
-			<a t-att-href="'/my/equipos/' + str(equipo.id)">
-			<div class="card-img">
-			<img t-att-src="'/web/image/maintenance.equipment/' + str(equipo.id) + '/image'" alt="Equipo QR Code" />
-			</div>
-			<div class="card-descripcion">
-			<h6>
-			<t t-esc="equipo.name" />
-			</h6>
-			<h5>
-			<t t-esc="equipo.marca" />
-			</h5>
-			</div>
-			</a>
-			</div>
-			</t>
-			</t>
-			<t t-else="">
-			<p>
-			<strong>
-			No hay equipos registrados para esta sede.
-			</strong>
-			<br />
-			Si cree que esto es un error, comuníquese con FDC CORP.
-			<br />
-			Gracias.
-			</p>
-			</t>
-			</div>
-			<br>
-			-->
-			<!-- </br> -->
 		</t>
 	</template>
 </odoo>

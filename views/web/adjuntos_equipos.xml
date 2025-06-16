@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+							<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="Icono Compresores de tornillo" />
 							<span>
 								Compresores de Tornillo S.A.C.
 							</span>
@@ -121,7 +121,7 @@
 								</div>
 							</t>
 						</t>
-						<t t-if="len(equipo.documentos) > 0">
+						<t t-if="int(total_adjuntos) > 0">
 							<t t-foreach="equipo.documentos" t-as="documentos">
 								<t t-set="extension" t-value="documentos.name.split('.')[-1].lower()" />
 								<div class="card-adjunto">
@@ -155,7 +155,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Si aún no tienes el archivo adjunto al equipo y esto es un error contacta a Compresores de Tornillo S.A.C. paras solucionarlo.
+							Aún no cuenta con Adjuntos registrados en el equipo. Contáctate con Compresores de Tornillo S.A.C para registrar uno nuevo.
 						</t>
 					</div>
 					<nav aria-label="Page navigation example">

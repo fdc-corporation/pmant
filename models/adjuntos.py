@@ -35,10 +35,51 @@ class ModelFirma(models.TransientModel):
     ot_id = fields.Many2one("maintenance.request", related="template_id.ot_id", string="Orden de trabajo")
 
 
-# class AdjuntoImagw(models.Model):
-#     _name        = 'adjuntoimage.mantenimiento'
-#     name         = fields.Char(size=60,string='Referencia Archivo')
-#     adjunto      = fields.Binary()
-#     #equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
-#     planequipoproceso   = fields.Many2one('planequipoproceso.mantenimiento')
-#     comentario          = fields.Text()
+class VoltajeLinea(models.Model):
+    _name = "voltaje.linea"
+
+    l1_l2 = fields.Float("L1/L2")
+    l2_l3 = fields.Float("L2/L3")
+    l1_l3 = fields.Float("L1/L3")
+    l1_gnd = fields.Float("L1/GND")
+    l2_gnd = fields.Float("L2/GND")
+    l3_gnd = fields.Float("L3/GND")
+    supply = fields.Float("Supply")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
+
+class AmperajeLinea(models.Model):
+    _name = 'amperaje.linea'
+    _description = 'Medición de amperaje por línea y fase'
+
+    linea = fields.Char(string='Línea')
+
+    carga_linea = fields.Float("Carga Línea")
+    descarga_linea = fields.Float("Descarga Línea")
+
+    fase = fields.Char("Fase")
+    carga_fase = fields.Char("Carga Fase")
+    descarga_fase = fields.Char("Descarga Fase")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
+
+class UnidadMedidaModulo(models.Model):
+    _name = 'unidad.medida.modulo'
+    _description = 'Unidad de Medida del Parámetro'
+
+    name = fields.Char(string="Unidad", required=True)
+
+
+class ParametroModulo(models.Model):
+    _name = 'parametro.modulo'
+    _description = 'Parámetro del módulo del compresor'
+
+    name = fields.Char(string="Nombre del parámetro", required=True)
+
+class ParametrosOperacion (models.Model):
+    _name = 'paremetros.operacion'
+    _descripcion = "Parámetros de operación del compresor"
+
+    paremetro_id = fields.Many2one("parametro.modulo", string="Paárametros del modulo")
+    valor_trabajo = fields.Char(string="Valores de trabajo")
+    valor_parada = fields.Char(string="Valores de parada")
+    unidad_medida = fields.Many2one("unidad.medida.modulo", string="Unidad de medida")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")

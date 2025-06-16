@@ -73,3 +73,9 @@ access_adjunto_evaluacion_user,access_adjunto_evaluacion_user,model_adjunto_eval
 access_medicion_equipo_user,medicion.equipo user,model_medicion_equipo,base.group_user,1,1,1,1
 access_wizars_inconvenientes_user,wizars.inconvenientes user,model_wizars_inconvenientes,base.group_user,1,1,1,1
 access_inconveniente_servicio_user,inconveniente.servicio user,model_inconveniente_servicio,base.group_user,1,1,1,1
+access_voltaje_linea,voltaje.linea,model_voltaje_linea,base.group_user,1,1,1,1
+access_amperaje_linea,amperaje.linea,model_amperaje_linea,base.group_user,1,1,1,1
+access_unidad_medida_modulo,unidad.medida.modulo,model_unidad_medida_modulo,base.group_user,1,1,1,1
+access_parametro_modulo,parametro.modulo,model_parametro_modulo,base.group_user,1,1,1,1
+access_paremetros_operacion,paremetros.operacion,model_paremetros_operacion,base.group_user,1,1,1,1
+access_mantenimiento_equipo_otros_user,mantenimento.equipo.otros user,model_mantenimento_equipo_otros,base.group_user,1,1,1,1

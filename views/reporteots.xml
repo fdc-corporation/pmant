@@ -12,10 +12,19 @@
         <t t-foreach="docs" t-as="doc">
             <t t-call="web.external_layout">
                 <div class="page" style="margin:0px 0px 0px 0px;">
-                    <h2 style="text-align: left;">
+                    <h2 style="text-align: center;">
 							Reporte Técnico
 						</h2>
-                    <table class="table " style="width: 100%; font-size: 11px;">
+                    <!--<div style="margin:5px;">-->
+                    <!--    <p style="text-align: right;font-size: 11px;" t-esc="doc.tarea.fecha_hoy"/>-->
+                    <!--    <p style="margin:0px 0px 2px 0px;font-size: 12px;">Señores:</p>-->
+                    <!--    <strong style="font-size: 11px;" t-field="doc.tarea.cliente"/>-->
+                    <!--    <p style="margin-top:5px;border-bottom: 1.5px solid black;font-size: 11px;">Actividad: -->
+                    <!--        <span t-esc="doc.name"/>-->
+                    <!--    </p>-->
+                    <!--</div>-->
+                    <br/>
+                    <table class="table " style="width: 100%;font-size: 11px;">
                         <tbody>
                             <tr class="">
                                 <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
@@ -61,26 +70,17 @@
 									</strong>
                                     <br/>
 									Cliente:
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente"/>
                                     <br/>
 									Teléfono:
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente.mobile"/>
                                     <br/>
 									Email:
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente.email"/>
                                 </td>
@@ -93,24 +93,15 @@
                                     <br/>
                                     <span t-field="doc.tarea.cliente.l10n_pe_district"/>
 									-
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente.city_id"/>
 									-
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente.state_id"/>
 									-
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.tarea.cliente.country_id"/>
                                 </td>
@@ -122,10 +113,7 @@
 									</strong>
                                     <br/>
 									Prioridad :
-									
-                                
-                                
-                                        
+                                    
                                     
                                     <span t-field="doc.priority"/>
                                 </td>
@@ -136,10 +124,7 @@
 									</strong>
                                     <span t-field="doc.duration"/>
 									horas
-								
-                            
-                            
-                                    
+                                
                                 
                                 </td>
                             </tr>
@@ -150,18 +135,10 @@
 									</strong>
                                     <br/>
 									Compañía:
-									
-                                
-                                
-                                        
                                     
                                     <span t-field="doc.company_id"/>
                                     <br/>
 									Responsable:
-									
-                                
-                                
-                                        
                                     
                                     <span t-field="doc.user_id"/>
                                 </td>
@@ -171,18 +148,10 @@
 									</strong>
                                     <br/>
 									Responsable:
-									
-                                
-                                
-                                        
                                     
                                     <span t-field="doc.maintenance_team_id"/>
                                     <br/>
-									Técnico:
-									
-                                
-                                
-                                        
+									Técnico(s):
                                     
                                     <span t-field="doc.user_id"/>
                                 </td>
@@ -193,7 +162,7 @@
                         <div>
                             <div>
                                 <table class="table" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
-                                    <thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+                                    <thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  red;">
                                         <tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
                                             <td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
                                                 <strong>
@@ -206,21 +175,14 @@
                                         <tr class="no-wrap">
                                             <td colspan="2">
 													Plan de Tarea :
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="doc.tarea"/>
                                             </td>
                                             <td rowspan="2">
                                                 <center>
                                                     <!--<img t-attf-src="data:image/png;base64,{{ pe.equipo.qr_image }}" style="width:80px; height:80px; display:block;"/>-->
-                                                        <div t-field="pe.equipo.qr_image" t-options="{'widget': 'image'}" style="width: 80px; height: 80px; display: block; border: 1px solid #ccc;"/>
+                                                    <div t-field="pe.equipo.qr_image" t-options="{'widget': 'image'}" style="width: 80px; height: 80px; display: block; border: 1px solid #ccc;"/>
 															Historial del Equipo
-														
-                                                
-                                                    
                                                 
                                                 </center>
                                             </td>
@@ -232,58 +194,30 @@
 													</strong>
                                                 <br/>
 													Máquina:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo"/>
 													-
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.marca"/>
                                                 <br/>
 													Propietario:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.propietario"/>
                                                 <br/>
 													Ubicacion:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.ubicacion"/>
                                             </td>
                                             <td>
 													Marca de la máquina:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.marca"/>
                                                 <br/>
 													MFG Year:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.effective_date"/>
                                                 <br/>
 													N° de Serie:
-													
-                                                
-                                                
-                                                    
                                                 
                                                 <span t-field="pe.equipo.serial_no"/>
                                             </td>
@@ -297,8 +231,8 @@
                                             <tr class="no-wrap">
                                                 <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
                                                     <strong>
-																Historial de Recepción 
-															</strong>
+														Historial de Recepción 
+													</strong>
                                                 </td>
                                             </tr>
                                         </thead>
@@ -326,7 +260,7 @@
                                     </table>
                                     <br/>
                                     <ul>
-                                      <t t-foreach="doc.tarea.adjuntos_evaluaciones" t-as="imagen">
+                                        <t t-foreach="doc.tarea.adjuntos_evaluaciones" t-as="imagen">
                                             <li>
                                                 <span style="font-size:12px;" t-esc="imagen.comentario"/>
                                             </li>
@@ -335,6 +269,10 @@
                                     <br/>
                                 </t>
                                 <div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Trabajos realizados</h6>
+                                        <hr/>
+                                    </div>
                                     <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
                                         <tr class="no-wrap">
                                             <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
@@ -372,6 +310,192 @@
                                                 </td>
                                                 <td>
                                                     <span t-field="pr.descripcion"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Datos de pruebas</h6>
+                                        <hr/>
+                                    </div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="7" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Voltaje de alimentación
+                                                <br/>
+													(Tension)
+												
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:3.5px solid red;">
+                                            <td colspan="3" style="text-align: center;">Tensión entre líneas
+                                                <br/>(voltaje)
+                                            </td>
+                                            <td colspan="3" style="text-align: center;">Tensión entre línea y neutro
+                                                <br/>(voltaje)
+                                            </td>
+                                            <td colspan="1" style="text-align: center;">Tensión del modulo</td>
+                                        </tr>
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/L2</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L2/L3</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/L3</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L2/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L3/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Supply</span>
+                                            </th>
+                                        </tr>
+                                        <t t-foreach="pe.voltaje_ids" t-as="vol">
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_l2"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l2_l3"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_l3"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l2_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l3_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.supply"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="6" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Corriente de motor principal
+                                                <br/>
+													(Amperaje)
+												
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:3.5px solid red;">
+                                            <td colspan="3" style="text-align: center;">Amperaje de línea (Amp)</td>
+                                            <td colspan="3" style="text-align: center;">Amperaje de fase (Amp)</td>
+                                        </tr>
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Línea </span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Carga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Descarga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Fase </span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Carga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Descarga</span>
+                                            </th>
+                                        </tr>
+                                        <t t-foreach="pe.amperaje_ids" t-as="amp">
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.carga_linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.descarga_linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.fase"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.carga_fase"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.descarga_fase"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="5" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Parámetros de operación del compresor
+												</td>
+                                        </tr>
+                                        <!--<tr style="background:#EDEDED;">-->
+                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre líneas<br/>(voltaje)</td>-->
+                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre línea y neutro<br/>(voltaje)</td>-->
+                                        <!--    <td colspan="1" style="text-align: center;">Tensión del modulo</td>-->
+                                        <!--</tr>-->
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Ítem</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Parámetros del modulo</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Valores de trabajo</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Valores de parada</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Unidad de medida</span>
+                                            </th>
+                                        </tr>
+                                        <t t-set="item" t-value="0"/>
+                                        <t t-foreach="pe.parametro_ids" t-as="param">
+                                            <t t-set="item" t-value="item + 1"/>
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-out="item"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_trabajo"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_trabajo"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_parada"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.unidad_medida"/>
                                                 </td>
                                             </tr>
                                         </t>
@@ -444,6 +568,30 @@
                                             <br/>
                                         </t>
                                     </t>
+                                </div>
+                                <br/>
+                                <div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Observaciones</h6>
+                                        <hr/>
+                                    </div>
+                                    <div style="font-size:11px;">
+                                        <t t-esc="pe.nota_observaciones"/>
+                                    </div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Conclusiones</h6>
+                                        <hr/>
+                                    </div>
+                                    <div style="font-size:11px;">
+                                        <t t-esc="pe.nota_mantenimiento"/>
+                                    </div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Recomendaciones</h6>
+                                        <hr/>
+                                    </div>
+                                    <div style="font-size:11px;">
+                                        <t t-esc="pe.nota_recomendaciones"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

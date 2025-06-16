@@ -6,7 +6,7 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
+							<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="Icono Compresores de tornillo" />
 							<span>
 								Compresores de Tornillo S.A.C.
 							</span>
@@ -31,9 +31,11 @@
 								</g>
 							</svg>
 							<span>
-								<span t-esc="ubicacion.parent_id.name">
-								</span>
+								<t t-if="ubicacion.parent_id">
+								<span t-esc="ubicacion.parent_id.name"></span>
 								/
+								</t>
+								
 								<span t-esc="ubicacion.name" />
 							</span>
 						</div>
@@ -82,6 +84,7 @@
 								Si aun no cuenta con el registro de alguno de sus Equipos, solicita el
 								registro del equipo a Compresores de Tornillo S.A.C. para ver su historial de servicios
 							</span>
+							
 						</div>
 					</div>
 				</div>
@@ -111,7 +114,7 @@
 							</t>
 						</t>
 						<t t-else="">
-							Lo sentimos... Al parecer, no cuenta con equipos registradas a su cuenta de usuario.
+							Lo sentimos... Al parecer no cuenta con equipos registradas a su cuenta de usuario.
 						</t>
 					</div>
 					<!-- Paginación -->

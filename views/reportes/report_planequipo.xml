@@ -181,7 +181,7 @@
 								<div>
 									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 										<tr>
-											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+											<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  red;">
 												<strong>
 															Activos
 														</strong>
@@ -335,6 +335,193 @@
 											</t>
 										</table>
 									</div>
+									<br/>
+									<div>
+                                    <div>
+                                        <h6 style="font-size:13px;">Datos de pruebas</h6>
+                                        <hr/>
+                                    </div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="7" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Voltaje de alimentación
+                                                <br/>
+													(Tension)
+												
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:3.5px solid red;">
+                                            <td colspan="3" style="text-align: center;">Tensión entre líneas
+                                                <br/>(voltaje)
+                                            </td>
+                                            <td colspan="3" style="text-align: center;">Tensión entre línea y neutro
+                                                <br/>(voltaje)
+                                            </td>
+                                            <td colspan="1" style="text-align: center;">Tensión del modulo</td>
+                                        </tr>
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/L2</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L2/L3</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/L3</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L1/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L2/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">L3/GND</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Supply</span>
+                                            </th>
+                                        </tr>
+                                        <t t-foreach="doc.voltaje_ids" t-as="vol">
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_l2"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l2_l3"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_l3"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l1_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l2_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.l3_gnd"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="vol.supply"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="6" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Corriente de motor principal
+                                                <br/>
+													(Amperaje)
+												
+                                            </td>
+                                        </tr>
+                                        <tr style="border-bottom:3.5px solid red;">
+                                            <td colspan="3" style="text-align: center;">Amperaje de línea (Amp)</td>
+                                            <td colspan="3" style="text-align: center;">Amperaje de fase (Amp)</td>
+                                        </tr>
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Línea </span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Carga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Descarga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Fase </span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Carga</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Descarga</span>
+                                            </th>
+                                        </tr>
+                                        <t t-foreach="doc.amperaje_ids" t-as="amp">
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.carga_linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.descarga_linea"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.fase"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.carga_fase"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="amp.descarga_fase"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div>
+                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
+                                            <td scope="col" colspan="5" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+													Parámetros de operación del compresor
+												</td>
+                                        </tr>
+                                        <!--<tr style="background:#EDEDED;">-->
+                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre líneas<br/>(voltaje)</td>-->
+                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre línea y neutro<br/>(voltaje)</td>-->
+                                        <!--    <td colspan="1" style="text-align: center;">Tensión del modulo</td>-->
+                                        <!--</tr>-->
+                                        <tr class="no-wrap">
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Ítem</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Parámetros del modulo</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Valores de trabajo</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Valores de parada</span>
+                                            </th>
+                                            <th style="text-align: center;">
+                                                <span style="text-align: center;">Unidad de medida</span>
+                                            </th>
+                                        </tr>
+                                        <t t-set="item" t-value="0"/>
+                                        <t t-foreach="doc.parametro_ids" t-as="param">
+                                            <t t-set="item" t-value="item + 1"/>
+                                            <tr class="no-wrap">
+                                                <td style="text-align: center;">
+                                                    <span t-out="item"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_trabajo"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_trabajo"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.valor_parada"/>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <span t-field="param.unidad_medida"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+									<br/>
 									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
 										<tr>
 											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
@@ -398,6 +585,30 @@
 										</t>
 									</t>
 								</div>
+								<br/>
+                                        <div>
+                                            <div>
+                                                <h6 style="font-size:13px;">Observaciones</h6>
+                                                <hr/>
+                                            </div>
+                                            <div style="font-size:11px;">
+                                                <t t-esc="doc.nota_observaciones"/>
+                                            </div>
+                                            <div>
+                                                <h6 style="font-size:13px;">Conclusiones</h6>
+                                                <hr/>
+                                            </div>
+                                            <div style="font-size:11px;">
+                                                <t t-esc="doc.nota_mantenimiento"/>
+                                            </div>
+                                            <div>
+                                                <h6 style="font-size:13px;">Recomendaciones</h6>
+                                                <hr/>
+                                            </div>
+                                            <div style="font-size:11px;">
+                                                <t t-esc="doc.nota_recomendaciones"/>
+                                            </div>
+                                        </div>
 							</div>
 						<div>
 							<div style="width:250px;font-size=12px; float:left;">
