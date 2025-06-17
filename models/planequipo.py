@@ -34,6 +34,10 @@ class PlanEquipo(models.Model):
     nota_recomendaciones = fields.Html(string="Recomendaciones")
     parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
     nota_observaciones = fields.Html(string="Observaciones general")
+
+
+
+
     def _default_nota_mantenimiento(self):
         return """
         <p>✓ El compresor queda operando en condiciones normales para su funcionamiento.</p>

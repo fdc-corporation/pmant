@@ -32,11 +32,12 @@
 					<group>
 						<!-- Campos de cabecera -->
 						<field name="id" invisible="1"/>
-						<field name="cliente" invisible="1" readonly="1"/>
-						<field name="ubicacion" invisible="1" readonly="1"/>
+						<field name="cliente"  readonly="1"/>
+						<field name="ubicacion" readonly="1"/>
 						<field name="tarea" invisible="1"/>
 						<field name="ots" invisible="1"/>
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion) ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<!-- <field name="equipo" options="{'no_open': True}"/> -->
 						<field name="plan" string="Plan de mantenimiento" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<field name="fecha_ejec"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
