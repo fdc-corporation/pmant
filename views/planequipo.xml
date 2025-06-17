@@ -36,7 +36,7 @@
 						<field name="ubicacion" readonly="1"/>
 						<field name="tarea" invisible="1"/>
 						<field name="ots" invisible="1"/>
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion) ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<!-- <field name="equipo" options="{'no_open': True}"/> -->
 						<field name="plan" string="Plan de mantenimiento" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<field name="fecha_ejec"/>
