@@ -133,7 +133,7 @@
 										<div class="head-card-mg">
 											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
 											<div class="text-card-mantenimiento">
-												<strong t-esc="plan[record].ots.name" />
+												<strong t-esc="plan[record].ots.name if plan[record].ots else plan[record].tarea.name"/>
 												<span>
 													<span>
 														Tipo de Mant. :
