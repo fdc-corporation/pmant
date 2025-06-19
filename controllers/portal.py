@@ -11,6 +11,7 @@ import math
 import urllib.parse
 import base64
 import json
+from datetime import datetime, date
 
 _logger = logging.getLogger(__name__)
 
@@ -336,7 +337,7 @@ class PortalPmant(http.Controller):
         historial_1_list = [
             {
                 "record": rec,
-                "fecha_ejec": rec.fecha_ejec,
+                "fecha_ejec": rec.fecha_ejec or date.min,
                 "is_otro": False,
             }
             for rec in historial_1
@@ -345,7 +346,7 @@ class PortalPmant(http.Controller):
         historial_2_list = [
             {
                 "record": rec,
-                "fecha_ejec": rec.fecha_ejec,
+                "fecha_ejec": rec.fecha_ejec or date.min,
                 "is_otro": True,
             }
             for rec in historial_2
