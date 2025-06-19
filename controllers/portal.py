@@ -1,6 +1,4 @@
 from odoo import http
-from odoo.http import request
-from datetime import date, datetime, timedelta
 import smtplib
 from math import ceil
 from email.mime.multipart import MIMEMultipart
@@ -25,6 +23,7 @@ class PortalPmant(http.Controller):
     )
     def sedes_portal(self, pagina=1, search=None):
         user_partner = request.env.user.partner_id
+
         _logger.info(f"User Partner: {user_partner}")
         dominio_web = request.httprequest.host
 
@@ -80,6 +79,7 @@ class PortalPmant(http.Controller):
         # Número de registros por página
         per_page = 15
         domain = [("ubicacion", "=", sede_id)]
+        user_partner = request.env.user.partner_id
 
         # Aplicar filtro si existe
         if filtro:
@@ -88,6 +88,10 @@ class PortalPmant(http.Controller):
         # Calcular el total de equipos y el número total de páginas
         total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
         total_paginas = math.ceil(total_equipos / per_page)
+        if total_equipos == 0:
+            domain = [("propietario", "=", sede_id)]
+            total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
+            total_paginas = math.ceil(total_equipos / per_page)
 
         # Calcular el offset para la página actual
         offset = (pagina - 1) * per_page
@@ -108,6 +112,7 @@ class PortalPmant(http.Controller):
                 "filtro": filtro,
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
+                "user_partner" : user_partner,
             },
         )
 
@@ -166,6 +171,7 @@ class PortalPmant(http.Controller):
                 "search": search or "",
             },
         )
+
 
     # SOLICITUD DE REGISTRO DE EQUIPO - SEDE -  CENTRAL
     @http.route(

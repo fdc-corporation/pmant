@@ -265,7 +265,6 @@
 .main .main-card-sedes .detalle-equipo-header .name-equipo button,
 .main .main-card-equipos .detalle-equipo-header .name-equipo button,
 .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo button {
-  display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
@@ -279,25 +278,25 @@
   font-weight: 500;
   line-height: normal;
   font-size: 14px;
-  display: none;
+  display: none !important;
 }
 @media screen and (min-width: 744px) {
   .main .main-card-sedes .detalle-equipo-header .name-equipo button,
   .main .main-card-equipos .detalle-equipo-header .name-equipo button,
   .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo button {
-    display: block;
+    display: flex !important;
   }
 }
 .main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
 .main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
 .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
-  display: none;
+  display: none !important;
 }
 @media screen and (min-width: 744px) {
   .main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
   .main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
   .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
-    display: block;
+    display: flex !important;
   }
 }
 .main .main-card-sedes .detalle-equipo-header .img-header-equipo,
@@ -336,19 +335,19 @@
   .main .main-card-sedes .detalle-equipo-header .btn-mobile,
   .main .main-card-equipos .detalle-equipo-header .btn-mobile,
   .main .main-card-detalles-equipo .detalle-equipo-header .btn-mobile {
-    display: none;
+    display: none !important;
   }
 }
 .main .main-card-sedes .detalle-equipo-header .btn-whatssap,
 .main .main-card-equipos .detalle-equipo-header .btn-whatssap,
 .main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
-  display: block;
+  display: flex !important;
 }
 @media screen and (min-width: 744px) {
   .main .main-card-sedes .detalle-equipo-header .btn-whatssap,
   .main .main-card-equipos .detalle-equipo-header .btn-whatssap,
   .main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
-    display: none;
+    display: none !important;
   }
 }
 .main .main-card-sedes .descripcion-propieadades-equipo,
@@ -512,7 +511,7 @@
   height: auto;
   position: relative;
   padding: 5px;
-  justify-content: start;
+  justify-content: space-between;
   align-items: flex-start;
   background-color: white;
   box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
@@ -520,108 +519,123 @@
   text-decoration: none;
   color: black;
 }
-.main .main-card-sedes .card-sede img,
-.main .main-card-sedes .card-equipo img,
-.main .main-card-sedes .card-mantenimiento img,
-.main .main-card-equipos .card-sede img,
-.main .main-card-equipos .card-equipo img,
-.main .main-card-equipos .card-mantenimiento img,
-.main .main-card-detalles-equipo .card-sede img,
-.main .main-card-detalles-equipo .card-equipo img,
-.main .main-card-detalles-equipo .card-mantenimiento img {
-  width: 100px;
-  height: 100px;
+.main .main-card-sedes .card-sede .head-card-mg,
+.main .main-card-sedes .card-equipo .head-card-mg,
+.main .main-card-sedes .card-mantenimiento .head-card-mg,
+.main .main-card-equipos .card-sede .head-card-mg,
+.main .main-card-equipos .card-equipo .head-card-mg,
+.main .main-card-equipos .card-mantenimiento .head-card-mg,
+.main .main-card-detalles-equipo .card-sede .head-card-mg,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg {
+  display: flex;
+  gap: 5px;
+  align-items: self-start;
 }
-.main .main-card-sedes .card-sede .text-card-sede,
-.main .main-card-sedes .card-sede .text-card-equipo,
-.main .main-card-sedes .card-sede .text-card-mantenimiento,
-.main .main-card-sedes .card-equipo .text-card-sede,
-.main .main-card-sedes .card-equipo .text-card-equipo,
-.main .main-card-sedes .card-equipo .text-card-mantenimiento,
-.main .main-card-sedes .card-mantenimiento .text-card-sede,
-.main .main-card-sedes .card-mantenimiento .text-card-equipo,
-.main .main-card-sedes .card-mantenimiento .text-card-mantenimiento,
-.main .main-card-equipos .card-sede .text-card-sede,
-.main .main-card-equipos .card-sede .text-card-equipo,
-.main .main-card-equipos .card-sede .text-card-mantenimiento,
-.main .main-card-equipos .card-equipo .text-card-sede,
-.main .main-card-equipos .card-equipo .text-card-equipo,
-.main .main-card-equipos .card-equipo .text-card-mantenimiento,
-.main .main-card-equipos .card-mantenimiento .text-card-sede,
-.main .main-card-equipos .card-mantenimiento .text-card-equipo,
-.main .main-card-equipos .card-mantenimiento .text-card-mantenimiento,
-.main .main-card-detalles-equipo .card-sede .text-card-sede,
-.main .main-card-detalles-equipo .card-sede .text-card-equipo,
-.main .main-card-detalles-equipo .card-sede .text-card-mantenimiento,
-.main .main-card-detalles-equipo .card-equipo .text-card-sede,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo,
-.main .main-card-detalles-equipo .card-equipo .text-card-mantenimiento,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-sede,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-equipo,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-mantenimiento {
+.main .main-card-sedes .card-sede .head-card-mg img,
+.main .main-card-sedes .card-equipo .head-card-mg img,
+.main .main-card-sedes .card-mantenimiento .head-card-mg img,
+.main .main-card-equipos .card-sede .head-card-mg img,
+.main .main-card-equipos .card-equipo .head-card-mg img,
+.main .main-card-equipos .card-mantenimiento .head-card-mg img,
+.main .main-card-detalles-equipo .card-sede .head-card-mg img,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg img,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg img {
+  width: 50px;
+  height: 50px;
+}
+.main .main-card-sedes .card-sede .head-card-mg .text-card-sede,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-sede,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-sede,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-sede,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-sede,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-sede,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-sede,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-sede,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-sede,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento {
   display: flex;
   flex-flow: column nowrap;
   align-items: start;
   justify-content: start;
   gap: 1px;
 }
-.main .main-card-sedes .card-sede .text-card-sede span,
-.main .main-card-sedes .card-sede .text-card-equipo span,
-.main .main-card-sedes .card-sede .text-card-mantenimiento span,
-.main .main-card-sedes .card-equipo .text-card-sede span,
-.main .main-card-sedes .card-equipo .text-card-equipo span,
-.main .main-card-sedes .card-equipo .text-card-mantenimiento span,
-.main .main-card-sedes .card-mantenimiento .text-card-sede span,
-.main .main-card-sedes .card-mantenimiento .text-card-equipo span,
-.main .main-card-sedes .card-mantenimiento .text-card-mantenimiento span,
-.main .main-card-equipos .card-sede .text-card-sede span,
-.main .main-card-equipos .card-sede .text-card-equipo span,
-.main .main-card-equipos .card-sede .text-card-mantenimiento span,
-.main .main-card-equipos .card-equipo .text-card-sede span,
-.main .main-card-equipos .card-equipo .text-card-equipo span,
-.main .main-card-equipos .card-equipo .text-card-mantenimiento span,
-.main .main-card-equipos .card-mantenimiento .text-card-sede span,
-.main .main-card-equipos .card-mantenimiento .text-card-equipo span,
-.main .main-card-equipos .card-mantenimiento .text-card-mantenimiento span,
-.main .main-card-detalles-equipo .card-sede .text-card-sede span,
-.main .main-card-detalles-equipo .card-sede .text-card-equipo span,
-.main .main-card-detalles-equipo .card-sede .text-card-mantenimiento span,
-.main .main-card-detalles-equipo .card-equipo .text-card-sede span,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo span,
-.main .main-card-detalles-equipo .card-equipo .text-card-mantenimiento span,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-sede span,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-equipo span,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-mantenimiento span {
-  font-size: 13px;
-}
-.main .main-card-sedes .card-sede .text-card-sede span:first-child,
-.main .main-card-sedes .card-sede .text-card-equipo span:first-child,
-.main .main-card-sedes .card-sede .text-card-mantenimiento span:first-child,
-.main .main-card-sedes .card-equipo .text-card-sede span:first-child,
-.main .main-card-sedes .card-equipo .text-card-equipo span:first-child,
-.main .main-card-sedes .card-equipo .text-card-mantenimiento span:first-child,
-.main .main-card-sedes .card-mantenimiento .text-card-sede span:first-child,
-.main .main-card-sedes .card-mantenimiento .text-card-equipo span:first-child,
-.main .main-card-sedes .card-mantenimiento .text-card-mantenimiento span:first-child,
-.main .main-card-equipos .card-sede .text-card-sede span:first-child,
-.main .main-card-equipos .card-sede .text-card-equipo span:first-child,
-.main .main-card-equipos .card-sede .text-card-mantenimiento span:first-child,
-.main .main-card-equipos .card-equipo .text-card-sede span:first-child,
-.main .main-card-equipos .card-equipo .text-card-equipo span:first-child,
-.main .main-card-equipos .card-equipo .text-card-mantenimiento span:first-child,
-.main .main-card-equipos .card-mantenimiento .text-card-sede span:first-child,
-.main .main-card-equipos .card-mantenimiento .text-card-equipo span:first-child,
-.main .main-card-equipos .card-mantenimiento .text-card-mantenimiento span:first-child,
-.main .main-card-detalles-equipo .card-sede .text-card-sede span:first-child,
-.main .main-card-detalles-equipo .card-sede .text-card-equipo span:first-child,
-.main .main-card-detalles-equipo .card-sede .text-card-mantenimiento span:first-child,
-.main .main-card-detalles-equipo .card-equipo .text-card-sede span:first-child,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo span:first-child,
-.main .main-card-detalles-equipo .card-equipo .text-card-mantenimiento span:first-child,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-sede span:first-child,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-equipo span:first-child,
-.main .main-card-detalles-equipo .card-mantenimiento .text-card-mantenimiento span:first-child {
+.main .main-card-sedes .card-sede .head-card-mg .text-card-sede strong,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-sede strong,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-sede strong,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-sede strong,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-sede strong,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-sede strong,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-sede strong,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-sede strong,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-sede strong,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento strong {
   font-size: 15px;
+  word-break: break-all;
+}
+.main .main-card-sedes .card-sede .head-card-mg .text-card-sede span,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-sede span,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-sede span,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-sede span,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-sede span,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-sede span,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-sede span,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-sede span,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-sede span,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento span {
+  font-size: 13px;
+  word-break: break-all;
 }
 .main .main-card-sedes .card-sede a,
 .main .main-card-sedes .card-equipo a,
@@ -651,38 +665,6 @@
 .main .main-card-detalles-equipo .card-equipo a svg,
 .main .main-card-detalles-equipo .card-mantenimiento a svg {
   color: white;
-}
-.main .main-card-sedes .card-mantenimiento,
-.main .main-card-equipos .card-mantenimiento,
-.main .main-card-detalles-equipo .card-mantenimiento {
-  display: flex;
-  justify-content: space-between;
-}
-.main .main-card-sedes .card-mantenimiento img,
-.main .main-card-equipos .card-mantenimiento img,
-.main .main-card-detalles-equipo .card-mantenimiento img {
-  width: 50px !important;
-  height: 50px !important;
-}
-.main .main-card-sedes .card-mantenimiento strong,
-.main .main-card-equipos .card-mantenimiento strong,
-.main .main-card-detalles-equipo .card-mantenimiento strong {
-  font-size: 13px;
-}
-.main .main-card-sedes .card-mantenimiento span,
-.main .main-card-equipos .card-mantenimiento span,
-.main .main-card-detalles-equipo .card-mantenimiento span {
-  font-size: 12px;
-}
-.main .main-card-sedes .card-mantenimiento span:first-child,
-.main .main-card-equipos .card-mantenimiento span:first-child,
-.main .main-card-detalles-equipo .card-mantenimiento span:first-child {
-  font-size: 12px !important;
-}
-.main .main-card-sedes .card-mantenimiento span span,
-.main .main-card-equipos .card-mantenimiento span span,
-.main .main-card-detalles-equipo .card-mantenimiento span span {
-  font-size: 12px;
 }
 
 .main-historial-equipo {
@@ -744,7 +726,8 @@
   display: none;
 }
 
-.notificacion-exito, .notificacion-error {
+.notificacion-exito,
+.notificacion-error {
   position: fixed;
   top: 20px;
   right: 20px;

@@ -182,7 +182,7 @@ class Equipo(models.Model):
             )
             for equipo in equipos_filtro:
                 if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number(equipo)
+                    equipo.serial_no = "FDC-" + str(equipo.id)
 
         if base_url == "https://compresores.com.pe":
             equipos_filtro = self.search(
@@ -190,7 +190,7 @@ class Equipo(models.Model):
             )
             for equipo in equipos_filtro:
                 if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number_ct(equipo)
+                    equipo.serial_no = "CT-" + str(equipo.id)
         if (
             base_url != "https://equiposindustriales.pe"
             and base_url != "http://compresores.com.pe"
@@ -200,16 +200,8 @@ class Equipo(models.Model):
             )
             for equipo in equipos_filtro:
                 if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number_general(equipo)
+                    equipo.serial_no = "NSR-" + str(equipo.id)
 
-    def _generate_serial_number(self, equipo):
-        return "FDC-" + str(equipo.id)
-
-    def _generate_serial_number_ct(self, equipo):
-        return "CT-" + str(equipo.id)
-
-    def _generate_serial_number_general(self, equipo):
-        return "NSR-" + str(equipo.id)
 
 
 class Adjunto(models.Model):
