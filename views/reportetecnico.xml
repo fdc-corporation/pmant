@@ -42,7 +42,11 @@
 									<strong>
 										Tipo de servicio:
 									</strong>
-									<span t-field="doc.tipo" />
+									<span t-field="doc.tipo" /><br></br>
+                                    <strong>
+										Orden de compra:
+									</strong>
+									<span t-field="doc.ots[0].oc_cliente or ''" />
 								</td>
 							</tr>
 							<tr>

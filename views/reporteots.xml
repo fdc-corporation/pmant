@@ -32,8 +32,12 @@
 										<strong>
 											Tipo de servicio:
 										</strong>
-										<span t-field="doc.tarea.tipo" />
-									</td>
+										<span t-field="doc.tarea.tipo" /><br></br>
+                                        <strong>
+											Orden de compra:
+										</strong>
+										<span t-field="doc.oc_cliente or ''" />
+                                    </td>
 								</tr>
 								<tr class="">
 									<td class="col-6">
