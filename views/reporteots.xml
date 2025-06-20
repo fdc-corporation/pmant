@@ -36,7 +36,7 @@
                                         <strong>
 											Orden de compra:
 										</strong>
-										<span t-field="doc.oc_cliente or ''" />
+										<span t-esc="doc.oc_cliente or ''" />
                                     </td>
 								</tr>
 								<tr class="">
