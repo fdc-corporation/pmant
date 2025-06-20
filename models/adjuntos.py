@@ -78,7 +78,7 @@ class ParametrosOperacion (models.Model):
     _name = 'paremetros.operacion'
     _descripcion = "Parámetros de operación del compresor"
 
-    paremetro_id = fields.Many2one("parametro.modulo", string="Paárametros del modulo")
+    paremetro_id = fields.Many2one("parametro.modulo", string="Párametros del modulo")
     valor_trabajo = fields.Char(string="Valores de trabajo")
     valor_parada = fields.Char(string="Valores de parada")
     unidad_medida = fields.Many2one("unidad.medida.modulo", string="Unidad de medida")

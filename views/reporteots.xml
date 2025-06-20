@@ -6,632 +6,639 @@
 		<field name="report_name">pmant.report_ots_view</field>
 		<field name="print_report_name">'OT_%s - %s' % (object.id, object.ubicacion and object.ubicacion.name or 'Sin Ubicación')</field>
 	</record>
-
 	<template id="pmant.report_ots_view">
 		<t t-call="web.html_container">
-        <t t-foreach="docs" t-as="doc">
-            <t t-call="web.external_layout">
-                <div class="page" style="margin:0px 0px 0px 0px;">
-                    <h2 style="text-align: center;">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page" style="margin:0px 0px 0px 0px;">
+						<h3 style="text-align: center;color:black !important;">
 							Reporte Técnico
-						</h2>
-                    <!--<div style="margin:5px;">-->
-                    <!--    <p style="text-align: right;font-size: 11px;" t-esc="doc.tarea.fecha_hoy"/>-->
-                    <!--    <p style="margin:0px 0px 2px 0px;font-size: 12px;">Señores:</p>-->
-                    <!--    <strong style="font-size: 11px;" t-field="doc.tarea.cliente"/>-->
-                    <!--    <p style="margin-top:5px;border-bottom: 1.5px solid black;font-size: 11px;">Actividad: -->
-                    <!--        <span t-esc="doc.name"/>-->
-                    <!--    </p>-->
-                    <!--</div>-->
-                    <br/>
-                    <table class="table " style="width: 100%;font-size: 11px;">
-                        <tbody>
-                            <tr class="">
-                                <td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
-									Orden de Trabajo
-								</td>
-                            </tr>
-                            <tr class="">
-                                <td class="col-6">
-                                    <strong>
-									Orden:
-									</strong>
-                                    <span t-field="doc.name"/>
-                                </td>
-                                <td class="col-6">
-                                    <strong>
-										Tipo de servicio:
-									</strong>
-                                    <span t-field="doc.tarea.tipo"/>
-                                </td>
-                            </tr>
-                            <tr class="">
-                                <td class="col-6">
-                                    <strong>
-										Fecha Programada:
-									</strong>
-                                    <span t-field="doc.schedule_date"/>
-                                </td>
-                                <td class="col-6">
-                                    <strong>
-										Fecha Ejecutada:
-									</strong>
-                                    <t t-if="doc.tarea">
-                                        <t t-if="doc.tarea.planequipo">
-                                            <span t-field="doc.tarea.planequipo[0].fecha_ejec"/>
-                                        </t>
-                                    </t>
-                                </td>
-                            </tr>
-                            <tr class="">
-                                <td class="col-6">
-                                    <strong>
-										Detalles del cliente
-									</strong>
-                                    <br/>
-									Cliente:
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente"/>
-                                    <br/>
-									Teléfono:
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente.mobile"/>
-                                    <br/>
-									Email:
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente.email"/>
-                                </td>
-                                <td class="col-6">
-                                    <strong>
-										Dirección:
-									</strong>
-                                    <span t-field="doc.tarea.cliente.street"/>
-                                    <span t-field="doc.tarea.cliente.street2"/>
-                                    <br/>
-                                    <span t-field="doc.tarea.cliente.l10n_pe_district"/>
-									-
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente.city_id"/>
-									-
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente.state_id"/>
-									-
-                                    
-                                    
-                                    <span t-field="doc.tarea.cliente.country_id"/>
-                                </td>
-                            </tr>
-                            <tr class="no-wrap">
-                                <td class="col-6">
-                                    <strong>
-										Detalles del Servicio
-									</strong>
-                                    <br/>
-									Prioridad :
-                                    
-                                    
-                                    <span t-field="doc.priority"/>
-                                </td>
-                                <td class="col-6">
-                                    <br/>
-                                    <strong>
-										Duracion :
-									</strong>
-                                    <span t-field="doc.duration"/>
-									horas
-                                
-                                
-                                </td>
-                            </tr>
-                            <tr class="no-wrap" style="margin-bottom: 0px;">
-                                <td class="col-6" style="border-bottom-left-radius: 7px;">
-                                    <strong>
-										Detalles de la compañía
-									</strong>
-                                    <br/>
-									Compañía:
-                                    
-                                    <span t-field="doc.company_id"/>
-                                    <br/>
-									Responsable:
-                                    
-                                    <span t-field="doc.user_id"/>
-                                </td>
-                                <td class="col-6" style="border-bottom-right-radius: 7px;">
-                                    <strong>
-										Detalles del Equipo de Mantenimiento
-									</strong>
-                                    <br/>
-									Responsable:
-                                    
-                                    <span t-field="doc.maintenance_team_id"/>
-                                    <br/>
-									Técnico(s):
-                                    
-                                    <span t-field="doc.user_id"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <t t-foreach="doc.tarea.planequipo" t-as="pe">
-                        <div>
-                            <div>
-                                <table class="table" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
-                                    <thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  red;">
-                                        <tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
-                                            <td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
-                                                <strong>
+						</h3>
+						<table class="table " style="width: 100%; font-size: 11px;">
+							<tbody>
+								<tr class="">
+									<td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid red;">
+										Orden de Trabajo
+									</td>
+								</tr>
+								<tr class="">
+									<td class="col-6">
+										<strong>
+											Orden:
+										</strong>
+										<span t-field="doc.name" />
+									</td>
+									<td class="col-6">
+										<strong>
+											Tipo de servicio:
+										</strong>
+										<span t-field="doc.tarea.tipo" />
+									</td>
+								</tr>
+								<tr class="">
+									<td class="col-6">
+										<strong>
+											Fecha Programada:
+										</strong>
+										<span t-field="doc.schedule_date" />
+									</td>
+									<td class="col-6">
+										<strong>
+											Fecha Ejecutada:
+										</strong>
+										<t t-if="doc.tarea">
+											<t t-if="doc.tarea.planequipo">
+												<span t-field="doc.tarea.planequipo[0].fecha_ejec" />
+											</t>
+										</t>
+									</td>
+								</tr>
+								<tr class="">
+									<td class="col-6">
+										<strong>
+											Detalles del cliente
+										</strong>
+										<br />
+										Cliente:
+										<span t-field="doc.tarea.cliente" />
+										<br />
+										Teléfono:
+										<span t-field="doc.tarea.cliente.mobile" />
+										<br />
+										Email:
+										<span t-field="doc.tarea.cliente.email" />
+									</td>
+									<td class="col-6">
+										<strong>
+											Dirección:
+										</strong>
+										<span t-field="doc.tarea.cliente.street" />
+										<span t-field="doc.tarea.cliente.street2" />
+										<br />
+										<span t-field="doc.tarea.cliente.l10n_pe_district" />
+										-
+										<span t-field="doc.tarea.cliente.city_id" />
+										-
+										<span t-field="doc.tarea.cliente.state_id" />
+										-
+										<span t-field="doc.tarea.cliente.country_id" />
+									</td>
+								</tr>
+								<tr class="no-wrap">
+									<td class="col-6">
+										<strong>
+											Detalles del Servicio
+										</strong>
+										<br />
+										Prioridad :
+										<span t-field="doc.priority" />
+									</td>
+									<td class="col-6">
+										<br />
+										<strong>
+											Duracion :
+										</strong>
+										<span t-field="doc.duration" />
+										horas
+									</td>
+								</tr>
+								<tr class="no-wrap" style="margin-bottom: 0px;">
+									<td class="col-6" style="border-bottom-left-radius: 7px;">
+										<strong>
+											Detalles de la compañía
+										</strong>
+										<br />
+										Compañía:
+										<span t-field="doc.company_id" />
+										<br />
+										Responsable:
+										<span t-field="doc.user_id" />
+									</td>
+									<td class="col-6" style="border-bottom-right-radius: 7px;">
+										<strong>
+											Detalles del Equipo de Mantenimiento
+										</strong>
+										<br />
+										Responsable:
+										<span t-field="doc.maintenance_team_id" />
+										<br />
+										Técnico:
+										<span t-field="doc.user_id" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<t t-foreach="doc.tarea.planequipo" t-as="pe">
+							<div>
+								<div>
+									<table class="table" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
+										<thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  red;">
+											<tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
+												<td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
+													<strong>
 														Activos
 													</strong>
-                                            </td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-wrap">
-                                            <td colspan="2">
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="no-wrap">
+												<td colspan="2">
 													Plan de Tarea :
-                                                
-                                                <span t-field="doc.tarea"/>
-                                            </td>
-                                            <td rowspan="2">
-                                                <center>
-                                                    <!--<img t-attf-src="data:image/png;base64,{{ pe.equipo.qr_image }}" style="width:80px; height:80px; display:block;"/>-->
-                                                    <div t-field="pe.equipo.qr_image" t-options="{'widget': 'image'}" style="width: 80px; height: 80px; display: block; border: 1px solid #ccc;"/>
-															Historial del Equipo
-                                                
-                                                </center>
-                                            </td>
-                                        </tr>
-                                        <tr class="no-wrap">
-                                            <td style="    border-bottom-left-radius: 5px;">
-                                                <strong>
+													<span t-field="doc.tarea" />
+												</td>
+												<td rowspan="2">
+													<center>
+														<img t-attf-src="data:image/jpg;base64,{{ pe.equipo.qr_image }}" style="width:80px; height:80px; display:block;" />
+														Historial del Equipo
+													</center>
+												</td>
+											</tr>
+											<tr class="no-wrap">
+												<td style="    border-bottom-left-radius: 5px;">
+													<strong>
 														Detalles de la máquina
 													</strong>
-                                                <br/>
+													<br />
 													Máquina:
-                                                
-                                                <span t-field="pe.equipo"/>
+													<span t-field="pe.equipo" />
 													-
-                                                
-                                                <span t-field="pe.equipo.marca"/>
-                                                <br/>
+													<span t-field="pe.equipo.marca" />
+													<br />
 													Propietario:
-                                                
-                                                <span t-field="pe.equipo.propietario"/>
-                                                <br/>
+													<span t-field="pe.equipo.propietario" />
+													<br />
 													Ubicacion:
-                                                
-                                                <span t-field="pe.equipo.ubicacion"/>
-                                            </td>
-                                            <td>
-													Marca de la máquina:
-                                                
-                                                <span t-field="pe.equipo.marca"/>
-                                                <br/>
-													MFG Year:
-                                                
-                                                <span t-field="pe.equipo.effective_date"/>
-                                                <br/>
-													N° de Serie:
-                                                
-                                                <span t-field="pe.equipo.serial_no"/>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <br/>
-                                <t t-if="doc.tarea.is_evaluacion">
-                                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
-                                        <thead>
-                                            <tr class="no-wrap">
-                                                <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
-                                                    <strong>
-														Historial de Recepción 
-													</strong>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
-                                                    <strong>Datos del Receptor </strong>
-                                                </th>
-                                                <th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
-                                                    <strong>Comentarios de recepción</strong>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="whidth:50%;">
-                                                    <strong>
-															Receptor:
-															</strong>
-                                                    <span t-esc="doc.tarea.create_user.name"/>
-                                                </td>
-                                                <td style="whidth:50%;">
-                                                    <span t-esc="doc.tarea.comentario_tecnico"/>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <br/>
-                                    <ul>
-                                        <t t-foreach="doc.tarea.adjuntos_evaluaciones" t-as="imagen">
-                                            <li>
-                                                <span style="font-size:12px;" t-esc="imagen.comentario"/>
-                                            </li>
-                                        </t>
-                                    </ul>
-                                    <br/>
-                                </t>
-                                <div>
-                                    <div>
-                                        <h6 style="font-size:13px;">Trabajos realizados</h6>
-                                        <hr/>
-                                    </div>
-                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                        <tr class="no-wrap">
-                                            <td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
-													Procesos del servicio
+													<span t-field="pe.equipo.ubicacion" />
 												</td>
-                                        </tr>
-                                        <tr class="no-wrap">
-                                            <th scope="col">
+												<td>
+													Marca de la máquina:
+													<span t-field="pe.equipo.marca" />
+													<br />
+													MFG Year:
+													<span t-field="pe.equipo.effective_date" />
+													<br />
+													N° de Serie:
+													<span t-field="pe.equipo.serial_no" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<br />
+									<t t-if="doc.tarea.is_evaluacion">
+										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+											<thead>
+												<tr class="no-wrap">
+													<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
+														<strong>
+															Historial de Evaluacion
+														</strong>
+													</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+														<strong>
+															Datos del Receptor
+														</strong>
+													</th>
+													<th style="text-align: left; font-size: 13px;width:50%; border: 0px;">
+														<strong>
+															Comentarios de recepción
+														</strong>
+													</th>
+												</tr>
+												<tr>
+													<td style="whidth:50%;">
+														<strong>
+															Receptor:
+														</strong>
+														<span t-esc="doc.tarea.create_user.name" />
+													</td>
+													<td style="whidth:50%;">
+														<span t-esc="doc.tarea.comentario_tecnico" />
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<br />
+										<ul>
+											<t t-foreach="doc.tarea.adjuntos_evaluaciones" t-as="imagen">
+												<li>
+													<span style="font-size:12px;" t-esc="imagen.comentario" />
+												</li>
+											</t>
+										</ul>
+										<br />
+									</t>
+									<div>
+										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+											<tr class="no-wrap">
+												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
+													Procesos
+												</td>
+											</tr>
+											<tr class="no-wrap">
+												<th scope="col">
 													Grupo
 												</th>
-                                            <th scope="col">
+												<th scope="col">
 													Proceso
 												</th>
-                                            <th scope="col">
+												<th scope="col">
 													Resultado
 												</th>
-                                            <th scope="col">
+												<th scope="col">
 													Comentario
 												</th>
-                                        </tr>
-                                        <t t-foreach="pe.procesos" t-as="pr">
-                                            <tr class="no-wrap">
-                                                <td>
-                                                    <span t-field="pr.proceso.grupo"/>
-                                                </td>
-                                                <td>
-                                                    <span t-field="pr.proceso"/>
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <t t-if="pr.estado">
-                                                            <img t-attf-src="data:image/jpg;base64,{{ pr.estado.icono }}" alt="" class="" style="width:16px;"/>
-                                                        </t>
-                                                    </center>
-                                                </td>
-                                                <td>
-                                                    <span t-field="pr.descripcion"/>
-                                                </td>
-                                            </tr>
-                                        </t>
-                                    </table>
-                                </div>
-                                <br/>
-                                <div>
-                                    <div>
-                                        <h6 style="font-size:13px;">Datos de pruebas</h6>
-                                        <hr/>
-                                    </div>
-                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
-                                            <td scope="col" colspan="7" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+											</tr>
+											<t t-foreach="pe.procesos" t-as="pr">
+												<t t-if="pr.estado.name != 'N/A'">
+													<tr>
+														<td>
+															<span t-field="pr.proceso.grupo" />
+														</td>
+														<td>
+															<span t-field="pr.proceso" />
+														</td>
+														<td>
+															<center>
+																<t t-if="pr.estado">
+																	<img t-attf-src="data:image/jpg;base64,{{ pr.estado.icono }}" alt="" class="" style="width:16px;" />
+																</t>
+															</center>
+															<!-- <span t-field="pr.estado"/> -->
+														</td>
+														<td>
+															<span t-field="pr.descripcion" />
+														</td>
+													</tr>
+												</t>
+											</t>
+										</table>
+									</div>
+									<br t-if="pe.voltaje_ids or pe.amperaje_ids or pe.parametro_ids" />
+									<div t-if="pe.voltaje_ids or pe.amperaje_ids or pe.parametro_ids">
+										<h6 style="font-size:13px;">
+											Datos de pruebas
+										</h6>
+										<hr />
+									</div>
+									<div t-if="pe.voltaje_ids">
+										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+											<tr class="no-wrap" style="border-bottom:3.5px solid red;">
+												<td scope="col" colspan="7" style="text-align: center;color:black; font-size: 13px; border: 0px;">
 													Voltaje de alimentación
-                                                <br/>
+													<br />
 													(Tension)
-												
-                                            </td>
-                                        </tr>
-                                        <tr style="border-bottom:3.5px solid red;">
-                                            <td colspan="3" style="text-align: center;">Tensión entre líneas
-                                                <br/>(voltaje)
-                                            </td>
-                                            <td colspan="3" style="text-align: center;">Tensión entre línea y neutro
-                                                <br/>(voltaje)
-                                            </td>
-                                            <td colspan="1" style="text-align: center;">Tensión del modulo</td>
-                                        </tr>
-                                        <tr class="no-wrap">
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L1/L2</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L2/L3</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L1/L3</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L1/GND</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L2/GND</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">L3/GND</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Supply</span>
-                                            </th>
-                                        </tr>
-                                        <t t-foreach="pe.voltaje_ids" t-as="vol">
-                                            <tr class="no-wrap">
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l1_l2"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l2_l3"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l1_l3"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l1_gnd"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l2_gnd"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.l3_gnd"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="vol.supply"/>
-                                                </td>
-                                            </tr>
-                                        </t>
-                                    </table>
-                                </div>
-                                <br/>
-                                <div>
-                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
-                                            <td scope="col" colspan="6" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+												</td>
+											</tr>
+											<tr style="border-bottom:3.5px solid red;">
+												<td colspan="3" style="text-align: center;">
+													Tensión entre líneas
+													<br />
+													(voltaje)
+												</td>
+												<td colspan="3" style="text-align: center;">
+													Tensión entre línea y neutro
+													<br />
+													(voltaje)
+												</td>
+												<td colspan="1" style="text-align: center;">
+													Tensión del modulo
+												</td>
+											</tr>
+											<tr class="no-wrap">
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L1/L2
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L2/L3
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L1/L3
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L1/GND
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L2/GND
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														L3/GND
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Supply
+													</span>
+												</th>
+											</tr>
+											<t t-foreach="pe.voltaje_ids" t-as="vol">
+												<tr class="no-wrap">
+													<td style="text-align: center;">
+														<span t-field="vol.l1_l2" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.l2_l3" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.l1_l3" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.l1_gnd" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.l2_gnd" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.l3_gnd" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="vol.supply" />
+													</td>
+												</tr>
+											</t>
+										</table>
+									</div>
+									<br t-if="pe.amperaje_ids" />
+									<div t-if="pe.amperaje_ids">
+										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+											<tr class="no-wrap" style="border-bottom:3.5px solid red;">
+												<td scope="col" colspan="6" style="text-align: center;color:black; font-size: 13px; border: 0px;">
 													Corriente de motor principal
-                                                <br/>
+													<br />
 													(Amperaje)
-												
-                                            </td>
-                                        </tr>
-                                        <tr style="border-bottom:3.5px solid red;">
-                                            <td colspan="3" style="text-align: center;">Amperaje de línea (Amp)</td>
-                                            <td colspan="3" style="text-align: center;">Amperaje de fase (Amp)</td>
-                                        </tr>
-                                        <tr class="no-wrap">
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Línea </span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Carga</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Descarga</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Fase </span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Carga</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Descarga</span>
-                                            </th>
-                                        </tr>
-                                        <t t-foreach="pe.amperaje_ids" t-as="amp">
-                                            <tr class="no-wrap">
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.linea"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.carga_linea"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.descarga_linea"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.fase"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.carga_fase"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="amp.descarga_fase"/>
-                                                </td>
-                                            </tr>
-                                        </t>
-                                    </table>
-                                </div>
-                                <br/>
-                                <div>
-                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                        <tr class="no-wrap" style="border-bottom:3.5px solid red;">
-                                            <td scope="col" colspan="5" style="text-align: center;color:black; font-size: 13px; border: 0px;">
+												</td>
+											</tr>
+											<tr style="border-bottom:3.5px solid red;">
+												<td colspan="3" style="text-align: center;">
+													Amperaje de línea (Amp)
+												</td>
+												<td colspan="3" style="text-align: center;">
+													Amperaje de fase (Amp)
+												</td>
+											</tr>
+											<tr class="no-wrap">
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Línea
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Carga
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Descarga
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Fase
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Carga
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Descarga
+													</span>
+												</th>
+											</tr>
+											<t t-foreach="pe.amperaje_ids" t-as="amp">
+												<tr class="no-wrap">
+													<td style="text-align: center;">
+														<span t-field="amp.linea" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="amp.carga_linea" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="amp.descarga_linea" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="amp.fase" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="amp.carga_fase" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="amp.descarga_fase" />
+													</td>
+												</tr>
+											</t>
+										</table>
+									</div>
+									<br t-if="pe.parametro_ids" />
+									<div t-if="pe.parametro_ids">
+										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+											<tr class="no-wrap" style="border-bottom:3.5px solid red;">
+												<td scope="col" colspan="5" style="text-align: center;color:black; font-size: 13px; border: 0px;">
 													Parámetros de operación del compresor
 												</td>
-                                        </tr>
-                                        <!--<tr style="background:#EDEDED;">-->
-                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre líneas<br/>(voltaje)</td>-->
-                                        <!--    <td colspan="3" style="text-align: center;">Tensión entre línea y neutro<br/>(voltaje)</td>-->
-                                        <!--    <td colspan="1" style="text-align: center;">Tensión del modulo</td>-->
-                                        <!--</tr>-->
-                                        <tr class="no-wrap">
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Ítem</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Parámetros del modulo</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Valores de trabajo</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Valores de parada</span>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <span style="text-align: center;">Unidad de medida</span>
-                                            </th>
-                                        </tr>
-                                        <t t-set="item" t-value="0"/>
-                                        <t t-foreach="pe.parametro_ids" t-as="param">
-                                            <t t-set="item" t-value="item + 1"/>
-                                            <tr class="no-wrap">
-                                                <td style="text-align: center;">
-                                                    <span t-out="item"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="param.valor_trabajo"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="param.valor_trabajo"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="param.valor_parada"/>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <span t-field="param.unidad_medida"/>
-                                                </td>
-                                            </tr>
-                                        </t>
-                                    </table>
-                                </div>
-                                <br/>
-                                <div>
-                                    <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                        <tbody>
-                                            <tr class="no-wrap">
-                                                <td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
-                                                    <font style="vertical-align: inherit;">
+											</tr>
+											<!-- <tr style="background:#EDEDED;"> -->
+											<!-- <td colspan="3" style="text-align: center;">Tensión entre líneas<br/>(voltaje)</td> -->
+											<!-- <td colspan="3" style="text-align: center;">Tensión entre línea y neutro<br/>(voltaje)</td> -->
+											<!-- <td colspan="1" style="text-align: center;">Tensión del modulo</td> -->
+											<!-- </tr> -->
+											<tr class="no-wrap">
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Ítem
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Parámetros del modulo
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Valores de trabajo
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Valores de parada
+													</span>
+												</th>
+												<th style="text-align: center;">
+													<span style="text-align: center;">
+														Unidad de medida
+													</span>
+												</th>
+											</tr>
+											<t t-set="item" t-value="0" />
+											<t t-foreach="pe.parametro_ids" t-as="param">
+												<t t-set="item" t-value="item + 1" />
+												<tr class="no-wrap">
+													<td style="text-align: center;">
+														<span t-out="item" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="param.valor_trabajo" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="param.valor_trabajo" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="param.valor_parada" />
+													</td>
+													<td style="text-align: center;">
+														<span t-field="param.unidad_medida" />
+													</td>
+												</tr>
+											</t>
+										</table>
+									</div>
+									<br />
+									<div>
+										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+											<tr>
+												<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid red;">
+													<font style="vertical-align: inherit;">
 														Detalles de Procesos
 													</font>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th style="text-align:center;">
+												</td>
+											</tr>
+											<tr>
+												<th style="text-align:center;">
 													Comentarios
 												</th>
-                                                <th scope="col" style="text-align:center;">
+												<th scope="col" style="text-align:center;">
 													Adjuntos
 												</th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <t t-foreach="pe.procesos" t-as="pr">
-                                        <t t-if="pr.adjuntos">
-                                            <br/>
-                                            <table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
-                                                <tr class="no-wrap" style=" background-color:  red;">
-                                                    <td style="background-color:  red;border:0px 0px 0px 0px !important;border-top:0px !important;">
-                                                        <strong>
+											</tr>
+										</table>
+										<t t-foreach="pe.procesos" t-as="pr">
+											<t t-if="pr.adjuntos">
+												<br />
+												<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+													<tr>
+														<td>
+															<strong>
 																Proceso:
 															</strong>
-                                                        <span t-field="pr.proceso"/>
-                                                    </td>
-                                                    <td style=" background-color:  red;border-top:0px;">
-                                                        <strong>
+															<span t-field="pr.proceso" />
+														</td>
+														<td>
+															<strong>
 																Descripcion:
 															</strong>
-                                                        <span t-field="pr.descripcion"/>
-                                                    </td>
-                                                    <t t-foreach="pr.adjuntos" t-as="ad" style="border:0px;border-bottom:0px;">
-                                                        <tr class="no-wrap">
-                                                            <td class="col-6" style="padding:10px 0px 0px 0px;">
-                                                                <t t-if="ad.comentario != null">
-                                                                    <strong>
-																			Comentario de la imagen:
-																		</strong>
-                                                                    <span t-field="ad.comentario"/>
-                                                                </t>
-                                                            </td>
-                                                            <td class="col-6" style="margin:0px auto 0px auto;">
-                                                                <t t-if="ad.adjunto != null">
-                                                                    <center>
-                                                                        <img t-attf-src="data:image/jpg;base64,{{ ad.adjunto }}" style="width:150px;height:150px;display:block;"/>
-                                                                    </center>
-                                                                </t>
-                                                                <t t-else="">
-                                                                    <center>
-                                                                        <img src="https://www.cams-it.com/wp-content/uploads/2015/05/default-placeholder-200x200.png" style="width:150px;height:150px;display:block;"/>
-                                                                    </center>
-                                                                </t>
-                                                            </td>
-                                                        </tr>
-                                                    </t>
-                                                </tr>
-                                            </table>
-                                            <br/>
-                                        </t>
-                                    </t>
-                                </div>
-                                <br/>
-                                <div>
-                                    <div>
-                                        <h6 style="font-size:13px;">Observaciones</h6>
-                                        <hr/>
-                                    </div>
-                                    <div style="font-size:11px;">
-                                        <t t-esc="pe.nota_observaciones"/>
-                                    </div>
-                                    <div>
-                                        <h6 style="font-size:13px;">Conclusiones</h6>
-                                        <hr/>
-                                    </div>
-                                    <div style="font-size:11px;">
-                                        <t t-esc="pe.nota_mantenimiento"/>
-                                    </div>
-                                    <div>
-                                        <h6 style="font-size:13px;">Recomendaciones</h6>
-                                        <hr/>
-                                    </div>
-                                    <div style="font-size:11px;">
-                                        <t t-esc="pe.nota_recomendaciones"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                    <div>
-                        <div style="width:250px;font-size=12px; float:center;">
-                            <span style="font-size:12px;">
+															<span t-field="pr.descripcion" />
+														</td>
+													</tr>
+												</table>
+												<div class="container-fluid">
+													<div class="row">
+														<t t-foreach="pr.adjuntos" t-as="ad">
+															<div class="col-6 mb-4">
+																<t t-if="ad.adjunto != null">
+																	<center>
+																		<img t-attf-src="data:image/jpg;base64,{{ ad.adjunto }}" style="width:150px;height:150px;display:block;" />
+																		<span style="font-size:12px;" t-field="ad.comentario" />
+																	</center>
+																</t>
+																<t t-else="">
+																	<center>
+																		<img t-attf-src="https://www.cams-it.com/wp-content/uploads/2015/05/default-placeholder-200x200.png" style="width:150px;height:150px;display:block;" />
+																		<span style="font-size:12px;" t-field="ad.comentario" />
+																	</center>
+																</t>
+															</div>
+														</t>
+													</div>
+												</div>
+											</t>
+										</t>
+										<br />
+										<div>
+											<div>
+												<h6 style="font-size:12px;font-weight: 800;">
+													Observaciones:
+												</h6>
+											</div>
+											<div style="font-size:11px;">
+												<t t-esc="pe.nota_observaciones" />
+											</div>
+											<hr />
+											<div>
+												<h6 style="font-size:12px;font-weight: 800;">
+													Conclusiones:
+												</h6>
+											</div>
+											<div style="font-size:11px;">
+												<t t-esc="pe.nota_mantenimiento" />
+											</div>
+											<hr />
+											<div>
+												<h6 style="font-size:12px;font-weight: 800;">
+													Recomendaciones:
+												</h6>
+											</div>
+											<div style="font-size:11px;">
+												<t t-esc="pe.nota_recomendaciones" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</t>
+						<div>
+							<div style="width:250px;font-size=12px; float:center;">
+								<span style="font-size:12px;">
 									Firma digital del cliente
 								</span>
-                            <div style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
-                                <t t-if="not doc.tarea.adjunto">
-                                    <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;"/>
-                                </t>
-                                <t t-else="">
-                                    <img t-attf-src="data:image/jpg;base64,{{ doc.tarea.adjunto }}" class="card-img-top" style="height:100px;margin:0px 0px 0px 0px;"/>
-                                </t>
-                            </div>
-                            <p style="margin:0px; 0px -5px 0px;font-size:12px">
-                                <strong style="font-size:12px;">
+								<div style="width:100%;height:100%;border:3px dashed grey; font-size=12px;">
+									<t t-if="not doc.tarea.adjunto">
+										<img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;" />
+									</t>
+									<t t-else="">
+										<img t-attf-src="data:image/jpg;base64,{{ doc.tarea.adjunto }}" class="card-img-top" style="height:100px;margin:0px 0px 0px 0px;" />
+									</t>
+								</div>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px">
+									<strong style="font-size:12px;">
 										Firmado por:
 									</strong>
-                                <t t-esc="doc.tarea.namefirma"/>
-                            </p>
-                            <p style="margin:0px; 0px -5px 0px;font-size:12px;">
-                                <strong style="font-size:12px;">
+									<t t-esc="doc.tarea.namefirma" />
+								</p>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
+									<strong style="font-size:12px;">
 										DNI:
 									</strong>
-                                <t t-esc="doc.tarea.dni"/>
-                            </p>
-                            <p style="margin:0px; 0px -5px 0px;font-size:12px;">
-                                <strong style="font-size:12px;">
-                                    Comentario:
-                                </strong>
-                                <t t-esc="doc.tarea.comentario"/>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </t>
-        </t>
-    </t>
+									<t t-esc="doc.tarea.dni" />
+								</p>
+								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
+									<strong style="font-size:12px;">
+										Comentario:
+									</strong>
+									<t t-esc="doc.tarea.comentario" />
+								</p>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
 	</template>
 </odoo>

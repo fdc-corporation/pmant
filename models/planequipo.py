@@ -25,6 +25,7 @@ class PlanEquipo(models.Model):
     avisado = fields.Boolean(default=False)
     estado = fields.Char(string="Estado", related="tarea.state_id.name")
     fecha_hoy = fields.Char(string="Fecha Formateada")
+    
     voltaje_ids = fields.One2many("voltaje.linea","planequipo_id", string="Lecturas de Voltaje")
     amperaje_ids = fields.One2many('amperaje.linea',"planequipo_id", string="Lecturas de Amperaje")
     nota_mantenimiento = fields.Html(

@@ -6,6 +6,14 @@
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_kanban" />
 		<field name="arch" type="xml">
 			<xpath expr="//div[@class='o_kanban_record_body']" position="after">
+				<div class="mt-2" style="display: flex; flex-direction: column;">
+                    <span name="propietario" t-if="record.propietario.raw_value">
+                        <strong>Propietario:</strong> <field name="propietario"/>
+                    </span>
+                    <span name="ubicacion" t-if="record.ubicacion.raw_value">
+                        <strong>Ubicacion:</strong> <field name="ubicacion" />
+                    </span>
+                </div>
 				<div class="">
 					<span class="text-danger">
 						<field name="avisado_prox" />
@@ -78,7 +86,7 @@
 						</div> -->
 						<field name="otros_mantenimento">
 							<tree>
-								<field name="planequipo" />
+								<field name="name" />
 								<field name="tipo" />
 								<field name="fecha_ejec" />
 								<field name="file_adjunto" filename="file_name" />
@@ -87,7 +95,7 @@
 								<group>
 									<field name="name"/>
 									<field name="equipo" readonly="1"/>
-									<field name="planequipo"/>
+									<!-- <field name="planequipo"/> -->
 									<field name="fecha_ejec"/>
 									<field name="tipo"/>
 									<field name="file_adjunto" filename="file_name" />

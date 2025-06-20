@@ -125,7 +125,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="main-sedes">
+					<div class="main_historail_pmant">
 						<t t-if="len(historial) > 0">
 							<t t-foreach="historial" t-as="plan">
 								<t t-if="not plan['is_otro']">

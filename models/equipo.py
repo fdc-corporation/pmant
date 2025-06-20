@@ -254,7 +254,7 @@ class MasMantenimiento (models.Model):
     _descriptiion = "Mas mantenimitnos externos"
 
     name = fields.Char(string="Nombre", required="1")
-    planequipo = fields.Many2one("planequipo.mantenimiento", string="Plan de mantenimiento")
+    # planequipo = fields.Many2one("planequipo.mantenimiento", string="Plan de mantenimiento")
     fecha_ejec = fields.Date(string="Fecha ejecutada")
     file_adjunto = fields.Binary(string="Reporte Tecnico")
     file_name = fields.Char(string="Nombre de archivo")
