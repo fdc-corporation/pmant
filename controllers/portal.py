@@ -1,4 +1,5 @@
 from odoo import http
+from odoo.http import request
 import smtplib
 from math import ceil
 from email.mime.multipart import MIMEMultipart
@@ -317,9 +318,7 @@ class PortalPmant(http.Controller):
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
         per_page = 10  # Registros por página
         # Filtrar historial de mantenimiento relacionado con el equipo
-        filtro = kwargs.get("filtro", False)
-        if filtro == False:
-            filtro = "fecha_ejec"
+        order = kwargs.get("filtro", False)
         domain = [("equipo", "=", equipo_id)]
         total = request.env["planequipo.mantenimiento"].sudo().search_count(domain)
         total_paginas = math.ceil(total / per_page)
@@ -332,7 +331,7 @@ class PortalPmant(http.Controller):
 
         # Obtener registros de la página actual
         offset = (pagina - 1) * per_page
-        filtro = f"{filtro} desc"
+        filtro = f"fecha_ejec {order if order else 'asc'}"
 
         historial = (
             request.env["planequipo.mantenimiento"]

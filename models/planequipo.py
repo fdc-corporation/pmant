@@ -25,6 +25,11 @@ class PlanEquipo(models.Model):
     avisado = fields.Boolean(default=False)
     estado = fields.Char(string="Estado", related="tarea.state_id.name")
     fecha_hoy = fields.Char(string="Fecha Formateada")
+    nota_recomendaciones = fields.Html(string="Recomendaciones")
+    nota_observaciones = fields.Html(string="Observaciones general")
+    nota_mantenimiento = fields.Html(
+        string="Conclusiones",
+    )
 
 
     @api.model

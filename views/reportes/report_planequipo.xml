@@ -427,6 +427,7 @@
 								<p style="margin:0px; 0px -5px 0px;font-size:12px;">
 									<strong>Comentario:</strong>
 									<t t-esc="doc.tarea.comentario"/>
+git pull
 								</p>
 							</div>
 						</div>
