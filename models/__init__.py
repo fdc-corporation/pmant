@@ -15,3 +15,4 @@ from . import product
 from . import crm
 from . import evento
 from . import hoja_horas
+from . import res_partner

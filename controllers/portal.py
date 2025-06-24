@@ -31,7 +31,7 @@ class PortalPmant(http.Controller):
         # Número de registros por página
         registros_por_pagina = 15
 
-        if user_partner.is_company:
+        if user_partner.is_company and user_partner.tienen_areas == False:
             # Crear dominio base para filtrar las sedes
             dominio = [("parent_id", "=", user_partner.id)]
 
@@ -63,8 +63,65 @@ class PortalPmant(http.Controller):
                     "search": search or "",
                 },
             )
+        elif user_partner.tienen_areas == True :
+            return request.redirect(f"/my/sede/{user_partner.id}/areas/")
+        elif user_partner.is_area == True:
+            return request.redirect(f"/my/area/{user_partner.id}/equipos/")
         else:
             return request.redirect(f"/my/sede/{user_partner.id}/equipos/")
+
+
+    # Areas de las sedes
+    @http.route(
+        [
+            "/my/sede/<int:sede_id>/areas/",
+            "/my/sede/<int:sede_id>/areas/page/<int:pagina>",
+        ],
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def areas_sede(self, sede_id, filtro=None, pagina=1, **kw):
+        # Número de registros por página
+        per_page = 15
+        domain = [("id_sede", "=", sede_id)]  # Filtrar por 'id_sede'
+
+        # Si existe un filtro, agregarlo al dominio
+        if filtro:
+            domain.append(("name", "ilike", filtro))  # Filtrado por nombre del área
+
+        user_partner = request.env.user.partner_id
+
+        # Calcular el total de áreas y el número total de páginas
+        total_areas = request.env["res.partner"].sudo().search_count(domain)
+        total_paginas = math.ceil(total_areas / per_page)
+
+        # Validación de la página solicitada
+        pagina = max(1, min(pagina, total_paginas))  # Asegurar que la página esté dentro del rango
+
+        # Calcular el offset para la página actual
+        offset = (pagina - 1) * per_page
+
+        # Obtener las áreas para la página actual
+        areas = request.env["res.partner"].sudo().search(domain, limit=per_page, offset=offset)
+        
+        # Buscar la sede
+        sede = request.env["res.partner"].browse(sede_id)
+
+        # Renderizar la plantilla con los datos
+        return request.render(
+            "pmant.areas_sede",
+            {
+                "areas": areas,
+                "filtro": filtro,
+                "pagina_actual": pagina,
+                "total_paginas": total_paginas,
+                "user_partner": user_partner,
+                "sede_id": sede_id,  # Pasar el ID de la sede a la plantilla para los enlaces de paginación
+                "ubicacion": sede,  # Pasar la sede a la plantilla
+            },
+        )
+
 
     # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
     @http.route(
@@ -114,6 +171,61 @@ class PortalPmant(http.Controller):
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
                 "user_partner" : user_partner,
+                "is_area" : False,
+            },
+        )
+
+    
+    # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
+    @http.route(
+        [
+            "/my/area/<int:sede_id>/equipos/",
+            "/my/area/<int:sede_id>/equipos/page/<int:pagina>",
+        ],
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def equipos_areas(self, sede_id, filtro=None, pagina=1, **kw):
+        # Número de registros por página
+        per_page = 15
+        domain = [("area", "=", sede_id)]
+        user_partner = request.env.user.partner_id
+
+        # Aplicar filtro si existe
+        if filtro:
+            domain.append(("name", "ilike", filtro))
+
+        # Calcular el total de equipos y el número total de páginas
+        total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
+        total_paginas = math.ceil(total_equipos / per_page)
+        if total_equipos == 0:
+            domain = [("propietario", "=", sede_id)]
+            total_equipos = request.env["maintenance.equipment"].sudo().search_count(domain)
+            total_paginas = math.ceil(total_equipos / per_page)
+
+        # Calcular el offset para la página actual
+        offset = (pagina - 1) * per_page
+
+        # Obtener los equipos para la página actual
+        equipos = (
+            request.env["maintenance.equipment"]
+            .sudo()
+            .search(domain, limit=per_page, offset=offset)
+        )
+        ubicacion = request.env["res.partner"].sudo().browse(sede_id)
+
+        return request.render(
+            "pmant.equipos_sede",
+            {
+                "equipos": equipos,
+                "ubicacion": ubicacion,
+                "filtro": filtro,
+                "pagina_actual": pagina,
+                "total_paginas": total_paginas,
+                "user_partner" : user_partner,
+                "is_area" : True,
+
             },
         )
 

@@ -6,24 +6,10 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'equiposindustriales.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
-							<t t-if="dominio_web == 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-								<span>
-									Compresores de Tornillo S.A.C.
-								</span>
-							</t>
-							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
+							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+							<span>
+								FDC CORPORATION E.I.R.L.
+							</span>
 						</div>
 						<div class="contactar">
 							<a href="/contactus" class="bg-primary">
@@ -108,7 +94,7 @@
 							Mis Sedes
 						</h3>
 						<form style=" display: flex; gap: 5px;" action="/my/sedes/" method="get" class="form-inline mb-3">
-							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar sedes..." value=""/>
+							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar sedes..." value="" />
 							<button type="submit" class="btn btn-primary">
 								Buscar
 							</button>
@@ -117,14 +103,32 @@
 					<div class="main-sedes">
 						<t t-if="len(sedes) > 0">
 							<t t-foreach="sedes" t-as="sede">
-								<a t-att-href="'/my/sede/' + str(sede.id) + '/equipos'" class="card-sede">
-									<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % sede.id" alt="Sede Image" />
-									<div class="text-card-sede">
-										<span t-esc="sede.name" />
-										<span t-esc="sede.email" />
-										<span t-esc="sede.street" />
-									</div>
-								</a>
+								<t t-if="len(sede.areas) > 0">
+									<a t-att-href="'/my/sede/' + str(sede.id) + '/areas'" class="card-sede">
+										<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % sede.id" alt="Sede Image" />
+										<div class="text-card-sede">
+											<strong t-esc="sede.name" />
+											<hr>
+											</hr>
+											<span t-esc="sede.street" />
+											<span t-esc="sede.email" />
+											<span t-esc="sede.mobile" />
+										</div>
+									</a>
+								</t>
+								<t t-else="">
+									<a t-att-href="'/my/sede/' + str(sede.id) + '/equipos'" class="card-sede">
+										<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % sede.id" alt="Sede Image" />
+										<div class="text-card-sede">
+											<strong t-esc="sede.name" />
+											<hr>
+											</hr>
+											<span t-esc="sede.street" />
+											<span t-esc="sede.email" />
+											<span t-esc="sede.mobile" />
+										</div>
+									</a>
+								</t>
 							</t>
 						</t>
 						<t t-else="">

@@ -8,6 +8,7 @@
 			<xpath expr="//field[@name='name']" position="after">
 				<field name="propietario" />
 				<field name="ubicacion" />
+				<field name="area" />
 			</xpath>
 			<xpath expr="//div[@t-if='record.serial_no.raw_value']" position="after">
 				<div class="mt-2" style="display: flex; flex-direction: column;">
@@ -16,6 +17,9 @@
 					</div>
 					<div t-if="record.ubicacion.raw_value">
 						<strong>Ubicacion:</strong> <field name="ubicacion" />
+					</div>
+					<div t-if="record.area.raw_value">
+						<strong>Área:</strong> <field name="area" />
 					</div>
 				</div>
 			</xpath>
@@ -37,7 +41,8 @@
 			<xpath expr="//field[@name='employee_id']" position="after">
 				<field name="propietario" />
 				<field name="parent_id" invisible="1" />
-				<field name="ubicacion" string="Ubicacion" domain="[('parent_id', '=', parent_id)]" />
+				<field name="ubicacion" string="Ubicacion" domain="[('parent_id', '=', parent_id), ('is_area', '=', False)]" />
+				<field name="area" domain="[('id_sede', '=', ubicacion), ('is_area', '=', True)]" />
 			</xpath>
 			<xpath expr="//field[@name='model']" position="after">
 				<field name="marca" string="Marca" />

@@ -7,24 +7,10 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+								</span>
 							</div>
 							<div class="contactar">
 								<a href="/contactus" class="bg-primary">
@@ -46,7 +32,6 @@
 									</g>
 								</svg>
 								<span>
-								
 									<span t-esc="user.parent_id.name or ''">
 									</span>
 									/
@@ -237,7 +222,7 @@
 															<span>
 																Fecha programada :
 															</span>
-																<span t-esc="ot.schedule_date.strftime('%d/%m/%Y') if ot.schedule_date else ''" />
+															<span t-esc="ot.schedule_date.strftime('%d/%m/%Y') if ot.schedule_date else ''" />
 														</span>
 														<span>
 															<span>
@@ -264,34 +249,32 @@
 						</t>
 					</div>
 					<t t-if="pager">
-						<t t-set="page_number" t-value="pager['page']['num']"/>
-						<t t-set="page_count" t-value="pager['page_count']"/>
-
+						<t t-set="page_number" t-value="pager['page']['num']" />
+						<t t-set="page_count" t-value="pager['page_count']" />
 						<div class="text-center mt-4">
 							<ul class="pagination justify-content-center">
 								<li t-if="page_number &gt; 1" class="page-item">
-									<t t-set="prev_url" t-value="pager['pages'][page_number - 2]['url']"/>
-									<a t-att-href="prev_url" class="page-link">Anterior</a>
+									<t t-set="prev_url" t-value="pager['pages'][page_number - 2]['url']" />
+									<a t-att-href="prev_url" class="page-link">
+										Anterior
+									</a>
 								</li>
-
 								<t t-foreach="pager['pages']" t-as="p">
 									<li t-att-class="'page-item%s' % (' active' if p['num'] == page_number else '')">
 										<a t-att-href="p['url']" class="page-link">
-											<t t-esc="p['num']"/>
+											<t t-esc="p['num']" />
 										</a>
 									</li>
 								</t>
-
 								<li t-if="page_number &lt; page_count" class="page-item">
-									<t t-set="next_url" t-value="pager['pages'][page_number]['url']"/>
-									<a t-att-href="next_url" class="page-link">Siguiente</a>
+									<t t-set="next_url" t-value="pager['pages'][page_number]['url']" />
+									<a t-att-href="next_url" class="page-link">
+										Siguiente
+									</a>
 								</li>
 							</ul>
 						</div>
 					</t>
-
-
-
 				</div>
 			</div>
 		</t>

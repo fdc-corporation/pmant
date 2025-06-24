@@ -81,6 +81,7 @@ class Equipo(models.Model):
     )
     parent_id = fields.Integer(related="propietario.id")
     ubicacion = fields.Many2one("res.partner", string="Ubicacion", tracking=True)
+    area = fields.Many2one("res.partner", string="Area asignada", tracking=True)
     fabricante = fields.Char(size=60)
     marca = fields.Char(size=60)
     frecuencia_m = fields.Integer(string="Frecuencia de Mantenimiento")
