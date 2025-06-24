@@ -7,9 +7,15 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
+<<<<<<< HEAD
 								<img src="/pmant/static/src/css/iconos/icon_ct.png" alt="Icono Compresores de tornillo" />
 								<span>
 									Compresores de Tornillo S.A.C.
+=======
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+>>>>>>> d587d21 (Agregado cambios para areas)
 								</span>
 							</div>
 							<div class="contactar">

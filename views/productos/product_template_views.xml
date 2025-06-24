@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_product_template_form_custom" model="ir.ui.view">
-        <field name="name">product.template.form.custom</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='options']" position="after">
-                <span class="d-inline-block">
-                    <field name="is_equipo"/>
-                    <label for="is_equipo"/>
-                    <field name="is_repuesto"/>
-                    <label for="is_repuesto"/>
-                </span>
-            </xpath>
-            <xpath expr="//field[@name='detailed_type']" position="after">
-                <field name="n_serie"  invisible="not is_equipo"/>
-                <field name="id_equipo" invisible="1" />
-
-            </xpath>            
-
-        </field>
-    </record>
+    
 </odoo>

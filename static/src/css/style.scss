@@ -388,7 +388,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 10px;
     }
-    .main_historail_pmant{
+    .main_historail_pmant {
       width: 100%;
       height: max-content;
       display: flex;
@@ -469,7 +469,6 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
           width: 50px;
           height: 50px;
         }
-        .text-card-sede,
         .text-card-equipo,
         .text-card-mantenimiento {
           display: flex;
@@ -504,6 +503,63 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         right: -10px;
         svg {
           color: white;
+        }
+      }
+    }
+    .card-equipo {
+      justify-content: start;
+      img {
+        width: 100px !important;
+        height: 100px !important;
+      }
+      .text-card-equipo {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: start;
+        justify-content: start;
+        gap: 1px;
+        width: 100%;
+        hr {
+          margin:0px 0px 3px 0px;
+          width: 100%;
+        }
+        strong {
+          font-size: 14px;
+          word-break: break-all;
+        }
+        span {
+          font-size: 13px;
+          word-break: break-all;
+          color: rgb(114, 114, 114);
+        }
+      }
+    }
+    .card-sede {
+      justify-content: start;
+      gap: 10px;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+      .text-card-sede {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: start;
+        justify-content: start;
+        gap: 1px;
+        width: 100%;
+        hr {
+          margin:0px 0px 3px 0px;
+          width: 100%;
+        }
+        strong {
+          font-size: 14px;
+          word-break: break-all;
+        }
+        span {
+          font-size: 13px;
+          word-break: break-all;
+          color: rgb(114, 114, 114);
         }
       }
     }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="areas_sede" name="Areas Registradas">
+		<t t-call="website.layout">
+			<div class="main">
+				<div class="card-contacto-main">
+					<div class="card-contacto">
+						<div class="text-contacto">
+							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+							<span>
+								FDC CORPORATION E.I.R.L.
+							</span>
+						</div>
+						<div class="contactar">
+							<a href="/contactus" class="bg-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
+									<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
+									</path>
+								</svg>
+								Contactar
+							</a>
+						</div>
+					</div>
+					<div class="info-empresa">
+						<div class="header-info">
+							<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g id="icon-empresa">
+									<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35" />
+									<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35" />
+									<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
+								</g>
+							</svg>
+                            <t t-if="ubicacion.parent_id">
+                                <span t-esc="ubicacion.parent_id.name" /> / 
+                                <span t-esc="ubicacion.name" />
+                            </t>
+							<t t-else="">
+                                <span t-esc="ubicacion.name" />
+                            </t>
+						</div>
+						<hr>
+						</hr>
+						<div class="body-text-info">
+							<span>
+								<strong>
+									Direccion :
+								</strong>
+								<t t-esc="ubicacion.street" />
+							</span>
+							<span>
+								<strong>
+									RUC :
+								</strong>
+								<t t-esc="ubicacion.vat" />
+							</span>
+							<span>
+								<strong>
+									Celular :
+								</strong>
+								<t t-esc="ubicacion.mobile" />
+							</span>
+							<span>
+								<strong>
+									Correo :
+								</strong>
+								<t t-esc="ubicacion.email" />
+							</span>
+							<div class="condicion-estado">
+								<span>
+									<strong>
+										Condición :
+									</strong>
+									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+								</span>
+								<span>
+									<strong>
+										Activo :
+									</strong>
+									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+								</span>
+							</div>
+							<span class="text-informativo">
+								Si aun no cuenta con el registro de alguna de sus sedes, solicita el
+								registro de la sede a FDCCORP para ver su historial de servicios
+							</span>
+							<!-- <div class="contenedor-button-info">
+								<a t-att-href="'/my/' + str(user_partner.id) + '/equipos'" class="bg-primary">
+									Ver mis equipos
+								</a>
+								<a href="" class="bg-primary">
+									Reporte General
+								</a>
+							</div> -->
+						</div>
+					</div>
+				</div>
+				<!-- Sección de áreas -->
+				<div class="main-card-equipos">
+					<div class="titulo-seccion" style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
+						<h3>
+							Mis Areas
+						</h3>
+						<form style="display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/areas/'" method="get" class="form-inline">
+							<input type="text" name="filtro" class="form-control mr-2" placeholder="Buscar áreas..." t-att-value="filtro or ''" />
+							<button type="submit" class="btn btn-primary">
+								Buscar
+							</button>
+						</form>
+					</div>
+					<!-- Mostrar áreas -->
+					<div class="main-equipos">
+						<t t-if="len(areas) > 0">
+							<t t-foreach="areas" t-as="area">
+								<a t-att-href="'/my/area/' + str(area.id) + '/equipos'" class="card-sede">
+									<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % area.id" alt="Sede Image" />
+									<div class="text-card-sede">
+										<strong t-esc="area.name" />
+										<hr />
+										<span t-esc="area.street" />
+										<span t-esc="area.email" />
+										<span t-esc="area.mobile" />
+									</div>
+								</a>
+							</t>
+						</t>
+						<t t-else="">
+							Lo sentimos... Al parecer, no cuenta con áreas registradas a su cuenta de usuario.
+						</t>
+					</div>
+					<!-- Paginación -->
+					<div class="contenedor-paginacion">
+						<nav aria-label="pagination justify-content-center">
+							<ul class="pagination">
+								<!-- Página anterior -->
+								<li t-if="pagina_actual > 1" class="page-item">
+									<a t-att-href="'/my/sede/%s/areas/page/%s' % (sede_id, pagina_actual - 1)" class="page-link" aria-label="Previous">
+										<span class="page-link">
+											« Anterior
+										</span>
+									</a>
+								</li>
+								<!-- Páginas -->
+								<t t-foreach="range(1, total_paginas + 1)" t-as="page">
+									<li t-attf-class="page-item #{'active' if page == pagina_actual else ''}">
+										<a t-att-href="'/my/sede/%s/areas/page/%s' % (sede_id, page)" class="page-link">
+											<t t-esc="page" />
+										</a>
+									</li>
+								</t>
+								<!-- Página siguiente -->
+								<li t-if="pagina_actual &lt; total_paginas" class="page-item">
+									<a t-att-href="'/my/sede/%s/areas/page/%s' % (sede_id, pagina_actual + 1)" class="page-link" aria-label="Next">
+										<span class="page-link">
+											Siguiente »
+										</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+</odoo>
