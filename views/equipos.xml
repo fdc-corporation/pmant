@@ -84,6 +84,63 @@
 							<field name="avisado_prox" invisible="1" />
 						</group>
 					</page>
+<<<<<<< HEAD
+=======
+					<page string="Otros mantenimientos">
+						<!-- <div class="oe_button_box" name="button_box">
+							<button string="Subir servicio" name="set_servico_tecnico" type="object" class="oe_highlight"/>
+						</div> -->
+						<field name="otros_mantenimento">
+							<tree>
+								<field name="name" />
+								<field name="tipo" />
+								<field name="fecha_ejec" />
+								<field name="file_adjunto" filename="file_name" />
+							</tree>
+							<form string="Subir reporte técnico">
+								<group>
+									<field name="name"/>
+									<field name="equipo" readonly="1"/>
+									<!-- <field name="planequipo"/> -->
+									<field name="fecha_ejec"/>
+									<field name="tipo"/>
+									<field name="file_adjunto" filename="file_name" />
+									<field name="file_name" invisible="1"/>
+								</group>
+							</form>
+						</field>
+					</page>
+					<page string="Solicitudes de mantenimiento">
+						<field name="solicitudes_servicio">
+							<tree>
+								<field name="ubicacion_id" />
+								<field name="estado" />
+								<field name="tipo_servicio" />
+								<field name="fecha_servicio" />
+								<field name="detalle_problema" />
+								<button name="create_tarea" invisible="estado in 'atendido'" string="Atender" type="object" class="oe_highlight" />
+							</tree>
+							<form string="Solicitud de Mantenimiento">
+								<sheet>
+									<group>
+										<group>
+											<field name="equipo_id" required="1"/>
+											<field name="ubicacion_id" required="1"/>
+											<field name="tipo_servicio" required="1"/>
+											<field name="fecha_servicio" required="1"/>
+										</group>
+										<group>
+											<field name="estado" readonly="1"/>
+											<field name="nombre_imagen" invisible="1"/>
+											<field name="imagen_referencial" readonly="1" filename="nombre_imagen"/>
+										</group>
+									</group>
+									<field name="detalle_problema" widget="text" colspan="4"/>
+								</sheet>
+							</form>
+						</field>
+					</page>
+>>>>>>> 27851c8 (Agregando cambios para solicitud de atecion de servicios)
 					<page string="Mediciones del equipo">
 						<field name="mediciones" >
 							<tree editable="bottom">

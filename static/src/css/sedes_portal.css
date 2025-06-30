@@ -652,19 +652,28 @@
   color: white;
 }
 .main .main-card-sedes .card-equipo,
+.main .main-card-sedes .card-solicitud,
 .main .main-card-equipos .card-equipo,
-.main .main-card-detalles-equipo .card-equipo {
+.main .main-card-equipos .card-solicitud,
+.main .main-card-detalles-equipo .card-equipo,
+.main .main-card-detalles-equipo .card-solicitud {
   justify-content: start;
 }
 .main .main-card-sedes .card-equipo img,
+.main .main-card-sedes .card-solicitud img,
 .main .main-card-equipos .card-equipo img,
-.main .main-card-detalles-equipo .card-equipo img {
+.main .main-card-equipos .card-solicitud img,
+.main .main-card-detalles-equipo .card-equipo img,
+.main .main-card-detalles-equipo .card-solicitud img {
   width: 100px !important;
   height: 100px !important;
 }
 .main .main-card-sedes .card-equipo .text-card-equipo,
+.main .main-card-sedes .card-solicitud .text-card-equipo,
 .main .main-card-equipos .card-equipo .text-card-equipo,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo {
+.main .main-card-equipos .card-solicitud .text-card-equipo,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo {
   display: flex;
   flex-flow: column nowrap;
   align-items: start;
@@ -673,23 +682,64 @@
   width: 100%;
 }
 .main .main-card-sedes .card-equipo .text-card-equipo hr,
+.main .main-card-sedes .card-solicitud .text-card-equipo hr,
 .main .main-card-equipos .card-equipo .text-card-equipo hr,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo hr {
+.main .main-card-equipos .card-solicitud .text-card-equipo hr,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo hr,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo hr {
   margin: 0px 0px 3px 0px;
   width: 100%;
 }
 .main .main-card-sedes .card-equipo .text-card-equipo strong,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong,
 .main .main-card-equipos .card-equipo .text-card-equipo strong,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong {
+.main .main-card-equipos .card-solicitud .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong {
   font-size: 14px;
   word-break: break-all;
 }
+.main .main-card-sedes .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong .status-alert,
+.main .main-card-equipos .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-equipos .card-solicitud .text-card-equipo strong .status-alert,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong .status-alert {
+  font-size: 12px;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 4px;
+  background-color: #dc3545;
+  word-break: keep-all;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong .status-atencion,
+.main .main-card-equipos .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-equipos .card-solicitud .text-card-equipo strong .status-atencion,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong .status-atencion {
+  font-size: 12px;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 4px;
+  background-color: #28a745;
+  word-break: keep-all;
+}
 .main .main-card-sedes .card-equipo .text-card-equipo span,
+.main .main-card-sedes .card-solicitud .text-card-equipo span,
 .main .main-card-equipos .card-equipo .text-card-equipo span,
-.main .main-card-detalles-equipo .card-equipo .text-card-equipo span {
+.main .main-card-equipos .card-solicitud .text-card-equipo span,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo span,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo span {
   font-size: 13px;
   word-break: break-all;
   color: rgb(114, 114, 114);
+}
+.main .main-card-sedes .card-solicitud img,
+.main .main-card-equipos .card-solicitud img,
+.main .main-card-detalles-equipo .card-solicitud img {
+  width: 60px !important;
+  height: 60px !important;
 }
 .main .main-card-sedes .card-sede,
 .main .main-card-equipos .card-sede,
@@ -793,7 +843,9 @@
 }
 
 .notificacion-exito,
-.notificacion-error {
+.notificacion-error,
+.notificacion-exito_solicitud,
+notificacion-error_solicitud {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -805,11 +857,13 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.notificacion-exito {
+.notificacion-exito,
+.notificacion-exito_solicitud {
   background-color: #28a745; /* Verde éxito */
 }
 
-.notificacion-error {
+.notificacion-error,
+.notificacion-error_solicitud {
   background-color: #dc3545; /* Rojo error */
 }
 

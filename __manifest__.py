@@ -68,6 +68,7 @@
         "views/web/form_calificacion.xml",
         "views/documents/documneto_firmado.xml",
         "views/web/areas_sede.xml",
+        "views/web/solicitudes_servicio.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
         "views/ventas/create_mantenimiento.xml",
         "views/ventas/sale_order_views.xml",
@@ -101,6 +102,7 @@
         "web.assets_frontend": [
             "pmant/static/src/css/sedes_portal.css",
            "pmant/static/src/js/data.js",
+           "pmant/static/src/js/equipos.js",
         ],
     },
     "installable": True,

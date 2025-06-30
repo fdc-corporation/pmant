@@ -506,7 +506,8 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         }
       }
     }
-    .card-equipo {
+    .card-equipo,
+    .card-solicitud {
       justify-content: start;
       img {
         width: 100px !important;
@@ -520,18 +521,40 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         gap: 1px;
         width: 100%;
         hr {
-          margin:0px 0px 3px 0px;
+          margin: 0px 0px 3px 0px;
           width: 100%;
         }
         strong {
           font-size: 14px;
           word-break: break-all;
+          .status-alert {
+            font-size: 12px;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 4px;
+            background-color: #dc3545;
+            word-break: keep-all;
+          }
+          .status-atencion {
+            font-size: 12px;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 4px;
+            background-color: #28a745;
+            word-break: keep-all;
+          }
         }
         span {
           font-size: 13px;
           word-break: break-all;
           color: rgb(114, 114, 114);
         }
+      }
+    }
+    .card-solicitud {
+      img {
+        width: 60px !important;
+        height: 60px !important;
       }
     }
     .card-sede {
@@ -549,7 +572,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         gap: 1px;
         width: 100%;
         hr {
-          margin:0px 0px 3px 0px;
+          margin: 0px 0px 3px 0px;
           width: 100%;
         }
         strong {
@@ -700,7 +723,9 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
   display: none;
 }
 .notificacion-exito,
-.notificacion-error {
+.notificacion-error,
+.notificacion-exito_solicitud,
+notificacion-error_solicitud {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -712,10 +737,12 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.notificacion-exito {
+.notificacion-exito,
+.notificacion-exito_solicitud {
   background-color: #28a745; /* Verde éxito */
 }
 
-.notificacion-error {
+.notificacion-error,
+.notificacion-error_solicitud {
   background-color: #dc3545; /* Rojo error */
 }

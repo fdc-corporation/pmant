@@ -462,6 +462,39 @@ class PortalPmant(http.Controller):
             },
         )
 
+
+    @http.route("/my/equipo/<int:equipo_id>/solicitudes/servicios", methods=["GET"], type="http", auth='user', website=True)
+    def view_solicitudes_servicios(self, equipo_id, page=1, sort='desc', **kwargs):
+        page = int(page)
+        sort = request.params.get('sort', 'desc').lower()
+        sort = sort if sort in ['asc', 'desc'] else 'desc'
+        solicitudes_per_page = 10
+
+        # Buscar las solicitudes de servicio de ese equipo
+        dominio = [('equipo_id.id', '=', equipo_id)]
+        total_solicitudes = request.env["servicio.solicitud"].sudo().search_count(dominio)
+        equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
+
+        # Obtener las solicitudes ordenadas por fecha_servicio
+        solicitudes = request.env["servicio.solicitud"].sudo().search(
+            dominio,
+            order=f"fecha_servicio {sort}",
+            limit=solicitudes_per_page,
+            offset=(page - 1) * solicitudes_per_page,
+        )
+
+        total_pages = ceil(total_solicitudes / solicitudes_per_page)
+
+        return request.render("pmant.solicitudes_servicio", {
+            'equipo': equipo,
+            'solicitudes': solicitudes,
+            'page': page,
+            'total_pages': total_pages,
+            'sort': sort,
+            'next_sort': 'asc' if sort == 'desc' else 'desc',
+        })
+
+
     @http.route(
         ["/my/servicios/ejecucion", "/my/servicios/ejecucion/page/<int:page>"],
         type="http",
@@ -662,224 +695,110 @@ class PortalPmant(http.Controller):
         ]
         return request.make_response(file_content_decoded, headers=headers)
 
-    @http.route(
-        ["/solicitud/mantenimiento/servicio"],
-        type="http",
-        methods=["POST"],
-        auth="user",
-        website=True,
-    )
-    def solicitud_servicio_crm(self, **kwargs):
-        ubicacion = kwargs.get("ubicacion")
-        ubicacion_id = kwargs.get("ubicacion_id")
-        nombre_equipo = kwargs.get("nombre_equipo")
-        id_equipo = kwargs.get("id_equipo")
-        marca_equipo = kwargs.get("marca_equipo")
-        modelo = kwargs.get("modelo")
-        numero_serie = kwargs.get("numero_serie")
-        razon = kwargs.get("razon")
-        tipo_sevicio = kwargs.get("tipo_servicio")
-        imagen = kwargs.get("formFileMultiple")
-        fecha_servicio = kwargs.get("fecha_servicio")
-        user_partner = request.env.user.partner_id
 
-        # Validar id_equipo
-        if not id_equipo:
-            return request.not_found()  # Redirigir si el equipo no está especificado
 
-        equipo = (
-            request.env["maintenance.equipment"]
-            .sudo()
-            .search([("id", "=", int(id_equipo))], limit=1)
-        )
-        if not equipo:
-            return request.not_found()  # Redirigir si el equipo no existe
-
-        equipos = [equipo.id]  # Agregar ID del equipo a la lista
-
-        print("-------------------ID DEL EQUIPO-------------------------")
-        print(id_equipo)
-        # Buscar usuario vendedor
-        creado_por = (
-            request.env["res.groups"]
-            .sudo()
-            .search([("name", "=", "Mantenimiento -  Vendedor")], limit=1)
-        )
-        supervisores = (
-            request.env["res.groups"]
-            .sudo()
-            .search([("name", "=", "Mantenimiento - ADMIN")], limit=1)
-        )
-        usuario_vemder = creado_por.users[0].id if creado_por else None
-
-        # Crear lead
-        lead = (
-            request.env["crm.lead"]
-            .sudo()
-            .create(
-                {
-                    "name": f"Solicitud de Mantenimiento - {user_partner.name} - {equipo.name}",
-                    "partner_id": user_partner.id,
-                    "equipo_tarea": [(6, 0, equipos)],  # Relación Many2many
-                    "ubicacion": int(ubicacion_id) if ubicacion_id else None,
-                    "user_id": int(usuario_vemder) if usuario_vemder else None,
-                    "description": f"<p><strong>Tipo de servicios:</strong> {tipo_sevicio}</p> <p> <strong>Fecha de Servicio:</strong> {fecha_servicio}</p>   <p>{razon}</p>",
-                }
-            )
-        )
-
-        # Adjuntar imagen
-        if imagen:
-            imagen_binario = base64.b64encode(imagen.read())
-            attachment = (
-                request.env["ir.attachment"]
-                .sudo()
-                .create(
-                    {
-                        "name": imagen.filename,
-                        "type": "binary",
-                        "datas": imagen_binario,
-                        "res_model": "crm.lead",
-                        "res_id": lead.id,
-                        "mimetype": imagen.content_type,
-                        "public": True,
-                    }
-                )
-            )
-
-            # Crear mensaje con el adjunto
-            request.env["mail.message"].sudo().create(
-                {
-                    "body": f"Imagen adjunta: <img src='/web/content/{attachment.id}' width='100'/>",
-                    "model": "crm.lead",
-                    "res_id": lead.id,
-                    "attachment_ids": [(4, attachment.id)],
-                }
-            )
-        datos = {
-            "ubicacion": ubicacion,
-            "equipo": equipo,
-        }
-        self.enviar_correo_personalizado(
-            supervisores, equipo, tipo_sevicio, fecha_servicio, razon
-        )
-        # Redirigir al historial del equipo
-        return request.redirect(f"/my/equipos/{equipo.id}/detalles")
-
-    # ENVIO DE EMAIL - SOLICITUD DE SEVICIOS
-    def enviar_correo_personalizado(
-        self, supervisores, equipo, tipo_sevicio, fecha_servicio, razon
-    ):
-        domain = request.httprequest.host
-        smtp_server = "smtp.hostinger.com"
-        smtp_port = 465
-
-        smtp_username = "fdccorp@fdc-corporation.com"
-        smtp_password = "Fdc@2024"
-
-        if domain == "compresores.com.pe":
-            smtp_username = "asistenteadmin@compresoresdetornillo.com.pe"
-            smtp_password = "Asistente2024!"
-
-        from_email = smtp_username
-        to_emails = [user.login for user in supervisores.users if user.login]
-        if not to_emails:
-            print("No se encontraron correos electrónicos de supervisores.")
-            return
-        subject = "Nueva Solicitud de Mantenimiento"
-        body = f"""
-        <html>
-<head>
-    <style>
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-            margin: 20px 0;
-            font-size: 16px;
-            text-align: left;
-        }}
-        thead {{
-            background-color: #007BFF;
-            color: white;
-        }}
-        th, td {{
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }}
-        tbody tr:nth-child(even) {{
-            background-color: #f9f9f9;
-        }}
-        tbody tr:hover {{
-            background-color: #f1f1f1;
-        }}
-        th {{
-            text-transform: uppercase;
-        }}
-        td {{
-            color: #333;
-        }}
-    </style>
-</head>
-<body>
-    <table style="width: 100%;" style="border:0px;">
-        <tr style="border:0px;">
-            <td style="text-align: left; border: 0px; vertical-align: middle;">
-                <img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png" alt="Logo FDC CORP"
-                     style="max-width: 100px; height: auto;">
-            </td>
-            <td style="border:0px;"></td>
-            <td style="border:0px;"></td>
-            <td style="border:0px;"></td>
-        </tr>
-    </table>
-    <br>
-    <h1>Nuevo Servicio de {tipo_sevicio}</h1>
-    <p>{ razon }</p>
-    <br>
-    <p><strong>Cliente: </strong>{equipo.propietario.name}</p>
-    <p><strong>Ubicación: </strong>{equipo.ubicacion.name}</p>
-    <p><strong>Teléfono: </strong>{equipo.ubicacion.mobile}</p>
-    <p><strong>Correo: </strong>{equipo.ubicacion.email}</p>
-    <br>
-    <table>
-        <thead>
-            <tr>
-                <th>Equipo</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>N° de Serie</th>
-                <th>Fecha de Servicio</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{equipo.name}</td>
-                <td>{equipo.marca}</td>
-                <td>{equipo.model}</td>
-                <td>{equipo.serial_no}</td>
-                <td>{fecha_servicio}</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
-        """
-        message = MIMEMultipart()
-        message["From"] = from_email
-        message["To"] = ", ".join(to_emails)
-        message["Subject"] = subject
-        # Adjuntar el cuerpo del mensaje como HTML
-        message.attach(MIMEText(body, "html"))
-
+    @http.route('/solicitud/mantenimiento/servicio', type='http', auth='public', methods=['POST'], csrf=True)
+    def recibir_solicitud_servicio(self, **post):
         try:
-            # Enviar correo usando SMTP
-            with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
-                server.login(smtp_username, smtp_password)
-                server.sendmail(from_email, to_emails, message.as_string())
-                print("Correo enviado con éxito.")
+            print("📩 Iniciando procesamiento del formulario de servicio...")
+
+            # Extraer datos del formulario
+            id_equipo = int(post.get('id_equipo') or 0)
+            ubicacion_id = int(post.get('ubicacion_id') or 0)
+            tipo_servicio = post.get('tipo_servicio')
+            fecha_servicio = post.get('fecha_servicio')
+            razon = post.get('razon')
+
+            print(f"➡️ Datos recibidos: equipo={id_equipo}, ubicacion={ubicacion_id}, tipo={tipo_servicio}, fecha={fecha_servicio}")
+
+            # Obtener archivo
+            file = request.httprequest.files.get('formFileMultiple')
+            file_encoded = False
+            filename = False
+            if file:
+                print(f"📎 Archivo recibido: {file.filename}")
+                file_encoded = base64.b64encode(file.read())
+                filename = file.filename
+            else:
+                print("ℹ️ No se adjuntó archivo.")
+
+            # Crear el registro
+            solicitud = request.env['servicio.solicitud'].sudo().create({
+                'equipo_id': id_equipo,
+                'ubicacion_id': ubicacion_id,
+                'tipo_servicio': tipo_servicio,
+                'fecha_servicio': fecha_servicio,
+                'detalle_problema': razon,
+                'imagen_referencial': file_encoded,
+                'nombre_imagen': filename,
+                'estado': 'nuevo',
+            })
+            print(f"✅ Solicitud creada con ID: {solicitud.id}")
+
+            equipo = solicitud.equipo_id
+
+            # HTML del correo
+            html_body = f"""<html><body>
+            <h1>Nuevo Servicio de {tipo_servicio}</h1>
+            <p>{razon}</p>
+            <p><strong>Equipo:</strong> {equipo.name}</p>
+            <p><strong>Fecha:</strong> {fecha_servicio}</p>
+            </body></html>"""
+
+            # Buscar usuarios del grupo
+            group = request.env.ref('pmant.group_pmant_admin')
+            internal_users = group.sudo().users.filtered(lambda u: u.email)
+            print(f"👥 Usuarios internos con permiso: {[u.login for u in internal_users]}")
+
+            destinatarios = [u.email for u in internal_users]
+            if request.env.user and request.env.user.email:
+                destinatarios.append(request.env.user.email)
+            print(f"✉️ Correos destino: {destinatarios}")
+
+            # Enviar correo
+            try:
+                mail = request.env['mail.mail'].sudo().create({
+                    'subject': f'Solicitud de Servicio - {tipo_servicio}',
+                    'email_to': ','.join(destinatarios),
+                    'body_html': html_body,
+                })
+                mail.send()
+                print("✅ Correo enviado correctamente.")
+            except Exception as mail_error:
+                print(f"❌ Error al enviar correo: {mail_error}")
+                print("📢 Generando notificaciones internas...")
+
+                for user in internal_users:
+                    request.env['mail.message'].sudo().create({
+                        'model': 'servicio.solicitud',
+                        'res_id': solicitud.id,
+                        'message_type': 'notification',
+                        'subtype_id': request.env.ref('mail.mt_note').id,
+                        'body': (
+                            f"<p><strong>📩 Nueva solicitud de servicio creada</strong></p>"
+                            f"<p>El equipo <strong>{equipo.name}</strong> tiene una nueva solicitud de tipo <strong>{tipo_servicio}</strong>.</p>"
+                        ),
+                        'author_id': request.env.user.partner_id.id,
+                        'partner_ids': [(4, user.partner_id.id)],
+                    })
+                print("✅ Notificaciones internas creadas.")
+
+            print("🎉 Proceso completado correctamente.")
+            return request.make_response(
+                '{"result": {"success": true, "redirect_url": "/my/equipo/' + str(id_equipo) +'/solicitudes/servicios"}}',
+                headers=[('Content-Type', 'application/json')]
+            )
+
         except Exception as e:
-            print(f"Error al enviar el correo: {e}")
+            print(f"🔥 Error general en la solicitud: {str(e)}")
+            return request.make_response(
+                '{"result": {"success": false}}',
+                headers=[('Content-Type', 'application/json')],
+                status=500
+            )
+
+
+
 
     # EVALUACIONES DEL EQUIPO, HISTORIAL
     @http.route(
@@ -1068,3 +987,5 @@ class PortalPmant(http.Controller):
             return {"success": True}
         except Exception as e:
             return {"success": False, "message": str(e)}
+
+
