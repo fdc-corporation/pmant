@@ -84,32 +84,7 @@
 							<field name="avisado_prox" invisible="1" />
 						</group>
 					</page>
-<<<<<<< HEAD
-=======
-					<page string="Otros mantenimientos">
-						<!-- <div class="oe_button_box" name="button_box">
-							<button string="Subir servicio" name="set_servico_tecnico" type="object" class="oe_highlight"/>
-						</div> -->
-						<field name="otros_mantenimento">
-							<tree>
-								<field name="name" />
-								<field name="tipo" />
-								<field name="fecha_ejec" />
-								<field name="file_adjunto" filename="file_name" />
-							</tree>
-							<form string="Subir reporte técnico">
-								<group>
-									<field name="name"/>
-									<field name="equipo" readonly="1"/>
-									<!-- <field name="planequipo"/> -->
-									<field name="fecha_ejec"/>
-									<field name="tipo"/>
-									<field name="file_adjunto" filename="file_name" />
-									<field name="file_name" invisible="1"/>
-								</group>
-							</form>
-						</field>
-					</page>
+
 					<page string="Solicitudes de mantenimiento">
 						<field name="solicitudes_servicio">
 							<tree>
@@ -140,7 +115,6 @@
 							</form>
 						</field>
 					</page>
->>>>>>> 27851c8 (Agregando cambios para solicitud de atecion de servicios)
 					<page string="Mediciones del equipo">
 						<field name="mediciones" >
 							<tree editable="bottom">
