@@ -117,6 +117,8 @@ class Equipo(models.Model):
     cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
     mediciones = fields.One2many("medicion.equipo", "equipo_id", string="Mediciones")
     otros_mantenimento = fields.One2many("mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
+    solicitudes_servicio = fields.One2many("servicio.solicitud", "equipo_id", string="Solicitudes de Mantenimiento")
+
 
     def action_view_cotizaciones(self):
         for record in self:
@@ -225,6 +227,7 @@ class Equipo(models.Model):
 
     def _generate_serial_number_general(self, equipo):
         return "NSR-" + str(equipo.id)
+
 
 
 class Adjunto(models.Model):

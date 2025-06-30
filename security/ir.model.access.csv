@@ -80,3 +80,4 @@ access_unidad_medida_modulo_user,Unidad Medida Modulo User Access,model_unidad_m
 access_parametro_modulo_user,Parametro Modulo User Access,model_parametro_modulo,base.group_user,1,1,1,1
 access_paremetros_operacion_user,Parametros Operacion User Access,model_paremetros_operacion,base.group_user,1,1,1,1
 access_mantenimiento_equipo_otros_user,Mantenimiento Equipo Otros User Access,model_mantenimento_equipo_otros,base.group_user,1,1,1,1
+access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_solicitud,base.group_user,1,1,1,1
