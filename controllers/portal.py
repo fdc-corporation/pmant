@@ -400,7 +400,7 @@ class PortalPmant(http.Controller):
         if domain == "compresores.com.pe":
             numero = "51993694375"
         if equipo:
-            texto = f"""Hola FDC CORPORATION E.I.R.L. 
+            texto = f"""Hola Compresores de Tornnillo S.A.C.
             Deseo solicitar un servicio nuevo para mi equipo {equipo.name if equipo.name else 'N/A'} modelo {equipo.model} marca {equipo.marca}, ubicado en {equipo.ubicacion.street if equipo.ubicacion.street else 'N/A' } empresa {equipo.propietario.name if equipo.propietario.name else 'N/A'}"""
 
             # Codificar el texto para URL
