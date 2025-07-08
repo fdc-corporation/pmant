@@ -22,6 +22,23 @@ class WizardInconvenientes(models.TransientModel):
                 "ot_id" : record.ot_id,
             })
 
-            record.programacion_id.fecha_fin = datetime.now()
-            record.ot_id.state_id = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1).id
+
+            
+
+            # Si finaliza, mover etapa
+            if record.is_finalizo_servicio:
+                print("EL SERVICIO ESTA FINALIZADO")
+                print(datetime.now())
+                etapa_final = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1)
+                if etapa_final:
+                    record.ot_id.stage_id = etapa_final.id
+                    # Actualizar si finalizó el servicio
+                record.programacion_id.write({
+                    "es_servicio_finalizado": True,
+                    "fecha_fin": datetime.now(),
+                })
+                # Desactivar acción de servicio
+                record.tarea_id.action_servicio = False
+
+            # Recalcular horas trabajadas
             record.programacion_id._compute_horas_trabajado()

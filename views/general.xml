@@ -101,7 +101,7 @@
 		<field name="name">Tareas</field>
 		<field name="res_model">tarea.mantenimiento</field>
 		<field name="context">{'search_default_filter_ot_null': 1}</field>
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">kanban,tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primera Tarea
@@ -112,7 +112,7 @@
 		<field name="name">Reporte Tecnico</field>
 		<field name="res_model">tarea.mantenimiento</field>
 		<!-- <field name="view_type">form</field> -->
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">kanban,tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primera Tarea
@@ -136,8 +136,63 @@
 		<field name="arch" type="xml">
 			<tree string="Tarea Tree">
 				<field name="name" />
-				<field name="state_id" />
+				<field name="stage_id" />
 			</tree>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="Tareav_kanban_view">
+		<field name="name">Tareav.kanban</field>
+		<field name="model">tarea.mantenimiento</field>
+		<field name="arch" type="xml">
+			<kanban default_group_by="stage_id" class="o_kanban_view" >
+				<field name="name"/>
+				<field name="cliente"/>
+				<field name="tipo"/>
+				<field name="stage_id"/>
+				<field name="ubicacion"/>
+				<field name="creado_por"/>
+				<field name="oc_id"/>
+				<field name="color"/>          <!-- Este campo está siendo accedido -->
+				<field name="activity_ids"/>
+                <templates>
+                   <t t-name="kanban-tooltip">
+                            <ul class="oe_kanban_tooltip">
+                                <li t-if="record.creado_por"><b>Creado por:</b> <t t-esc="record.creado_por.value"/></li>
+                            </ul>
+                        </t>
+                    <t t-name="kanban-menu">
+                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit...</a></t>
+                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                    </t>
+                    <t t-name="kanban-box">
+						<t t-set="dummy" t-value="record.stage_id.raw_value"/>
+                        <div t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click oe_semantic_html_override">
+                            <div class="oe_kanban_content" tooltip="kanban-tooltip">
+                                <div class="o_kanban_record_top" tooltip="kanban-tooltip">
+                                    <b class="o_kanban_record_title" style="font-size:16px;"><field name="name"/></b>
+                                </div>
+                                <div class="o_kanban_record_body"  >
+                                    <span name="cliente" t-if="record.cliente.raw_value"><strong>Cliente: </strong><field name="cliente"/><br/></span>
+                                    <span class="ubicacion" t-if="record.ubicacion.raw_value"><strong>Ubicación: </strong><field name="ubicacion"/><br/></span>
+                                    <span name="tipo" t-if="record.tipo.raw_value"><strong>Tipo de servicio: </strong><field name="tipo"/><br/></span>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <div class="o_kanban_inline_block ml4 mr4">
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                        </div>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="creado_por" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Tareav_form_view">
@@ -146,11 +201,11 @@
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<header>
-					<field name="state_id" widget="statusbar" options="{'clickable': '1'}" invisible="archive" />
+					<field name="stage_id" widget="statusbar" options="{'clickable': '1'}"  />
 					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico" icon="fa-envelope" />
 					<!-- CREAR BOTON DE CREAR OT -->
 					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
-					<button string="Iniciar servicio" name="init_servicio" type="object" class="oe_highlight" invisible="action_servicio" />
+					<button string="Iniciar servicio" name="init_servicio" type="object" class="oe_highlight" invisible="action_servicio or not active_servicio " />
 					<button string="Finalizar servicio" name="cancel_servicio" type="object" invisible="not action_servicio"/>
 					<field name="action_servicio" invisible="1" />
 				</header>
@@ -161,9 +216,10 @@
 					<group>
 						<group>
 							<field name="id" invisible="1" />
+							<field name="color" widget="color_picker"  invisible="1"/>
 							<field name="name" />
 							<field name="cliente" />
-							<field name="oc_id" />
+							<field name="oc_id" groups="pmant.group_pmant_admin"/>
 						</group>
 						<group>
 							<field name="tipo" />
@@ -171,7 +227,7 @@
 							<field name="is_tecnico" invisible="1" />
 							<field name="ubicacion" domain="[('parent_id','=',cliente)]" />
 						</group>
-						<field name="planequipo" invisible="is_tecnico and state_id == 3" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
+						<field name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
 							<tree>
 								<field name="equipo" />
 								<field name="plan" />
@@ -192,16 +248,10 @@
 								<field name="fecha_hoy" invisible="1" />
 							</group>
 						</page>
-						<!-- <page name="calificacion" string="Calificaciones">
-							<group>
-								<field name="clasi1" />
-								<field name="clasi2" />
-							</group>
-						</page> -->
 						<page string="OTs" invisible="is_tecnico">
 							<field name="ots" />
 						</page>
-						<page string="Hoja de Recepcion" invisible="not is_evaluacion or state_id not in [1,2]">
+						<page string="Hoja de Recepcion" invisible="not is_evaluacion ">
 							<group>
 								<field name="create_user" />
 								<field name="fecha_entrada" />

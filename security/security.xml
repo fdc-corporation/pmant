@@ -5,7 +5,9 @@
         <record id="group_pmant_admin" model="res.groups">
             <field name="name">Mantenimiento - ADMIN</field>
         </record>
-
+        <record id="group_pmant_user_notifi_fac" model="res.groups">
+            <field name="name">Mantenimiento - Notificacion Facturacion</field>
+        </record>
         <record id="group_pmant_tecnico" model="res.groups">
             <field name="name">Mantenimiento - TECNICO</field>
         </record>
