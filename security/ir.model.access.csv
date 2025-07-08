@@ -73,7 +73,6 @@ access_adjunto_evaluacion_user,access_adjunto_evaluacion_user,model_adjunto_eval
 access_medicion_equipo_user,medicion.equipo user,model_medicion_equipo,base.group_user,1,1,1,1
 access_wizars_inconvenientes_user,wizars.inconvenientes user,model_wizars_inconvenientes,base.group_user,1,1,1,1
 access_inconveniente_servicio_user,inconveniente.servicio user,model_inconveniente_servicio,base.group_user,1,1,1,1
-<<<<<<< HEAD
 ,,,,,,,
 access_voltaje_linea_user,Voltaje Linea User Access,model_voltaje_linea,base.group_user,1,1,1,1
 access_amperaje_linea_user,Amperaje Linea User Access,model_amperaje_linea,base.group_user,1,1,1,1
@@ -82,7 +81,4 @@ access_parametro_modulo_user,Parametro Modulo User Access,model_parametro_modulo
 access_paremetros_operacion_user,Parametros Operacion User Access,model_paremetros_operacion,base.group_user,1,1,1,1
 access_mantenimiento_equipo_otros_user,Mantenimiento Equipo Otros User Access,model_mantenimento_equipo_otros,base.group_user,1,1,1,1
 access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_solicitud,base.group_user,1,1,1,1
-=======
-access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_solicitud,base.group_user,1,1,1,1
 access_etapa_tarea_mantenimiento_user,access.etapa.tarea.mantenimiento.user,model_etapa_tarea_mantenimiento,base.group_user,1,1,1,1
->>>>>>> 4faf0f5 (Agregamos estados y kanban tareas)
