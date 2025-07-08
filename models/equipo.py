@@ -158,28 +158,35 @@ class Equipo(models.Model):
             )
             record.cotizacion_cantidad = len(cotizaciones)
 
-    @api.model
     def _generate_qr_code(self):
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+
         for record in self:
-            base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-            base_url += "/my/equipos/" + str(record.id) + "/detalles"
-            qr_image = generate_qr_code(base_url)
-            url_qr = base_url
+            # Generar URL
+            url = f"{base_url}/my/equipos/{record.id}/detalles"
 
-            lista_fechas = []
-            for tarea in record.planequipo:
-                if tarea and tarea.plan.frecuencia > 0:
-                    lista_fechas.append(tarea.fecha_ejecprox)
-            fecha_prox = lista_fechas[-1] if lista_fechas else False
+            # Generar QR como imagen base64
+            qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+            qr.add_data(url)
+            qr.make(fit=True)
+            img = qr.make_image(fill_color="black", back_color="white")
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            qr_image_b64 = base64.b64encode(buffer.getvalue())
 
-            record.write(
-                {
-                    "qr_image": qr_image,
-                    "qr_image2": qr_image,
-                    "url_qr": url_qr,
-                    "fecha_prox": fecha_prox,
-                }
-            )
+            # Obtener última fecha
+            fechas = [
+                tarea.fecha_ejecprox
+                for tarea in record.planequipo
+                if tarea and tarea.plan and tarea.plan.frecuencia > 0
+            ]
+            fecha_prox = fechas[-1] if fechas else False
+
+            # Asignar a campos
+            record.qr_image = qr_image_b64
+            record.qr_image2 = qr_image_b64
+            record.url_qr = url
+            record.fecha_prox = fecha_prox
 
     def _get_certificados(self):
         for record in self:
