@@ -97,6 +97,7 @@
         "views/code/cron_programacion.xml",
         "wizard/wizard-share.xml",
         "wizard/wizard_inconvenientes.xml",
+        "views/etapas_tarea.xml",
     ],
     "assets": {
         "web.assets_frontend": [

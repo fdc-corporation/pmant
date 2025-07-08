@@ -124,6 +124,15 @@ class OTS(models.Model):
     def write(self, vals):
         res = super(OTS, self).write(vals)
         if "stage_id" in vals:
+            for record in self:
+                # Si el estado tiene una secuencia específica (por ejemplo, 3)
+                if record.stage_id.sequence == 3:
+                    fecha_actual = fields.Date.today()
+                    record.fecha_ejec = fecha_actual
+                    record.tarea._fecha_ejecutada()
+                    record.tarea._evento_calendario_proximo_servicio()
+                if record.stage_id.sequence == 4:
+                    record.notify_users_facturacion()
             self._change_createui()
         if "tarea" in vals:
             self._compute_order_compra()
@@ -132,6 +141,29 @@ class OTS(models.Model):
         if "duration" in vals or "subodinados" in vals or "user_id" in vals:
             self.action_programacion_inicial()
         return res
+
+
+    def notify_users_facturacion (self):
+        # Nombre exacto del grupo
+        group_xml_id = 'pmant.group_pmant_user_notifi_fac'
+        
+        # Buscar el grupo
+        group = self.env.ref(group_xml_id)
+        
+        # Obtener los usuarios del grupo
+        users = group.users
+        if not users:
+            return  # No hay usuarios para notificar
+
+        # Notificar a cada usuario
+        for user in users:
+            self.message_post(
+                body=f"{self.name}: La tarea ha pasado a la etapa {self.stage_id.name}, lista para facturar.",
+                partner_ids=[user.partner_id.id]
+            )
+
+
+
 
     def action_programacion_inicial(self):
         for record in self:
@@ -189,8 +221,6 @@ class OTS(models.Model):
     def _change_createui(self):
         for record in self:
             self._validacion_etapas()
-            if record.tarea:
-                record.tarea.write({"state_id": record.stage_id.id})
             if self.stage_id.sequence == 3:
                 self._fecha_estado()
                 # self.action_open_wizard()

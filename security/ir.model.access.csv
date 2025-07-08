@@ -74,3 +74,4 @@ access_medicion_equipo_user,medicion.equipo user,model_medicion_equipo,base.grou
 access_wizars_inconvenientes_user,wizars.inconvenientes user,model_wizars_inconvenientes,base.group_user,1,1,1,1
 access_inconveniente_servicio_user,inconveniente.servicio user,model_inconveniente_servicio,base.group_user,1,1,1,1
 access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_solicitud,base.group_user,1,1,1,1
+access_etapa_tarea_mantenimiento_user,access.etapa.tarea.mantenimiento.user,model_etapa_tarea_mantenimiento,base.group_user,1,1,1,1

@@ -36,7 +36,7 @@ class WizardInconvenientes(models.TransientModel):
                 print(datetime.now())
                 etapa_final = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1)
                 if etapa_final:
-                    record.tarea_id.state_id = etapa_final.id
+                    record.ot_id.stage_id = etapa_final.id
                     # Actualizar si finalizó el servicio
                 record.programacion_id.write({
                     "es_servicio_finalizado": True,
