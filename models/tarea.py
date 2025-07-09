@@ -24,6 +24,7 @@ class EstapaTarea(models.Model):
     dias_promedio    = fields.Integer(string="Dias de estadia")
     color_error     = fields.Integer(string="Color error")
     color_warning   = fields.Integer(string="Color warning")
+    fold = fields.Boolean(string="Folded in Kanban", default=False)
 
 class TipoTarea(models.Model):
    _name = 'tipotarea.mantenimiento'
@@ -51,10 +52,15 @@ class Tarea(models.Model):
         'etapa.tarea.mantenimiento',
         string="Etapa",
         store=True,
-        tracking=True,
-        ondelete='set null',
+        tracking=True, group_expand='_group_expand_stages',
+        ondelete='set null',copy=False, index=True,
         default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
     )
+    kanban_state = fields.Selection([
+        ('inportante', 'Importante'),
+        ('realizado', 'Realizado'),
+        ('atrasado', 'Atrasado'),
+    ], string='Estado Kanban', default='normal')
     revisar = fields.Boolean()
     archive = fields.Boolean(related="ots.archive", store=True)
     namefirma = fields.Char(string="Nombre del Firmante")
@@ -87,6 +93,12 @@ class Tarea(models.Model):
         string='Color',
         help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
     )
+
+
+    @api.model
+    def _group_expand_stages(self, stages, domain, order):
+        return self.env['etapa.tarea.mantenimiento'].search([], order=order)
+
 
     def _set_action(self):
         """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""

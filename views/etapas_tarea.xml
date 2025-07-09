@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Etapas de Tarea de Mantenimiento" default_order="sequence">
                 <field name="name"/>
+                <field name="fold"/>
                 <field name="sequence"/>
                 <field name="dias_promedio"/>
                 <field name="color_error" widget="color_picker"/>
@@ -22,6 +23,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="fold"/>
                         <field name="sequence"/>
                         <field name="dias_promedio"/>
                         <field name="color_error" widget="color_picker"/>

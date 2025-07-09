@@ -4,7 +4,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/> <!-- Asegúrate de que el ID sea correcto -->
         <field name="arch" type="xml">
-            <xpath expr="//div[@name='vat_vies_container']" position="after">
+            <xpath expr="//field[@name='vat']" position="after">
                 <field name="tienen_areas"/>
                 <field name="is_area" />
                 <field name="id_sede" invisible="not is_area" domain="[('tienen_areas', '=', True)]"/>
