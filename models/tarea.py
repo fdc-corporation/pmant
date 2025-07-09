@@ -55,6 +55,11 @@ class Tarea(models.Model):
         ondelete='set null',group_expand='_group_expand_stages',
         default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
     )
+    kanban_state = fields.Selection([
+        ('inportante', 'Importante'),
+        ('realizado', 'Realizado'),
+        ('atrasado', 'Atrasado'),
+    ], string='Estado Kanban', default='normal')
     revisar = fields.Boolean()
     archive = fields.Boolean(related="ots.archive", store=True)
     namefirma = fields.Char(string="Nombre del Firmante")
