@@ -60,7 +60,7 @@ class Tarea(models.Model):
         ('inportante', 'Importante'),
         ('realizado', 'Realizado'),
         ('atrasado', 'Atrasado'),
-    ], string='Estado Kanban', default='normal')
+    ], string='Estado Kanban')
     revisar = fields.Boolean()
     archive = fields.Boolean(related="ots.archive", store=True)
     namefirma = fields.Char(string="Nombre del Firmante")
