@@ -52,7 +52,7 @@ class Tarea(models.Model):
         string="Etapa",
         store=True,
         tracking=True,
-        ondelete='set null',
+        ondelete='set null',group_expand='_group_expand_stages',
         default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
     )
     revisar = fields.Boolean()
@@ -86,6 +86,12 @@ class Tarea(models.Model):
         string='Color',
         help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
     )
+
+    @api.model
+    def _group_expand_stages(self, stages, domain, order):
+        return self.env['etapa.tarea.mantenimiento'].search([], order=order)
+
+
 
     def _set_action(self):
         """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""
