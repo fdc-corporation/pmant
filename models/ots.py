@@ -405,30 +405,30 @@ class OTS(models.Model):
         self.ensure_one()  # Asegura que solo se trabaje con un registro
         ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
         statement_report_action = self.env.ref("pmant.action_reporte_acta")
+        for statement in self: 
+            # Renderizar PDF del acta
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report_action, res_ids=statement.ids
+            )
 
-        # Renderizar PDF del acta
-        content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-            statement_report_action, res_ids=statement.ids
-        )
+            # Crear adjunto
+            attachment = self.env["ir.attachment"].create({
+                "name": f"Acta - {self.name}",
+                "type": "binary",
+                "datas": content,
+                "mimetype": "application/pdf",
+                "res_model": "sign.template",  # Podrías usar otro modelo si lo necesitas
+                "res_id": None,
+            })
+            vals_template = {
+                    "name":  f"Acta - {self.name}",
+                    "attachment_id": attachment.id,  # Asociar el adjunto creado
+                    "ot_id": self.id,
+                }
 
-        # Crear adjunto
-        attachment = self.env["ir.attachment"].create({
-            "name": f"Acta - {self.name}",
-            "type": "binary",
-            "datas": content,
-            "mimetype": "application/pdf",
-            "res_model": "sign.template",  # Podrías usar otro modelo si lo necesitas
-            "res_id": None,
-        })
-        vals_template = {
-                "name":  f"Acta - {self.name}",
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
-            }
+            vals_template.pop("attachment_count", None)
 
-        vals_template.pop("attachment_count", None)
-
-        sign_template = self.env["sign.template"].create(vals_template)
+            sign_template = self.env["sign.template"].create(vals_template)
 
         # Redirigir al formulario del template recién creado
         return {
