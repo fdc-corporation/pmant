@@ -7,6 +7,8 @@ from email.mime.text import MIMEText
 import logging
 import base64
 from odoo.tools import html2plaintext
+from PyPDF2 import PdfReader
+import io
 
 # Crear un logger
 _logger = logging.getLogger(__name__)
@@ -359,123 +361,88 @@ class OTS(models.Model):
             lead = self.env["crm.lead"].create(valores)
             record.oportunidad = lead.id
 
-    # SOLICITAR FIRMA AL CLIENTE DEL SERVICIO REALIZADO
+    def _validar_pdf(self, content):
+        """Verifica que el PDF generado sea válido usando PyPDF2"""
+        try:
+            reader = PdfReader(io.BytesIO(content))
+            _ = reader.pages  # fuerza la lectura
+        except Exception as e:
+            raise UserError(f"⚠️ PDF inválido. Error de validación: {e}")
+        if not content or len(content) < 1000:
+            raise UserError("⚠️ El contenido del PDF está vacío o dañado.")
+        return True
+
+    def _crear_attachment_para_firma(self, content, nombre_pdf):
+        """Crea un ir.attachment válido para sign.template"""
+        datas_base64 = base64.b64encode(content).decode("utf-8")
+        return self.env["ir.attachment"].create({
+            "name": nombre_pdf,
+            "type": "binary",
+            "datas": datas_base64,
+            "mimetype": "application/pdf",
+            "res_model": "sign.template",
+            "res_id": False,
+        })
+
+    def _crear_sign_template(self, name, attachment_id, ot_id):
+        """Crea la plantilla de firma (sign.template)"""
+        vals = {
+            "name": name,
+            "attachment_id": attachment_id,
+            "ot_id": ot_id,
+        }
+        return self.env["sign.template"].create(vals)
+
     def set_firma_cliente_mantenimiento(self):
-        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
+        report = self.env.ref("pmant.action_mantenimiento_ot")
+        ir_report = self.env["ir.actions.report"].sudo()
 
-        for statement in self:
-            print(f"🔧 Generando PDF para OT: {statement.name}")
-            _logger.info("🔧 Generando PDF para OT: %s", statement.name)
+        for record in self:
+            print(f"🔧 Generando PDF de mantenimiento para: {record.name}")
+            content, _ = ir_report._render_qweb_pdf(report, res_ids=record.ids)
 
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
+            self._validar_pdf(content)
 
-            # Verificar si el PDF es válido
-            if not content or len(content) < 1000:
-                print("❌ El contenido del PDF está vacío o es inválido.")
-                _logger.error("❌ El contenido del PDF está vacío o es inválido.")
-                raise UserError("Error al generar el PDF. Puede que el template esté mal o falten datos.")
+            attachment = self._crear_attachment_para_firma(content, f"OT {record.name}")
+            sign_template = self._crear_sign_template(f"OT {record.name}", attachment.id, record.id)
 
-            print(f"📄 PDF generado correctamente. Tamaño: {len(content)} bytes")
-            _logger.info("📄 PDF generado correctamente. Tamaño: %s bytes", len(content))
+            # Linkear attachment al template
+            attachment.write({"res_id": sign_template.id})
 
-            # Crear el adjunto con el PDF generado
-            attachment = self.env["ir.attachment"].create({
-                "name": "OT " + statement.name,
-                "type": "binary",
-                "datas": base64.b64encode(content),
-                "mimetype": "application/pdf",
-                "res_model": "sign.template",
-                "res_id": None,
-            })
-
-            print(f"📎 Adjunto creado con ID: {attachment.id}")
-            _logger.info("📎 Adjunto creado con ID: %s", attachment.id)
-            _logger.info("📎 Adjunto datas: %s", attachment.datas)
-            _logger.info("📎 Adjunto mimetype: %s", attachment.mimetype)
-
-            vals_template = {
-                "name": "OT " + statement.name,
-                "attachment_id": attachment.id,
-                "ot_id": statement.id,
-            }
-
-            # vals_template.pop("attachment_count", None)
-
-            sign_template = self.env["sign.template"].create(vals_template)
-            # attachment.res_id = sign_template.id
-            print(f"✍️ Plantilla de firma creada: {sign_template.name}")
-            _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
-
-        # print("✅ Proceso finalizado correctamente. Redirigiendo a vista kanban.")
-        # _logger.info("✅ Firma del cliente preparada correctamente. Redirigiendo a sign.template.")
+            print(f"✅ Plantilla creada: {sign_template.name} con adjunto {attachment.name}")
 
         return {
             "type": "ir.actions.act_window",
-            "name": "OT " + self.name,
+            "name": "Firmas OT",
             "res_model": "sign.template",
             "view_mode": "kanban",
             "target": "current",
         }
-
 
     def set_firma_empresa_acta(self):
-        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        statement_report_action = self.env.ref("pmant.action_reporte_acta")
+        report = self.env.ref("pmant.action_reporte_acta")
+        ir_report = self.env["ir.actions.report"].sudo()
 
-        for statement in self:
-            print(f"🧾 Generando acta para: {statement.name}")
-            statement_report = statement_report_action.sudo()
+        for record in self:
+            print(f"🧾 Generando acta para: {record.name}")
+            content, _ = ir_report._render_qweb_pdf(report, res_ids=record.ids)
 
-            # Generar PDF
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
-            print(f"📄 PDF generado para ID {statement.id} - tamaño: {len(content)} bytes")
+            self._validar_pdf(content)
 
-            # Validar si el PDF es válido
-            if not content or len(content) < 1000:
-                print("❌ El PDF generado está vacío o dañado.")
-                raise UserError("El contenido del PDF es inválido o está vacío.")
+            attachment = self._crear_attachment_para_firma(content, f"Acta - {record.name}")
+            sign_template = self._crear_sign_template(f"Acta - {record.name}", attachment.id, record.id)
 
-            # Crear adjunto
-            attachment = self.env["ir.attachment"].create({
-                "name": f"Acta - {statement.name}",
-                "type": "binary",
-                "datas": base64.b64encode(content).decode("utf-8"),  # ✅ fix aquí
-                "mimetype": "application/pdf",
-                "res_model": "sign.template",
-                "res_id": False,
-            })
-            print(f"📎 Adjunto creado: ID {attachment.id}, nombre: {attachment.name}")
+            attachment.write({"res_id": sign_template.id})
 
-            # Crear plantilla de firma
-            vals_template = {
-                "name": f"Acta - {statement.name}",
-                "attachment_id": attachment.id,
-                "ot_id": statement.id,
-            }
-
-            vals_template.pop("attachment_count", None)
-
-            sign_template = self.env["sign.template"].create(vals_template)
-            attachment.res_id = sign_template.id
-            print(f"✍️ Plantilla de firma creada: ID {sign_template.id}, nombre: {sign_template.name}")
-
-        # Redirigir a la vista kanban de plantillas de firma
-        print("✅ Proceso completado. Redirigiendo a la vista kanban de sign.template")
+            print(f"✅ Plantilla de acta creada: {sign_template.name}")
 
         return {
             "type": "ir.actions.act_window",
-            "name": "Acta - Firma",
+            "name": "Actas Firmadas",
             "res_model": "sign.template",
             "view_mode": "kanban",
             "target": "current",
         }
-
 
     def _create_calendar_event(self):
         for record in self:
