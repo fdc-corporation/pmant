@@ -16,7 +16,7 @@
     # any module necessary for this one to work correctly
     "depends": [
         "base","sale","web","documents","oc_compras","product","crm","portal","mail",
-        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar"
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign"
     ],
     # always loaded
     "data": [
@@ -66,7 +66,7 @@
         "views/pmant_view_inherit_kanban.xml",
         "views/web/pagijna_gracias_web.xml",
         "views/web/form_calificacion.xml",
-        # "views/documents/documneto_firmado.xml",
+        "views/documents/documneto_firmado.xml",
         "views/web/areas_sede.xml",
         "views/web/solicitudes_servicio.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
