@@ -16,7 +16,7 @@
     # any module necessary for this one to work correctly
     "depends": [
         "base","sale","web","documents","oc_compras","product","crm","portal","mail",
-        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign"
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar"
     ],
     # always loaded
     "data": [
