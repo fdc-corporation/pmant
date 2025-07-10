@@ -424,7 +424,7 @@ class OTS(models.Model):
             attachment = self.env["ir.attachment"].create({
                 "name": f"Acta - {statement.name}",
                 "type": "binary",
-                "datas": base64.b64encode(content),
+                "datas": base64.b64encode(content).decode("utf-8"),  # ✅ fix aquí
                 "mimetype": "application/pdf",
                 "res_model": "sign.template",
                 "res_id": False,
