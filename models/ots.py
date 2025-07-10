@@ -397,18 +397,18 @@ class OTS(models.Model):
             _logger.info("📎 Adjunto datas: %s", attachment.datas)
             _logger.info("📎 Adjunto mimetype: %s", attachment.mimetype)
 
-            # vals_template = {
-            #     "name": "OT " + statement.name,
-            #     "attachment_id": attachment.id,
-            #     "ot_id": statement.id,
-            # }
+            vals_template = {
+                "name": "OT " + statement.name,
+                "attachment_id": attachment.id,
+                "ot_id": statement.id,
+            }
 
             # vals_template.pop("attachment_count", None)
 
-            # sign_template = self.env["sign.template"].create(vals_template)
+            sign_template = self.env["sign.template"].create(vals_template)
             # attachment.res_id = sign_template.id
-            # print(f"✍️ Plantilla de firma creada: {sign_template.name}")
-            # _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
+            print(f"✍️ Plantilla de firma creada: {sign_template.name}")
+            _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
 
         # print("✅ Proceso finalizado correctamente. Redirigiendo a vista kanban.")
         # _logger.info("✅ Firma del cliente preparada correctamente. Redirigiendo a sign.template.")
