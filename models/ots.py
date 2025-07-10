@@ -382,6 +382,7 @@ class OTS(models.Model):
             "mimetype": "application/pdf",
             "res_model": "sign.template",
             "res_id": False,
+            "store_fname": False, 
         })
 
     def _crear_sign_template(self, name, attachment_id, ot_id):
