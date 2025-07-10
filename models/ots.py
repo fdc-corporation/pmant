@@ -402,43 +402,39 @@ class OTS(models.Model):
         }
 
     def set_firma_empresa_acta(self):
+        self.ensure_one()  # Asegura que solo se trabaje con un registro
         ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
         statement_report_action = self.env.ref("pmant.action_reporte_acta")
-        for statement in self:
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
 
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "Acta - " + self.name,
-                    "type": "binary",
-                    "raw": content,
-                    "mimetype": "application/pdf",
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,  # No se asocia a un registro específico en este momento
-                }
-            )
+        # Renderizar PDF del acta
+        pdf_content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+            statement_report_action, res_ids=[self.id]
+        )
 
-            vals_template = {
-                "name": "Acta - " + self.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
-            }
+        # Crear adjunto
+        attachment = self.env["ir.attachment"].create({
+            "name": f"Acta - {self.name}",
+            "type": "binary",
+            "datas": pdf_content,
+            "mimetype": "application/pdf",
+            "res_model": "sign.template",  # Podrías usar otro modelo si lo necesitas
+            "res_id": False,
+        })
 
-            # Eliminar 'attachment_count' si está presente en los valores
-            vals_template.pop("attachment_count", None)
+        # Crear plantilla de firma electrónica
+        sign_template = self.env["sign.template"].create({
+            "name": f"Acta - {self.name}",
+            "attachment_id": attachment.id,
+            "ot_id": self.id,
+        })
 
-            # Crear la plantilla de firma sin 'attachment_count'
-            sign_template = self.env["sign.template"].create(vals_template)
-
-            # Redirigir al formulario de sign.template
+        # Redirigir al formulario del template recién creado
         return {
             "type": "ir.actions.act_window",
-            "name": "Acta - " + self.name,
+            "name": f"Acta - {self.name}",
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "res_id": sign_template.id,
+            "view_mode": "form",
             "target": "current",
         }
 
