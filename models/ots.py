@@ -404,43 +404,57 @@ class OTS(models.Model):
     def set_firma_empresa_acta(self):
         ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
         statement_report_action = self.env.ref("pmant.action_reporte_acta")
+
         for statement in self:
+            print(f"🧾 Generando acta para: {statement.name}")
             statement_report = statement_report_action.sudo()
+
+            # Generar PDF
             content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
                 statement_report, res_ids=statement.ids
             )
+            print(f"📄 PDF generado para ID {statement.id} - tamaño: {len(content)} bytes")
 
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "Acta - " + self.name,
-                    "type": "binary",
-                    "raw": content,
-                    "mimetype": "application/pdf",
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,  # No se asocia a un registro específico en este momento
-                }
-            )
+            # Validar si el PDF es válido
+            if not content or len(content) < 1000:
+                print("❌ El PDF generado está vacío o dañado.")
+                raise UserError("El contenido del PDF es inválido o está vacío.")
 
+            # Crear adjunto
+            attachment = self.env["ir.attachment"].create({
+                "name": f"Acta - {statement.name}",
+                "type": "binary",
+                "datas": base64.b64encode(content),
+                "mimetype": "application/pdf",
+                "res_model": "sign.template",
+                "res_id": False,
+            })
+            print(f"📎 Adjunto creado: ID {attachment.id}, nombre: {attachment.name}")
+
+            # Crear plantilla de firma
             vals_template = {
-                "name": "Acta - " + self.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
+                "name": f"Acta - {statement.name}",
+                "attachment_id": attachment.id,
+                "ot_id": statement.id,
             }
 
-            # Eliminar 'attachment_count' si está presente en los valores
             vals_template.pop("attachment_count", None)
 
-            # Crear la plantilla de firma sin 'attachment_count'
             sign_template = self.env["sign.template"].create(vals_template)
+            print(f"✍️ Plantilla de firma creada: ID {sign_template.id}, nombre: {sign_template.name}")
 
-            # Redirigir al formulario de sign.template
+        # Redirigir a la vista kanban de plantillas de firma
+        print("✅ Proceso completado. Redirigiendo a la vista kanban de sign.template")
+
         return {
             "type": "ir.actions.act_window",
-            "name": "Acta - " + self.name,
+            "name": "Acta - Firma",
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "view_mode": "kanban",
             "target": "current",
         }
+
+
     def _create_calendar_event(self):
         for record in self:
             if record.schedule_date and record.duration:
