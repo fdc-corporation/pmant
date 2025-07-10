@@ -361,45 +361,63 @@ class OTS(models.Model):
 
     # SOLICITAR FIRMA AL CLIENTE DEL SERVICIO REALIZADO
     def set_firma_cliente_mantenimiento(self):
-
         ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
         statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
+
         for statement in self:
+            print(f"🔧 Generando PDF para OT: {statement.name}")
+            _logger.info("🔧 Generando PDF para OT: %s", statement.name)
+
             statement_report = statement_report_action.sudo()
             content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
                 statement_report, res_ids=statement.ids
             )
 
+            # Verificar si el PDF es válido
+            if not content or len(content) < 1000:
+                print("❌ El contenido del PDF está vacío o es inválido.")
+                _logger.error("❌ El contenido del PDF está vacío o es inválido.")
+                raise UserError("Error al generar el PDF. Puede que el template esté mal o falten datos.")
+
+            print(f"📄 PDF generado correctamente. Tamaño: {len(content)} bytes")
+            _logger.info("📄 PDF generado correctamente. Tamaño: %s bytes", len(content))
+
             # Crear el adjunto con el PDF generado
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "OT " + self.name,
-                    "type": "binary",
-                    "mimetype": "application/pdf",
-                    "raw": content,
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,
-                }
-            )
+            attachment = self.env["ir.attachment"].create({
+                "name": "OT " + statement.name,
+                "type": "binary",
+                "datas": base64.b64encode(content),
+                "mimetype": "application/pdf",
+                "res_model": "sign.template",
+                "res_id": None,
+            })
+
+            print(f"📎 Adjunto creado con ID: {attachment.id}")
+            _logger.info("📎 Adjunto creado con ID: %s", attachment.id)
 
             vals_template = {
-                "name": "OT " + self.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
+                "name": "OT " + statement.name,
+                "attachment_id": attachment.id,
+                "ot_id": statement.id,
             }
 
             vals_template.pop("attachment_count", None)
 
             sign_template = self.env["sign.template"].create(vals_template)
+            print(f"✍️ Plantilla de firma creada: {sign_template.name}")
+            _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
 
-            # Redirigir al formulario del sign.template
+        print("✅ Proceso finalizado correctamente. Redirigiendo a vista kanban.")
+        _logger.info("✅ Firma del cliente preparada correctamente. Redirigiendo a sign.template.")
+
         return {
             "type": "ir.actions.act_window",
             "name": "OT " + self.name,
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "view_mode": "kanban",
             "target": "current",
         }
+
 
     def set_firma_empresa_acta(self):
         ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
