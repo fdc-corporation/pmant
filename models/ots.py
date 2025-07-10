@@ -404,6 +404,7 @@ class OTS(models.Model):
             vals_template.pop("attachment_count", None)
 
             sign_template = self.env["sign.template"].create(vals_template)
+            attachment.res_id = sign_template.id
             print(f"✍️ Plantilla de firma creada: {sign_template.name}")
             _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
 
@@ -459,6 +460,7 @@ class OTS(models.Model):
             vals_template.pop("attachment_count", None)
 
             sign_template = self.env["sign.template"].create(vals_template)
+            attachment.res_id = sign_template.id
             print(f"✍️ Plantilla de firma creada: ID {sign_template.id}, nombre: {sign_template.name}")
 
         # Redirigir a la vista kanban de plantillas de firma
