@@ -66,7 +66,7 @@
         "views/pmant_view_inherit_kanban.xml",
         "views/web/pagijna_gracias_web.xml",
         "views/web/form_calificacion.xml",
-        "views/documents/documneto_firmado.xml",
+        # "views/documents/documneto_firmado.xml",
         "views/web/areas_sede.xml",
         "views/web/solicitudes_servicio.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
