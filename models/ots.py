@@ -410,8 +410,8 @@ class OTS(models.Model):
             # print(f"✍️ Plantilla de firma creada: {sign_template.name}")
             # _logger.info("✍️ Plantilla de firma creada con ID: %s", sign_template.id)
 
-        print("✅ Proceso finalizado correctamente. Redirigiendo a vista kanban.")
-        _logger.info("✅ Firma del cliente preparada correctamente. Redirigiendo a sign.template.")
+        # print("✅ Proceso finalizado correctamente. Redirigiendo a vista kanban.")
+        # _logger.info("✅ Firma del cliente preparada correctamente. Redirigiendo a sign.template.")
 
         return {
             "type": "ir.actions.act_window",
