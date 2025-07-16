@@ -1,146 +1,890 @@
+@charset "UTF-8";
 * {
-    box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
 
-.main-detalles-equipo {
-    background-color: #f8f9fa;
-    width: 100vw;
-    height: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-top: 15px;
-    text-align: right;
+.main {
+  width: 90vw;
+  max-width: 1360px;
+  margin-top: 50px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-flow: column nowrap;
+  margin-left: auto;
+  justify-content: center;
+  margin-right: auto;
+  background: #fff;
+  gap: 15px;
 }
-
-.main-detalles-equipo .main_detalles {
-    max-width: 1000px;
-    height: auto;
-    background-color: white;
-    border-radius: 4px;
-    margin-right: auto;
-    margin-left: auto;
-    border: 1px solid #dee2e6;
-    box-shadow: inset 0 -1px 0 #dee2e6;
-    padding: 15px;
+@media screen and (min-width: 1000px) {
+  .main {
+    flex-flow: row;
+    gap: 30px;
+  }
+}
+.main .card-contacto-main {
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+  align-items: center;
+  justify-content: baseline;
+  gap: 15px;
+}
+@media screen and (min-width: 1000px) {
+  .main .card-contacto-main {
+    width: 700px;
+  }
+}
+.main .card-contacto-main .card-contacto {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  gap: 5px;
+}
+.main .card-contacto-main .card-contacto .text-contacto {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 12px;
+}
+.main .card-contacto-main .card-contacto .text-contacto img {
+  width: 35px;
+  height: 35px;
+}
+.main .card-contacto-main .card-contacto .text-contacto span {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.main .card-contacto-main .card-contacto .contactar {
+  width: 100%;
+}
+.main .card-contacto-main .card-contacto .contactar a {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
+}
+.main .card-contacto-main .card-contacto .contactar a svg {
+  color: white !important;
+  filter: invert(100%);
+  width: 20px;
+}
+.main .card-contacto-main .main-card-detalles-equipo .descripcion-propieadades-equipo {
+  font-size: 14px;
+  gap: 5px !important;
+}
+.main .card-contacto-main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor {
+  gap: 5px !important;
+}
+.main .card-contacto-main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad {
+  gap: 10px !important;
+  margin: 0px 0px 11px 0px !important;
+}
+.main .card-contacto-main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label {
+  width: 130px !important;
+}
+.main .card-contacto-main .info-empresa {
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  align-self: stretch;
+  border-radius: 5px;
+  background: #fff;
+  overflow: hidden;
+}
+.main .card-contacto-main .info-empresa hr {
+  background: #e2e2e2;
+  width: 100%;
+}
+.main .card-contacto-main .info-empresa .header-info {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+}
+.main .card-contacto-main .info-empresa .header-info svg {
+  width: 40px;
+  height: 40px;
+}
+.main .card-contacto-main .info-empresa .body-text-info {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  font-size: 14px;
+  width: 100%;
+  height: auto;
+}
+.main .card-contacto-main .info-empresa .body-text-info span strong {
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.main .card-contacto-main .info-empresa .body-text-info .condicion-estado {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+.main .card-contacto-main .info-empresa .body-text-info .condicion-estado span {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+.main .card-contacto-main .info-empresa .body-text-info .text-informativo {
+  color: #666 !important;
+  font-family: Poppins;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.main .card-contacto-main .info-empresa .body-text-info .contenedor-button-info {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.main .card-contacto-main .info-empresa .body-text-info .contenedor-button-info a {
+  width: 45%;
+  max-width: 220px;
+  height: 30px;
+  color: white;
+  font-size: 13px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main .main-detalles-equipos {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+.main .main-card-detalles-equipo {
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+}
+.main .contenedor-enalces-mantenimiento {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 15px;
+  justify-content: center;
+}
+@media screen and (min-width: 580px) {
+  .main .contenedor-enalces-mantenimiento {
+    justify-content: flex-start;
+  }
+}
+.main .contenedor-enalces-mantenimiento .item-enlace {
+  padding: 10px;
+  display: flex;
+  width: 150px;
+  gap: 10px;
+  border-radius: 5px;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -1px 2px 9px 0px rgba(0, 0, 0, 0.3019607843);
+  text-decoration: none;
+  color: black;
+}
+.main .contenedor-enalces-mantenimiento .item-enlace img {
+  width: 70px;
+}
+.main .contenedor-enalces-mantenimiento .item-enlace span {
+  display: block;
+  text-align: center;
+}
+.main .main-card-sedes,
+.main .main-card-equipos,
+.main .main-card-detalles-equipo {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 15px;
+  border-radius: 5px;
+  background: #fff;
+}
+.main .main-card-sedes .detalle-equipo-header,
+.main .main-card-equipos .detalle-equipo-header,
+.main .main-card-detalles-equipo .detalle-equipo-header {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 15px;
+  padding: 10px;
+}
+@media screen and (min-width: 768px) {
+  .main .main-card-sedes .detalle-equipo-header,
+  .main .main-card-equipos .detalle-equipo-header,
+  .main .main-card-detalles-equipo .detalle-equipo-header {
     display: flex;
-    flex-flow: column;
-    gap: 20px;
-    margin-bottom: 15px;
-    text-align: right;
-    
-}
-
-.main-detalles-equipo .main_detalles .nombre_equipo {
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    justify-content: center;
+    flex-flow: row nowrap;
     justify-content: space-between;
-
+    align-items: flex-start;
+  }
+}
+.main .main-card-sedes .detalle-equipo-header .name-equipo,
+.main .main-card-equipos .detalle-equipo-header .name-equipo,
+.main .main-card-detalles-equipo .detalle-equipo-header .name-equipo {
+  display: flex;
+  flex-flow: column;
+  align-content: flex-start;
+  width: 100%;
+  gap: 5px;
+}
+.main .main-card-sedes .detalle-equipo-header .name-equipo button,
+.main .main-card-equipos .detalle-equipo-header .name-equipo button,
+.main .main-card-detalles-equipo .detalle-equipo-header .name-equipo button {
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 35px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
+  display: none !important;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .name-equipo button,
+  .main .main-card-equipos .detalle-equipo-header .name-equipo button,
+  .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo button {
+    display: flex !important;
+  }
+}
+.main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
+.main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
+.main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
+  display: none !important;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .name-equipo .btn-whatssap,
+  .main .main-card-equipos .detalle-equipo-header .name-equipo .btn-whatssap,
+  .main .main-card-detalles-equipo .detalle-equipo-header .name-equipo .btn-whatssap {
+    display: flex !important;
+  }
+}
+.main .main-card-sedes .detalle-equipo-header .img-header-equipo,
+.main .main-card-equipos .detalle-equipo-header .img-header-equipo,
+.main .main-card-detalles-equipo .detalle-equipo-header .img-header-equipo {
+  display: flex;
+  gap: 10px;
+}
+.main .main-card-sedes .detalle-equipo-header .img-header-equipo img,
+.main .main-card-equipos .detalle-equipo-header .img-header-equipo img,
+.main .main-card-detalles-equipo .detalle-equipo-header .img-header-equipo img {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #e2e2e2;
+}
+.main .main-card-sedes .detalle-equipo-header .btn-mobile,
+.main .main-card-equipos .detalle-equipo-header .btn-mobile,
+.main .main-card-detalles-equipo .detalle-equipo-header .btn-mobile {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
+  display: block;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .btn-mobile,
+  .main .main-card-equipos .detalle-equipo-header .btn-mobile,
+  .main .main-card-detalles-equipo .detalle-equipo-header .btn-mobile {
+    display: none !important;
+  }
+}
+.main .main-card-sedes .detalle-equipo-header .btn-whatssap,
+.main .main-card-equipos .detalle-equipo-header .btn-whatssap,
+.main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
+  display: flex !important;
+}
+@media screen and (min-width: 744px) {
+  .main .main-card-sedes .detalle-equipo-header .btn-whatssap,
+  .main .main-card-equipos .detalle-equipo-header .btn-whatssap,
+  .main .main-card-detalles-equipo .detalle-equipo-header .btn-whatssap {
+    display: none !important;
+  }
+}
+.main .main-card-sedes .descripcion-propieadades-equipo,
+.main .main-card-equipos .descripcion-propieadades-equipo,
+.main .main-card-detalles-equipo .descripcion-propieadades-equipo {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 20px;
+  padding: 10px;
+}
+.main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor,
+.main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor,
+.main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+}
+.main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad,
+.main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad,
+.main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad {
+  display: flex !important;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+.main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label,
+.main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label,
+.main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad label {
+  width: 180px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.main .main-card-sedes .descripcion-propieadades-equipo .propiedades-contenedor .propiedad span,
+.main .main-card-equipos .descripcion-propieadades-equipo .propiedades-contenedor .propiedad span,
+.main .main-card-detalles-equipo .descripcion-propieadades-equipo .propiedades-contenedor .propiedad span {
+  width: 200px;
+}
+.main .main-card-sedes .titulo-seccion,
+.main .main-card-equipos .titulo-seccion,
+.main .main-card-detalles-equipo .titulo-seccion {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+.main .main-card-sedes .titulo-seccion button,
+.main .main-card-equipos .titulo-seccion button,
+.main .main-card-detalles-equipo .titulo-seccion button {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  max-width: 185px;
+  height: 35px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
+}
+.main .main-card-sedes .main-adjuntos,
+.main .main-card-equipos .main-adjuntos,
+.main .main-card-detalles-equipo .main-adjuntos {
+  width: 100%;
+  height: max-content;
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: 10px;
+}
+.main .main-card-sedes .main-sedes,
+.main .main-card-sedes .main-equipos,
+.main .main-card-equipos .main-sedes,
+.main .main-card-equipos .main-equipos,
+.main .main-card-detalles-equipo .main-sedes,
+.main .main-card-detalles-equipo .main-equipos {
+  width: 100%;
+  height: max-content;
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+.main .main-card-sedes .main_historail_pmant,
+.main .main-card-equipos .main_historail_pmant,
+.main .main-card-detalles-equipo .main_historail_pmant {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-flow: column;
+  gap: 12px;
+}
+.main .main-card-sedes .card-adjunto,
+.main .main-card-equipos .card-adjunto,
+.main .main-card-detalles-equipo .card-adjunto {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+  padding: 5px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+  border-radius: 4px;
+  text-decoration: none;
+  color: black;
+  margin: 0px auto;
+  position: relative;
+}
+.main .main-card-sedes .card-adjunto .fecha_generada,
+.main .main-card-equipos .card-adjunto .fecha_generada,
+.main .main-card-detalles-equipo .card-adjunto .fecha_generada {
+  position: absolute;
+  padding: 3px 6px;
+  font-size: 12.5px;
+  color: white;
+  border-radius: 3px;
+  border: 0px;
+  top: 5px;
+  right: 5px;
+}
+.main .main-card-sedes .card-adjunto img,
+.main .main-card-equipos .card-adjunto img,
+.main .main-card-detalles-equipo .card-adjunto img {
+  width: 100%;
+  height: 200px;
+}
+.main .main-card-sedes .card-adjunto p,
+.main .main-card-equipos .card-adjunto p,
+.main .main-card-detalles-equipo .card-adjunto p {
+  font-size: 13px;
+  text-align: center;
+  margin: 0px;
+}
+.main .main-card-sedes .card-adjunto a,
+.main .main-card-equipos .card-adjunto a,
+.main .main-card-detalles-equipo .card-adjunto a {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.main .main-card-sedes .card-adjunto a svg,
+.main .main-card-equipos .card-adjunto a svg,
+.main .main-card-detalles-equipo .card-adjunto a svg {
+  color: white;
+}
+.main .main-card-sedes .card-sede,
+.main .main-card-sedes .card-equipo,
+.main .main-card-sedes .card-mantenimiento,
+.main .main-card-equipos .card-sede,
+.main .main-card-equipos .card-equipo,
+.main .main-card-equipos .card-mantenimiento,
+.main .main-card-detalles-equipo .card-sede,
+.main .main-card-detalles-equipo .card-equipo,
+.main .main-card-detalles-equipo .card-mantenimiento {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 5px;
+  width: 100%;
+  height: auto;
+  position: relative;
+  padding: 5px;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: white;
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+  border-radius: 4px;
+  text-decoration: none;
+  color: black;
+}
+.main .main-card-sedes .card-sede .head-card-mg,
+.main .main-card-sedes .card-equipo .head-card-mg,
+.main .main-card-sedes .card-mantenimiento .head-card-mg,
+.main .main-card-equipos .card-sede .head-card-mg,
+.main .main-card-equipos .card-equipo .head-card-mg,
+.main .main-card-equipos .card-mantenimiento .head-card-mg,
+.main .main-card-detalles-equipo .card-sede .head-card-mg,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg {
+  display: flex;
+  gap: 10px;
+  align-items: self-start;
+}
+.main .main-card-sedes .card-sede .head-card-mg img,
+.main .main-card-sedes .card-equipo .head-card-mg img,
+.main .main-card-sedes .card-mantenimiento .head-card-mg img,
+.main .main-card-equipos .card-sede .head-card-mg img,
+.main .main-card-equipos .card-equipo .head-card-mg img,
+.main .main-card-equipos .card-mantenimiento .head-card-mg img,
+.main .main-card-detalles-equipo .card-sede .head-card-mg img,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg img,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg img {
+  width: 50px;
+  height: 50px;
+}
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 1px;
+}
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento strong,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento strong {
+  font-size: 14px;
+  word-break: break-all;
+}
+.main .main-card-sedes .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-sedes .card-mantenimiento .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-equipos .card-mantenimiento .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-sede .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-equipo .head-card-mg .text-card-mantenimiento span,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-equipo span,
+.main .main-card-detalles-equipo .card-mantenimiento .head-card-mg .text-card-mantenimiento span {
+  font-size: 13px;
+  word-break: break-all;
+}
+.main .main-card-sedes .card-sede a,
+.main .main-card-sedes .card-equipo a,
+.main .main-card-sedes .card-mantenimiento a,
+.main .main-card-equipos .card-sede a,
+.main .main-card-equipos .card-equipo a,
+.main .main-card-equipos .card-mantenimiento a,
+.main .main-card-detalles-equipo .card-sede a,
+.main .main-card-detalles-equipo .card-equipo a,
+.main .main-card-detalles-equipo .card-mantenimiento a {
+  width: 40px;
+  border-radius: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  color: white;
+  bottom: -10px;
+  text-decoration: none;
+  right: -10px;
+}
+.main .main-card-sedes .card-sede a svg,
+.main .main-card-sedes .card-equipo a svg,
+.main .main-card-sedes .card-mantenimiento a svg,
+.main .main-card-equipos .card-sede a svg,
+.main .main-card-equipos .card-equipo a svg,
+.main .main-card-equipos .card-mantenimiento a svg,
+.main .main-card-detalles-equipo .card-sede a svg,
+.main .main-card-detalles-equipo .card-equipo a svg,
+.main .main-card-detalles-equipo .card-mantenimiento a svg {
+  color: white;
+}
+.main .main-card-sedes .card-equipo,
+.main .main-card-sedes .card-solicitud,
+.main .main-card-equipos .card-equipo,
+.main .main-card-equipos .card-solicitud,
+.main .main-card-detalles-equipo .card-equipo,
+.main .main-card-detalles-equipo .card-solicitud {
+  justify-content: start;
+}
+.main .main-card-sedes .card-equipo img,
+.main .main-card-sedes .card-solicitud img,
+.main .main-card-equipos .card-equipo img,
+.main .main-card-equipos .card-solicitud img,
+.main .main-card-detalles-equipo .card-equipo img,
+.main .main-card-detalles-equipo .card-solicitud img {
+  width: 100px !important;
+  height: 100px !important;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo,
+.main .main-card-sedes .card-solicitud .text-card-equipo,
+.main .main-card-equipos .card-equipo .text-card-equipo,
+.main .main-card-equipos .card-solicitud .text-card-equipo,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 1px;
+  width: 100%;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo hr,
+.main .main-card-sedes .card-solicitud .text-card-equipo hr,
+.main .main-card-equipos .card-equipo .text-card-equipo hr,
+.main .main-card-equipos .card-solicitud .text-card-equipo hr,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo hr,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo hr {
+  margin: 0px 0px 3px 0px;
+  width: 100%;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo strong,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong,
+.main .main-card-equipos .card-equipo .text-card-equipo strong,
+.main .main-card-equipos .card-solicitud .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong {
+  font-size: 14px;
+  word-break: break-all;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong .status-alert,
+.main .main-card-equipos .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-equipos .card-solicitud .text-card-equipo strong .status-alert,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong .status-alert,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong .status-alert {
+  font-size: 12px;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 4px;
+  background-color: #dc3545;
+  word-break: keep-all;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-sedes .card-solicitud .text-card-equipo strong .status-atencion,
+.main .main-card-equipos .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-equipos .card-solicitud .text-card-equipo strong .status-atencion,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo strong .status-atencion,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo strong .status-atencion {
+  font-size: 12px;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 4px;
+  background-color: #28a745;
+  word-break: keep-all;
+}
+.main .main-card-sedes .card-equipo .text-card-equipo span,
+.main .main-card-sedes .card-solicitud .text-card-equipo span,
+.main .main-card-equipos .card-equipo .text-card-equipo span,
+.main .main-card-equipos .card-solicitud .text-card-equipo span,
+.main .main-card-detalles-equipo .card-equipo .text-card-equipo span,
+.main .main-card-detalles-equipo .card-solicitud .text-card-equipo span {
+  font-size: 13px;
+  word-break: break-all;
+  color: rgb(114, 114, 114);
+}
+.main .main-card-sedes .card-solicitud img,
+.main .main-card-equipos .card-solicitud img,
+.main .main-card-detalles-equipo .card-solicitud img {
+  width: 60px !important;
+  height: 60px !important;
+}
+.main .main-card-sedes .card-sede,
+.main .main-card-equipos .card-sede,
+.main .main-card-detalles-equipo .card-sede {
+  justify-content: start;
+  gap: 10px;
+}
+.main .main-card-sedes .card-sede img,
+.main .main-card-equipos .card-sede img,
+.main .main-card-detalles-equipo .card-sede img {
+  width: 100px;
+  height: 100px;
+}
+.main .main-card-sedes .card-sede .text-card-sede,
+.main .main-card-equipos .card-sede .text-card-sede,
+.main .main-card-detalles-equipo .card-sede .text-card-sede {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 1px;
+  width: 100%;
+}
+.main .main-card-sedes .card-sede .text-card-sede hr,
+.main .main-card-equipos .card-sede .text-card-sede hr,
+.main .main-card-detalles-equipo .card-sede .text-card-sede hr {
+  margin: 0px 0px 3px 0px;
+  width: 100%;
+}
+.main .main-card-sedes .card-sede .text-card-sede strong,
+.main .main-card-equipos .card-sede .text-card-sede strong,
+.main .main-card-detalles-equipo .card-sede .text-card-sede strong {
+  font-size: 14px;
+  word-break: break-all;
+}
+.main .main-card-sedes .card-sede .text-card-sede span,
+.main .main-card-equipos .card-sede .text-card-sede span,
+.main .main-card-detalles-equipo .card-sede .text-card-sede span {
+  font-size: 13px;
+  word-break: break-all;
+  color: rgb(114, 114, 114);
+}
+.main .main-card-sedes .card-sede .btn-desca,
+.main .main-card-equipos .card-sede .btn-desca,
+.main .main-card-detalles-equipo .card-sede .btn-desca {
+  width: 40px;
+  border-radius: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  color: white;
+  bottom: -10px;
+  text-decoration: none;
+  right: -10px;
+}
+.main .main-card-sedes .card-sede .btn-desca svg,
+.main .main-card-equipos .card-sede .btn-desca svg,
+.main .main-card-detalles-equipo .card-sede .btn-desca svg {
+  color: white;
 }
 
-.main-detalles-equipo .main_detalles .nombre_equipo {
-    font-size: 14px;
+.main-historial-equipo {
+  width: 90vw;
+  margin-top: 50px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-flow: column nowrap;
+  margin-left: auto;
+  justify-content: center;
+  margin-right: auto;
+  background: #fff;
+  gap: 15px;
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario {
-    display: flex;
-    align-items: baseline;
-    justify-content: start;
-    flex-flow: row wrap;
-    width: 100%;
-    height: auto;
-    /* margin-bottom: 15px; */
+.modal-body {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles {
-    display: flex;
-    align-items: baseline;
-    justify-content: start;
-    flex-flow: column;
-    width: 100%;
-    height: auto;
-    gap: 20px;
-
+.modal-footer button {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 35px !important;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-1 {
-    display: flex;
-    flex-flow: column;
-    justify-content: start;
-    align-items: start;
-    gap: 20px;
-    width: 50%;
-
+.visor-imagen {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.57);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+.visor-imagen img {
+  width: 60%;
+  max-width: 80%;
+  cursor: pointer;
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-2 {
-    display: flex;
-    flex-flow: column;
-    justify-content: start;
-    align-items: start;
-    gap: 20px;
-    width: 50%;
+.display-none {
+  display: none;
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-1 .item-detalle {
-    display: flex;
-    flex-flow: column;
-    justify-content: start;
-    align-items: start;
+.notificacion-exito,
+.notificacion-error,
+.notificacion-exito_solicitud,
+notificacion-error_solicitud {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-2 .item-detalle {
-    display: flex;
-    flex-flow: column;
-    justify-content: start;
-    align-items: start;
+.notificacion-exito,
+.notificacion-exito_solicitud {
+  background-color: #28a745; /* Verde éxito */
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-1 .item-detalle label {
-    width: 150px;
-    font-size: 14px;
-    font-weight: 700;
+.notificacion-error,
+.notificacion-error_solicitud {
+  background-color: #dc3545; /* Rojo error */
 }
 
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-2 .item-detalle label {
-    width: 150px;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-1 .item-detalle span {
-    font-size: 13px;
-}
-
-.main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-2 .item-detalle span {
-    font-size: 13px;
-}
-
-@media screen and (min-width: 600px) {
-    .main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles {
-        display: flex;
-        align-items: baseline;
-        justify-content: start;
-        flex-flow: row;
-        width: 100%;
-        height: auto;
-        gap: 20px;
-    }
-
-    .main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-1 .item-detalle {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: center;
-    }
-
-    .main-detalles-equipo .main_detalles .detalles_propietario .parte1_detalles .detalle-2 .item-detalle {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: center;
-    }
-
-
-}
+/*# sourceMappingURL=detalles_equipo.css.map */

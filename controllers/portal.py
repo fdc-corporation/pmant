@@ -526,6 +526,44 @@ class PortalPmant(http.Controller):
         })
 
 
+    @http.route("/my/equipo/<int:equipo_id>/cotizaciones", methods=["GET"], type="http", auth='user', website=True)
+    def view_cotizaciones_equipo(self, equipo_id, page=1, **kwargs):
+        equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
+        user_partner = request.env.user.partner_id
+
+        search_query = kwargs.get('search', '').strip()
+        page = int(page)
+        per_page = 10
+
+        name_domain = equipo.name + " / " + equipo.serial_no if equipo.serial_no else equipo.name
+
+        # Construcción del dominio
+        domain = [("order_line.name", "=", name_domain)]
+        if search_query:
+            domain += [("name", "ilike", search_query)]
+
+        total = request.env["sale.order"].sudo().search_count(domain)
+
+        cotizaciones = request.env["sale.order"].sudo().search(
+            domain,
+            order="date_order desc",
+            limit=per_page,
+            offset=(page - 1) * per_page,
+        )
+
+        total_pages = ceil(total / per_page) if total > 0 else 1
+
+        return request.render("pmant.cotizaciones_pmant", {
+            'cotizaciones': cotizaciones,
+            'user_partner': user_partner,
+            'search': search_query,
+            'pagina_actual': page,
+            'total_paginas': total_pages,
+            'equipo': equipo,
+        })
+
+
+
     @http.route(
         ["/my/servicios/ejecucion", "/my/servicios/ejecucion/page/<int:page>"],
         type="http",

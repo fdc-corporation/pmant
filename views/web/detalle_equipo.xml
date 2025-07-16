@@ -358,6 +358,15 @@
 								servicio
 							</span>
 						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones'" class="item-enlace">
+							<img src="/pmant/static/src/css/iconos/venta.png" />
+							<span>
+								Cotizaciones del
+								<br>
+								</br>
+								equipo
+							</span>
+						</a>
 						<br>
 						</br>
 					</div>

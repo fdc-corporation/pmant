@@ -585,53 +585,23 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
           color: rgb(114, 114, 114);
         }
       }
+      .btn-desca {
+        width: 40px;
+        border-radius: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        color: white;
+        bottom: -10px;
+        text-decoration: none;
+        right: -10px;
+        svg {
+          color: white;
+        }
+      }
     }
-    // .card-mantenimiento {
-    //   display: flex;
-    //   justify-content: space-between;
-    //   flex-flow: column nowrap;
-    // .card-text-head {
-    //   display: flex;
-    //   gap: 5px;
-    //   align-items: self-start;
-    //   img {
-    //     width: 50px !important;
-    //     height: 50px !important;
-    //   }
-    //   strong {
-    //     font-size: 13px;
-    //   }
-    //   p {
-    //     font-size: 12px;
-    //     &:first-child {
-    //       font-size: 12px !important;
-    //     }
-    //     span {
-    //       font-size: 12px;
-    //     }
-    //   }
-    // }
-    // .card-body-group {
-    //   table {
-    //     tbody {
-    //       tr {
-    //         .td_tecnicos{
-    //           display: flex;
-    //           gap: 8px;
-    //           .span_tecnicos{
-    //             padding: 3px 6px;
-    //             border-radius: 10px;
-    //             background-color: red;
-    //             color: white;
-    //             font-size: 12.5px;
-    //             box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.61);
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // }
   }
 }
 
