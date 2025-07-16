@@ -24,7 +24,6 @@ class EstapaTarea(models.Model):
     dias_promedio    = fields.Integer(string="Dias de estadia")
     color_error     = fields.Integer(string="Color error")
     color_warning   = fields.Integer(string="Color warning")
-    fold = fields.Boolean(string="Folded in Kanban", default=False)
 
 class TipoTarea(models.Model):
    _name = 'tipotarea.mantenimiento'
@@ -52,8 +51,8 @@ class Tarea(models.Model):
         'etapa.tarea.mantenimiento',
         string="Etapa",
         store=True,
-        tracking=True, group_expand='_group_expand_stages',
-        ondelete='set null',copy=False, index=True,
+        tracking=True,
+        ondelete='set null',group_expand='_group_expand_stages',
         default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
     )
     kanban_state = fields.Selection([
@@ -86,7 +85,6 @@ class Tarea(models.Model):
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
     action_servicio = fields.Boolean(string="Is init servicio")
-
     active_servicio =  fields.Boolean(string="Tiene Programacion?", compute="_set_action")
     fecha_etapa = fields.Date(string="Fecha de movimiento de etapa")
     color = fields.Integer(
@@ -94,10 +92,10 @@ class Tarea(models.Model):
         help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
     )
 
-
     @api.model
     def _group_expand_stages(self, stages, domain, order):
         return self.env['etapa.tarea.mantenimiento'].search([], order=order)
+
 
 
     def _set_action(self):
@@ -346,7 +344,7 @@ class Tarea(models.Model):
     
     def cancel_servicio(self):
         for record in self:
-            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "!=", False)], limit=1)
+            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_fin", "=", False)], limit=1)
             return {
                 "type": "ir.actions.act_window",
                 "name": "Finalizar actividad",
@@ -355,7 +353,8 @@ class Tarea(models.Model):
                 "target": "new",
                 "context": {
                     "default_programacion_id": horas.id,  # si estás dentro de programacion.mantenimiento
-                    "default_ot_id": self.id,  # si estás dentro de programacion.mantenimiento
+                    "default_ot_id": self.ots[0].id,  # si estás dentro de programacion.mantenimiento
+                    "default_tarea_id": self.id,  # si estás dentro de programacion.mantenimiento
                 },
             }
 
@@ -380,4 +379,3 @@ class Tarea(models.Model):
     #             self._notify_on_change()
     #             self._fecha_ejecutada()
     #             self._evento_calendario_proximo_servicio()
-
