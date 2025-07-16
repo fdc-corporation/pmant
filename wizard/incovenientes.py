@@ -8,20 +8,25 @@ class WizardInconvenientes(models.TransientModel):
     _description = "Model para los inconvenientes de Servicios"
 
     programacion_id = fields.Many2one("programacion.mantenimiento", default=lambda self: self._context.get("programacion_id"), string="Hoja de horas")
-    ot_id = fields.Many2one("tarea.mantenimiento", default=lambda self: self._context.get("ot_id"), string="Tarea")
+    ot_id = fields.Many2one("maintenance.request", default=lambda self: self._context.get("ot_id"), string="OT")
+    tarea_id = fields.Many2one("tarea.mantenimiento", default=lambda self: self._context.get("tarea_id"), string="Tarea")
+    is_finalizo_servicio = fields.Boolean(string="Finalizo el servicio?")
     file_ref = fields.Binary(string="Imagen de ref.")
     comentario = fields.Text(string="Comentario del inconveniente")
-
+    
 
     def action_set_data(self):
         for record in self:
-            self.env["inconveniente.servicio"].create({
-                "programacion_id" : record.programacion_id.id,
-                "file_ref" : record.file_ref ,
-                "comentario" : record.comentario,
-                "ot_id" : record.ot_id,
-            })
-
+            print("DATOS DE FINALIZACION DE SERVICIO")
+            print(record.is_finalizo_servicio)
+            # Registrar inconveniente solo si el servicio no fue finalizado
+            if not record.is_finalizo_servicio:
+                self.env["inconveniente.servicio"].create({
+                    "programacion_id": record.programacion_id.id,
+                    "file_ref": record.file_ref,
+                    "comentario": record.comentario,
+                    "ot_id": record.ot_id.id,
+                })
 
             
 

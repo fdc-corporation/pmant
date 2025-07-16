@@ -7,8 +7,10 @@
                 <group>
                     <field name="programacion_id" readonly="1" />
                     <field name="ot_id" readonly="1" />
-                    <field name="file_ref" />
-                    <field name="comentario" />
+                    <field name="tarea_id" readonly="1" />
+                    <field name="is_finalizo_servicio" />
+                    <field name="file_ref" invisible="is_finalizo_servicio" />
+                    <field name="comentario" invisible="is_finalizo_servicio" />
                 </group>
                 <footer>
                     <button string="Guardar" type="object" name="action_set_data" class="btn-primary"/>
