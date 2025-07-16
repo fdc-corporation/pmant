@@ -24,6 +24,7 @@ class EstapaTarea(models.Model):
     dias_promedio    = fields.Integer(string="Dias de estadia")
     color_error     = fields.Integer(string="Color error")
     color_warning   = fields.Integer(string="Color warning")
+    fold = fields.Boolean(string="Contraído por defecto")  # <- este campo
 
 class TipoTarea(models.Model):
    _name = 'tipotarea.mantenimiento'
