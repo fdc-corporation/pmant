@@ -62,6 +62,7 @@
         "views/web/evaluciones_equipo.xml",
         "views/web/certificados_equipo.xml",
         "views/web/servicios_ejecucion.xml",
+        "views/web/cotizaciones_equipo.xml",
         "views/web/index_servicios_ejecuccion.xml",
         "views/pmant_view_inherit_kanban.xml",
         "views/web/pagijna_gracias_web.xml",

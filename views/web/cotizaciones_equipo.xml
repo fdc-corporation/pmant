@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="cotizaciones_pmant" name="Cotizaciones del Equipo">
+		<t t-call="website.layout">
+			<div class="main">
+				<div class="card-contacto-main">
+					<div class="card-contacto">
+						<div class="text-contacto">
+							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+							<span>
+								FDC CORPORATION E.I.R.L.
+							</span>
+						</div>
+						<div class="contactar">
+							<a href="/contactus" class="bg-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
+									<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
+									</path>
+								</svg>
+								Contactar
+							</a>
+						</div>
+					</div>
+					<div class="info-empresa">
+						<div class="header-info">
+							<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g id="icon-empresa">
+									<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35" />
+									<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35" />
+									<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
+								</g>
+							</svg>
+							<span t-esc="user_partner.name" />
+						</div>
+						<hr>
+						</hr>
+						<div class="body-text-info">
+							<span>
+								<strong>
+									Direccion :
+								</strong>
+								<t t-esc="user_partner.street" />
+							</span>
+							<span>
+								<strong>
+									RUC :
+								</strong>
+								<t t-esc="user_partner.vat" />
+							</span>
+							<span>
+								<strong>
+									Celular :
+								</strong>
+								<t t-esc="user_partner.mobile" />
+							</span>
+							<span>
+								<strong>
+									Correo :
+								</strong>
+								<t t-esc="user_partner.email" />
+							</span>
+							<div class="condicion-estado">
+								<span>
+									<strong>
+										Condición :
+									</strong>
+									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+								</span>
+								<span>
+									<strong>
+										Activo :
+									</strong>
+									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+								</span>
+							</div>
+							<span class="text-informativo">
+								Si aun no cuenta con el registro de alguna de sus sedes, solicita el
+								registro de la sede a FDCCORP para ver su historial de servicios
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="main-card-sedes">
+					<div style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 15px;">
+						<h3>
+							Mis cotizaciones de servicio
+						</h3>
+						<form style="display: flex; gap: 5px;" t-att-action="'/my/equipo/%s/cotizaciones' % equipo.id" method="get" class="form-inline mb-3">
+							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar cotizaciones..." t-att-value="search or ''" />
+							<button type="submit" class="btn btn-primary">
+								Buscar
+							</button>
+						</form>
+					</div>
+					<div class="main-sedes">
+						<t t-if="len(cotizaciones) > 0">
+							<t t-foreach="cotizaciones" t-as="coti">
+								<div t-att-href="'/my/orders/' + str(coti.id)" class="card-sede">
+									<img src="/pmant/static/src/css/iconos/bienes.png" style="width: 80px;height: 80px;" />
+									<div class="text-card-sede">
+										<strong t-esc="coti.name" />
+										<hr>
+										</hr>
+										<span>
+											<strong>
+												Término de pago:
+											</strong>
+											<span t-esc="coti.payment_term_id.name" />
+										</span>
+										<span>
+											<strong>
+												Direccion de entrega:
+											</strong>
+											<span t-esc="coti.partner_shipping_id.name" />
+										</span>
+										<span>
+											<strong>
+												Fecha de la orden:
+											</strong>
+											<span t-esc="coti.date_order" />
+										</span>
+									</div>
+									<a target="_blank" t-att-href="'/my/orders/' + str(coti.id)" class="bg-primary btn-desca">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+											<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+											<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+										</svg>
+									</a>
+								</div>
+							</t>
+						</t>
+						<t t-else="">
+							Lo sentimos.. al parecer no cuenta con cotizaciones registrados al equipo.
+						</t>
+					</div>
+					<!-- Paginación -->
+					<div class="contenedor-paginacion">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
+								<!-- Enlace a la página anterior -->
+								<li t-if="pagina_actual > 1" class="page-item">
+									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones?page=' + str(pagina_actual + 1) + (('&amp;search=' + search) if search else '')" class="page-link" aria-label="Next">
+										<span aria-hidden="true">
+											Siguiente »
+										</span>
+									</a>
+								</li>
+								<!-- Enlaces a cada página -->
+								<t t-foreach="range(1, total_paginas + 1)" t-as="p">
+									<li t-attf-class="page-item #{'active' if p == pagina_actual else ''}">
+										<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones?page=' + str(p) + (('&amp;search=' + search) if search else '')" class="page-link">
+											<t t-esc="p" />
+										</a>
+									</li>
+								</t>
+								<!-- Enlace a la página siguiente -->
+								<li t-if="pagina_actual &lt; total_paginas" class="page-item">
+									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones?page=' + str(pagina_actual + 1) + (('&amp;search=' + search) if search else '')" class="page-link" aria-label="Next">
+										<span aria-hidden="true">
+											Siguiente »
+										</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+</odoo>
