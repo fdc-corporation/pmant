@@ -565,7 +565,7 @@ class OTS(models.Model):
             }
 
 
-    def action_view_incidencias(self):
+    def action_view_ots(self):
         cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
         return {
                 "name": "Solicitud de Mantenimiento",
