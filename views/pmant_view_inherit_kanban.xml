@@ -15,7 +15,7 @@
         </field>
     </record>-->
 
-    <record id="form_pmant_oc_inherit_module_name" model="ir.ui.view">
+    <!-- <record id="form_pmant_oc_inherit_module_name" model="ir.ui.view">
         <field name="name">oc.compras.view.form.inherit</field>
         <field name="model">maintenance.request</field>
         <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
@@ -24,5 +24,5 @@
                 <field name="oc_cliente" string="OC cliente" invisible="not order_compra" />
             </xpath>
         </field>
-    </record> 
+    </record>  -->
 </odoo>
