@@ -21,6 +21,7 @@ class EquipmentSelectionWizard(models.TransientModel):
             sale_order.order_line.create({
                 'order_id': sale_order.id,
                 'name' : equipment.name + ' / ' + equipment.serial_no,
-                'display_type' : 'line_section'
+                'display_type' : 'line_section',
+                'id_equipo' : equipment.id
             })
         return {'type': 'ir.actions.act_window_close'}

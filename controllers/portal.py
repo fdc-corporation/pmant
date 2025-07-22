@@ -535,10 +535,8 @@ class PortalPmant(http.Controller):
         page = int(page)
         per_page = 10
 
-        name_domain = equipo.name + " / " + equipo.serial_no if equipo.serial_no else equipo.name
-
         # Construcción del dominio
-        domain = [("order_line.name", "=", name_domain)]
+        domain = [("order_line.id_equipo", "in", [equipo_id])]
         if search_query:
             domain += [("name", "ilike", search_query)]
 

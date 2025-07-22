@@ -76,7 +76,7 @@ class Tarea(models.Model):
     id_tipo = fields.Integer()
     fecha_hoy = fields.Char(string="Fecha Formateada", compute="_fecha_formateada")
     is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
-    oc_id = fields.Many2one('oc.compras', string="OC")
+    # oc_id = fields.Many2one('oc.compras', string="OC")
     is_tecnico = fields.Boolean(
         compute='_compute_is_tecnico',
         string='Is Técnico',
@@ -92,12 +92,19 @@ class Tarea(models.Model):
         string='Color',
         help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
     )
+    sale_order = fields.Many2one("sale.order", string="Orden de venta")
 
     @api.model
     def _group_expand_stages(self, stages, domain, order):
         return self.env['etapa.tarea.mantenimiento'].search([], order=order)
 
-
+    def name_get(self):
+        result = []
+        for record in self:
+            estado = dict(self._fields['state'].selection).get(record.state, '')
+            name = f"{record.name} / [{estado}]"
+            result.append((record.id, name))
+        return result
 
     def _set_action(self):
         """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""
@@ -318,10 +325,10 @@ class Tarea(models.Model):
             "tarea": self.id,
             "empresa": self.cliente.id,
             "ubicacion": self.ubicacion.id,
-            "order_compra" : self.oc_id.id
+            # "order_compra" : self.oc_id.id
         })
 
-        self.oc_id.ot_servicio = ot.id
+        # self.oc_id.ot_servicio = ot.id
 
         return {
             "type" : "ir.actions.act_window",
