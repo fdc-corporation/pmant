@@ -151,7 +151,6 @@
 				<field name="stage_id"/>
 				<field name="ubicacion"/>
 				<field name="creado_por"/>
-				<field name="oc_id"/>
 				<field name="color"/>          <!-- Este campo está siendo accedido -->
 				<field name="activity_ids"/>
                 <templates>
@@ -220,13 +219,14 @@
 							<field name="color" widget="color_picker"  invisible="1"/>
 							<field name="name" />
 							<field name="cliente" />
-							<field name="oc_id" groups="pmant.group_pmant_admin"/>
+							
 						</group>
 						<group>
 							<field name="tipo" />
 							<field name="is_evaluacion" />
 							<field name="is_tecnico" invisible="1" />
 							<field name="ubicacion" domain="[('parent_id','=',cliente)]" />
+							<field name="sale_order"  invisible="1" />
 						</group>
 						<field name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
 							<tree>
@@ -291,6 +291,8 @@
 			</form>
 		</field>
 	</record>
+
+
 	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="tarea_list_action" />
 	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request" action="tarea_list_action" />
 	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title" action="reporte_tecnico_list_action" />

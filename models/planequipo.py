@@ -23,7 +23,7 @@ class PlanEquipo(models.Model):
     creador_id = fields.Integer(compute="_generate_tecnico")
     fecha_ejecprox = fields.Date(compute="_generate_tecnico", store=True)
     avisado = fields.Boolean(default=False)
-    estado = fields.Char(string="Estado", related="tarea.stage_id.name")
+    estado = fields.Char(string="Estado", related="ots.stage_id.name")
     fecha_hoy = fields.Char(string="Fecha Formateada")
     nota_recomendaciones = fields.Html(string="Recomendaciones")
     nota_observaciones = fields.Html(string="Observaciones general")

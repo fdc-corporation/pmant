@@ -123,12 +123,11 @@ class Equipo(models.Model):
 
     def action_view_cotizaciones(self):
         for record in self:
-            name_domain = record.name + " / " + record.serial_no if record.serial_no else ''
             cotizaciones = self.env["sale.order"].search(
-                [("order_line.name", "=", name_domain)]
+               [("order_line.id_equipo", "in", [record.id])]
             )
             return {
-                "name": "Cotizaciones",
+                "name": "Cotizaciones del Equipo",
                 "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
                 "domain": [("id", "in", cotizaciones.ids)],
                 "view_mode": "tree,form",  # puedes permitir también la vista formulario
@@ -138,9 +137,8 @@ class Equipo(models.Model):
 
     def _total_cotizaciones(self):
         for record in self:
-            name_domain = record.name + " / " + record.serial_no if record.serial_no else ''
             cotizaciones = self.env["sale.order"].search(
-                [("order_line.name", "=", name_domain)]
+                [("order_line.id_equipo", "in", [record.id])]
             )
             record.cotizacion_cantidad = len(cotizaciones)
 

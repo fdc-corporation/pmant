@@ -7,8 +7,6 @@ from email.mime.text import MIMEText
 import logging
 import base64
 from odoo.tools import html2plaintext
-from PyPDF2 import PdfReader
-import io
 
 # Crear un logger
 _logger = logging.getLogger(__name__)
@@ -24,9 +22,9 @@ class OTS(models.Model):
     tex = fields.Char(string="Text")
     empresa = fields.Many2one("res.partner", related="tarea.cliente")
     ubicacion = fields.Many2one("res.partner", related="tarea.ubicacion")
-    order_compra = fields.Many2one(
-        "oc.compras", string="Orden de compra", ondelete="set null"
-    )
+    # order_compra = fields.Many2one(
+    #     "oc.compras", string="Orden de compra", ondelete="set null"
+    # )
     factura = fields.Many2one("account.move", string="Factura")
     factura_sunat = fields.Char(string="Factura Sunat")
     selec_sunat = fields.Boolean(string="Factura Sunat?")
@@ -39,8 +37,8 @@ class OTS(models.Model):
     is_tecnico = fields.Boolean(
         compute="_compute_is_tecnico", string="Is Técnico", store=False
     )
-    oc_cliente = fields.Char(related="order_compra.oc", store=True)
-    not_oc = fields.Boolean(string="No tiene OC?")
+    # oc_cliente = fields.Char(related="order_compra.oc", store=True)
+    # not_oc = fields.Boolean(string="No tiene OC?")
     tab_horas = fields.One2many(
         "programacion.mantenimiento", "ot_id", string="Hoja de horas"
     )
@@ -52,26 +50,23 @@ class OTS(models.Model):
     document_count = fields.Integer(
         string="Documentos firmados", compute="get_cantidad_documentos"
     )
-    cantidad_inconvenientes = fields.Integer(
-            string="Incidencias",
-            compute="_get_cantidad_incidencias",
-            store=True
-        )
+    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
+
     @api.depends("estado")
     def _get_tex(self):
         if self.estado:
             self.tex = "Urgente"
 
     # OBTENER LA OC DE LA TAREA PARA EL MODULO DE OC_COMPRAS
-    @api.onchange("tarea", "order_compra")
-    def _compute_order_compra(self):
-        for record in self:
-            if record.tarea and record.tarea.oc_id:
-                record.order_compra = record.tarea.oc_id.id
-                if record.tarea.oc_id:
-                    record.tarea.oc_id.ot_servicio = self.id
-            else:
-                record.order_compra = False
+    # @api.onchange("tarea", "order_compra")
+    # def _compute_order_compra(self):
+    #     for record in self:
+    #         if record.tarea and record.tarea.oc_id:
+    #             record.order_compra = record.tarea.oc_id.id
+    #             if record.tarea.oc_id:
+    #                 record.tarea.oc_id.ot_servicio = self.id
+    #         else:
+    #             record.order_compra = False
 
     # ACCION PARA VER TODOS LOS DOCUMENTOS RELACIONADOS A LA OT
     def action_view_documentos(self):
@@ -136,8 +131,6 @@ class OTS(models.Model):
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
             self._change_createui()
-        if "tarea" in vals:
-            self._compute_order_compra()
         if "schedule_date" in vals:
             self.action_programacion_inicial()
         if "duration" in vals or "subodinados" in vals or "user_id" in vals:
@@ -245,13 +238,7 @@ class OTS(models.Model):
     # RESTRICCIONES DE ESTADOS
     def _validacion_etapas(self):
         for record in self:
-            if record.not_oc == False:
-                if record.stage_id.sequence == 4 and not record.order_compra:
-                    raise UserError(
-                        _("Debe registrar la OC en el mudlo de Orden de compras")
-                    )
-
-            elif record.stage_id.sequence == 5:
+            if record.stage_id.sequence == 5:
                 if not record.selec_sunat and not record.factura:
                     raise UserError(_("Debe registrar la factura"))
                 elif record.selec_sunat and not record.factura_sunat:
@@ -318,26 +305,24 @@ class OTS(models.Model):
 
     # ACCION PARA EL ENVIO DE REPORTE A LA SUCURSAL
     def send_report_sucursal(self):
+        self.ensure_one()
         try:
             # Verificar que existe la plantilla
             template = self.env.ref("pmant.email_template_custom_sucursal")
             if template:
                 ctx = {
-                    "default_model": "maintenance.request",  # Modelo actual
-                    "default_res_ids": self.id,  # Se asegura de que es un entero
-                    "default_res_ids": [
-                        self.id
-                    ],  # res_ids debe ser una lista de enteros
+                    "default_model": "maintenance.request",
+                    "default_res_id": self.id,
                     "default_template_id": template.id,
-                    "default_composition_mode": "comment",  # Modo de composición
+                    "default_use_template": True,
+                    "default_composition_mode": "comment",
                     "force_email": True,
                 }
                 return {
                     "type": "ir.actions.act_window",
-                    "view_mode": "form",
+                    "name": "Enviar Correo de Programación",
                     "res_model": "mail.compose.message",
-                    "views": [(False, "form")],
-                    "view_id": False,
+                    "view_mode": "form",
                     "target": "new",
                     "context": ctx,
                 }
@@ -361,87 +346,86 @@ class OTS(models.Model):
             lead = self.env["crm.lead"].create(valores)
             record.oportunidad = lead.id
 
-    def _validar_pdf(self, content):
-        """Verifica que el PDF generado sea válido usando PyPDF2"""
-        try:
-            reader = PdfReader(io.BytesIO(content))
-            _ = reader.pages  # fuerza la lectura
-        except Exception as e:
-            raise UserError(f"⚠️ PDF inválido. Error de validación: {e}")
-        if not content or len(content) < 1000:
-            raise UserError("⚠️ El contenido del PDF está vacío o dañado.")
-        return True
-
-    def _crear_attachment_para_firma(self, content, nombre_pdf):
-        """Crea un ir.attachment válido para sign.template"""
-        datas_base64 = base64.b64encode(content).decode("utf-8")
-        return self.env["ir.attachment"].create({
-            "name": nombre_pdf,
-            "type": "binary",
-            "datas": datas_base64,
-            "mimetype": "application/pdf",
-            "res_model": "sign.template",
-            "res_id": False,
-            "store_fname": False, 
-        })
-
-    def _crear_sign_template(self, name, attachment_id, ot_id):
-        """Crea la plantilla de firma (sign.template)"""
-        vals = {
-            "name": name,
-            "attachment_id": attachment_id,
-            "ot_id": ot_id,
-        }
-        return self.env["sign.template"].create(vals)
-
+    # SOLICITAR FIRMA AL CLIENTE DEL SERVICIO REALIZADO
     def set_firma_cliente_mantenimiento(self):
-        report = self.env.ref("pmant.action_mantenimiento_ot")
-        ir_report = self.env["ir.actions.report"].sudo()
 
-        for record in self:
-            print(f"🔧 Generando PDF de mantenimiento para: {record.name}")
-            content, _ = ir_report._render_qweb_pdf(report, res_ids=record.ids)
+        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+        statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
+        for statement in self:
+            statement_report = statement_report_action.sudo()
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report, res_ids=statement.ids
+            )
 
-            self._validar_pdf(content)
+            # Crear el adjunto con el PDF generado
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": "OT " + self.name,
+                    "type": "binary",
+                    "mimetype": "application/pdf",
+                    "raw": content,
+                    "res_model": "sign.template",  # Asociar al modelo sign.template
+                    "res_id": None,
+                }
+            )
 
-            attachment = self._crear_attachment_para_firma(content, f"OT {record.name}")
-            sign_template = self._crear_sign_template(f"OT {record.name}", attachment.id, record.id)
+            vals_template = {
+                "name": "OT " + self.name,
+                "attachment_id": attachment.id,  # Asociar el adjunto creado
+                "ot_id": self.id,
+            }
 
-            # Linkear attachment al template
-            attachment.write({"res_id": sign_template.id})
+            vals_template.pop("attachment_count", None)
 
-            print(f"✅ Plantilla creada: {sign_template.name} con adjunto {attachment.name}")
+            sign_template = self.env["sign.template"].create(vals_template)
 
+            # Redirigir al formulario del sign.template
         return {
             "type": "ir.actions.act_window",
-            "name": "Firmas OT",
+            "name": "OT " + self.name,
             "res_model": "sign.template",
-            "view_mode": "kanban",
+            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
             "target": "current",
         }
 
     def set_firma_empresa_acta(self):
-        report = self.env.ref("pmant.action_reporte_acta")
-        ir_report = self.env["ir.actions.report"].sudo()
+        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+        statement_report_action = self.env.ref("pmant.action_reporte_acta")
+        for statement in self:
+            statement_report = statement_report_action.sudo()
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report, res_ids=statement.ids
+            )
 
-        for record in self:
-            print(f"🧾 Generando acta para: {record.name}")
-            content, _ = ir_report._render_qweb_pdf(report, res_ids=record.ids)
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": "Acta - " + self.name,
+                    "type": "binary",
+                    "raw": content,
+                    "mimetype": "application/pdf",
+                    "res_model": "sign.template",  # Asociar al modelo sign.template
+                    "res_id": None,  # No se asocia a un registro específico en este momento
+                }
+            )
 
-            self._validar_pdf(content)
+            vals_template = {
+                "name": "Acta - " + self.name,
+                "attachment_id": attachment.id,  # Asociar el adjunto creado
+                "ot_id": self.id,
+            }
 
-            attachment = self._crear_attachment_para_firma(content, f"Acta - {record.name}")
-            sign_template = self._crear_sign_template(f"Acta - {record.name}", attachment.id, record.id)
+            # Eliminar 'attachment_count' si está presente en los valores
+            vals_template.pop("attachment_count", None)
 
-            attachment.write({"res_id": sign_template.id})
+            # Crear la plantilla de firma sin 'attachment_count'
+            sign_template = self.env["sign.template"].create(vals_template)
 
-            print(f"✅ Plantilla de acta creada: {sign_template.name}")
-
+            # Redirigir al formulario de sign.template
         return {
             "type": "ir.actions.act_window",
-            "name": "Actas Firmadas",
+            "name": "Acta - " + self.name,
             "res_model": "sign.template",
-            "view_mode": "kanban",
+            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
             "target": "current",
         }
 
@@ -503,7 +487,7 @@ class OTS(models.Model):
             ordenes = self.env["maintenance.request"].search(
                 [
                     ("schedule_date", ">=", fecha_objetivo),
-                    ("schedule_date", "<", fecha_objetivo + timedelta(days=2)),
+                    ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
                 ]
             )
 
@@ -515,8 +499,6 @@ class OTS(models.Model):
                     correos.append(orden.ubicacion.email)
                 if orden.empresa and orden.empresa.email:
                     correos.append(orden.empresa.email)
-                if orden.employee_id and orden.employee_id.work_email:
-                    correos.append(orden.employee_id.work_email)
 
                 email_to = ",".join(filter(None, correos))
 
@@ -566,31 +548,18 @@ class OTS(models.Model):
             },
         }
 
-    @api.depends('tab_horas')  # Puedes cambiar esto por un campo más adecuado si tienes un trigger real
+
     def _get_cantidad_incidencias(self):
-        for record in self:
-            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
-            record.cantidad_inconvenientes = len(cant_data)
+        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
+        self.cantidad_inconvenientes = len(cant_data)
 
     def action_view_incidencias(self):
-        for record in self:
-            cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", record.id)])
-            return {
-                    "name": "Incidencias",
-                    "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
-                    "domain": [("id", "in", cant_data.ids)],
-                    "view_mode": "tree,form",  # puedes permitir también la vista formulario
-                    "res_model": "inconveniente.servicio",
-                    "context": {"create": False},
-                }
-
-
-    def action_view_ots(self):
+        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
         return {
-            "type": "ir.actions.act_window",
-            "name": "Orden de trabajo",
-            "view_mode": "form",
-            "res_model": "maintenance.request",
-            "res_id": self.id,
-            "context": "{'create' : False}",
-        }
+                "name": "Incidencias",
+                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
+                "domain": [("id", "in", cant_data.ids)],
+                "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                "res_model": "inconveniente.servicio",
+                "context": {"create": False},
+            }

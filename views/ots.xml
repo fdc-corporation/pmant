@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-	<record id="view_maintenance_request_filter" model="ir.ui.view">
+	<!-- <record id="view_maintenance_request_filter" model="ir.ui.view">
 		<field name="name">maintenance.request.search</field>
 		<field name="model">maintenance.request</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_search"/>
@@ -12,7 +12,7 @@
                 <filter string="N° de OC" name="filter_oc" domain="[('order_compra','=', order_compra)]"/>
 			</search>		
 		</field>
-	</record>
+	</record> -->
 	 <record id="maintenance.hr_equipment_request_action" model="ir.actions.act_window">
             <field name="context" eval="{'search_default_filter_my_orders': 1}"/>
     </record>
@@ -59,8 +59,8 @@
 				<field name="ubicacion" readonly="1" />
 				<field name="oportunidad" readonly="1"/>
 				<field name="is_tecnico" invisible="1"/>
-				<field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="['|', ('cliente', '=', empresa), ('cliente', '=', ubicacion)]" />
-				<field name="not_oc" />
+				<!-- <field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="['|', ('cliente', '=', empresa), ('cliente', '=', ubicacion)]" /> -->
+				<!-- <field name="not_oc" /> -->
 				<field name="selec_sunat" invisible="stage_id in (1, 2, 3)" />
 				<field name="factura_sunat"  invisible="not selec_sunat"/>
                 <field name="factura"  invisible="stage_id in (1, 2, 3) and selec_sunat or is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('partner_id', '=', empresa)]"  />
