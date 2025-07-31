@@ -6,24 +6,10 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'equiposindustriales.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
-							<t t-if="dominio_web == 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-								<span>
-									Compresores de Tornillo S.A.C.
-								</span>
-							</t>
-							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
+							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+							<span>
+								FDC CORPORATION E.I.R.L.
+							</span>
 						</div>
 						<div class="contactar">
 							<a href="/contactus" class="bg-primary">
@@ -88,7 +74,7 @@
 									<label>
 										Fecha asignada :
 									</label>
-									<span t-esc="equipo.assign_date">
+									<span t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else ''">
 									</span>
 								</div>
 							</div>
@@ -105,17 +91,25 @@
 							<div class="btn-group">
 								<div>
 									<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-										Filtros de Fechas
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter-right" viewBox="0 0 16 16">
+											<path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5"/>
+										</svg>
 									</button>
 									<ul class="dropdown-menu">
 										<li>
-											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=fecha_ejec'">
-												Ordenar por fecha ejecutada
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=asc'">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+													<path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
+												</svg>
+												Ascendente
 											</a>
 										</li>
 										<li>
-											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=fecha_ejecprox'">
-												Ordenar por fecha proxima
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=desc'">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+													<path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" />
+												</svg>
+												Descendente
 											</a>
 										</li>
 									</ul>
@@ -129,41 +123,41 @@
 							</div>
 						</div>
 					</div>
-					<div class="main-sedes">
-						<t t-if="len(equipo.planequipo) > 0">
-							<t t-foreach="equipo.planequipo" t-as="plan">
+					<div class="main_historail_pmant">
+						<t t-if="len(historial) > 0">
+							<t t-foreach="historial" t-as="plan">
 								<div class="card-mantenimiento">
-									<div style="display:flex; gap:5px;align-items:center;">
-										<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
-										<div class="text-card-mantenimiento">
-											<strong t-esc="plan.tarea.name" />
-											<span>
+										<div class="head-card-mg">
+											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
+											<div class="text-card-mantenimiento">
+												<strong t-esc="plan.ots.name if plan.ots else plan.tarea.name"/>
 												<span>
-													Plan de Mant. :
+													<span>
+														Tipo de Mant. :
+													</span>
+													<span t-esc="plan.tarea.tipo.name" />
 												</span>
-												<span t-esc="plan.plan.name" />
-											</span>
-											<span>
 												<span>
-													Fecha de ejecución :
+													<span>
+														Fecha de ejecución :
+													</span>
+													<span t-esc="plan.fecha_ejec.strftime('%d/%m/%Y') if plan.fecha_ejec else ''" />
 												</span>
-												<span t-esc="plan.fecha_ejec" />
-											</span>
-											<span>
 												<span>
-													Etapa :
+													<span>
+														Etapa :
+													</span>
+													<span t-esc="plan.estado" />
 												</span>
-												<span t-esc="plan.estado" />
-											</span>
+											</div>
 										</div>
+										<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.id)" class="bg-primary">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+												<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+												<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+											</svg>
+										</a>
 									</div>
-									<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.tarea.id)" class="bg-primary">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
-											<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
-											<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
-										</svg>
-									</a>
-								</div>
 							</t>
 						</t>
 						<t t-else="">

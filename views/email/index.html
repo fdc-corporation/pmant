@@ -1,3 +1,16 @@
+<p>Estimado <t t-esc="object.empresa.name"></t><br>
+    Se agendó una orden de trabajo para la ubicación:
+    <t t-out="object.ubicacion.name"></t> programada para la fecha
+    <t t-if="object.schedule_date">
+        <t t-set="day_of_week" t-value="object.schedule_date.strftime('%A')"></t>
+        <!-- Traducir el día de la semana -->
+        <t t-out="days_translation.get(day_of_week, day_of_week)"></t>
+        <!-- Mostrar la fecha en formato día/mes/año -->
+        <t t-out="object.schedule_date.strftime('%d/%m/%Y')"></t>
+    </t>
+</p>
+
+
 <div>
     <div>
         <t t-set="color" t-value="'#3191c5'"></t>
@@ -114,13 +127,15 @@
                                         <li>
                                             Puedes revisar el reporte técnico con puntos a revisar en el siguiente
                                             link:
-                                            <a t-att-href="'https://equiposindustriales.pe/reporte?id=' + str(object.id)">Reporte
+                                            <a
+                                                t-att-href="'https://equiposindustriales.pe/reporte?id=' + str(object.id)">Reporte
                                                 del servicio</a>
 
                                         </li>
                                         <li>
                                             Si desea ver el historial de mantenimiento de sus equipos, puede revisar
-                                            <a href="https://equiposindustriales.pe/my/home">Ver historial de equipos</a>
+                                            <a href="https://equiposindustriales.pe/my/home">Ver historial de
+                                                equipos</a>
                                         </li>
                                     </ul>
                                 </td>

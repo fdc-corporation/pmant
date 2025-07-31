@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="email_template_custom_empresa" model="mail.template">
+	<record id="email_template_custom_empresa_programacion" model="mail.template">
 		<field name="name">Orden de trabajo programado</field>
 		<field name="model_id" ref="maintenance.model_maintenance_request" />
         <field name="subject">Orden de trabajo programado: {{ object.empresa.name }} en la ubicación - {{ object.ubicacion.name }}</field>
@@ -113,9 +113,9 @@
                                                         </li>
                                                         <li>Duración: <t t-out="object.duration"> horas</t>
                                                         </li>
-                                                        <li>Responsable: <t t-out="object.user_id.name"></t>
+                                                        <li>Tecnico responsable: <t t-out="object.user_id.name"></t>
                                                         </li>
-                                                        <li>Asistentes:
+                                                        <li>Tecnicos:
                                                             <ul>
                                                                 <t t-foreach="object.subodinados" t-as="res">
                                                                     <li>

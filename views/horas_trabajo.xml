@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista Formulario -->
+    <record id="view_form_mantenimiento_evento" model="ir.ui.view">
+        <field name="name">programacion.mantenimiento.form</field>
+        <field name="model">programacion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <form string="Evento de Mantenimiento">
+                <header>
+                    <button invisible="not tab_comentarios or h_faltantes" string="Aceptar incidencia" name="action_validacion_time" type="object" class="oe_highlight"/>
+                    <button invisible="not tab_comentarios or h_optimizado" string="Cancelar incidencia" name="action_validacion_time_cancel" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="fecha_date" required="1"/>
+                            <field name="fecha_inicio" readonly="1"/>
+                            <field name="event_calendario" readonly="1"/>                         
+                        </group>
+                        <group>
+                            <field name="duracion" required="1" widget="float_time" />
+                            <field name="fecha_fin" readonly="1"/>
+                            <field name="horas_trabajado" readonly="1" widget="float_time" />
+                        </group>
+                        <group>
+                            <field name="tecnicos" widget="many2many_avatar_user" required="1"/>
+                            <field name="h_faltantes" widget="float_time" readonly="1"/>
+
+                        </group>
+                        <group>
+                            <field name="ot_id"  readonly="1"/>
+                            <field name="es_servicio_finalizado"  readonly="1"/>
+                            <field name="h_optimizado" widget="float_time"  readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Incidencias" group="pmant.group_pmant_admin">
+                            <field name="tab_comentarios">
+                                <tree>
+                                    <field name="file_ref" />
+                                    <field name="comentario" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <!-- Campo oculto -->
+                    <field name="horas_active" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Árbol -->
+    <record id="programacion_mantenimiento_view_tree" model="ir.ui.view">
+        <field name="name">programacion.mantenimiento.view.tree</field>
+        <field name="model">programacion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <tree string="Horas trabajadas" >
+                <field name="fecha_date"/>
+                <field name="duracion"/>
+                <field name="event_calendario"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin"/>
+                <field name="horas_trabajado"/>
+                <field name="tecnicos" widget="many2many_avatar_user"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Gráfica -->
+    <record id="programacion_mantenimiento_view_graph" model="ir.ui.view">
+        <field name="name">programacion.mantenimiento.view.graph</field>
+        <field name="model">programacion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <graph string="Horas trabajadas" type="bar" stacked="False">
+                <field name="tecnicos"/>
+                <field name="horas_trabajado" type="measure"/>
+                <field name="duracion" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="programacion_mantenimiento_action" model="ir.actions.act_window">
+        <field name="name">Programación de Mantenimiento</field>
+        <field name="res_model">programacion.mantenimiento</field>
+        <field name="view_mode">tree,kanban,graph,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea y gestiona los eventos de mantenimiento programado.
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- TREE DEL MODEL DE INCIDENCIAS -->
+    <record id="incidencias_view_tree" model="ir.ui.view">
+        <field name="name">inconveniente.servicio.view.tree</field>
+        <field name="model">inconveniente.servicio</field>
+        <field name="arch" type="xml">
+            <tree string="Incidencias" >
+                <field name="ot_id"/>
+                <field name="file_ref"/>
+                <field name="comentario"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <!-- Menú -->
+    <menuitem
+        id="horas_trabajo_menu"
+        name="Horas de trabajo"
+        parent="maintenance.maintenance_reporting"
+        action="programacion_mantenimiento_action"
+        sequence="20"/>
+</odoo>

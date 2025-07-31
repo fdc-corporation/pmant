@@ -6,24 +6,10 @@
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
-							<t t-if="dominio_web == 'equiposindustriales.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
-							<t t-if="dominio_web == 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-								<span>
-									Compresores de Tornillo S.A.C.
-								</span>
-							</t>
-							<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</t>
+							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
+							<span>
+								FDC CORPORATION E.I.R.L.
+							</span>
 						</div>
 						<div class="contactar">
 							<a href="/contactus" class="bg-primary">
@@ -191,22 +177,57 @@
 									</div>
 									<div class="modal-body">
 										<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-										<select name="ubicacion_id" class="form-control">
-											<option value="">
-												Seleccione una ubicación
-											</option>
-											<t t-foreach="ubicaciones" t-as="ubicacion">
-												<option t-att-value="ubicacion.id">
-													<t t-esc="ubicacion.name" />
+										<div class="mb-3 w-100">
+											<label for="ubicacion_id" class="form-label">
+												Sede a la que pertenece
+											</label>
+											<select name="ubicacion_id" class="form-control">
+												<option value="">
+													Seleccione una ubicación
 												</option>
-											</t>
-										</select>
-										<input type="text" name="nombre_equipo" placeholder="Nombre del equipo" />
-										<input type="text" name="marca_equipo" placeholder="Marca del equipo" />
-										<input type="text" name="modelo" placeholder="Modelo del equipo" />
-										<input type="text" name="numero_serie" placeholder="N° de serie" />
-										<input type="date" name="fecha_registro" placeholder="Fecha de registro" />
-										<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+												<t t-foreach="ubicaciones" t-as="ubicacion">
+													<option t-att-value="ubicacion.id">
+														<t t-esc="ubicacion.name" />
+													</option>
+												</t>
+											</select>
+										</div>
+										<div class="w-100">
+											<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">
+												Nombre del equipo
+											</label>
+											<input type="text" class="form-control" name="nombre_equipo" />
+										</div>
+										<div class="w-100">
+											<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">
+												Marca del equipo
+											</label>
+											<input type="text" class="form-control" name="marca_equipo" placeholder="Marca del equipo" />
+										</div>
+										<div class="w-100">
+											<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">
+												Modelo
+											</label>
+											<input type="text" class="form-control" name="modelo" />
+										</div>
+										<div class="w-100">
+											<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">
+												N° de serie
+											</label>
+											<input type="text" class="form-control" name="numero_serie" />
+										</div>
+										<div class="w-100">
+											<label for="fecha_registro" style="font-size: 16px;margin-bottom: 0px;">
+												Fecha de registro
+											</label>
+											<input type="date" class="form-control" name="fecha_registro" placeholder="Fecha de registro" />
+										</div>
+										<div class="w-100">
+											<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">
+												Imagen del equipo
+											</label>
+											<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+										</div>
 									</div>
 									<div class="modal-footer">
 										<button type="submit" class="btn btn-primary">

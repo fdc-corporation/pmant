@@ -9,6 +9,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
 
 .main {
   width: 90vw;
+  max-width: 1360px;
   // height: calc(100vh - 50px);
   //   padding: 10px;
   margin-top: 50px;
@@ -217,6 +218,8 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
       align-items: center;
       justify-content: center;
       box-shadow: -1px 2px 9px 0px #0000004d;
+      text-decoration: none;
+      color: black;
       img {
         width: 70px;
       }
@@ -256,7 +259,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         width: 100%;
         gap: 5px;
         button {
-          display: flex;
+          // display: flex !important;
           flex-flow: row nowrap;
           justify-content: center;
           align-items: center;
@@ -271,17 +274,16 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
           font-weight: 500;
           line-height: normal;
           font-size: 14px;
-          display: none;
+          display: none !important;
           @media screen and (min-width: 744px) {
-            display: block;
+            display: flex !important;
           }
-          
         }
-        .btn-whatssap{
-          display: none;
+        .btn-whatssap {
+          display: none !important;
           @media screen and (min-width: 744px) {
-            display: block;
-          } 
+            display: flex !important;
+          }
         }
       }
       .img-header-equipo {
@@ -311,13 +313,13 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         font-size: 14px;
         display: block;
         @media screen and (min-width: 744px) {
-          display: none;
+          display: none !important;
         }
       }
       .btn-whatssap {
-        display: block;
+        display: flex !important;
         @media screen and (min-width: 744px) {
-          display: none;
+          display: none !important;
         }
       }
     }
@@ -331,13 +333,13 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         flex-flow: row wrap;
         align-items: center;
         justify-content: flex-start;
-        gap: 0px;
+        gap: 15px;
         .propiedad {
           display: flex !important;
           flex-flow: row wrap;
           gap: 10px;
           label {
-            width: 200px;
+            width: 180px;
             font-weight: 600;
             font-size: 14px;
           }
@@ -386,6 +388,13 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 10px;
     }
+    .main_historail_pmant {
+      width: 100%;
+      height: max-content;
+      display: flex;
+      flex-flow: column;
+      gap: 12px;
+    }
     .card-adjunto {
       display: flex;
       flex-flow: column nowrap;
@@ -408,7 +417,7 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
         position: absolute;
         padding: 3px 6px;
         font-size: 12.5px;
-        color:white;
+        color: white;
         border-radius: 3px;
         border: 0px;
         top: 5px;
@@ -445,64 +454,151 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
       height: auto;
       position: relative;
       padding: 5px;
-      justify-content: start;
+      justify-content: space-between;
       align-items: flex-start;
       background-color: white;
       box-shadow: $box-shadow-general;
       border-radius: 4px;
       text-decoration: none;
       color: black;
-      img {
-        width: 100px;
-        height: 100px;
-      }
-      .text-card-sede,
-      .text-card-equipo,
-      .text-card-mantenimiento {
+      .head-card-mg {
         display: flex;
-        flex-flow: column nowrap;
-        align-items: start;
-        justify-content: start;
-        gap: 1px;
-        span {
-          font-size: 13px;
-          &:first-child {
-            font-size: 15px;
+        gap: 10px;
+        align-items: self-start;
+        img {
+          width: 50px;
+          height: 50px;
+        }
+        .text-card-equipo,
+        .text-card-mantenimiento {
+          display: flex;
+          flex-flow: column nowrap;
+          align-items: start;
+          justify-content: start;
+          gap: 1px;
+          strong {
+            font-size: 14px;
+            word-break: break-all;
+          }
+          span {
+            font-size: 13px;
+            word-break: break-all;
+            // &:first-child {
+            // font-size: 15px;
+            // }
           }
         }
       }
-
       a {
         width: 40px;
-        border-radius: 5px;
-        height: 100%;
+        border-radius: 100%;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
         color: white;
+        bottom: -10px;
         text-decoration: none;
+        right: -10px;
         svg {
           color: white;
         }
       }
     }
-    .card-mantenimiento {
-      display: flex;
-      justify-content: space-between;
+    .card-equipo,
+    .card-solicitud {
+      justify-content: start;
       img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 100px !important;
+        height: 100px !important;
       }
-      strong {
-        font-size: 13px;
-      }
-      span {
-        font-size: 12px;
-        &:first-child {
-          font-size: 12px !important;
+      .text-card-equipo {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: start;
+        justify-content: start;
+        gap: 1px;
+        width: 100%;
+        hr {
+          margin: 0px 0px 3px 0px;
+          width: 100%;
+        }
+        strong {
+          font-size: 14px;
+          word-break: break-all;
+          .status-alert {
+            font-size: 12px;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 4px;
+            background-color: #dc3545;
+            word-break: keep-all;
+          }
+          .status-atencion {
+            font-size: 12px;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 4px;
+            background-color: #28a745;
+            word-break: keep-all;
+          }
         }
         span {
-          font-size: 12px;
+          font-size: 13px;
+          word-break: break-all;
+          color: rgb(114, 114, 114);
+        }
+      }
+    }
+    .card-solicitud {
+      img {
+        width: 60px !important;
+        height: 60px !important;
+      }
+    }
+    .card-sede {
+      justify-content: start;
+      gap: 10px;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+      .text-card-sede {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: start;
+        justify-content: start;
+        gap: 1px;
+        width: 100%;
+        hr {
+          margin: 0px 0px 3px 0px;
+          width: 100%;
+        }
+        strong {
+          font-size: 14px;
+          word-break: break-all;
+        }
+        span {
+          font-size: 13px;
+          word-break: break-all;
+          color: rgb(114, 114, 114);
+        }
+      }
+      .btn-desca {
+        width: 40px;
+        border-radius: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        color: white;
+        bottom: -10px;
+        text-decoration: none;
+        right: -10px;
+        svg {
+          color: white;
         }
       }
     }
@@ -532,30 +628,30 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  input,
-  select,
-  textarea {
-    width: 100%;
-    height: 38px;
-    border-radius: 5px;
-    border: 0px;
-    background: #fff;
-    box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.25) inset;
-    outline: none;
-    padding-left: 10px;
-    ::placeholder {
-      color: black;
-      // font-family: Poppins;
-      font-size: 13px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-    }
-  }
-  input[disabled="disabled"]{
-    background-color: lavender !important;
-  }
+  gap: 9px;
+  // input,
+  // select,
+  // textarea {
+  //   width: 100%;
+  //   height: 38px;
+  //   border-radius: 5px;
+  //   border: 0px;
+  //   background: #fff;
+  //   box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.25) inset;
+  //   outline: none;
+  //   padding-left: 10px;
+  //   ::placeholder {
+  //     color: black;
+  //     // font-family: Poppins;
+  //     font-size: 13px;
+  //     font-style: normal;
+  //     font-weight: 500;
+  //     line-height: normal;
+  //   }
+  // }
+  // input[disabled="disabled"]{
+  //   background-color: lavender !important;
+  // }
 }
 .modal-footer {
   button {
@@ -595,4 +691,28 @@ $box-shadow-general: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
 
 .display-none {
   display: none;
+}
+.notificacion-exito,
+.notificacion-error,
+.notificacion-exito_solicitud,
+notificacion-error_solicitud {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.notificacion-exito,
+.notificacion-exito_solicitud {
+  background-color: #28a745; /* Verde éxito */
+}
+
+.notificacion-error,
+.notificacion-error_solicitud {
+  background-color: #dc3545; /* Rojo error */
 }

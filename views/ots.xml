@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-	<record id="view_maintenance_request_filter" model="ir.ui.view">
+	<!-- <record id="view_maintenance_request_filter" model="ir.ui.view">
 		<field name="name">maintenance.request.search</field>
 		<field name="model">maintenance.request</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_search"/>
@@ -12,7 +12,7 @@
                 <filter string="N° de OC" name="filter_oc" domain="[('order_compra','=', order_compra)]"/>
 			</search>		
 		</field>
-	</record>
+	</record> -->
 	 <record id="maintenance.hr_equipment_request_action" model="ir.actions.act_window">
             <field name="context" eval="{'search_default_filter_my_orders': 1}"/>
     </record>
@@ -38,6 +38,14 @@
 				<button name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
 				<button name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
 				<button name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
+				<button class="oe_stat_button"
+						type="object"
+						name="action_open_wizard"
+						icon="fa-whatsapp"
+						context="{'default_partner_id': empresa.id, 'full_name': True}">
+					<span class="o_stat_info">Enviar</span>
+				</button>
+
 			</xpath>
 		
 			<xpath expr="//field[@name='maintenance_type']" position="after">
@@ -51,44 +59,91 @@
 				<field name="ubicacion" readonly="1" />
 				<field name="oportunidad" readonly="1"/>
 				<field name="is_tecnico" invisible="1"/>
-				<field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('cliente', '=', empresa)]" />
-				<field name="not_oc" />
+				<!-- <field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="['|', ('cliente', '=', empresa), ('cliente', '=', ubicacion)]" /> -->
+				<!-- <field name="not_oc" /> -->
 				<field name="selec_sunat" invisible="stage_id in (1, 2, 3)" />
 				<field name="factura_sunat"  invisible="not selec_sunat"/>
                 <field name="factura"  invisible="stage_id in (1, 2, 3) and selec_sunat or is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('partner_id', '=', empresa)]"  />
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="after">
-				<field name="subodinados" widget="many2many_tags" ></field>
+				<field name="subodinados" widget="many2many_avatar_user" ></field>
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="before">
-				<field name="event_id" readonly="1" ></field>
+				<field name="is_active_programacion" invisible="1" ></field>
 			</xpath>
-
-
+			<xpath expr="//page" position="after">
+				<page string="Programación">
+					<div class="oe_button_box" name="button_box" invisible="is_tecnico">
+						<button name="action_view_incidencias" type="object" class="oe_stat_button" icon="fa-file-text-o">
+							<field name="cantidad_inconvenientes" string="Incidencias" widget="statinfo"/>
+						</button>
+					</div>
+						<field name="tab_horas" readonly="is_tecnico">
+							<tree editable="bottom">
+								<field name="fecha_date" />
+								<field name="duracion" widget="float_time"  />
+								<field name="tecnicos" widget="many2many_avatar_user"  />
+								<field name="event_calendario" readonly="1"  />
+								<field name="horas_active" column_invisible="1"  />
+								<field name="fecha_inicio" readonly="1"  />
+								<field name="fecha_fin" readonly="1" />
+								<field name="horas_trabajado" widget="float_time" readonly="1" />
+								<button name="action_view_registro" class="btn btn-link" type="object" string="Detalles"></button>
+								<!-- <button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button> -->
+								<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->
+							</tree>
+						</field>
+				</page>
+				<page string="Calificaciones">
+					<group >
+						<field name="rating_p1" />
+						<field name="rating_p2" />
+						<field name="rating_p3" />
+						<field name="rating_comment" />
+					</group>
+				</page>
+				<!-- <page string="Acta firmado">
+					<field name="acta_firmado" widget="pdf_viewer"/>
+				</page> -->
+			</xpath>
+			<xpath expr="//sheet/div[@invisible='not archive']" position="before">
+				<div class="oe_button_box" name="button_box">
+						<button class="oe_stat_button" type="object" name="action_view_documentos"
+								icon="fa-file-text-o">
+								<field string="Documentos firmados" name="document_count" widget="statinfo"/>
+						</button>
+				</div>
+			</xpath>
 
 			<!-- LIMITRAR VISIVILIDA DE CAMPOSEN ORDENER DE TRABAJO -->
 			<xpath expr="//field[@name='maintenance_team_id']" position="attributes">
 				<attribute name="invisible" >is_tecnico</attribute>
 			</xpath>
-			
+			<xpath expr="//field[@name='subodinados']" position="attributes">
+				<attribute name="user_id">many2many_avatar_user</attribute>
+			  </xpath>
 			<xpath expr="//field[@name='close_date']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
+			<xpath expr="//field[@name='email_cc']" position="attributes">
+				<attribute name="invisible">
+					True
+				</attribute>			</xpath>
 			<xpath expr="//field[@name='category_id']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 			<xpath expr="//field[@name='equipment_id']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 			<xpath expr="//field[@name='maintenance_type']" position="attributes">
 				<attribute name="invisible">
-					1
+					True
 				</attribute>
 			</xpath>
 
@@ -108,6 +163,7 @@
 			
 			<xpath expr="//field[@name='duration']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
+				<attribute name="required" >1</attribute>
 			</xpath>
 			<xpath expr="//field[@name='priority']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
@@ -121,4 +177,5 @@
 		</field>
 	</record>
 	<!-- FIN VISTA MAINTANCE REQUEST -->
+
 </odoo>

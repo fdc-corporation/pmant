@@ -33,22 +33,32 @@
 						<field name="cliente" invisible="0" readonly="1" />
 						<field name="ubicacion" invisible="0" readonly="1" />
 						<field name="is_admin" invisible="1" />
-						<field name="tarea" invisible="1" />
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion)]"  readonly="not is_admin and not tarea.is_evaluacion"/>
-						<field name="plan" string="Plan de mantenimiento"  readonly="not is_admin and not tarea.is_evaluacion" />
+						<field name="tarea" readonly="1"/>
+						<field name="ots" invisible="1" />
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>						<field name="plan" string="Plan de mantenimiento"  readonly="not is_admin and not tarea.is_evaluacion" />
 						<field name="fecha_ejec" />
 						<field name="fecha_ejecprox" string="Proxima Fecha de Mantenimiento" />
 						<field name="fecha_hoy" invisible="1"/>
-
 					</group>
-					<field name="procesos" invisible="is_admin">
-						<tree responsive="1">
-							<field name="estado"/>
-							<field name="proceso" />
-							<field name="descripcion" />
-							<field name="is_admin" column_invisible="True"/>
-						</tree>
-    				</field>
+					<notebook>
+						<page name="procesos" string="Procesos">
+							<field name="procesos" invisible="is_admin">
+								<tree responsive="1">
+									<field name="estado"/>
+									<field name="proceso" />
+									<field name="descripcion" />
+									<field name="is_admin" column_invisible="True"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Conclusiones" invisible="is_admin">
+							<group>
+								<field name="nota_observaciones" widget="html" invisible="is_admin" />
+								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />
+								<field name="nota_recomendaciones" widget="html" invisible="is_admin" />
+							</group>
+						</page>
+					</notebook>
 				</sheet>
 			</form>
 		</field>

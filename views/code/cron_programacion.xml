@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Definir la tarea programada -->
+        <record id="ir_cron_programacion" model="ir.cron">
+            <field name="name">Correo prorgramacion Mantenimiento</field>
+            <field name="model_id" ref="model_maintenance_request"/> <!-- Referencia correcta al modelo -->
+            <field name="state">code</field>
+            <field name="code">model._set_email_programacion()</field> <!-- Llamar al método que envía la notificación -->
+            <field name="interval_number">1</field> <!-- Ejecutar cada 1 día -->
+            <field name="interval_type">days</field> <!-- Tipo de intervalo en días -->
+            <field name="numbercall">1</field> <!-- Número de veces que se debe ejecutar (-1 para ejecución infinita) -->
+            <field name="active">True</field> <!-- Activar la tarea -->
+            <field name="nextcall">2025-05-03 08:00:00</field> <!-- Evita que se ejecute inmediatamente -->
+
+        </record>
+        <!-- Definir la tarea programada -->
+        <record id="ir_cron_fecha_registro" model="ir.cron">
+            <field name="name">PMANT: Actualizacion de tiempo de state</field>
+            <field name="model_id" ref="model_tarea_mantenimiento"/> <!-- Referencia correcta al modelo -->
+            <field name="state">code</field>
+            <field name="code">model._cron_fecha_movimiento()</field> <!-- Llamar al método que envía la notificación -->
+            <field name="interval_number">1</field> <!-- Ejecutar cada 1 día -->
+            <field name="interval_type">days</field> <!-- Tipo de intervalo en días -->
+            <field name="numbercall">1</field> <!-- Número de veces que se debe ejecutar (-1 para ejecución infinita) -->
+            <field name="active">True</field> <!-- Activar la tarea -->
+            <field name="nextcall">2025-07-08 08:00:00</field> <!-- Evita que se ejecute inmediatamente -->
+
+        </record>
+    </data>
+</odoo>

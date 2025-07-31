@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="email_template_calificacion_servicio" model="mail.template">
+	<field name="name">Calificacion de servicio</field>
+    <field name="model_id" ref="maintenance.model_maintenance_request"/>
+    <field name="subject">¡Califica nuestro servicio!</field>
+    <field name="email_from">{{ (user.email_formatted or object.user_id.email_formatted) }}</field>
+    <field name="email_to">{{ object.ubicacion.email }}</field>
+    <field name="lang">{{ object.partner_id.lang }}</field>
+    <!-- <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" /> -->
+
+    <field name="body_html">
+        <![CDATA[
+            <div style="font-family: Arial, sans-serif; font-size: 14px; color: #111827;">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px;">
+                    <tr>
+                        <td align="center" style="padding-bottom: 20px;">
+                            <h2 style="font-size: 21px; color: #111827; font-weight: 600; margin: 0;">
+                                ¡Califica nuestro servicio!
+                            </h2>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding-bottom: 20px;">
+                            Hola <strong t-out="object.empresa.name">FDC CORP</strong>,<br/>
+                            Nos encantaría conocer su calificación sobre la calidad y atención de nuestro servicio:
+                            <strong t-out="object.name">Orden de trabajo</strong>.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" style="padding-bottom: 20px;">
+                            <a t-att-href="(base_url or '') + '/calificacion/' + str(object.id)"
+                               style="background-color: #008f8c; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                                Ir al formulario
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 11px; color: gray; text-align: center;">
+                            Si aún no cuentas con un usuario para nuestro portal, contacte a 
+                            <a t-att-href="'tel:' + str(object.create_uid.company_id.mobile)"
+                               style="color: #008f8c; text-decoration: none;">
+                                +51 908 912 551
+                            </a>
+                            para obtener acceso a todos sus servicios.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        ]]>
+    </field>
+	</record>
+</odoo>

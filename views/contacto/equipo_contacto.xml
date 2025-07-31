@@ -4,6 +4,14 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/> <!-- Asegúrate de que el ID sea correcto -->
         <field name="arch" type="xml">
+            <xpath expr="//div[@name='vat_vies_container']" position="after">
+                <field name="tienen_areas"/>
+                <field name="is_area" />
+                <field name="id_sede" invisible="not is_area" domain="[('tienen_areas', '=', True)]"/>
+            </xpath>
+            <xpath expr="//field[@name='website']" position="before">
+                <field name="email_jefe" />
+            </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='equipos']" position="attributes">
                 <attribute name="invisible">parent_id</attribute>
               </xpath>
@@ -20,8 +28,18 @@
                             <field name="category_id"/>
                             <field name="serial_no"/>
                             <field name="company_id"/>
-                            <!-- Añade otros campos de maintenance.equipment que desees mostrar -->
                         </tree>                        
+                    </field>
+                </page>
+                <page string="Areas" name="areas" invisible="not tienen_areas">
+                    <field name="areas">
+                        <tree>
+                            <field name="name"></field>
+                            <field name="parent_id"></field>
+                            <field name="email"></field>
+                            <field name="mobile"></field>
+                            <field name="vat"></field>
+                        </tree>
                     </field>
                 </page>
             </xpath>
@@ -42,7 +60,16 @@
 
 
 
-
+    <record id="equipo_search_inherit" model="ir.ui.view">
+        <field name="name">search.equipo.view.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search[1]/field[@name='name']" position="after">
+                <field name="propietario"/>
+            </xpath>
+        </field>
+    </record>
 
 
 </odoo>

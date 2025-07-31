@@ -1,10 +1,9 @@
 from odoo import models, fields, api, exceptions
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from odoo.exceptions import UserError
 import logging
 from odoo.exceptions import UserError
 import base64
-
 _logger = logging.getLogger(__name__)
 
 
@@ -16,6 +15,15 @@ class AdjuntoEvaluacion (models.Model):
     adjuntoimage     = fields.Binary()
     comentario       = fields.Text()
 
+class EstapaTarea(models.Model):
+    _name = "etapa.tarea.mantenimiento"
+    _description = "Etapas de Tarea de Mantenimiento"
+
+    name = fields.Char(size=60, required=True, string='Nombre')
+    sequence = fields.Integer(string='Secuencia', default=1, help="Determina el orden en que se muestran las etapas de la tarea de mantenimiento. Las etapas con menor número se mostrarán primero.")
+    dias_promedio    = fields.Integer(string="Dias de estadia")
+    color_error     = fields.Integer(string="Color error")
+    color_warning   = fields.Integer(string="Color warning")
 
 class TipoTarea(models.Model):
    _name = 'tipotarea.mantenimiento'
@@ -27,7 +35,7 @@ class Tarea(models.Model):
 
     _inherit = ['mail.thread', 'mail.activity.mixin']  # Hereda de mail.thread y mail.activity.mixin
     
-    name = fields.Char(size=60, required=True, string='Nombre', write=['pmant.group_pmant_admin'])
+    name = fields.Char(size=60, required=True, string='Nombre', tracking=True)
     tipo = fields.Many2one('tipotarea.mantenimiento', string="Tipo")
     cliente = fields.Many2one('res.partner', string="Cliente", tracking=True, domain=[('is_company', '=', 'True')], required=False)
     ubicacion = fields.Many2one('res.partner', string="Ubicacion", tracking=True)
@@ -38,7 +46,20 @@ class Tarea(models.Model):
     adjunto = fields.Binary()
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
-    state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True, tracking=True)
+    state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True, tracking=True, ondelete='set null')
+    stage_id = fields.Many2one(
+        'etapa.tarea.mantenimiento',
+        string="Etapa",
+        store=True,
+        tracking=True,
+        ondelete='set null',group_expand='_group_expand_stages',
+        default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
+    )
+    kanban_state = fields.Selection([
+        ('inportante', 'Importante'),
+        ('realizado', 'Realizado'),
+        ('atrasado', 'Atrasado'),
+    ], string='Estado Kanban')
     revisar = fields.Boolean()
     archive = fields.Boolean(related="ots.archive", store=True)
     namefirma = fields.Char(string="Nombre del Firmante")
@@ -54,7 +75,7 @@ class Tarea(models.Model):
     id_tipo = fields.Integer()
     fecha_hoy = fields.Char(string="Fecha Formateada", compute="_fecha_formateada")
     is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
-    oc_id = fields.Many2one('oc.compras', string="OC")
+    # oc_id = fields.Many2one('oc.compras', string="OC")
     is_tecnico = fields.Boolean(
         compute='_compute_is_tecnico',
         string='Is Técnico',
@@ -63,7 +84,39 @@ class Tarea(models.Model):
     firma_evaluacion = fields.Binary()
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
+    action_servicio = fields.Boolean(string="Is init servicio")
+    active_servicio =  fields.Boolean(string="Tiene Programacion?", compute="_set_action")
+    fecha_etapa = fields.Date(string="Fecha de movimiento de etapa")
+    color = fields.Integer(
+        string='Color',
+        help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
+    )
+    sale_order = fields.Many2one("sale.order", string="Orden de venta")
 
+    @api.model
+    def _group_expand_stages(self, stages, domain, order):
+        return self.env['etapa.tarea.mantenimiento'].search([], order=order)
+
+    def name_get(self):
+        result = []
+        for record in self:
+            estado = dict(self._fields['state'].selection).get(record.state, '')
+            name = f"{record.name} / [{estado}]"
+            result.append((record.id, name))
+        return result
+
+    def _set_action(self):
+        """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""
+        for record in self:
+            record.active_servicio = False
+            print("INICIO DE LA FUNCION ACTIVESERVICIO")
+            if record.ots:
+                primera_ot = record.ots[0].tab_horas
+                print("DATOPS DE LA PROGRAMACION")
+                print(primera_ot)
+                print(len(primera_ot))                
+                if len(primera_ot) > 0:
+                    record.active_servicio = True
 
     @api.onchange('tipo')
     def tipo_click(self):
@@ -103,51 +156,52 @@ class Tarea(models.Model):
     @api.model
     def create(self, vals):
         record = super(Tarea, self).create(vals)
-        if 'state_id' in vals:
-            record._notify_on_change()
         if 'create_user' not in vals:
             vals['create_user'] = self.env.user.id
         if 'compania' not in vals:
             vals['compania'] = self.env.company.id
+            # Notificar a los usuarios del grupo específico
+        group_xml_id = 'pmant.group_pmant_admin'  # Ajusta si tu módulo se llama distinto
+        group = self.env.ref(group_xml_id)
+
+        if group:
+            for user in group.users:
+                record.message_post(
+                    body=(
+                        f"{user.name}, se te ha asignado una nueva tarea "
+                        f"{record.name}. Debes programarla y crear la OT correspondiente."
+                    ),
+                    partner_ids=[user.partner_id.id],
+                )
+
+        record._set_fecha_movimiento()
         return record
 
     def write(self, vals):
-        result = super(Tarea, self).write(vals)
-        if 'state_id' in vals:
-            for record in self:
-                # Verificar si el registro tiene un ID válido
-                if record.id:
-                    # Actualizar solicitudes de mantenimiento relacionadas
-                    ot = self.env['maintenance.request'].search([('tarea', '=', record.id)])
-                    if ot:
-                        if ot.stage_id.sequence != record.state_id.sequence:
-                            ot.stage_id = record.state_id.id
-                            if record.state_id.sequence == 3:
-                                fecha_actual = fields.Date.today()
-                                ot.fecha_ejec = fecha_actual
+        res = super().write(vals)
+        if "stage_id" in vals:
+            self._set_fecha_movimiento()
+        return res
 
-                # Si el estado tiene una secuencia específica (por ejemplo, 3)
-                if record.state_id.sequence == 3:
-                    record._fecha_ejecutada()
-                    record._evento_calendario_proximo_servicio()
-                    record._notify_on_change()
-        return result
+    def _set_fecha_movimiento(self):
+        for record in self:
+            record.fecha_etapa = fields.Date.today()
 
+    @api.model
+    def _cron_fecha_movimiento(self):
+        leads = self.search([])
+        hoy = fields.Date.today()
+        for lead in leads:
+            dias = (hoy - lead.fecha_etapa).days
+            if lead.stage_id.dias_promedio:
+                if dias > lead.stage_id.dias_promedio:
+                    lead.color = lead.stage_id.color_error
+                elif dias == (lead.stage_id.dias_promedio - 1):
+                    lead.color = lead.stage_id.color_warning
+                    
     def _fecha_entrada(self):
         for record in self:
             record.fecha_entrada = fields.Date.today()
-    
-    def _notify_on_change(self):
-        for record in self:
-            if record.state_id.id == 3:
-                message = f"La tarea {record.name} se cambió a {record.state_id.name}. Verificar estado de la tarea realizada."
-                partners_to_notify = [ot.user_id.partner_id.id for ot in record.ots if ot.user_id and ot.user_id.partner_id]
-                if partners_to_notify and record.id:  # Asegurarse de que el registro está guardado
-                    record.message_notify(
-                        body=message,
-                        partner_ids=partners_to_notify,
-                        subject="Actualización de Tarea"
-                    )
                     
     def _fecha_ejecutada(self):
         fecha_actual = fields.Date.today()
@@ -186,22 +240,33 @@ class Tarea(models.Model):
                     planes_por_fecha[fecha_ejecprox] = []
 
                 planes_por_fecha[fecha_ejecprox].append((equipo, alertas))
-
+            # for planequipo in self.planequipo:
+            #     print("DATOS DEL EQUIPO FECHAS  PROXIMAS DE SERVICIO")
+            #     print(planequipo.equipo.fecha_prox)
             for fecha, equipos_alertas in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([equipo for equipo, _ in equipos_alertas])
-                event = self.env['calendar.event'].create({
-                    'name': f'Servicio de {cliente}',
-                    'start': fecha,
-                    'stop': fecha,
-                    'allday': False,
-                    'location': ubicacion,
-                    'description': f'Servicios de equipos: {descripcion_equipos}',
-                    'partner_ids': [(6, 0, partner_ids)],
-                })
+                
+                existing_event = self.env['calendar.event'].search([
+                    ('name', '=', f'Proximo servicio - {cliente}'),
+                    ('start', '=', fecha),
+                    ('ots_id', '=', record.ots[0].id if record.ots else False),
+                ], limit=1)
+                
+                if not existing_event :
+                    event = self.env['calendar.event'].create({
+                        'name': f'Proximo servicio - {cliente}',
+                        'start': fecha,
+                        'stop': fecha,
+                        'allday': False,
+                        'ots_id': record.ots[0].id if record.ots else False,
+                        'location': ubicacion,
+                        'description': f'Servicios de equipos: {descripcion_equipos}',
+                        'partner_ids': [(6, 0, partner_ids)],
+                    })
 
-                for _, alertas in equipos_alertas:
-                    if alertas:
-                        event.alarm_ids = [(4, alarma.id) for alarma in alertas]
+                    for _, alertas in equipos_alertas:
+                        if alertas:
+                            event.alarm_ids = [(4, alarma.id) for alarma in alertas]
 
     def action_send_email_recepcion(self):
         template = self.env.ref('pmant.email_template_hoja_recepcion')
@@ -259,10 +324,10 @@ class Tarea(models.Model):
             "tarea": self.id,
             "empresa": self.cliente.id,
             "ubicacion": self.ubicacion.id,
-            "order_compra" : self.oc_id.id
+            # "order_compra" : self.oc_id.id
         })
 
-        self.oc_id.ot_servicio = ot.id
+        # self.oc_id.ot_servicio = ot.id
 
         return {
             "type" : "ir.actions.act_window",
@@ -274,7 +339,31 @@ class Tarea(models.Model):
         }
 
 
-
+    def init_servicio (self):
+        for record in self:
+            if record.ots:
+                record.action_servicio = True
+                horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "=", False)], limit=1)
+                horas.fecha_inicio = datetime.now()
+                record.ots[0].stage_id = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1).id
+                # hoja_horas._compute_horas_trabajado()
+        # return ''
+    
+    def cancel_servicio(self):
+        for record in self:
+            horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_fin", "=", False)], limit=1)
+            return {
+                "type": "ir.actions.act_window",
+                "name": "Finalizar actividad",
+                "res_model": "wizars.inconvenientes",
+                "view_mode": "form",
+                "target": "new",
+                "context": {
+                    "default_programacion_id": horas.id,  # si estás dentro de programacion.mantenimiento
+                    "default_ot_id": self.ots[0].id,  # si estás dentro de programacion.mantenimiento
+                    "default_tarea_id": self.id,  # si estás dentro de programacion.mantenimiento
+                },
+            }
 
     # @api.multi
     # @api.onchange('state_id')

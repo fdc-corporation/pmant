@@ -7,24 +7,10 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="Icono FDC CORP" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+								</span>
 							</div>
 							<div class="contactar">
 								<a href="/contactus" class="bg-primary">
@@ -46,9 +32,11 @@
 									</g>
 								</svg>
 								<span>
-									<span t-esc="equipo.ubicacion.parent_id.name">
-									</span>
-									/
+									<t t-if="equipo.ubicacion.parent_id">
+										<span t-esc="equipo.ubicacion.parent_id.name">
+										</span>
+										/
+									</t>
 									<span t-esc="equipo.ubicacion.name" />
 								</span>
 							</div>
@@ -94,7 +82,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDC CORP para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -110,24 +98,10 @@
 					<div class="card-contacto-main">
 						<div class="card-contacto">
 							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt="" />
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="Icono FDC CORP" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+								</span>
 							</div>
 							<div class="contactar">
 								<a href="/contactus" class="bg-primary">
@@ -192,7 +166,7 @@
 									</span>
 								</div>
 								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDC CORP para ver su historial de servicios.
 								</span>
 								<!--
 								<div class="contenedor-button-info">
@@ -213,11 +187,17 @@
 								</label>
 								<h4 t-esc="equipo.name">
 								</h4>
-								<div style="display:flex;gap: 10px;">
-									<button href="" type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+								<div style="display:flex;gap: 10px; ali">
+									<button style="display: flex;gap: 8px;align-items: center;justify-content: center;" href="" type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+										<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+											<path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0" />
+										</svg>
 										Solicitar servicio
 									</button>
-									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
+									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;display: flex;gap: 8px;align-items: center;justify-content: center;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+											<path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+										</svg>
 										Whatsapp
 									</a>
 								</div>
@@ -227,11 +207,17 @@
 								<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=qr_image' % equipo.id" alt="Qr del equipo" />
 							</div>
 							<div style="display:flex;gap: 10px;">
-								<button href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+								<button style="display: flex;gap: 8px;align-items: center;justify-content: center;" href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+										<path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0" />
+									</svg>
 									Solicitar servicio
 								</button>
-								<a class="btn-whatssap btn btn-primary" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;" >
-										Whatsapp
+								<a t-att-href="whatsapp_url" class="btn-whatssap btn btn-primary" style="text-decoration:none;border: 0px;background: #3fc93f;width: 60%;display: flex;gap: 8px;align-items: center;justify-content: center;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+										<path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+									</svg>
+									Whatsapp
 								</a>
 							</div>
 						</div>
@@ -264,7 +250,7 @@
 									<label>
 										Fecha asignada :
 									</label>
-									<span t-esc="equipo.assign_date">
+									<span t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else ''">
 									</span>
 								</div>
 							</div>
@@ -282,9 +268,9 @@
 								</div>
 								<div class="propiedad">
 									<label>
-										Próximo mantenimiento  :
+										Próximo mantenimiento :
 									</label>
-									<span t-esc="equipo.fecha_prox">
+									<span t-esc="equipo.fecha_prox.strftime('%d/%m/%Y') if equipo.fecha_prox else ''">
 									</span>
 								</div>
 							</div>
@@ -316,10 +302,20 @@
 									<label>
 										Fecha efectiva  :
 									</label>
-									<span t-esc="equipo.effective_date">
+									<span t-esc="equipo.effective_date.strftime('%d/%m/%Y')">
 									</span>
 								</div>
 							</div>
+						</div>
+						<div style="padding:10px;">
+							<a class="btn btn-primary" style="font-size:13px !important;" data-bs-toggle="modal" data-bs-target="#ModelEditInfo">
+								<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
+									<path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+									<path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+									<path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+								</svg>
+								Ingresar horas de trabajo
+							</a>
 						</div>
 					</div>
 					<div class="contenedor-enalces-mantenimiento">
@@ -353,14 +349,102 @@
 								operatividad
 							</span>
 						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/solicitudes/servicios'" class="item-enlace">
+							<img src="/pmant/static/src/css/iconos/servicio-al-cliente.png" />
+							<span>
+								Solicitudes de
+								<br>
+								</br>
+								servicio
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones'" class="item-enlace">
+							<img src="/pmant/static/src/css/iconos/venta.png" />
+							<span>
+								Cotizaciones del
+								<br>
+								</br>
+								equipo
+							</span>
+						</a>
 						<br>
 						</br>
 					</div>
 				</div>
 			</div>
+			<!-- MODEL PARA EDITAR INFORMACION POR PARTE DEL CLIENTE -->
+			<div class="modal" id="ModelEditInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="max-width: 500px !important;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<div>
+								<h3 class="modal-title text-primary" id="exampleModalLabel">
+									Horas de trabajo
+								</h3>
+								<p style="font-size:12px;">
+									Esta informacion sera manejada por FDC CORP para poder realizar reportes, dashboard que optimize el analisis de su equipo.
+								</p>
+							</div>
+							<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+						</div>
+						<form id="form-medicion-equipo" class="form-control border-0 p-0">
+							<input type="hidden" name="equipo_id" id="equipo_id" t-att-value="equipo.id" />
+							<div class="modal-body">
+								<div class="w-100">
+									<label for="uso_promedio">
+										Hora de uso promedio diario
+									</label>
+									<input type="number" name="uso_promedio" id="uso_promedio" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="temperatura">
+										Temperatura del elemento
+									</label>
+									<input type="number" name="temperatura" id="temperatura" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="presion">
+										Presión actual
+									</label>
+									<input type="number" name="presion" id="presion" class="form-control" />
+								</div>
+								<div class="w-100">
+									<label for="tem_ambiente">
+										Temperatura del ambiente
+									</label>
+									<input type="number" name="tem_ambiente" id="tem_ambiente" class="form-control" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" id="enviar_medicion" class="btn btn-primary">
+									Enviar
+								</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Cerrar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="notificacion-exito" class="notificacion-exito" style="display: none;">
+				Medición guardada de manera exitosa.
+			</div>
+			<div id="notificacion-error" class="notificacion-error" style="display: none;">
+				Ocurrió un error al guardar la medición.
+			</div>
+			<!--
+			<div id="notificacion-exito_solicitud" class="alert alert-success" style="display:none;">
+			✅ Solicitud enviada correctamente.
+			</div>
+			
+			<div id="notificacion-error_solicitud" class="alert alert-danger" style="display:none;">
+			❌ Ocurrió un error al enviar la solicitud. Intenta nuevamente.
+			</div>
+			-->
 			<!-- Modal -->
 			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" style="max-width: max-content !important;height: auto !important;">
+				<div class="modal-dialog" style="max-width: 750px !important;height: auto !important;">
 					<div class="modal-content">
 						<form action="/solicitud/mantenimiento/servicio" method="POST" enctype="multipart/form-data">
 							<div class="modal-header">
@@ -368,7 +452,7 @@
 									<h3 class="modal-title text-primary" id="exampleModalLabel">
 										Formulario de Servicios
 									</h3>
-									<p style="font-size:12px;">
+									<p style="font-size:16px;">
 										Este formulario es netamente usado para solicitar servicios de emergencias y/o programar servicios del equipo
 									</p>
 								</div>
@@ -378,40 +462,88 @@
 								-->
 							</div>
 							<div class="modal-body">
-								<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-								<input type="hidden" name="id_equipo" t-att-value="equipo.id" />
-								<input type="hidden" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
-								<input type="text" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
-								<select name="tipo_servicio" class="form-control">
-									<option value="">
-										Seleccionar tipo de Servicio
-									</option>
-									<option value="">
+								<input type="hidden" class="form-control" name="csrf_token" t-att-value="request.csrf_token()" />
+								<input type="hidden" class="form-control" name="id_equipo" t-att-value="equipo.id" />
+								<input type="hidden" class="form-control" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
+								<div class="w-100">
+									<label for="ubicacion" style="font-size: 16px;margin-bottom: 0px;">
+										Ubicacion del equipo
+									</label>
+									<input type="text" class="form-control" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
+								</div>
+								<div class="w-100">
+									<label for="tipo_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Tipo de servicio
+									</label>
+									<select name="tipo_servicio" required="required" class="form-control">
+										<option value="">
+											Seleccionar tipo de Servicio
+										</option>
+										<!--
+										<option value="">
 										Select. Servicio
-									</option>
-									<option value="Preventivo">
-										Preventivo
-									</option>
-									<option value="Instalación">
-										Instalación
-									</option>
-									<option value="Mantenimiento">
-										Mantenimiento
-									</option>
-									<option value="Modificación">
-										Modificación
-									</option>
-								</select>
-								<input type="text" name="nombre_equipo" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
-								<input type="text" name="marca_equipo" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
-								<input type="text" name="modelo" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
-								<input type="text" name="numero_serie" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
-								<input type="date" name="fecha_servicio" placeholder="Fecha de Servicio" />
-								<textarea placeholder="Detalles del problema" name="razon" rows="4"></textarea>
-								<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+										</option>
+										-->
+										<option value="Preventivo">
+											Preventivo
+										</option>
+										<option value="Instalación">
+											Instalación
+										</option>
+										<option value="Mantenimiento">
+											Mantenimiento
+										</option>
+										<option value="Modificación">
+											Modificación
+										</option>
+									</select>
+								</div>
+								<div class="w-100">
+									<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Nombre del equipo
+									</label>
+									<input type="text" name="nombre_equipo" class="form-control" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Marca
+									</label>
+									<input type="text" name="marca_equipo" class="form-control" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">
+										Modelo
+									</label>
+									<input type="text" name="modelo" class="form-control" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">
+										Numero de serie
+									</label>
+									<input type="text" name="numero_serie" class="form-control" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
+								</div>
+								<div class="w-100">
+									<label for="fecha_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Fecha para el servicio
+									</label>
+									<input type="date" required="required" name="fecha_servicio" class="form-control" placeholder="Fecha de Servicio" />
+								</div>
+								<div class="w-100">
+									<label for="razon" style="font-size: 16px;margin-bottom: 0px;">
+										Detalles del problema
+									</label>
+									<textarea required="required" class="form-control" name="razon" rows="4">
+									</textarea>
+								</div>
+								<div class="w-100">
+									<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">
+										Imagen referente
+									</label>
+									<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary">
+								<button type="submit" id="submit_form_solicitud" class="btn btn-primary">
 									Enviar
 								</button>
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

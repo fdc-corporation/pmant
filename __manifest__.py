@@ -6,8 +6,8 @@
     "description": """
         Long description of module's purpose
     """,
-    "author": "My Company",
-    "website": "http://www.yourcompany.com",
+    "author": "Yostin Palacios Calle",
+    "website": "http://fdc-corporation.com",
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
@@ -15,21 +15,8 @@
     "version": "1.9",
     # any module necessary for this one to work correctly
     "depends": [
-        "base",
-        "sale",
-        "web",
-        "documents",
-        "oc_compras",
-        "product",
-        "crm",
-        "portal",
-        "mail",
-        "maintenance",
-        "hr",
-        "contacts",
-        "hr_maintenance",
-        "web_digital_sign",
-        "calendar",
+        "base","sale","web","documents","product","crm","portal","mail",
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign"
     ],
     # always loaded
     "data": [
@@ -45,9 +32,10 @@
         "views/herencia.xml",
         "views/configuracion.xml",
         "views/wizard.xml",
-        # 'views/reportecertificado.xml',
+        'views/reportes/report_planequipo.xml',
         "views/reporteticket.xml",
         "views/planequipo_reporte.xml",
+        "views/horas_trabajo.xml",
         "views/planequipo.xml",
         "views/equipos.xml",
         "views/rules_cliente.xml",
@@ -74,8 +62,14 @@
         "views/web/evaluciones_equipo.xml",
         "views/web/certificados_equipo.xml",
         "views/web/servicios_ejecucion.xml",
+        "views/web/cotizaciones_equipo.xml",
         "views/web/index_servicios_ejecuccion.xml",
         "views/pmant_view_inherit_kanban.xml",
+        "views/web/pagijna_gracias_web.xml",
+        "views/web/form_calificacion.xml",
+        "views/documents/documneto_firmado.xml",
+        "views/web/areas_sede.xml",
+        "views/web/solicitudes_servicio.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS
         "views/ventas/create_mantenimiento.xml",
         "views/ventas/sale_order_views.xml",
@@ -92,17 +86,25 @@
         "views/email/email_sucursal_ot.xml",
         "views/email/email_hoja_recepcion.xml",
         "views/contacto/equipo_contacto.xml",
+        "views/email/service_finalizado.xml",
+        "views/email/calificacion_service.xml",
+        "views/email/email_empresa_ot_whatsapp.xml",
         # VISTAS DE MODELO DE EVENTO
         "views/eventos/eventos-mant.xml",
         "views/adjunto/it_attchment_inherit.xml",
         # Vista en el modelo de DOCUMENTS
         "views/documents/documentos_inherit.xml",
         "views/code/compartir.xml",
+        "views/code/cron_programacion.xml",
         "wizard/wizard-share.xml",
+        "wizard/wizard_inconvenientes.xml",
+        "views/etapas_tarea.xml",
     ],
     "assets": {
         "web.assets_frontend": [
             "pmant/static/src/css/sedes_portal.css",
+           "pmant/static/src/js/data.js",
+           "pmant/static/src/js/equipos.js",
         ],
     },
     "installable": True,

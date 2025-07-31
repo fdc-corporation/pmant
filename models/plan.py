@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+
+
 class FrecuenciaPlan(models.Model):
     _name        ='tipoplan.mantenimiento'
     name         = fields.Char(size=25,required=True,string='Nombre')

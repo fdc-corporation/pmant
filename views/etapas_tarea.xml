@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_etapa_tarea_mantenimiento_tree" model="ir.ui.view">
+        <field name="name">etapa.tarea.mantenimiento.tree</field>
+        <field name="model">etapa.tarea.mantenimiento</field>
+        <field name="arch" type="xml">
+            <tree string="Etapas de Tarea de Mantenimiento" default_order="sequence">
+                <field name="name"/>
+                <field name="sequence"/>
+                <field name="dias_promedio"/>
+                <field name="color_error" widget="color_picker"/>
+                <field name="color_warning" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_etapa_tarea_mantenimiento_form" model="ir.ui.view">
+        <field name="name">etapa.tarea.mantenimiento.form</field>
+        <field name="model">etapa.tarea.mantenimiento</field>
+        <field name="arch" type="xml">
+            <form string="Etapa de Tarea de Mantenimiento">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="dias_promedio"/>
+                        <field name="color_error" widget="color_picker"/>
+                        <field name="color_warning" widget="color_picker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action para el menú -->
+    <record id="action_etapa_tarea_mantenimiento" model="ir.actions.act_window">
+        <field name="name">Etapas de Mantenimiento</field>
+        <field name="res_model">etapa.tarea.mantenimiento</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea nuevas etapas de mantenimiento para gestionar las tareas.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú (opcional, si no tienes aún uno) -->
+	<menuitem id="etapa_tarea" name="Etapas de Tarea" parent="maintenance.menu_maintenance_configuration" action="action_etapa_tarea_mantenimiento" />
+
+</odoo>

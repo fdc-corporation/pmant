@@ -197,7 +197,7 @@
 											</td>
 											<td rowspan="2">
 												<center>
-													<img t-attf-src="data:image/jpg;base64,{{ pe.equipo.qr_image }}" style="width:80px;height:80px;display:block;"/>
+                                                        <div t-field="pe.equipo.qr_image" t-options="{'widget': 'image'}" style="width: 80px; height: 80px; display: block; border: 1px solid #ccc;"/>
 													<span>
 																Historial del Equipo
 															</span>

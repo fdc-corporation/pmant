@@ -5,11 +5,22 @@
 		<field name="model">maintenance.equipment</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_kanban" />
 		<field name="arch" type="xml">
-			<xpath expr="//div[@class='o_kanban_record_body']" position="after">
-				<div class="">
-					<span class="text-danger">
-						<field name="avisado_prox" />
-					</span>
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="propietario" />
+				<field name="ubicacion" />
+				<field name="area" />
+			</xpath>
+			<xpath expr="//div[@t-if='record.serial_no.raw_value']" position="after">
+				<div class="mt-2" style="display: flex; flex-direction: column;">
+					<div t-if="record.propietario.raw_value">
+						<strong>Propietario:</strong> <field name="propietario" />
+					</div>
+					<div t-if="record.ubicacion.raw_value">
+						<strong>Ubicacion:</strong> <field name="ubicacion" />
+					</div>
+					<div t-if="record.area.raw_value">
+						<strong>Área:</strong> <field name="area" />
+					</div>
 				</div>
 			</xpath>
 		</field>
@@ -19,11 +30,19 @@
 		<field name="model">maintenance.equipment</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_form" />
 		<field name="arch" type="xml">
+			<xpath expr="//div[@name='button_box']" position="inside">
+				<!-- BOTON DE COTIZACIONES -->
+				<button class="oe_stat_button" type="object"  name="action_view_cotizaciones"
+				icon="fa-pencil-square-o">
+				<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo"/>
+				</button>
+			</xpath>
 			<!-- ADD -->
 			<xpath expr="//field[@name='employee_id']" position="after">
 				<field name="propietario" />
 				<field name="parent_id" invisible="1" />
-				<field name="ubicacion" string="Ubicacion" domain="[('parent_id', '=', parent_id)]" />
+				<field name="ubicacion" string="Ubicacion" domain="[('parent_id', '=', parent_id), ('is_area', '=', False)]" />
+				<field name="area" domain="[('id_sede', '=', ubicacion), ('is_area', '=', True)]" />
 			</xpath>
 			<xpath expr="//field[@name='model']" position="after">
 				<field name="marca" string="Marca" />
@@ -34,13 +53,13 @@
 			<xpath expr="//field[@name='fecha_compra']" position="after">
 				<field name="fabricante" string="Fabricante" />
 			</xpath>
-			<xpath expr="//field[@name='fabricante']" position="after">
+			<!-- <xpath expr="//field[@name='fabricante']" position="after">
 				<field name="otro1" string="Clasificacion 1" />
 			</xpath>
 			<xpath expr="//field[@name='otro1']" position="after">
 				<field name="otro2" string="Clasificacion 2" />
-			</xpath>
-			<xpath expr="//field[@name='otro2']" position="after">
+			</xpath> -->
+			<xpath expr="//field[@name='fabricante']" position="after">
 				<field name="time_uso" string="Horas de uso Promedio diario" widget="float_time" />
 			</xpath>
             <xpath expr="//field[@name='time_uso']" position="after">
@@ -49,13 +68,64 @@
 			<xpath expr="//sheet/notebook[1]" position="after">
 				<notebook>
 					<page string="Mantenimientos">
-						<field name="planequipo" string="Mantenimientos Realizados" />
+						<field name="planequipo" string="Mantenimientos Realizados" >
+							<tree>
+								<field name="equipo" />
+								<field name="plan" />
+								<field name="estado" />
+								<field name="fecha_ejec" />
+								<button name="create_report_equipo" string="Generar Reporte" type="object" class="oe_highlight" />
+							</tree>
+						</field>
 						<group>
 							<field name="fecha_prox" string="Proximo Mantenimiento" />
 							<field name="hoy" invisible="1" />
 							<field name="avisado" invisible="1" />
 							<field name="avisado_prox" invisible="1" />
 						</group>
+					</page>
+
+					<page string="Solicitudes de mantenimiento">
+						<field name="solicitudes_servicio">
+							<tree>
+								<field name="ubicacion_id" />
+								<field name="estado" />
+								<field name="tipo_servicio" />
+								<field name="fecha_servicio" />
+								<field name="detalle_problema" />
+								<button name="create_tarea" invisible="estado in 'atendido'" string="Atender" type="object" class="oe_highlight" />
+							</tree>
+							<form string="Solicitud de Mantenimiento">
+								<sheet>
+									<group>
+										<group>
+											<field name="equipo_id" required="1"/>
+											<field name="ubicacion_id" required="1"/>
+											<field name="tipo_servicio" required="1"/>
+											<field name="fecha_servicio" required="1"/>
+										</group>
+										<group>
+											<field name="estado" readonly="1"/>
+											<field name="nombre_imagen" invisible="1"/>
+											<field name="imagen_referencial" readonly="1" filename="nombre_imagen"/>
+										</group>
+									</group>
+									<field name="detalle_problema" widget="text" colspan="4"/>
+								</sheet>
+							</form>
+						</field>
+					</page>
+					<page string="Mediciones del equipo">
+						<field name="mediciones" >
+							<tree editable="bottom">
+								<field name="hora_uso" />
+								<field name="temperatura_elemento" />
+								<field name="presion_actual" />
+								<field name="temperatura_ambiente" />
+								<!-- <field name="equipo_id" /> -->
+								<field name="fecha_registro" />
+							</tree>
+						</field>
 					</page>
 					<page string="Certificados">
 						<field name="certificados" string="Certificados" >

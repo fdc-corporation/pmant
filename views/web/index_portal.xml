@@ -1,7 +1,6 @@
 <data>
     <template id="portal_my_home_inherit" inherit_id="portal.portal_my_home">
         <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="before">
-            <br/>
             <t t-call="portal.portal_docs_entry">
                 
                 <t t-set="icon" t-value="'/project/static/src/img/tasks.svg'"/>
@@ -10,8 +9,6 @@
                 <t t-set="url">/my/sedes</t>
                 <t t-set="config_card" t-value="True"/>
             </t>
-            <br/>
-            <br />
         </xpath>
     </template>
   </data>

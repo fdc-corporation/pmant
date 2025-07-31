@@ -3,10 +3,10 @@
 	<record id="email_template_custom_sucursal" model="mail.template">
 	<field name="name">Orden de trabajo programado sucursal</field>
     <field name="model_id" ref="maintenance.model_maintenance_request"/>
-    <field name="subject">Orden de trabajo programado: {{ object.ubicacion.name }}</field>
+    <field name="subject">Orden de trabajo programado: {{ object.empresa.name }} en la ubicación - {{ object.ubicacion.name }}</field>
     <field name="email_from">{{ (user.email_formatted or object.user_id.email_formatted) }}</field>
     <field name="email_to">{{ object.ubicacion.email }}</field>
-    <field name="lang">{{ object.partner_id.lang }}</field>
+    <field name="lang">{{ object.ubicacion.lang }}</field>
     <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" />
 
     <field name="body_html">
