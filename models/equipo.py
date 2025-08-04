@@ -111,15 +111,37 @@ class Equipo(models.Model):
     avisado = fields.Boolean(string="Avisado")
     anticipo = fields.Integer(compute="_generate_f_prox")
     image = fields.Binary("Image", attachment=True)
-    certificados = fields.Many2many(
-        "ir.attachment", "id_equipo", string="Certificados de operatividad"
+    certificados = fields.One2many(
+        "sign.request", "equipo_id", domain=[("state", "=", "signed")], string="Certificados de operatividad"
     )
     documentos = fields.Many2many("documents.document", "equipo", string="Documentos")
     cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
     mediciones = fields.One2many("medicion.equipo", "equipo_id", string="Mediciones")
 
     solicitudes_servicio = fields.One2many("servicio.solicitud", "equipo_id", string="Solicitudes de Mantenimiento")
+    cantidad_certificados = fields.Integer(
+        compute="_get_certificados", string="Cantidad de Certificados"
+    )
 
+    def action_view_certificados(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Certificados de Operatividad",
+            "res_model": "sign.request",
+            "view_mode": "kanban,form",
+            "target": "current",  # O usa 'new' si deseas que se abra como ventana modal
+            "domain": [("state", "=", "signed"), ("equipo_id", "=", self.id)],
+            "context": {
+                "default_equipo_id": self.id,
+            },
+        }
+
+    def _get_certificados(self):
+        documentos = self.env["sign.request"].search_count(
+            [("equipo_id", "=", self.id), ("state", "=", "signed")]
+        )
+        self.cantidad_certificados = documentos
 
     def action_view_cotizaciones(self):
         for record in self:
@@ -172,12 +194,6 @@ class Equipo(models.Model):
             record.url_qr = url
             record.fecha_prox = fecha_prox
 
-    def _get_certificados(self):
-        for record in self:
-            certificados = self.env["ir.attachment"].search(
-                [("id_equipo", "=", record.id)]
-            )
-            record.certificados = certificados.mapped("id")
 
     def generar_n_serie(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")

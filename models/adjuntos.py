@@ -23,16 +23,19 @@ class FirmasElectronica (models.Model):
     _inherit="sign.template"
     
     ot_id = fields.Many2one("maintenance.request", string="Orden de trabajo")
+    equipo_id = fields.Many2one("maintenance.equipment", string="Equipo")
     
 class DocumentoFirmado(models.Model):
     _inherit="sign.request"
 
     ot_id = fields.Many2one("maintenance.request", related="template_id.ot_id", string="Orden de trabajo")
+    equipo_id = fields.Many2one("maintenance.equipment", related="template_id.equipo_id", string="Equipo")
 
 class ModelFirma(models.TransientModel):
     _inherit="sign.send.request"
 
     ot_id = fields.Many2one("maintenance.request", related="template_id.ot_id", string="Orden de trabajo")
+    equipo_id = fields.Many2one("maintenance.equipment", related="template_id.equipo_id", string="Equipo")
 
 
 # class AdjuntoImagw(models.Model):

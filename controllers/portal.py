@@ -504,8 +504,10 @@ class PortalPmant(http.Controller):
         page = int(page)
         per_page = 10
 
+        name_domain = equipo.name + " / " + equipo.serial_no if equipo.serial_no else equipo.name
+
         # Construcción del dominio
-        domain = [("order_line.id_equipo", "in", [equipo_id])]
+        domain = [("order_line.name", "=", name_domain)]
         if search_query:
             domain += [("name", "ilike", search_query)]
 
@@ -720,7 +722,7 @@ class PortalPmant(http.Controller):
         website=True,
     )
     def descarga_certificado_equipo(self, id_adjunto):
-        attachment = request.env["ir.attachment"].sudo().browse(id_adjunto)
+        attachment = request.env["ir.attachment"].sudo().search([("name", "ilike", "Certificado"),("res_model", "=", "sign.request"),("res_id", "=", id_adjunto)], limit=1)
         file_content_decoded = base64.b64decode(attachment.datas)
 
         # Generar encabezado manualmente

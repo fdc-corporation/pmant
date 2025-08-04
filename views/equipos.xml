@@ -36,6 +36,9 @@
 				icon="fa-pencil-square-o">
 				<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo"/>
 				</button>
+				<button class="oe_stat_button" type="object" name="action_view_certificados" icon="fa-file-text-o">
+					<field string="Certificados firmados" name="cantidad_certificados" widget="statinfo"/>
+				</button>
 			</xpath>
 			<!-- ADD -->
 			<xpath expr="//field[@name='employee_id']" position="after">
@@ -129,12 +132,12 @@
 					</page>
 					<page string="Certificados">
 						<field name="certificados" string="Certificados" >
-							<tree>
+							<!-- <tree>
 								<field name="name" string="Nombre del archivo"/>
 								<field name="type" string="Tipo de archivo"/>
 								<field name="mimetype" string="Tipo de archivo"/>
 								<field name="write_date" string="Fecha Generada"/>
-							</tree>
+							</tree> -->
 							 
 						</field>
 					</page>

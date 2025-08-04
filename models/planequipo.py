@@ -75,31 +75,48 @@ class PlanEquipo(models.Model):
 
 
 
-    def _create_certificado_operatividad(self):
-        ir_actions_report_sudo = self.env['ir.actions.report'].sudo()
-        statement_report_action = self.env.ref('pmant.action_reporte_cert_operatividad')
-        for statement in self:
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=statement.ids)
-            certificado = self.env['ir.attachment'].create({
-                'name': "Certificado-operatividad-" + statement.equipo.name + ".pdf",
-                'type': 'binary',
-                'mimetype': 'application/pdf',
-                'raw': content,
-                'res_model': statement._name,
-                'res_id': statement.id,
-                'id_equipo': statement.equipo.id,
-            })
-
-            statement.equipo.certificados = [(4, certificado.id)]
-
-
 
 
    
     def create_certificado_operatividad(self):
-        self._create_certificado_operatividad()
-        return self.env.ref('pmant.action_reporte_cert_operatividad').report_action(self)
+        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+        statement_report_action = self.env.ref("pmant.action_reporte_cert_operatividad")
+        for statement in self:
+            statement_report = statement_report_action.sudo()
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report, res_ids=statement.ids
+            )
+
+            # Crear el adjunto con el PDF generado
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": "Certificado " + self.equipo.name,
+                    "type": "binary",
+                    "mimetype": "application/pdf",
+                    "raw": content,
+                    "res_model": "sign.template",  # Asociar al modelo sign.template
+                    "res_id": None,
+                }
+            )
+
+            vals_template = {
+                "name": "Certificado " + self.equipo.name,
+                "attachment_id": attachment.id,  # Asociar el adjunto creado
+                "equipo_id": self.equipo.id,
+            }
+
+            vals_template.pop("attachment_count", None)
+
+            sign_template = self.env["sign.template"].create(vals_template)
+
+            # Redirigir al formulario del sign.template
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Certificado " + self.equipo.name,
+            "res_model": "sign.template",
+            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "target": "current",
+        }
 
 
     def create_report_equipo (self) : 
