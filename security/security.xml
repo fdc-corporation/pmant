@@ -27,7 +27,9 @@
     <record id="group_recibir_notificacion" model="res.groups">
             <field name="name">Recibir Notificacion  Mantenimiento</field>
     </record>
-
+    <record id="group_recibir_notificacion_web" model="res.groups">
+            <field name="name">Recibir Notificacion  Web</field>
+    </record>
         <record id="group_pmant_manager" model="res.groups">
         <field name="name">Manager Mantenimiento</field>
         <field name="comment">The user will have access to the human resources configuration as well as statistic reports.</field>
