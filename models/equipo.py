@@ -211,43 +211,25 @@ class Equipo(models.Model):
 
     def generar_n_serie(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        print("--------------------------------------------------")
-        print(base_url)
-        equipos_filtro = ""
-        if base_url == "https://equiposindustriales.pe":
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "FDC-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number(equipo)
+        
+        prefix_map = {
+            "https://equiposindustriales.pe": "FDC-",
+            "https://compresores.com.pe": "CT-",
+        }
 
-        if base_url == "https://compresores.com.pe":
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "CT-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number_ct(equipo)
-        if (
-            base_url != "https://equiposindustriales.pe"
-            and base_url != "http://compresores.com.pe"
-        ):
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "NSR-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = self._generate_serial_number_general(equipo)
 
-    def _generate_serial_number(self, equipo):
-        return "FDC-" + str(equipo.id)
+        
+        prefix = prefix_map.get(base_url, "NSR-")
+        
+        equipos_filtro = self.env['maintenance.equipment'].search(
+            ["|", ("serial_no", "=", False), ("serial_no", "ilike", prefix + "%")]
+        )
+        
+        for equipo in equipos_filtro:
+            if not equipo.serial_no:
+                equipo.serial_no = f"{prefix}{equipo.id}"
 
-    def _generate_serial_number_ct(self, equipo):
-        return "CT-" + str(equipo.id)
-
-    def _generate_serial_number_general(self, equipo):
-        return "NSR-" + str(equipo.id)
+        return ''
 
 
 
