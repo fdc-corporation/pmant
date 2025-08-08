@@ -7,13 +7,17 @@ class EquipmentSelectionWizard(models.TransientModel):
 
     equipment_ids = fields.Many2many('maintenance.equipment', string='Equipos')
     order_id = fields.Many2one('sale.order', string='Orden de Venta', default=lambda self: self.env.context.get('default_order_id'))
-    ubicacion = fields.Many2one('res.partner', string='Dirección de Envío', compute='_compute_partner_shipping_id', store=True)
-
-    @api.depends('order_id')
-    def _compute_partner_shipping_id(self):
-        for equipo in self:
-            if equipo.order_id:
-                equipo.ubicacion = equipo.order_id.partner_shipping_id.id
+    ubicacion = fields.Many2one(
+        "res.partner",
+        string="Dirección de Envío",
+        default=lambda self: (
+            self.env["sale.order"]
+            .browse(self.env.context.get("default_order_id"))
+            .partner_shipping_id.id
+            if self.env.context.get("default_order_id")
+            else False
+        ),
+    )
 
     def action_add_equipment(self):
         sale_order = self.order_id

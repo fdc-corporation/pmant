@@ -519,6 +519,9 @@ class PortalPmant(http.Controller):
             limit=per_page,
             offset=(page - 1) * per_page,
         )
+        for sale in cotizaciones :
+            sale.access_token = None  
+            sale._portal_ensure_token()
 
         total_pages = ceil(total / per_page) if total > 0 else 1
 
