@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http, fields
 from odoo.http import request
 from datetime import date, datetime, timedelta
 import smtplib
@@ -550,6 +550,9 @@ class PortalPmant(http.Controller):
             limit=per_page,
             offset=(page - 1) * per_page,
         )
+        for sale in cotizaciones :
+            sale.access_token = None  
+            sale._portal_ensure_token()
 
         total_pages = ceil(total / per_page) if total > 0 else 1
 
@@ -561,7 +564,6 @@ class PortalPmant(http.Controller):
             'total_paginas': total_pages,
             'equipo': equipo,
         })
-
 
 
     @http.route(
