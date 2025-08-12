@@ -15,7 +15,7 @@
             </field>
     </record>
 -->
-    <record id="only_ots_can_vercliente_empresa" model="ir.rule">
+    <!-- <record id="only_ots_can_vercliente_empresa" model="ir.rule">
             <field name="name">Only OTS can modify ver cliente</field>
             <field name="model_id" ref="model_planequipo_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente_empresa'))]"/>
@@ -26,8 +26,8 @@
             <field name="domain_force">
                 ['&amp;',('ots','!=',False),('equipo.propietario','=',user.partner_id.id)]
             </field>
-    </record>
-    <record id="readsequipo-cliente_empresa" model="ir.rule">
+    </record> -->
+    <!-- <record id="readsequipo-cliente_empresa" model="ir.rule">
             <field name="name">Read all equipament</field>
             <field name="model_id" ref="model_maintenance_equipment"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente_empresa'))]"/>
@@ -38,9 +38,9 @@
             <field name="domain_force">
                 [('propietario.id', '=', user.partner_id.id)]
             </field>
-    </record>
+    </record> -->
 
-    <record id="cliente_emp_only_tareaid" model="ir.rule">
+    <!-- <record id="cliente_emp_only_tareaid" model="ir.rule">
             <field name="name">Only OTS TAREA  ver</field>
             <field name="model_id" ref="model_tarea_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente_empresa'))]"/>
@@ -51,9 +51,9 @@
             <field name="domain_force">
             [('ots','!=',False),('ots.user_id','!=',False),('cliente','=',user.partner_id.id),('ots.stage_id.id','in',(1,2))]
             </field>
-    </record>
+    </record> -->
 
-    <record id="readclimanteni3" model="ir.rule">
+    <!-- <record id="readclimanteni3" model="ir.rule">
             <field name="name">Read all maintenance_request</field>
             <field name="model_id" ref="model_maintenance_request"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente_empresa'))]"/>
@@ -64,7 +64,7 @@
             <field name="domain_force">
              [('user_id','!=',False),('tarea.cliente','=',user.partner_id.id),('stage_id.id','in',(1,2))]   
             </field>
-    </record>
+    </record> -->
 
 
 </odoo>

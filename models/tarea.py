@@ -102,7 +102,7 @@ class Tarea(models.Model):
     )
 
     def _total_cotizaciones(self):
-        self.cotizacion_cantidad = len(self.cotizacion_id)
+        self.cotizacion_cantidad = len(self.sale_order)
 
     def action_view_cotizaciones(self):
         return {

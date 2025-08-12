@@ -563,3 +563,13 @@ class OTS(models.Model):
                 "res_model": "inconveniente.servicio",
                 "context": {"create": False},
             }
+
+    def action_view_ots(self):
+        return {
+                "name": "Solicitud de Mantenimiento",
+                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
+                "res_id" : self.id,
+                "view_mode": "form",  # puedes permitir también la vista formulario
+                "res_model": "maintenance.request",
+                "context": {"create": False},
+            }

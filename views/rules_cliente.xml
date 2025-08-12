@@ -15,7 +15,7 @@
             </field>
     </record> -->
 
-    <record id="only_ots_can_vercliente" model="ir.rule">
+    <!-- <record id="only_ots_can_vercliente" model="ir.rule">
             <field name="name">Only OTS can modify ver cliente</field>
             <field name="model_id" ref="model_planequipo_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente'))]"/>
@@ -26,8 +26,8 @@
             <field name="domain_force">
                 ['&amp;',('ots','!=',False),('equipo.ubicacion.id','=',user.partner_id.id)]
             </field>
-    </record>
-    <record id="readsequipo-cliente" model="ir.rule">
+    </record> -->
+    <!-- <record id="readsequipo-cliente" model="ir.rule">
             <field name="name">Read all equipament</field>
             <field name="model_id" ref="model_maintenance_equipment"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente'))]"/>
@@ -38,10 +38,10 @@
             <field name="domain_force">
                 [('ubicacion.id', '=', user.partner_id.id)]
             </field>
-    </record>
+    </record> -->
 
 
-    <record id="cliente_only_tareaid" model="ir.rule">
+    <!-- <record id="cliente_only_tareaid" model="ir.rule">
             <field name="name">Only OTS TAREA  ver</field>
             <field name="model_id" ref="model_tarea_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente'))]"/>
@@ -52,8 +52,8 @@
             <field name="domain_force">
             ['&amp;',('ots','!=',False),('ots.user_id','!=',False),('ots.ubicacion','=',user.partner_id.id),('ots.stage_id.id','in',(1,2))]
             </field>
-    </record>
-    <record id="cliente_tareaid" model="ir.rule">
+    </record> -->
+    <!-- <record id="cliente_tareaid" model="ir.rule">
             <field name="name">Only OTS TAREA  ver</field>
             <field name="model_id" ref="model_tarea_mantenimiento"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente'))]"/>
@@ -64,10 +64,10 @@
             <field name="domain_force">
             ['&amp;',('ots','=',False),('ots.ubicacion','=',user.partner_id.id)]
             </field>
-    </record>
+    </record> -->
 <!--REGLAS PARA OTS -->  
 
-    <record id="readclimanteni2" model="ir.rule">
+    <!-- <record id="readclimanteni2" model="ir.rule">
             <field name="name">Read all maintenance_request</field>
             <field name="model_id" ref="model_maintenance_request"/>
             <field name="groups" eval="[(4, ref('pmant.group_pmant_cliente'))]"/>
@@ -75,9 +75,6 @@
             <field name="perm_write" eval="0"/>
             <field name="perm_create" eval="0"/>
             <field name="perm_unlink" eval="0"/>
-            <!--<field name="domain_force">
-                [1,'=',1]
-            </field> -->
-    </record>
+    </record> -->
  
 </odoo>
