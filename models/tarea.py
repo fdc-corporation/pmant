@@ -93,6 +93,28 @@ class Tarea(models.Model):
     )
     sale_order = fields.Many2one("sale.order", string="Orden de venta")
 
+    cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
+    compania = fields.Many2one(
+        comodel_name="res.company",
+        string="Compañía",
+        default=lambda self: self.env.company,
+        required=True,
+    )
+
+    def _total_cotizaciones(self):
+        self.cotizacion_cantidad = len(self.sale_order)
+
+    def action_view_cotizaciones(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Ventas",
+            "view_mode": "form",
+            "res_model": "sale.order",
+            "res_id": self.sale_order.id,
+            "context": "{'create' : False}",
+        }
+
+
     @api.model
     def _group_expand_stages(self, stages, domain, order):
         return self.env['etapa.tarea.mantenimiento'].search([], order=order)

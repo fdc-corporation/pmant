@@ -566,7 +566,6 @@ class OTS(models.Model):
 
 
     def action_view_ots(self):
-        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
         return {
                 "name": "Solicitud de Mantenimiento",
                 "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
