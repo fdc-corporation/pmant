@@ -74,7 +74,7 @@
         "views/ventas/create_mantenimiento.xml",
         "views/ventas/sale_order_views.xml",
         # ARCHIVOS DE PRODUCTOS - TEMPLATE - EQUIPOS
-        "views/productos/product_template_views.xml",
+        # "views/productos/product_template_views.xml",
         # VISTA - CAMPOS PARA CRM
         "views/crm/orden_trabajo.xml",
         # REPORTES DE MODELOS
