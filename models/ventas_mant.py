@@ -35,8 +35,8 @@ class SaleOrder(models.Model):
                 continue
 
             try:
-                group = env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
-                user = env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
+                group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
+                user = self.env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
 
                 mantenimiento_vals = {
                     "name": f"{order.name} - Servicios de mantenimiento",
