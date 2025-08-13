@@ -21,7 +21,9 @@ class CrmLead(models.Model):
                     self.env['sale.order.line'].create({
                         'order_id' : cotizacion.id,
                         'name' : equipo.name + ' / ' + equipo.serial_no,
-                        'display_type' : 'line_section'
+                        'display_type' : 'line_section',
+                        'id_equipo' : equipo.id
+
                     })
                     
             else :
