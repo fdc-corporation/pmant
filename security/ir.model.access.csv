@@ -14,7 +14,7 @@ pmant_tecnico_acc13,TECNICO_PLANTILLA_TICKET,model_plantillaticket_mantenimiento
 pmant_tecnico_acc14,TECNICO_IMAGENES,model_adjuntoimage_mantenimiento,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc15,TECNICO_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc16,TECNICO_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
-pmant_tecnico_acc16,TECNICO_MAINANCE_REQUEST,model_maintenance_request,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_acc17,TECNICO_MAINANCE_REQUEST,model_maintenance_request,pmant.group_pmant_tecnico,1,1,0,0
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
@@ -39,8 +39,8 @@ pmant_admin_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimie
 ,,,,,,,
 ,,,,,,,
 pmant_admin_acc1,VENDEDOR_TAREA,model_tarea_mantenimiento,pmant.group_pmant_customer,1,1,1,1
-pmant_admin_acc1,VENEDOR_MANTENIMIENTO,model_maintenance_request,pmant.group_pmant_customer,1,1,0,0
-
+pmant_admin_acc2,VENEDOR_MANTENIMIENTO,model_maintenance_request,pmant.group_pmant_customer,1,1,0,0
+,,,,,,,
 ,,,,,,,
 ,,,,,,,
 access_wizard_equipment_selection,wizard.equipment.selection,model_wizard_equipment_selection,,1,1,1,1
