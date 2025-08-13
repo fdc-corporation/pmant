@@ -11,7 +11,7 @@ from . import adjuntos
 from . import parametros
 from . import ventas_mant
 from . import wizard
-# from . import product
+from . import product
 from . import crm
 from . import evento
 from . import hoja_horas
