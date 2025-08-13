@@ -12,14 +12,14 @@ class PlanEquipoProcesos(models.Model):
     tarea               = fields.Many2one('tarea.mantenimiento',string="Tarea")
     ots                 = fields.Many2one('maintenance.request',string="ots")
     plan                = fields.Many2one('plan.mantenimiento',related="planequipo.plan")
-    adjunto             = fields.Binary(string="Adjunto 1")
-    adjunto2            = fields.Binary(compute="_geadj", string="Adjunto 2")
+    adjunto             = fields.Binary(string="Adjunto 1", attachment=True)
+    adjunto2            = fields.Binary(compute="_geadj", string="Adjunto 2", attachment=True)
     is_admin            = fields.Boolean(compute="_geadj")
     descripcion2        = fields.Text(compute="_geadj",default="falta poner Comentario...",string="Comentarios")
     name_file           = fields.Char(default="Adjunto")
     adjuntos            = fields.One2many('adjuntoimage.mantenimiento', 'planequipoproceso', string="Archivos Adjuntos")
-    adjunto1            = fields.Binary(string="Adjunto 1")
-    adjunto23           = fields.Binary(string="Adjunto 2")
+    adjunto1            = fields.Binary(string="Adjunto 1", attachment=True)
+    adjunto23           = fields.Binary(string="Adjunto 2", attachment=True)
     
     def _geadj(self):
         for rec in self:
@@ -47,5 +47,5 @@ class Proceso(models.Model):
 class EstadoProceso(models.Model):
    _name   = 'estadoproceso.mantenimiento'
    name    = fields.Char(size=5,required=True,string='Nombre')
-   icono = fields.Binary(string="Icono", store=True)
+   icono = fields.Binary(string="Icono", store=True, attachment=True)
 #'''

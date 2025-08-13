@@ -12,5 +12,5 @@ class Contacto(models.Model):
 class Empleado(models.Model):
     _name    = 'hr.employee'
     _inherit = 'hr.employee'
-    firma    = fields.Binary()
+    firma    = fields.Binary(attachment=True)
     dni      = fields.Char(string="N° Documento para la firma")

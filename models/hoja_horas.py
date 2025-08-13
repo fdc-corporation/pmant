@@ -13,7 +13,7 @@ class Inconvenientes(models.Model):
 
     programacion_id = fields.Many2one("programacion.mantenimiento", string="Hoja de horas")
     ot_id = fields.Many2one("maintenance.request", string="OT")
-    file_ref = fields.Binary(string="Imagen de ref.")
+    file_ref = fields.Binary(string="Imagen de ref.", attachment=True)
     comentario = fields.Text(string="Comentario del inconveniente")
 
 class HojaHoras(models.Model):

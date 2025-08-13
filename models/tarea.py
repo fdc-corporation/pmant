@@ -12,7 +12,7 @@ class AdjuntoEvaluacion (models.Model):
     _description = 'Adjuntos de evaluación'
 
     tarea  = fields.Many2one('tarea.mantenimiento', string="Tarea")
-    adjuntoimage     = fields.Binary()
+    adjuntoimage     = fields.Binary(attachment=True)
     comentario       = fields.Text()
 
 class EstapaTarea(models.Model):
@@ -43,7 +43,7 @@ class Tarea(models.Model):
     clasi1 = fields.Char(size=50, string="Clasificacion 1")
     clasi2 = fields.Char(size=50, string="Clasificacion 2")
     prioridad = fields.Selection(related="ots.priority")
-    adjunto = fields.Binary()
+    adjunto = fields.Binary(attachment=True)
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
     state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True, tracking=True, ondelete='set null')
@@ -81,7 +81,7 @@ class Tarea(models.Model):
         string='Is Técnico',
         store=False
     )
-    firma_evaluacion = fields.Binary()
+    firma_evaluacion = fields.Binary(attachment=True)
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
     action_servicio = fields.Boolean(string="Is init servicio")

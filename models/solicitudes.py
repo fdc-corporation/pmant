@@ -35,7 +35,7 @@ class ServicioSolicitud(models.Model):
     )
 
     imagen_referencial = fields.Binary(
-        string='Imagen Referencial'
+        string='Imagen Referencial', attachment=True
     )
 
     nombre_imagen = fields.Char(
