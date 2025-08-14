@@ -18,9 +18,9 @@
             <xpath expr="//header" position="inside">
                 <button string="Nueva Cotizacion" invisible="not equipo_tarea" name="btn_cotizacion" type="object" class="oe_highlight"  ></button>
             </xpath>
-            <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+            <!-- <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
                 <attribute name="invisible">type == "lead" or ( probability == 0 and not active ) or equipo_tarea</attribute>
-            </xpath>
+            </xpath> -->
         </field>
     </record>
 </odoo>
