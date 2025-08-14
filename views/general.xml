@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 	<record model="ir.actions.act_window" id="planes_list_action">
-		<field name="name">
-			Planes de Mantenimiento
-		</field>
-		<field name="res_model">
-			plan.mantenimiento
-		</field>
-		<field name="view_mode">
-			tree,form
-		</field>
+		<field name="name">Planes de Mantenimiento</field>
+		<field name="res_model">plan.mantenimiento</field>
+		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primer Plan de Tarea
@@ -17,12 +11,8 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Planv_form_view">
-		<field name="name">
-			plan.form
-		</field>
-		<field name="model">
-			plan.mantenimiento
-		</field>
+		<field name="name">plan.form</field>
+		<field name="model">plan.mantenimiento</field>
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<sheet>
@@ -48,16 +38,10 @@
 	</record>
 	<menuitem id="plantarea_menuv" name="Planes de mantenimiento" parent="maintenance.menu_m_request" action="planes_list_action" />
 	<record model="ir.actions.act_window" id="tipoplan_list_action">
-		<field name="name">
-			Tipo Plan Fecuencia
-		</field>
-		<field name="res_model">
-			tipoplan.mantenimiento
-		</field>
+		<field name="name">Tipo Plan Fecuencia</field>
+		<field name="res_model">tipoplan.mantenimiento</field>
 		<!-- <field name="view_type">form</field> -->
-		<field name="view_mode">
-			tree,form
-		</field>
+		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primer Tipo Plan Frecuencia
@@ -66,16 +50,10 @@
 	</record>
 	<menuitem id="tipoplan_menu" name="Tipo Plan Frecuencia" parent="maintenance.menu_maintenance_configuration" action="tipoplan_list_action" />
 	<record model="ir.actions.act_window" id="proceso_list_action">
-		<field name="name">
-			Proceso de Tarea
-		</field>
-		<field name="res_model">
-			proceso.mantenimiento
-		</field>
+		<field name="name">Proceso de Tarea</field>
+		<field name="res_model">proceso.mantenimiento</field>
 		<!-- <field name="view_type">form</field> -->
-		<field name="view_mode">
-			tree,form
-		</field>
+		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primer Proceso
@@ -83,12 +61,8 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Procesov_form_view">
-		<field name="name">
-			Proceso.form
-		</field>
-		<field name="model">
-			proceso.mantenimiento
-		</field>
+		<field name="name">Proceso.form</field>
+		<field name="model">proceso.mantenimiento</field>
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<sheet>
@@ -101,16 +75,10 @@
 		</field>
 	</record>
 	<record model="ir.actions.act_window" id="grupoproceso_list_action">
-		<field name="name">
-			Grupo Procesos
-		</field>
-		<field name="res_model">
-			grupoproceso.mantenimiento
-		</field>
+		<field name="name">Grupo Procesos</field>
+		<field name="res_model">grupoproceso.mantenimiento</field>
 		<!-- <field name="view_type">form</field> -->
-		<field name="view_mode">
-			tree,form
-		</field>
+		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primer Proceso
@@ -119,16 +87,10 @@
 	</record>
 	<menuitem id="grupoprocesos_menuv" name="Grupo Procesos" parent="maintenance.menu_maintenance_configuration" action="grupoproceso_list_action" />
 	<record model="ir.actions.act_window" id="tipotarea_list_action">
-		<field name="name">
-			Tipo Tareas
-		</field>
-		<field name="res_model">
-			tipotarea.mantenimiento
-		</field>
+		<field name="name">Tipo Tareas</field>
+		<field name="res_model">tipotarea.mantenimiento</field>
 		<!-- <field name="view_type">fom</field> -->
-		<field name="view_mode">
-			tree,form
-		</field>
+		<field name="view_mode">tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primer Tipo Tarea
@@ -136,18 +98,10 @@
 		</field>
 	</record>
 	<record model="ir.actions.act_window" id="tarea_list_action">
-		<field name="name">
-			Tareas
-		</field>
-		<field name="res_model">
-			tarea.mantenimiento
-		</field>
-		<field name="context">
-			{'search_default_filter_ot_null': 1}
-		</field>
-		<field name="view_mode">
-			kanban,tree,form
-		</field>
+		<field name="name">Tareas</field>
+		<field name="res_model">tarea.mantenimiento</field>
+		<field name="context">{'search_default_filter_ot_null': 1}</field>
+		<field name="view_mode">kanban,tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primera Tarea
@@ -155,16 +109,10 @@
 		</field>
 	</record>
 	<record model="ir.actions.act_window" id="reporte_tecnico_list_action">
-		<field name="name">
-			Reporte Tecnico
-		</field>
-		<field name="res_model">
-			tarea.mantenimiento
-		</field>
+		<field name="name">Reporte Tecnico</field>
+		<field name="res_model">tarea.mantenimiento</field>
 		<!-- <field name="view_type">form</field> -->
-		<field name="view_mode">
-			kanban,tree,form
-		</field>
+		<field name="view_mode">kanban,tree,form</field>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
 				Crea tu primera Tarea
@@ -172,12 +120,8 @@
 		</field>
 	</record>
 	<record id="view_tarea_search" model="ir.ui.view">
-		<field name="name">
-			model.search
-		</field>
-		<field name="model">
-			tarea.mantenimiento
-		</field>
+		<field name="name">model.search</field>
+		<field name="model">tarea.mantenimiento</field>
 		<field name="arch" type="xml">
 			<search>
 				<field name="name" />
@@ -187,12 +131,8 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Tareav_tree_view">
-		<field name="name">
-			Tareav.tree
-		</field>
-		<field name="model">
-			tarea.mantenimiento
-		</field>
+		<field name="name">Tareav.tree</field>
+		<field name="model">tarea.mantenimiento</field>
 		<field name="arch" type="xml">
 			<tree string="Tarea Tree">
 				<field name="name" />
@@ -201,12 +141,8 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Tareav_kanban_view">
-		<field name="name">
-			Tareav.kanban
-		</field>
-		<field name="model">
-			tarea.mantenimiento
-		</field>
+		<field name="name">Tareav.kanban</field>
+		<field name="model">tarea.mantenimiento</field>
 		<field name="arch" type="xml">
 			<kanban default_group_by="stage_id" class="o_kanban_view">
 				<field name="name" />
@@ -293,12 +229,8 @@
 		</field>
 	</record>
 	<record model="ir.ui.view" id="Tareav_form_view">
-		<field name="name">
-			Tareav.form
-		</field>
-		<field name="model">
-			tarea.mantenimiento
-		</field>
+		<field name="name">Tareav.form</field>
+		<field name="model">tarea.mantenimiento</field>
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<field name="action_servicio" invisible="1" />
