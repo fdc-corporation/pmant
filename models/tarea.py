@@ -182,20 +182,6 @@ class Tarea(models.Model):
             vals['create_user'] = self.env.user.id
         if 'compania' not in vals:
             vals['compania'] = self.env.company.id
-            # Notificar a los usuarios del grupo específico
-        group_xml_id = 'pmant.group_pmant_admin'  # Ajusta si tu módulo se llama distinto
-        group = self.env.ref(group_xml_id)
-
-        if group:
-            for user in group.users:
-                record.message_post(
-                    body=(
-                        f"{user.name}, se te ha asignado una nueva tarea "
-                        f"{record.name}. Debes programarla y crear la OT correspondiente."
-                    ),
-                    partner_ids=[user.partner_id.id],
-                )
-
         record._set_fecha_movimiento()
         return record
 
