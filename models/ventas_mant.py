@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
             try:
                 group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
                 user = self.env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
-
+                format_html_nota = self.template_format_nota(order)
                 mantenimiento_vals = {
                     "name": f"{order.name} - Servicios de mantenimiento",
                     "cliente": order.partner_id.id,
@@ -46,6 +46,7 @@ class SaleOrder(models.Model):
                     "creado_por": user.id,
                     "oc_id": order.oc_id.id if order.oc_id else False,
                     "sale_order": order.id,
+                    "notas": format_html_nota,
                 }
                 mantenimiento = self.env["tarea.mantenimiento"].create(mantenimiento_vals)
 
@@ -70,6 +71,36 @@ class SaleOrder(models.Model):
 
             except Exception as e:
                 raise UserError(f"Error al crear la solicitud de mantenimiento: {str(e)}")
+
+    def template_format_nota(self, order):
+        formato = ""
+        productos = []
+
+        for line in order.order_line:
+            if line.display_type == 'line_section':
+                # Si hay productos acumulados antes, los agregamos y reiniciamos
+                if productos:
+                    formato += "<ul>" + "".join(productos) + "</ul>"
+                    productos = []
+                formato += f"<h3 style='color:#2c3e50; margin-top:10px;'>{line.name}</h3>"
+
+            elif line.display_type == 'line_note':
+                if productos:
+                    formato += "<ul>" + "".join(productos) + "</ul>"
+                    productos = []
+                formato += f"<p style='color:#7f8c8d; font-style:italic; margin-left:10px;'>{line.name}</p>"
+
+            else:
+                productos.append(
+                    f"<li><b>Producto:</b> {line.name} "
+                    f"/ <b>Cantidad:</b> {line.product_uom_qty}</li>"
+                )
+
+        # Agregar los últimos productos si quedaron pendientes
+        if productos:
+            formato += "<ul>" + "".join(productos) + "</ul>"
+
+        return formato
 
     def action_view_services(self):
         self.ensure_one()

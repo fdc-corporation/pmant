@@ -100,6 +100,7 @@ class Tarea(models.Model):
         default=lambda self: self.env.company,
         required=True,
     )
+    notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
 
     def _total_cotizaciones(self):
         self.cotizacion_cantidad = len(self.sale_order)
