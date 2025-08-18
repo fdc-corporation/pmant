@@ -15,6 +15,14 @@ pmant_tecnico_acc14,TECNICO_IMAGENES,model_adjuntoimage_mantenimiento,pmant.grou
 pmant_tecnico_acc15,TECNICO_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc16,TECNICO_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
 pmant_tecnico_acc17,TECNICO_MAINANCE_REQUEST,model_maintenance_request,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_employee_rw,pmant_tecnico_hr_employee_rw,hr.model_hr_employee,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_department_rw,pmant_tecnico_hr_department_rw,hr.model_hr_department,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_employee_public_rw,pmant_tecnico_hr_employee_public_rw,hr.model_hr_employee_public,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_attendance_rw,pmant_tecnico_hr_attendance_rw,hr_attendance.model_hr_attendance,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_contract_rw,pmant_tecnico_hr_contract_rw,hr_contract.model_hr_contract,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_job_rw,pmant_tecnico_hr_job_rw,hr.model_hr_job,pmant.group_pmant_tecnico,1,1,0,0
+pmant_tecnico_hr_employee_category_rw,pmant_tecnico_hr_employee_category_rw,hr.model_hr_employee_category,pmant.group_pmant_tecnico,1,1,0,0
+,,,,,,,
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,

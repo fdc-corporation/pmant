@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	 <record id="maintenance.hr_equipment_request_action" model="ir.actions.act_window">
-            <field name="context" eval="{'search_default_filter_my_orders': 1}"/>
-    </record>
+
 
 	  <!-- Definición de la Secuencia -->
 	  <record id="seq_ot_mantenimiento" model="ir.sequence">
@@ -13,8 +11,12 @@
 		<field name="number_next">1</field>
 		<field name="number_increment">1</field>
 	</record>
-	
-	<record id="ots_add" model="ir.ui.view">
+
+
+
+
+
+	<record id="ots_add" model="ir.ui.view">	
 		<field name="name">ots.view</field>
 		<field name="model">maintenance.request</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_form" />
