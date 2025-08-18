@@ -41,8 +41,8 @@
 						<field name="fecha_hoy" invisible="1"/>
 					</group>
 					<notebook>
-						<page name="procesos" string="Procesos">
-							<field name="procesos" invisible="is_admin">
+						<page name="procesos" invisible="is_admin" string="Procesos">
+							<field name="procesos">
 								<tree responsive="1">
 									<field name="estado"/>
 									<field name="proceso" />
