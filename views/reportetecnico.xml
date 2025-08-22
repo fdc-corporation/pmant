@@ -497,24 +497,26 @@
 											</tr>
 											<t t-set="item" t-value="0" />
 											<t t-foreach="pe.parametro_ids" t-as="param">
-												<t t-set="item" t-value="item + 1" />
-												<tr class="no-wrap">
-													<td style="text-align: center;">
-														<span t-out="item" />
-													</td>
-													<td style="text-align: center;">
-														<span t-field="param.valor_trabajo" />
-													</td>
-													<td style="text-align: center;">
-														<span t-field="param.valor_trabajo" />
-													</td>
-													<td style="text-align: center;">
-														<span t-field="param.valor_parada" />
-													</td>
-													<td style="text-align: center;">
-														<span t-field="param.unidad_medida" />
-													</td>
-												</tr>
+												<t t-if="param.valor_trabajo and param.valor_parada">
+													<t t-set="item" t-value="item + 1" />
+													<tr class="no-wrap">
+														<td style="text-align: center;">
+															<span t-out="item" />
+														</td>
+														<td style="text-align: center;">
+															<span t-field="param.paremetro_c" />
+														</td>
+														<td style="text-align: center;">
+															<span t-field="param.valor_trabajo" />
+														</td>
+														<td style="text-align: center;">
+															<span t-field="param.valor_parada" />
+														</td>
+														<td style="text-align: center;">
+															<span t-field="param.medida_c" />
+														</td>
+													</tr>
+												</t>
 											</t>
 										</table>
 									</div>

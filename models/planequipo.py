@@ -37,6 +37,23 @@ class PlanEquipo(models.Model):
     nota_observaciones = fields.Html(string="Observaciones general")
 
 
+    def data_parametros(self):
+        return [
+            {"paremetro_id": "Horas Marcha", "unidad_medida": "Horas"},
+            {"paremetro_id": "Horas Carga", "unidad_medida": "Horas"},
+            {"paremetro_id": "Relé de carga", "unidad_medida": ""},
+            {"paremetro_id": "Temperatura de salida de elemento 1", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura de salida de elemento 2", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura ambiente", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura de refrigeración", "unidad_medida": "°C"},
+            {"paremetro_id": "Presión de salida", "unidad_medida": "Bar"},
+            {"paremetro_id": "Presión de aceite", "unidad_medida": "Bar"},
+            {"paremetro_id": "Dp tanque separador", "unidad_medida": "Bar"},
+            {"paremetro_id": "Dp entrada de aire", "unidad_medida": "Bar"},
+            {"paremetro_id": "Nivel de aceite", "unidad_medida": ""},
+            {"paremetro_id": "Estado del radiador", "unidad_medida": ""},
+        ]
+
 
 
     def _default_nota_mantenimiento(self):
@@ -49,14 +66,28 @@ class PlanEquipo(models.Model):
             <li><strong>(12 meses)</strong>: Cambio de filtro de aceite, cambio de filtro de aire, cambio de filtro separador de aceite, cambio de aceite, mantenimiento preventivo de v&aacute;lvulas, engrase de rodamientos de motor principal, cambio de kit de v&aacute;lvulas (m&iacute;nima presi&oacute;n, termost&aacute;tica), mantenimiento de intercambiadores de calor (radiadores).</li>
             <li><strong>Todos los mantenimientos</strong> incluyen por parte de nuestra &aacute;rea t&eacute;cnica: limpieza general del equipo interna y externa, sopleteo de radiadores, verificaci&oacute;n de funcionamiento de v&aacute;lvulas, verificaci&oacute;n de sistema el&eacute;ctrico (motor principal, motor ventilador, tablero el&eacute;ctrico), verificaci&oacute;n de par&aacute;metros, cambio de repuestos y piezas, y puesta en marcha del equipo.</li>
         </ul>
-        """    
+        """
+
     @api.model
     def create(self, vals):
-        # Usa valores predeterminados del contexto si no están definidos explícitamente
-        vals['cliente'] = vals.get('cliente', self.env.context.get('default_cliente'))
-        vals['ubicacion'] = vals.get('ubicacion', self.env.context.get('default_ubicacion'))
-        vals['tarea'] = vals.get('tarea', self.env.context.get('default_tarea'))
-        return super(PlanEquipo, self).create(vals)
+        vals.setdefault('cliente', self.env.context.get('default_cliente'))
+        vals.setdefault('ubicacion', self.env.context.get('default_ubicacion'))
+        vals.setdefault('tarea', self.env.context.get('default_tarea'))
+
+        parametro_commands = []
+        if not vals.get('parametro_ids'):
+            for data in self.data_parametros():
+                parametro_commands.append((
+                    0, 0,
+                    {
+                        'paremetro_c': data['paremetro_id'],   # (mantengo tu nombre de campo)
+                        'medida_c': data['unidad_medida'],
+                    }
+                ))
+            vals['parametro_ids'] = parametro_commands
+
+        record = super(PlanEquipo, self).create(vals)
+        return record
 
     @api.depends('fecha_ejec')
     def _generate_tecnico(self):

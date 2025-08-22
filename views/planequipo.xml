@@ -85,18 +85,18 @@
 						<page string="Parámetros de operación del compresor" invisible="is_admin" >
 							<field name="parametro_ids" nolabel="1" >
 								<tree editable="bottom">
-									<field name="paremetro_id"/>
+									<field name="paremetro_c"/>
 									<field name="valor_trabajo"/>
 									<field name="valor_parada"/>
-									<field name="unidad_medida"/>
+									<field name="medida_c"/>
 								</tree>
 							</field>
 						</page>
 						<page string="Conclusiones" invisible="is_admin">
 							<group>
-								<field name="nota_observaciones" widget="html" invisible="is_admin" />
-								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />
-								<field name="nota_recomendaciones" widget="html" invisible="is_admin" />
+								<field name="nota_observaciones" placeholder="Aqui puede usted indicar sobre las observaciones del  del equipo" widget="html" invisible="is_admin" />
+								<field name="nota_mantenimiento" placeholder="En este campo usted puede descripbir las conclusiones del servicio al equipo" widget="html" invisible="is_admin" />
+								<field name="nota_recomendaciones" placeholder="Aqui puede colocar las notas de recomendaciones al cliente para el equipo" widget="html" invisible="is_admin" />
 							</group>
 						</page>
 					</notebook>

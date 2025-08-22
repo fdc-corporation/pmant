@@ -64,6 +64,12 @@ class AmperajeLinea(models.Model):
     descarga_fase = fields.Char("Descarga Fase")
     planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
 
+
+class ModeluParametro(models.Model):
+    _name = "parametro.modulo"
+    _description = "Parametros de modulo"
+
+    name = fields.Char(string="Nombre")
 class UnidadMedidaModulo(models.Model):
     _name = 'unidad.medida.modulo'
     _description = 'Unidad de Medida del Parámetro'
@@ -71,18 +77,17 @@ class UnidadMedidaModulo(models.Model):
     name = fields.Char(string="Unidad", required=True)
 
 
-class ParametroModulo(models.Model):
-    _name = 'parametro.modulo'
-    _description = 'Parámetro del módulo del compresor'
-
-    name = fields.Char(string="Nombre del parámetro", required=True)
 
 class ParametrosOperacion (models.Model):
     _name = 'paremetros.operacion'
     _descripcion = "Parámetros de operación del compresor"
 
+    paremetro_c = fields.Char( string="Párametros del modulo")
     paremetro_id = fields.Many2one("parametro.modulo", string="Párametros del modulo")
     valor_trabajo = fields.Char(string="Valores de trabajo")
     valor_parada = fields.Char(string="Valores de parada")
     unidad_medida = fields.Many2one("unidad.medida.modulo", string="Unidad de medida")
+    medida_c = fields.Char(string="Unidad de medida")
     planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
+
+
