@@ -80,3 +80,4 @@ access_paremetros_operacion_user,Parametros Operacion User Access,model_paremetr
 access_mantenimiento_equipo_otros_user,Mantenimiento Equipo Otros User Access,model_mantenimento_equipo_otros,base.group_user,1,1,1,1
 access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_solicitud,base.group_user,1,1,1,1
 access_etapa_tarea_mantenimiento_user,access.etapa.tarea.mantenimiento.user,model_etapa_tarea_mantenimiento,base.group_user,1,1,1,1
+access_wizard_sale_order,wizard.sale.order,model_wizard_sale_order,base.group_user,1,1,1,1
