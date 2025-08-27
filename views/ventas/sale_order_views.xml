@@ -38,7 +38,7 @@
                 <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
             </xpath>
             <xpath expr="//notebook/page[1]/tree[1]/field[@name='name']" position="after">
-                <field name="id_equipo"></field>
+                <field name="id_equipo" column_invisible="1"></field>
             </xpath>
         </field>
     </record>

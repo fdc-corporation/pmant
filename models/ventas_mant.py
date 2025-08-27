@@ -18,15 +18,19 @@ class SaleOrder(models.Model):
             "context": {"default_order_id": self.id},
         }  
 
-
     def verify_service(self):
         for order in self:
-            if any(line.id_equipo for line in order.order_line):
-                order.is_servicio = False
-            order.is_servicio = any(
+            has_service = any(
                 line.product_template_id.detailed_type == "service"
                 for line in order.order_line
             )
+            has_equipo = any(line.id_equipo for line in order.order_line)
+
+            # Solo es servicio si hay servicios y no tiene equipo
+            if has_service and not has_equipo:
+                order.is_servicio = True
+            else:
+                order.is_servicio = False
 
     def action_confirm(self):
         res = super().action_confirm()
