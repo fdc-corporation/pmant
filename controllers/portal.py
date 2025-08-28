@@ -649,13 +649,11 @@ class PortalPmant(http.Controller):
             )
         filename = f"Reporte Tecnico.pdf"
         headers = [
-                ('Content-Type', 'application/pdf'),
-                ('Content-Length', len(content)),
-                ('Content-Disposition', 'attachment; filename=' + "Reporte Tecnico.pdf;")
-                ('Content-Disposition', f'attachment; filename={filename}')
+            ("Content-Type", "application/pdf"),
+            ("Content-Length", len(content)),
+            ("Content-Disposition", f"attachment; filename={filename}"),
         ]
         return request.make_response(content, headers=headers)
-
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
     @http.route(
         ["/descargas/adjuntos/equipo/<int:id_adjunto>"],
