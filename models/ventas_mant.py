@@ -59,8 +59,9 @@ class SaleOrder(models.Model):
                 group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
                 user = self.env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
                 format_html_nota = self.template_format_nota(order)
+                
                 mantenimiento_vals = {
-                    "name": f"{order.name} - Servicios de mantenimiento",
+                    "name": f"{' '.join(order.partner_id.name.split()[:2])} {order.name} - Servicios de mantenimiento",
                     "cliente": order.partner_id.id,
                     "ubicacion": order.partner_shipping_id.id,
                     "create_user": user.id,
