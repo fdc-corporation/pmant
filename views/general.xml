@@ -266,16 +266,16 @@
 							<field name="is_evaluacion" />
 							<field name="sale_order" invisible="1" />
 						</group>
-						<field name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
-							<tree>
-								<field name="equipo" />
-								<field name="plan" />
-								<field name="fecha_ejec" />
-								<field name="estado" />
-								<button name="create_certificado_operatividad" string="Generar Certificado" type="object" groups="pmant.group_pmant_admin" class="btn-primary" />
-							</tree>
-						</field>
 					</group>
+					<field nolabel="1" name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
+    							<tree>
+    								<field name="equipo"/>
+    								<field name="plan"/>
+    								<field name="fecha_ejec"/>
+    								<field name="estado"/>
+    								<button name="create_certificado_operatividad" string="Generar Certificado" type="object" groups="pmant.group_pmant_admin" class="btn-primary"/>
+    							</tree>
+						</field>
 					<notebook>
 						<page string="Detalles de Venta" name="detalle_venta">
 							<field name="notas" placeholder="Notas de la tarea" widget="html"></field>
