@@ -5,7 +5,7 @@ pmant_tecnico_acc3,TECNICO_TAREA,model_tarea_mantenimiento,pmant.group_pmant_tec
 pmant_tecnico_acc4,TECNICO_TIPO_TAREA,model_tipotarea_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc6,TECNICO_PROCESOS,model_proceso_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
 pmant_tecnico_acc7,TECNICO_ESTADOPROCESO,model_estadoproceso_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
-pmant_tecnico_acc8,TECNICO_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
+pmant_tecnico_acc8,TECNICO_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
 pmant_tecnico_acc9,TECNICO_OTS,model_maintenance_request,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc10,TECNICO_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc11,TECNICO_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
