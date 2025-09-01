@@ -59,6 +59,10 @@ class HojaHoras(models.Model):
                     _logger.warning(f"⚠️ Técnicos sin partner persistido en OT {record.ot_id.name if record.ot_id else 'Sin OT'}")
                 else:
                     partner_ids = [user.partner_id.id for user in record.tecnicos]
+                    if record.ot_id.empresa:
+                        if record.ot_id.ubicacion:
+                            partner_ids.append(record.ot_id.ubicacion.id)
+                        partner_ids.append(record.ot_id.empresa.id)
                     valores_evento = {
                         "name": f"Servicio programado / {record.ot_id.name or record.name}",
                         "start": record.fecha_date,
