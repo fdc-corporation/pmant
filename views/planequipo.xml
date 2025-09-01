@@ -38,7 +38,7 @@
 						<field name="ots" invisible="1"/>
 						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<!-- <field name="equipo" options="{'no_open': True}"/> -->
-						<field name="plan" string="Plan de mantenimiento" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<field name="fecha_ejec"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
 						<field name="fecha_hoy" invisible="1"/>
