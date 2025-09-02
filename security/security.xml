@@ -22,7 +22,6 @@
     <record id="group_recibir_notificacion" model="res.groups">
             <field name="name">Mantenimiento - Recibir Notificacion  Mantenimiento</field>
     </record>
-
    
         <record id="group_pmant_manager" model="res.groups">
         <field name="name">Manager Mantenimiento</field>
