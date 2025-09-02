@@ -115,7 +115,10 @@ class Tarea(models.Model):
             "context": "{'create' : False}",
         }
 
-
+    def action_print_report (self):
+        return self.env.ref("pmant.action_ot_mantenimiento").report_action(self)
+    
+    
     @api.model
     def _group_expand_stages(self, stages, domain, order):
         return self.env['etapa.tarea.mantenimiento'].search([], order=order)

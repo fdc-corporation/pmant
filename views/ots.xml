@@ -20,6 +20,7 @@
 		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_form" />
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='reset_equipment_request']" position="after">
+				<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
 				<button string="Enviar correo a la Empresa" name="send_report_empresa" type="object" />
 				<button string="Enviar correo a la Sucursal" name="send_report_sucursal" type="object" />
 				<button name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
