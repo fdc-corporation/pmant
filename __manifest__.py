@@ -106,6 +106,9 @@
            "pmant/static/src/js/data.js",
            "pmant/static/src/js/equipos.js",
         ],
+        "web.assets_backend": [
+            "pmant/static/src/xml/form_status_inidicator.xml",
+        ],
     },
     "installable": True,
     "application": False,
