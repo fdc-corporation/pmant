@@ -574,3 +574,7 @@ class OTS(models.Model):
                 "res_model": "maintenance.request",
                 "context": {"create": False},
             }
+
+
+    def action_print_report (self):
+        return self.env.ref("pmant.action_mantenimiento_ot").report_action(self)

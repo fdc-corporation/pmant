@@ -239,6 +239,7 @@
 					<field name="stage_id" widget="statusbar" groups="pmant.group_pmant_admin" options="{'clickable': '1'}" />
 					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico" icon="fa-envelope" />
 					<!-- CREAR BOTON DE CREAR OT -->
+					<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
 					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
 					<button string="Iniciar servicio" name="init_servicio" type="object" class="oe_highlight" invisible="action_servicio" />
 					<button string="Finalizar servicio" name="cancel_servicio" type="object" invisible="not action_servicio" />

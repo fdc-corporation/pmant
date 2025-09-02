@@ -8,6 +8,11 @@ class SaleOrder(models.Model):
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
     is_servicio = fields.Boolean(string="Es servicio", compute="verify_service")
 
+
+
+    def action_print_sale(self):
+        return self.env.ref("sale.action_report_saleorder").report_action(self)
+
     def action_open_wizard_sale(self):
         return {
             "name": "Confirmacion de venta",

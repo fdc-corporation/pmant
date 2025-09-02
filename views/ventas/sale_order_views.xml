@@ -60,8 +60,13 @@
             <xpath expr="//header" position="inside">
                 <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
             </xpath>
+<<<<<<< HEAD
             <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
                 <attribute name="domain" >[('parent_id', '=', partner_id)]</attribute>
+=======
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="id_equipo" column_invisible="1"></field>
+>>>>>>> b8d2851 (btn print report sale and pmant)
             </xpath>
         </field>
     </record>
@@ -83,6 +88,11 @@
                         string="Confirmar"
                         type="object"
                         invisible="state not in ['draft', 'sent'] or not is_servicio"/>
+                <button name="action_print_sale"
+                        id="action_print_sale"
+                        class="oe_stat_button"
+                        string="Generar PDF"
+                        type="object"/>
             </xpath>
 
             <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
