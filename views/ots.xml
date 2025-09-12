@@ -82,6 +82,9 @@
 							</tree>
 						</field>
 				</page>
+				<page string="Notas de ventas">
+					<field name="notas_venta"></field>
+				</page>
 				<page string="Calificaciones">
 					<group >
 						<field name="rating_p1" />
