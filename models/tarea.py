@@ -105,7 +105,7 @@ class Tarea(models.Model):
 
 
     def _get_cantidad_ot(self):
-        cant_data = self.env["maintenance.request"].search([("tarea", "=", self.tarea.id)])
+        cant_data = self.env["maintenance.request"].search([("tarea", "=", self.id)])
         self.cantidad_ot = len(cant_data)
 
     def action_view_ot(self):
