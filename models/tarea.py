@@ -101,6 +101,23 @@ class Tarea(models.Model):
         required=True,
     )
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
+    cantidad_ot = fields.Integer(string="Cantidad de OTs", compute="_get_cantidad_ot")
+
+
+    def _get_cantidad_ot(self):
+        cant_data = self.env["maintenance.request"].search([("tarea", "=", self.tarea.id)])
+        self.cantidad_ot = len(cant_data)
+
+    def action_view_ot(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Orden de Trabajo",
+            "view_mode": "form",
+            "res_model": "maintenance.request",
+            "res_id": self.ots.id,
+            "context": "{'create' : False}",
+        }
+
 
     def _total_cotizaciones(self):
         self.cotizacion_cantidad = len(self.sale_order)
@@ -336,6 +353,7 @@ class Tarea(models.Model):
             "tarea": self.id,
             "empresa": self.cliente.id,
             "ubicacion": self.ubicacion.id,
+            "notas_venta": self.notas,
             # "order_compra" : self.oc_id.id
         })
 

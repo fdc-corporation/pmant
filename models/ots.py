@@ -51,6 +51,8 @@ class OTS(models.Model):
         string="Documentos firmados", compute="get_cantidad_documentos"
     )
     cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
+    notas_venta = fields.Html(string="Notas Venta", sanitize_style=True, sanitize_tags=False)
+
 
     @api.depends("estado")
     def _get_tex(self):
