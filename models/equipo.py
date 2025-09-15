@@ -210,16 +210,7 @@ class Equipo(models.Model):
 
 
     def generar_n_serie(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        
-        prefix_map = {
-            "https://equiposindustriales.pe": "FDC-",
-            "https://compresores.com.pe": "CT-",
-        }
-
-
-        
-        prefix = prefix_map.get(base_url, "NSR-")
+        prefix = "CT-"
         
         equipos_filtro = self.env['maintenance.equipment'].search(
             ["|", ("serial_no", "=", False), ("serial_no", "ilike", prefix + "%")]
