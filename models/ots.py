@@ -126,10 +126,23 @@ class OTS(models.Model):
             for record in self:
                 # Si el estado tiene una secuencia específica (por ejemplo, 3)
                 if record.stage_id.sequence == 3:
-                    fecha_actual = fields.Date.today()
-                    record.fecha_ejec = fecha_actual
-                    record.tarea._fecha_ejecutada()
-                    record.tarea._evento_calendario_proximo_servicio()
+                    print("ETAPA EN EJECUCION")
+                    print(record.tarea.planequipo.is_informe_file)
+                    print(record.tarea.planequipo)
+                    if not record.tarea.planequipo.is_informe_file:
+                        print("ejecucion automatico")
+                        fecha_actual = fields.Date.today()
+                        record.fecha_ejec = fecha_actual
+                        record.tarea._fecha_ejecutada()
+                        record.tarea._evento_calendario_proximo_servicio()
+                    else :
+                        if not record.tarea.planequipo.informe_file:
+                            raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
+                        else:
+                            print("ejecucion manual")
+                            print(record.tarea.planequipo.fecha_ejec)
+                            record.fecha_ejec = record.tarea.planequipo.fecha_ejec
+                            record.tarea._evento_calendario_proximo_servicio()
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
             self._change_createui()
@@ -218,9 +231,10 @@ class OTS(models.Model):
     def _change_createui(self):
         for record in self:
             self._validacion_etapas()
-            if self.stage_id.sequence == 3:
-                self._fecha_estado()
-                # self.action_open_wizard()
+            if not record.tarea.planequipo.is_informe_file:
+                if self.stage_id.sequence == 3:
+                    self._fecha_estado()
+                    # self.action_open_wizard()
             if self.stage_id.sequence == 5:
                 self.send_reporte_final()
                 # self.action_open_wizard()

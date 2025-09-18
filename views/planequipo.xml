@@ -39,13 +39,21 @@
 						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<!-- <field name="equipo" options="{'no_open': True}"/> -->
 						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin" readonly="not is_admin and not tarea.is_evaluacion"/>
-						<field name="fecha_ejec"/>
+						<field name="fecha_ejec" invisible="1" readonly="1"/>
+						<field name="fecha_ejec" invisible="1"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
-						<field name="fecha_hoy" invisible="1"/>
+						<field name="is_informe_file" invisible="not is_admin"/>
 					</group>
 					<notebook>
+						<page string="Informe tecnico" invisible="not is_informe_file" >
+							<group>
+								<field name="informe_filename" invisible="1" ></field>
+								<field name="fecha_ejec"></field>
+								<field name="informe_file" filename="informe_filename" ></field>
+							</group>
+						</page>
 						<!-- Procesos de mantenimiento -->
-						<page string="Procesos de Mantenimiento" invisible="is_admin" >
+						<page string="Procesos de Mantenimiento" invisible="is_admin or is_informe_file" >
 							<field name="procesos" nolabel="1" >
 								<tree >
 									<field name="estado"/>
@@ -55,7 +63,7 @@
 							</field>
 						</page>
 						<!-- Voltaje -->
-						<page string="Voltaje de Alimentación" invisible="is_admin" >
+						<page string="Voltaje de Alimentación" invisible="is_admin or is_informe_file" >
 							<field name="voltaje_ids" nolabel="1" >
 								<tree editable="bottom">
 									<field name="l1_l2"/>
@@ -69,7 +77,7 @@
 							</field>
 						</page>
 						<!-- Amperaje -->
-						<page string="Corriente de Motor Principal" invisible="is_admin" >
+						<page string="Corriente de Motor Principal" invisible="is_admin or is_informe_file" >
 							<field name="amperaje_ids" nolabel="1" >
 								<tree editable="bottom">
 									<field name="linea"/>
@@ -82,7 +90,7 @@
 							</field>
 						</page>
 						<!-- Parámetros de operación -->
-						<page string="Parámetros de operación del compresor" invisible="is_admin" >
+						<page string="Parámetros de operación del compresor" invisible="is_admin or is_informe_file" >
 							<field name="parametro_ids" nolabel="1" >
 								<tree editable="bottom">
 									<field name="paremetro_c"/>
@@ -92,7 +100,7 @@
 								</tree>
 							</field>
 						</page>
-						<page string="Conclusiones" invisible="is_admin">
+						<page string="Conclusiones" invisible="is_admin or is_informe_file">
 							<group>
 								<field name="nota_observaciones" placeholder="Aqui puede usted indicar sobre las observaciones del  del equipo" widget="html" invisible="is_admin" />
 								<field name="nota_mantenimiento" placeholder="En este campo usted puede descripbir las conclusiones del servicio al equipo" widget="html" invisible="is_admin" />

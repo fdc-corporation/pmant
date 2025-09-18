@@ -18,7 +18,7 @@ class PlanEquipo(models.Model):
     tarea = fields.Many2one('tarea.mantenimiento', string='Tarea', required=True)
     ots = fields.One2many('maintenance.request', 'tarea', related="tarea.ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'planequipo', string="Procesos a Utilizar")
-    fecha_ejec = fields.Date(string="Fecha Ejecutada", readonly="True", store=True)
+    fecha_ejec = fields.Date(string="Fecha Ejecutada", store=True)
     is_admin = fields.Boolean(compute="_generate_tecnico", default=True)
     creador_id = fields.Integer(compute="_generate_tecnico")
     fecha_ejecprox = fields.Date(compute="_generate_tecnico", store=True)
@@ -35,7 +35,10 @@ class PlanEquipo(models.Model):
     nota_recomendaciones = fields.Html(string="Recomendaciones")
     parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
     nota_observaciones = fields.Html(string="Observaciones general")
-
+    is_informe_file = fields.Boolean(string="Subir Informe Tecnico", default=False)
+    informe_file = fields.Binary(string="Informe Técnico", attachment=True)
+    informe_filename = fields.Char(string="Nombre del archivo")
+    
 
     def data_parametros(self):
         return [
@@ -58,14 +61,7 @@ class PlanEquipo(models.Model):
 
     def _default_nota_mantenimiento(self):
         return """
-        <p>✓ El compresor queda operando en condiciones normales para su funcionamiento.</p>
-        <p>✓ El mantenimiento preventivo que se le realiz&oacute; al equipo est&aacute; basado en los est&aacute;ndares de calidad establecidos por <strong>COMPRESORES DE TORNILLO SAC</strong>, y bajo los lineamientos del fabricante, garantizando el trabajo realizado por el &aacute;rea t&eacute;cnica.</p>
-        <p>✓ Los equipos Atlas Copco, tienen establecido en su plan de mantenimiento el reemplazo de repuestos y piezas seg&uacute;n sus horas de funcionamiento o un (01) a&ntilde;o lo que ocurra primero, en este caso se debe de realizar a partir del &uacute;ltimo mantenimiento:</p>
-        <ul>
-            <li><strong>(06 meses)</strong>: Cambio de filtro de aceite, cambio de filtro de aire, cambio de kit de v&aacute;lvulas.</li>
-            <li><strong>(12 meses)</strong>: Cambio de filtro de aceite, cambio de filtro de aire, cambio de filtro separador de aceite, cambio de aceite, mantenimiento preventivo de v&aacute;lvulas, engrase de rodamientos de motor principal, cambio de kit de v&aacute;lvulas (m&iacute;nima presi&oacute;n, termost&aacute;tica), mantenimiento de intercambiadores de calor (radiadores).</li>
-            <li><strong>Todos los mantenimientos</strong> incluyen por parte de nuestra &aacute;rea t&eacute;cnica: limpieza general del equipo interna y externa, sopleteo de radiadores, verificaci&oacute;n de funcionamiento de v&aacute;lvulas, verificaci&oacute;n de sistema el&eacute;ctrico (motor principal, motor ventilador, tablero el&eacute;ctrico), verificaci&oacute;n de par&aacute;metros, cambio de repuestos y piezas, y puesta en marcha del equipo.</li>
-        </ul>
+        
         """
 
     @api.model

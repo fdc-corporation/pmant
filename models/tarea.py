@@ -236,8 +236,8 @@ class Tarea(models.Model):
         fecha_actual = fields.Date.today()
         for record in self:
             for equipo in record.planequipo:
-                equipo.write({'fecha_ejec': fecha_actual})
-
+                if not equipo.is_informe_file:
+                    equipo.write({'fecha_ejec': fecha_actual})
 
     def _compute_is_tecnico(self):
         for record in self:
