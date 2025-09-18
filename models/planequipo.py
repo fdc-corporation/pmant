@@ -89,7 +89,8 @@ class PlanEquipo(models.Model):
     def _generate_tecnico(self):
         for record in self:
             record.creador_id = record.equipo.create_uid.id
-            record.is_admin = self.env['res.users'].has_group('pmant.group_pmant_admin')
+            record.is_admin = self.env.user.has_group('pmant.group_pmant_admin')
+
 
             if record.fecha_ejec:
                 fecha_prox = datetime.strptime(str(record.fecha_ejec), '%Y-%m-%d')
