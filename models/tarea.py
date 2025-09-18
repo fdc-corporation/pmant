@@ -337,6 +337,7 @@ class Tarea(models.Model):
             "tarea": self.id,
             "empresa": self.cliente.id,
             "ubicacion": self.ubicacion.id,
+            "notas_venta": self.notas,
             # "order_compra" : self.oc_id.id
         })
 
