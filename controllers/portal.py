@@ -643,17 +643,29 @@ class PortalPmant(http.Controller):
     def descarga_reporte_mantenimiento(self, tarea_id, **kw):
         report_action = http.request.env["ir.actions.report"].sudo()
         tarea = request.env["planequipo.mantenimiento"].sudo().browse(tarea_id)
-        for record in tarea:
-            content, _content_type = report_action._render_qweb_pdf(
-                "pmant.action_report_equipo", res_ids=record.ids
+        if tarea.is_informe_file:
+            filecontent = base64.b64decode(tarea.informe_file)
+            filename = f'reporte_mantenimiento_{tarea.equipo.name}.pdf'
+
+            return request.make_response(
+                filecontent,
+                headers=[
+                    ('Content-Type', 'application/octet-stream'),
+                    ('Content-Disposition', f'attachment; filename="{filename}"')
+                ]
             )
-        filename = f"Reporte Tecnico.pdf"
-        headers = [
-            ("Content-Type", "application/pdf"),
-            ("Content-Length", len(content)),
-            ("Content-Disposition", f"attachment; filename={filename}"),
-        ]
-        return request.make_response(content, headers=headers)
+        else:
+            for record in tarea:
+                content, _content_type = report_action._render_qweb_pdf(
+                    "pmant.action_report_equipo", res_ids=record.ids
+                )
+            filename = f"Reporte Tecnico.pdf"
+            headers = [
+                ("Content-Type", "application/pdf"),
+                ("Content-Length", len(content)),
+                ("Content-Disposition", f"attachment; filename={filename}"),
+            ]
+            return request.make_response(content, headers=headers)
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
     @http.route(
         ["/descargas/adjuntos/equipo/<int:id_adjunto>"],
