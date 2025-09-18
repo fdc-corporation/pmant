@@ -18,7 +18,8 @@ class PlanEquipo(models.Model):
     tarea = fields.Many2one('tarea.mantenimiento', string='Tarea', required=True)
     ots = fields.One2many('maintenance.request', 'tarea', related="tarea.ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'planequipo', string="Procesos a Utilizar")
-    fecha_ejec = fields.Date(string="Fecha", readonly="True", store=True)
+
+    fecha_ejec = fields.Date(string="Fecha Ejecutada", store=True)
     is_admin = fields.Boolean(compute="_generate_tecnico", default=True)
     creador_id = fields.Integer(compute="_generate_tecnico")
     fecha_ejecprox = fields.Date(compute="_generate_tecnico", store=True)
@@ -30,7 +31,37 @@ class PlanEquipo(models.Model):
     nota_mantenimiento = fields.Html(
         string="Conclusiones",
     )
+    nota_recomendaciones = fields.Html(string="Recomendaciones")
+    parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
+    nota_observaciones = fields.Html(string="Observaciones general")
+    is_informe_file = fields.Boolean(string="Subir Informe Tecnico", default=False)
+    informe_file = fields.Binary(string="Informe Técnico", attachment=True)
+    informe_filename = fields.Char(string="Nombre del archivo")
+    
 
+    def data_parametros(self):
+        return [
+            {"paremetro_id": "Horas Marcha", "unidad_medida": "Horas"},
+            {"paremetro_id": "Horas Carga", "unidad_medida": "Horas"},
+            {"paremetro_id": "Relé de carga", "unidad_medida": ""},
+            {"paremetro_id": "Temperatura de salida de elemento 1", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura de salida de elemento 2", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura ambiente", "unidad_medida": "°C"},
+            {"paremetro_id": "Temperatura de refrigeración", "unidad_medida": "°C"},
+            {"paremetro_id": "Presión de salida", "unidad_medida": "Bar"},
+            {"paremetro_id": "Presión de aceite", "unidad_medida": "Bar"},
+            {"paremetro_id": "Dp tanque separador", "unidad_medida": "Bar"},
+            {"paremetro_id": "Dp entrada de aire", "unidad_medida": "Bar"},
+            {"paremetro_id": "Nivel de aceite", "unidad_medida": ""},
+            {"paremetro_id": "Estado del radiador", "unidad_medida": ""},
+        ]
+
+
+
+    def _default_nota_mantenimiento(self):
+        return """
+        
+        """
 
     @api.model
     def create(self, vals):

@@ -29,30 +29,78 @@
 			<form string="Tarea Form">
 				<sheet>
 					<group>
-						<field name="id" invisible="1" />
-						<field name="cliente" invisible="0" readonly="1" />
-						<field name="ubicacion" invisible="0" readonly="1" />
-						<field name="is_admin" invisible="1" />
-						<field name="tarea" readonly="1"/>
-						<field name="ots" invisible="1" />
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>						
-						<field name="plan" groups="pmant.group_pmant_admin" string="Plan de mantenimiento"  readonly="not is_admin and not tarea.is_evaluacion" />
-						<field name="fecha_ejec" />
-						<field name="fecha_ejecprox" string="Proxima Fecha de Mantenimiento" />
-						<field name="fecha_hoy" invisible="1"/>
+
+						<!-- Campos de cabecera -->
+						<field name="id" invisible="1"/>
+						<field name="cliente"  readonly="1"/>
+						<field name="ubicacion" readonly="1"/>
+						<field name="tarea" invisible="1"/>
+						<field name="ots" invisible="1"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<!-- <field name="equipo" options="{'no_open': True}"/> -->
+						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="fecha_ejec" invisible="1" readonly="1"/>
+						<field name="fecha_ejec" invisible="1"/>
+						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
+						<field name="is_informe_file" invisible="not is_admin"/>
 					</group>
 					<notebook>
-						<page name="procesos" invisible="is_admin" string="Procesos">
-							<field name="procesos">
-								<tree responsive="1">
+						<page string="Informe tecnico" invisible="not is_informe_file" >
+							<group>
+								<field name="informe_filename" invisible="1" ></field>
+								<field name="fecha_ejec"></field>
+								<field name="informe_file" filename="informe_filename" ></field>
+							</group>
+						</page>
+						<!-- Procesos de mantenimiento -->
+						<page string="Procesos de Mantenimiento" invisible="is_admin or is_informe_file" >
+							<field name="procesos" nolabel="1" >
+								<tree >
 									<field name="estado"/>
-									<field name="proceso" />
-									<field name="descripcion" />
-									<field name="is_admin" column_invisible="True"/>
+									<field name="proceso"/>
+									<field name="descripcion"/>
 								</tree>
 							</field>
 						</page>
-						<page string="Conclusiones" invisible="is_admin">
+						<!-- Voltaje -->
+						<page string="Voltaje de Alimentación" invisible="is_admin or is_informe_file" >
+							<field name="voltaje_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="l1_l2"/>
+									<field name="l2_l3"/>
+									<field name="l1_l3"/>
+									<field name="l1_gnd"/>
+									<field name="l2_gnd"/>
+									<field name="l3_gnd"/>
+									<field name="supply"/>
+								</tree>
+							</field>
+						</page>
+						<!-- Amperaje -->
+						<page string="Corriente de Motor Principal" invisible="is_admin or is_informe_file" >
+							<field name="amperaje_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="linea"/>
+									<field name="carga_linea"/>
+									<field name="descarga_linea"/>
+									<field name="fase"/>
+									<field name="carga_fase"/>
+									<field name="descarga_fase"/>
+								</tree>
+							</field>
+						</page>
+						<!-- Parámetros de operación -->
+						<page string="Parámetros de operación del compresor" invisible="is_admin or is_informe_file" >
+							<field name="parametro_ids" nolabel="1" >
+								<tree editable="bottom">
+									<field name="paremetro_c"/>
+									<field name="valor_trabajo"/>
+									<field name="valor_parada"/>
+									<field name="medida_c"/>
+								</tree>
+							</field>
+						</page>
+						<page string="Conclusiones" invisible="is_admin or is_informe_file">
 							<group>
 								<field name="nota_observaciones" widget="html" invisible="is_admin" />
 								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />
