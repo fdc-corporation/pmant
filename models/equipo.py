@@ -196,38 +196,12 @@ class Equipo(models.Model):
 
 
     def generar_n_serie(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        print("--------------------------------------------------")
-        print(base_url)
-        equipos_filtro = ""
-        if base_url == "https://equiposindustriales.pe":
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "FDC-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = "FDC-" + str(equipo.id)
-
-        if base_url == "https://compresores.com.pe":
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "CT-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = "CT-" + str(equipo.id)
-        if (
-            base_url != "https://equiposindustriales.pe"
-            and base_url != "http://compresores.com.pe"
-        ):
-            equipos_filtro = self.search(
-                ["|", ("serial_no", "=", False), ("serial_no", "ilike", "NSR-%")]
-            )
-            for equipo in equipos_filtro:
-                if not equipo.serial_no:
-                    equipo.serial_no = "NSR-" + str(equipo.id)
-
-
-
+        equipos_filtro = self.search(
+            ["|", ("serial_no", "=", False), ("serial_no", "ilike", "FDC-%")]
+        )
+        for equipo in equipos_filtro:
+            if not equipo.serial_no:
+                equipo.serial_no = "FDC-" + str(equipo.id)
 
 class Adjunto(models.Model):
     _name = "adjunto.mantenimiento"
