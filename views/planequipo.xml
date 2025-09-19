@@ -62,45 +62,7 @@
 								</tree>
 							</field>
 						</page>
-						<!-- Voltaje -->
-						<page string="Voltaje de Alimentación" invisible="is_admin or is_informe_file" >
-							<field name="voltaje_ids" nolabel="1" >
-								<tree editable="bottom">
-									<field name="l1_l2"/>
-									<field name="l2_l3"/>
-									<field name="l1_l3"/>
-									<field name="l1_gnd"/>
-									<field name="l2_gnd"/>
-									<field name="l3_gnd"/>
-									<field name="supply"/>
-								</tree>
-							</field>
-						</page>
-						<!-- Amperaje -->
-						<page string="Corriente de Motor Principal" invisible="is_admin or is_informe_file" >
-							<field name="amperaje_ids" nolabel="1" >
-								<tree editable="bottom">
-									<field name="linea"/>
-									<field name="carga_linea"/>
-									<field name="descarga_linea"/>
-									<field name="fase"/>
-									<field name="carga_fase"/>
-									<field name="descarga_fase"/>
-								</tree>
-							</field>
-						</page>
-						<!-- Parámetros de operación -->
-						<page string="Parámetros de operación del compresor" invisible="is_admin or is_informe_file" >
-							<field name="parametro_ids" nolabel="1" >
-								<tree editable="bottom">
-									<field name="paremetro_c"/>
-									<field name="valor_trabajo"/>
-									<field name="valor_parada"/>
-									<field name="medida_c"/>
-								</tree>
-							</field>
-						</page>
-						<page string="Conclusiones" invisible="is_admin or is_informe_file">
+						<page string="Conclusiones" invisible="is_admin">
 							<group>
 								<field name="nota_observaciones" widget="html" invisible="is_admin" />
 								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />

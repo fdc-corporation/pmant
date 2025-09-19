@@ -31,8 +31,6 @@ class PlanEquipo(models.Model):
     nota_mantenimiento = fields.Html(
         string="Conclusiones",
     )
-    nota_recomendaciones = fields.Html(string="Recomendaciones")
-    parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
     nota_observaciones = fields.Html(string="Observaciones general")
     is_informe_file = fields.Boolean(string="Subir Informe Tecnico", default=False)
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
