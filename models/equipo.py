@@ -198,16 +198,16 @@ class Equipo(models.Model):
             fechas = [
                 tarea.fecha_ejecprox
                 for tarea in record.planequipo
-                if tarea and tarea.plan and tarea.plan.frecuencia > 0
+                if tarea and tarea.plan and tarea.plan.frecuencia > 0 and tarea.fecha_ejecprox
             ]
-            fecha_prox = fechas[-1] if fechas else False
+
+            fecha_prox = max(fechas) if fechas else False
 
             # Asignar a campos
             record.qr_image = qr_image_b64
             record.qr_image2 = qr_image_b64
             record.url_qr = url
             record.fecha_prox = fecha_prox
-
 
     def generar_n_serie(self):
         prefix = "CT-"
