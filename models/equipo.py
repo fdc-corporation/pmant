@@ -101,7 +101,7 @@ class Equipo(models.Model):
     )
     qr_image2 = fields.Binary("QR equipo", compute="_generate_qr_code", attachment=True)
     url_qr = fields.Char(string="URL del QR", compute="_generate_qr_code")
-    fecha_prox = fields.Date(string="Fecha aprox", compute="_generate_qr_code")
+    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code")
     hoy = fields.Date(default=str(datetime.now()))
     avisado_prox = fields.Char(compute="_comparar_fechas")
     avisado_prox = fields.Char(string="Avisado aprox")
@@ -184,9 +184,10 @@ class Equipo(models.Model):
             fechas = [
                 tarea.fecha_ejecprox
                 for tarea in record.planequipo
-                if tarea and tarea.plan and tarea.plan.frecuencia > 0
+                if tarea and tarea.plan and tarea.plan.frecuencia > 0 and tarea.fecha_ejecprox
             ]
-            fecha_prox = fechas[-1] if fechas else False
+
+            fecha_prox = max(fechas) if fechas else False
 
             # Asignar a campos
             record.qr_image = qr_image_b64
