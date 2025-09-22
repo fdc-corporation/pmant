@@ -28,6 +28,9 @@
 		<field name="arch" type="xml">
 			<form string="Tarea Form">
 				<sheet>
+					<div class="float-end fs-6 border-0" invisible="not is_informe_file">
+						<field readonly="1" widget="badge" name="stage_informe" decoration-success="stage_informe == 'registrado'" decoration-danger="stage_informe == 'sin_realizar'" ></field>
+					</div>
 					<field name="is_admin" invisible="1" />
 					<group>
 						<!-- Campos de cabecera -->

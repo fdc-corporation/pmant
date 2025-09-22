@@ -38,7 +38,7 @@ class PlanEquipo(models.Model):
     is_informe_file = fields.Boolean(string="Subir Informe Tecnico", default=False)
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
     informe_filename = fields.Char(string="Nombre del archivo")
-    
+    stage_informe = fields.Selection([("registrado","Registrado"),("sin_realizar","Sin Realizar")], string="Estado del Informe", default="sin_realizar")
 
     def data_parametros(self):
         return [
@@ -57,7 +57,12 @@ class PlanEquipo(models.Model):
             {"paremetro_id": "Estado del radiador", "unidad_medida": ""},
         ]
 
-
+    @api.onchange("informe_file")
+    def _onchange_informe_file(self):
+        if self.informe_file:
+            self.stage_informe = "registrado"
+        else:
+            self.stage_informe = "sin_realizar"
 
     def _default_nota_mantenimiento(self):
         return """
