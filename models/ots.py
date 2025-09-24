@@ -128,19 +128,19 @@ class OTS(models.Model):
                     print("ETAPA EN EJECUCION")
                     print(record.tarea.planequipo.is_informe_file)
                     print(record.tarea.planequipo)
-                    if not record.tarea.planequipo.is_informe_file:
+                    if not any(record.tarea.planequipo.mapped("is_informe_file")):
                         print("ejecucion automatico")
                         fecha_actual = fields.Date.today()
                         record.fecha_ejec = fecha_actual
                         record.tarea._fecha_ejecutada()
                         record.tarea._evento_calendario_proximo_servicio()
                     else :
-                        if not record.tarea.planequipo.informe_file:
+                        if not any(record.tarea.planequipo.mapped("informe_file")):
                             raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
                         else:
                             print("ejecucion manual")
-                            print(record.tarea.planequipo.fecha_ejec)
-                            record.fecha_ejec = record.tarea.planequipo.fecha_ejec
+                            print(record.tarea.planequipo[:1].fecha_ejec)
+                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec
                             record.tarea._evento_calendario_proximo_servicio()
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
