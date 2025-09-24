@@ -230,7 +230,7 @@ class OTS(models.Model):
     def _change_createui(self):
         for record in self:
             self._validacion_etapas()
-            if not record.tarea.planequipo.is_informe_file:
+            if not any(record.tarea.planequipo.mapped("is_informe_file")):
                 if self.stage_id.sequence == 3:
                     self._fecha_estado()
                     # self.action_open_wizard()
