@@ -126,7 +126,7 @@ class OTS(models.Model):
                 # Si el estado tiene una secuencia específica (por ejemplo, 3)
                 if record.stage_id.sequence == 3:
                     print("ETAPA EN EJECUCION")
-                    print(any(record.tarea.planequipo.mapped("is_informe_file")))
+                    print(record.tarea.planequipo.mapped("is_informe_file"))
                     print(record.tarea.planequipo)
                     if not any(record.tarea.planequipo.mapped("is_informe_file")):
                         print("ejecucion automatico")
