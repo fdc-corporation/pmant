@@ -140,7 +140,7 @@ class OTS(models.Model):
                         else:
                             print("ejecucion manual")
                             print(record.tarea.planequipo[:1].fecha_ejec)
-                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec
+                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec if record.tarea.planequipo else None
                             record.tarea._evento_calendario_proximo_servicio()
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()

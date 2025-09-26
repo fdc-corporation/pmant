@@ -7,7 +7,7 @@ class SaleOrder(models.Model):
     ots = fields.Many2one("tarea.mantenimiento", string="Tarea")
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
     is_servicio = fields.Boolean(string="Es servicio", compute="verify_service")
-
+    titulo_cotizacion = fields.Char(string="Título de cotización")
 
 
     def action_print_sale(self):
@@ -66,7 +66,7 @@ class SaleOrder(models.Model):
                 format_html_nota = self.template_format_nota(order)
                 
                 mantenimiento_vals = {
-                    "name": f"{' '.join(order.partner_id.name.split()[:2])} {order.name} - Servicios de mantenimiento",
+                    "name": f"{order.name} - {order.titulo_cotizacion}",
                     "cliente": order.partner_id.id,
                     "ubicacion": order.partner_shipping_id.id,
                     "create_user": user.id,
