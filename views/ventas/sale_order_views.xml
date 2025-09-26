@@ -37,6 +37,9 @@
             <xpath expr="//header" position="inside">
                 <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
             </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="titulo_cotizacion"></field>
+            </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
                 <field name="id_equipo" column_invisible="1"></field>
             </xpath>
