@@ -152,7 +152,7 @@ class Equipo(models.Model):
                 "name": "Cotizaciones del Equipo",
                 "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
                 "domain": [("id", "in", cotizaciones.ids)],
-                "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                "view_mode": "list,form",  # puedes permitir también la vista formulario
                 "res_model": "sale.order",
                 "context": {"create": False},
             }
@@ -204,25 +204,3 @@ class Equipo(models.Model):
             if not equipo.serial_no:
                 equipo.serial_no = "FDC-" + str(equipo.id)
 
-class Adjunto(models.Model):
-    _name = "adjunto.mantenimiento"
-    _description = "Adjuntos de Mantenimiento"
-    name = fields.Char(size=60, string="Referencia Archivo")
-    adjunto = fields.Binary(attachment=True)
-    equipo = fields.Many2one("maintenance.equipment", string="Equipo")
-    # planequipoproceso   = fields.Many2one('planequipo.mantenimiento')
-
-
-class AdjuntoImagw(models.Model):
-    _name = "adjuntoimage.mantenimiento"
-    name = fields.Char(size=60, string="Referencia Archivo")
-    adjunto = fields.Binary(attachment=True)
-    # equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
-    planequipoproceso = fields.Many2one("planequipoproceso.mantenimiento")
-    comentario = fields.Text()
-
-
-class DocuemntosEquipo(models.Model):
-    _inherit = "documents.document"
-
-    equipo = fields.Many2many("maintenance.equipment", string="Equipo")

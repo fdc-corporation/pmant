@@ -38,10 +38,16 @@ class ModelFirma(models.TransientModel):
     equipo_id = fields.Many2one("maintenance.equipment", related="template_id.equipo_id", string="Equipo")
 
 
-# class AdjuntoImagw(models.Model):
-#     _name        = 'adjuntoimage.mantenimiento'
-#     name         = fields.Char(size=60,string='Referencia Archivo')
-#     adjunto      = fields.Binary()
-#     #equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
-#     planequipoproceso   = fields.Many2one('planequipoproceso.mantenimiento')
-#     comentario          = fields.Text()
+class AdjuntoImagw(models.Model):
+    _name = "adjuntoimage.mantenimiento"
+    name = fields.Char(size=60, string="Referencia Archivo")
+    adjunto = fields.Binary(attachment=True)
+    # equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
+    planequipoproceso = fields.Many2one("planequipoproceso.mantenimiento")
+    comentario = fields.Text()
+
+
+class DocuemntosEquipo(models.Model):
+    _inherit = "documents.document"
+
+    equipo = fields.Many2many("maintenance.equipment", string="Equipo")

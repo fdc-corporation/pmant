@@ -11,13 +11,12 @@
 </record>
 
 <!-- Menú solo para el grupo técnico -->
-<record id="menu_model_tecnico" model="ir.ui.menu">
+<!-- <record id="menu_model_tecnico" model="ir.ui.menu">
     <field name="name">Mis Registros</field>
-    <!-- ⬇️ CAMBIA: menú padre adecuado -->
     <field name="parent_id" ref="crm.crm_menu_root"/>
     <field name="action" ref="action_model_tecnico"/>
     <field name="groups_id" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
-</record>
+</record> -->
 
 
 

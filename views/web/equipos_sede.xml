@@ -56,7 +56,7 @@
 								<strong>
 									Celular :
 								</strong>
-								<t t-esc="ubicacion.mobile" />
+								<t t-esc="ubicacion.phone" />
 							</span>
 							<span>
 								<strong>

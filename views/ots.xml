@@ -40,7 +40,7 @@
 		
 			<xpath expr="//field[@name='maintenance_type']" position="after">
 				<field name="id" invisible="1" />
-				<field name="estado" invisible="1" />
+				<!-- <field name="estado" invisible="1" /> -->
 				<field name="tex" invisible="1" />
 				<field name="fecha_ejec" invisible="stage_id in (1,2)" readonly="1" />
 				<!-- <field name="activity_ids" widget="kanban_activity"/> -->
@@ -55,11 +55,15 @@
 				<field name="factura_sunat"  invisible="not selec_sunat"/>
                 <field name="factura"  invisible="stage_id in (1, 2, 3) and selec_sunat or is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="[('partner_id', '=', empresa)]"  />
 			</xpath>
-			<xpath expr="//field[@name='schedule_date']" position="after">
+			<xpath expr="//field[@name='schedule_date']" position="before">
 				<field name="subodinados" widget="many2many_avatar_user" ></field>
 			</xpath>
 			<xpath expr="//field[@name='schedule_date']" position="before">
 				<field name="is_active_programacion" invisible="1" ></field>
+			</xpath>
+			<xpath expr="//field[@name='priority']" position="after">
+				<field name="duration" ></field>
+
 			</xpath>
 			<xpath expr="//page" position="after">
 				<page string="Programación">
@@ -69,7 +73,7 @@
 						</button>
 					</div>
 						<field name="tab_horas" readonly="is_tecnico">
-							<tree editable="bottom">
+							<list editable="bottom">
 								<field name="fecha_date" />
 								<field name="duracion" widget="float_time"  />
 								<field name="tecnicos" widget="many2many_avatar_user"  />
@@ -81,7 +85,7 @@
 								<button name="action_view_registro" class="btn btn-link" type="object" string="Detalles"></button>
 								<!-- <button name="cancel_cronograma" invisible="not horas_active"  type="object" string="Cancelar"></button> -->
 								<!-- <button name="init_cronograma" type="object" string="Calendario"></button> -->
-							</tree>
+							</list>
 						</field>
 				</page>
 				<page string="Calificaciones">
@@ -151,10 +155,10 @@
 				<attribute name="readonly" >is_tecnico</attribute>
 			</xpath>
 			
-			<xpath expr="//field[@name='duration']" position="attributes">
+			<!-- <xpath expr="//field[@name='duration']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
 				<attribute name="required" >1</attribute>
-			</xpath>
+			</xpath> -->
 			<xpath expr="//field[@name='priority']" position="attributes">
 				<attribute name="readonly" >is_tecnico</attribute>
 			</xpath>

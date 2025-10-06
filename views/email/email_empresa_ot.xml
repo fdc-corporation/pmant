@@ -9,9 +9,7 @@
         <field name="lang">{{ object.partner_id.lang }}</field>
         <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" />
 
-		<field name="body_html">
-			<![CDATA[
-                <div>
+<field name="body_html" type="html">                <div>
                     <div>
                         <t t-set="color" t-value="'#3191c5'"></t>
                         <t t-set="days_translation" t-value="{
@@ -147,7 +145,6 @@
                         </tbody>
                     </table>
                 </div>
-			]]>
 		</field>
 	</record>
 </odoo>

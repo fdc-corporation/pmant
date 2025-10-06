@@ -51,7 +51,7 @@
 								<strong>
 									Celular :
 								</strong>
-								<t t-esc="user_partner.mobile" />
+								<t t-esc="user_partner.phone" />
 							</span>
 							<span>
 								<strong>
@@ -112,7 +112,7 @@
 											</hr>
 											<span t-esc="sede.street" />
 											<span t-esc="sede.email" />
-											<span t-esc="sede.mobile" />
+											<span t-esc="sede.phone" />
 										</div>
 									</a>
 								</t>
@@ -125,7 +125,7 @@
 											</hr>
 											<span t-esc="sede.street" />
 											<span t-esc="sede.email" />
-											<span t-esc="sede.mobile" />
+											<span t-esc="sede.phone" />
 										</div>
 									</a>
 								</t>

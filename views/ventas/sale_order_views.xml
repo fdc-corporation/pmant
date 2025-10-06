@@ -9,6 +9,14 @@
         <field name="context">{'default_order_id': active_id}</field>
     </record>
 
+    <record id="action_open_order_cancel_wizard" model="ir.actions.act_window">
+        <field name="name">Cancelar Orden de Venta</field>
+        <field name="res_model">wizard.order.cancel</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_sale_id': active_id}</field>
+    </record>
+
     <!-- Vista del asistente para seleccionar equipo -->
     <record id="view_equipment_selection_wizard" model="ir.ui.view">
         <field name="name">wizard.equipment.selection.form</field>
@@ -28,14 +36,26 @@
         </field>
     </record>
 
-    <record id="view_inhrit_tree_sale_order" model="ir.ui.view">
-        <field name="name">sale.order.sale_order_tree</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.sale_order_tree"/>
+    <!-- WIZARD DE CANCELACION DE ORDEN DE VENTA -->
+    <record id="view_wizard_order_cancel" model="ir.ui.view">
+        <field name="name">wizard.order.cancel.form</field>
+        <field name="model">wizard.order.cancel</field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="partner_shipping_id" />
-            </xpath>
+            <form string="Cancelar Orden de Venta">
+                <sheet>
+                    <field name="sale_id" invisible="1"></field>
+                    <div class="alert alert-warning">
+                        <p>
+                            ¿Estás seguro de cancelar la orden de venta? tienes un OT que se eliminara cuando se cancele la orden de venta.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_cancel_all" string="Cancelar y eliminar OT" type="object" class="btn-primary"/>
+                    <button name="action_cancel" string="Cancelar y no eliminar OT" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
         </field>
     </record>
 
@@ -63,9 +83,17 @@
             <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
                 <attribute name="domain" >[('parent_id', '=', partner_id)]</attribute>
             </xpath>
-
-            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="titulo_cotizacion"></field>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
                 <field name="id_equipo" column_invisible="1"></field>
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="before">
+                <button name="%(action_open_order_cancel_wizard)d" invisible="state not in ['draft', 'sent', 'sale'] or not id or locked or not ots" type="action" string="Cancelar"  />
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'sent', 'sale'] or not id or locked or ots</attribute>
             </xpath>
         </field>
     </record>

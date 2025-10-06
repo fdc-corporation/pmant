@@ -2,39 +2,89 @@
 
 <!--Registros de grupos en el modelo ( tabla ) res.groups-->
 
-        <record id="group_pmant_admin" model="res.groups">
-            <field name="name">Mantenimiento - ADMIN</field>
-        </record>
-        <record id="group_pmant_user_notifi_fac" model="res.groups">
-            <field name="name">Mantenimiento - Notificacion Facturacion</field>
-        </record>
-        <record id="group_pmant_planner_tarea" model="res.groups">
-            <field name="name">Mantenimiento - Autoasignacion tareas (planner)</field>
-        </record>
-        <record id="group_pmant_tecnico" model="res.groups">
-            <field name="name">Mantenimiento - TECNICO</field>
-        </record>
-       
-	<record id="group_pmant_customer" model="res.groups">
-            <field name="name">Mantenimiento -  Vendedor</field>
+    
+    <record model="res.groups.privilege" id="res_group_pmant_category">
+        <field name="name">Pmant</field>
+        <field name="category_id" ref="base.module_category_supply_chain"/>
+    </record>
+    <record model="res.groups.privilege" id="res_hroup_pmant_privilege_alert">
+        <field name="name">Pmant - Notificacion facturacion</field>
+        <field name="category_id" ref="base.module_category_supply_chain"/>
     </record>
 
-    <record id="group_recibir_notificacion" model="res.groups">
-            <field name="name">Mantenimiento - Recibir Notificacion  Mantenimiento</field>
+    <record model="res.groups" id="group_pmant_planner">
+        <field name="name">Mantenimiento - Planner</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Usuario planner de mantenimiento.</field>
     </record>
+    <record model="res.groups" id="group_pmant_admin">
+        <field name="name">Mantenimiento - Admin</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">Usuario tecnico de mantenimiento.</field>
+    </record>
+    <record model="res.groups" id="group_pmant_tecnico">
+        <field name="name">Mantenimiento - Tecnico</field>
+        <field name="sequence">30</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Usuario tecnico de mantenimiento.</field>
+    </record>
+    <record model="res.groups" id="group_pmant_vendedor">
+        <field name="name">Mantenimiento - Vendedor</field>
+        <field name="sequence">40</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Usuario vendedor de mantenimiento.</field>
+    </record>
+
+    <record model="res.groups" id="group_pmant_user_notifi_fac">
+        <field name="name">Mantenimiento - Notificacion facturacion</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_hroup_pmant_privilege_alert"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Usuario que recibe notificaciones de facturacion de mantenimiento.</field>
+
+    </record>
+
+
+    <!-- <record id="group_pmant_admin" model="res.groups">
+            <field name="name">Mantenimiento - ADMIN</field>
+        </record> -->
+        <!-- <record id="group_pmant_user_notifi_fac" model="res.groups">
+            <field name="name">Mantenimiento - Notificacion Facturacion</field>
+        </record> -->
+        <!-- <record id="group_pmant_planner_tarea" model="res.groups">
+            <field name="name">Mantenimiento - Autoasignacion tareas (planner)</field>
+        </record> -->
+        <!-- <record id="group_pmant_tecnico" model="res.groups">
+            <field name="name">Mantenimiento - TECNICO</field>
+        </record> -->
+       
+	<!-- <record id="group_pmant_customer" model="res.groups">
+            <field name="name">Mantenimiento -  Vendedor</field>
+    </record> -->
+
+    <!-- <record id="group_recibir_notificacion" model="res.groups">
+            <field name="name">Mantenimiento - Recibir Notificacion  Mantenimiento</field>
+    </record> -->
    
-        <record id="group_pmant_manager" model="res.groups">
+        <!-- <record id="group_pmant_manager" model="res.groups">
         <field name="name">Manager Mantenimiento</field>
         <field name="comment">The user will have access to the human resources configuration as well as statistic reports.</field>
 
 
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> -->
 
         <!--
             <field name="category_id" ref="pmant.mod_category_pmant"/>
         <field name="implied_ids" eval="[(4, ref('group_hr_user'))]"/>
          -->
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <!-- <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/> -->
 
-    </record>
+    <!-- </record> -->
 </odoo>

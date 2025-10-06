@@ -5,12 +5,8 @@
 		<field name="model">maintenance.equipment</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_kanban" />
 		<field name="arch" type="xml">
-			<xpath expr="//field[@name='name']" position="after">
-				<field name="propietario" />
-				<field name="ubicacion" />
-				<field name="area" />
-			</xpath>
-			<xpath expr="//div[@t-if='record.serial_no.raw_value']" position="after">
+			
+			<xpath expr="//field[@name='serial_no']" position="after">
 				<div class="mt-2" style="display: flex; flex-direction: column;">
 					<div t-if="record.propietario.raw_value">
 						<strong>Propietario:</strong> <field name="propietario" />
@@ -72,13 +68,13 @@
 				<notebook>
 					<page string="Mantenimientos">
 						<field name="planequipo" string="Mantenimientos Realizados" >
-							<tree>
+							<list>
 								<field name="equipo" />
 								<field name="plan" />
 								<field name="estado" />
 								<field name="fecha_ejec" />
 								<button name="create_report_equipo" string="Generar Reporte" type="object" class="oe_highlight" />
-							</tree>
+							</list>
 						</field>
 						<group>
 							<field name="fecha_prox" string="Proximo Mantenimiento" />
@@ -90,14 +86,14 @@
 
 					<page string="Solicitudes de mantenimiento">
 						<field name="solicitudes_servicio">
-							<tree>
+							<list>
 								<field name="ubicacion_id" />
 								<field name="estado" />
 								<field name="tipo_servicio" />
 								<field name="fecha_servicio" />
 								<field name="detalle_problema" />
 								<button name="create_tarea" invisible="estado in 'atendido'" string="Atender" type="object" class="oe_highlight" />
-							</tree>
+							</list>
 							<form string="Solicitud de Mantenimiento">
 								<sheet>
 									<group>
@@ -120,24 +116,24 @@
 					</page>
 					<page string="Mediciones del equipo">
 						<field name="mediciones" >
-							<tree editable="bottom">
+							<list editable="bottom">
 								<field name="hora_uso" />
 								<field name="temperatura_elemento" />
 								<field name="presion_actual" />
 								<field name="temperatura_ambiente" />
 								<!-- <field name="equipo_id" /> -->
 								<field name="fecha_registro" />
-							</tree>
+							</list>
 						</field>
 					</page>
 					<page string="Certificados">
 						<field name="certificados" string="Certificados" >
-							<!-- <tree>
+							<!-- <list>
 								<field name="name" string="Nombre del archivo"/>
 								<field name="type" string="Tipo de archivo"/>
 								<field name="mimetype" string="Tipo de archivo"/>
 								<field name="write_date" string="Fecha Generada"/>
-							</tree> -->
+							</list> -->
 							 
 						</field>
 					</page>
@@ -162,11 +158,11 @@
 					True
 				</attribute>
 			</xpath>
-			<xpath expr="//field[@name='location']" position="attributes">
+			<!-- <xpath expr="//field[@name='location']" position="attributes">
 				<attribute name="invisible">
 					True
 				</attribute>
-			</xpath>
+			</xpath> -->
 			<xpath expr="//field[@name='equipment_assign_to']" position="attributes">
 				<attribute name="invisible">
 					True

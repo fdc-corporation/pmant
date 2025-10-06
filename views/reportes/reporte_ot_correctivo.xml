@@ -68,7 +68,7 @@
 									<span t-field="doc.ubicacion" />
 									<br />
 									Teléfono:
-									<span t-field="doc.ubicacion.mobile" />
+									<span t-field="doc.ubicacion.phone" />
 									<br />
 									Email:
 									<span t-field="doc.ubicacion.email" />

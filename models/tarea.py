@@ -32,7 +32,6 @@ class TipoTarea(models.Model):
 class Tarea(models.Model):
     _name = 'tarea.mantenimiento'
     _description = 'Tareas de mantenimiento'
-
     _inherit = ['mail.thread', 'mail.activity.mixin']  # Hereda de mail.thread y mail.activity.mixin
     
     name = fields.Char(size=60, required=True, string='Nombre', tracking=True)
@@ -46,13 +45,12 @@ class Tarea(models.Model):
     adjunto = fields.Binary(attachment=True)
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
-    state_id = fields.Many2one('maintenance.stage', string="Etapa", store=True, tracking=True, ondelete='set null')
     stage_id = fields.Many2one(
         'etapa.tarea.mantenimiento',
         string="Etapa",
         store=True,
         tracking=True,
-        ondelete='set null',group_expand='_group_expand_stages',
+        ondelete='set null',group_expand='_read_group_stage_ids',
         default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
     )
     kanban_state = fields.Selection([
@@ -66,7 +64,6 @@ class Tarea(models.Model):
     dni = fields.Char(string="DNI del Firmante")
     is_admin = fields.Boolean(compute="_is_admin", default=True)
     comentario = fields.Text('Comentario del firmante')
-    creado_por = fields.Many2one('res.users', string="Creado por")
     fecha_entrada = fields.Date( string="Fecha de ingreso", compute="_fecha_entrada")
     create_user     = fields.Many2one('res.users', string='Creado por', default=lambda self: self.env.user)
     compania        = fields.Many2one('res.company', string='Compañía', default=lambda self: self.env.company)
@@ -75,7 +72,6 @@ class Tarea(models.Model):
     id_tipo = fields.Integer()
     fecha_hoy = fields.Char(string="Fecha Formateada", compute="_fecha_formateada")
     is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
-    # oc_id = fields.Many2one('oc.compras', string="OC")
     is_tecnico = fields.Boolean(
         compute='_compute_is_tecnico',
         string='Is Técnico',
@@ -119,10 +115,9 @@ class Tarea(models.Model):
         return self.env.ref("pmant.action_ot_mantenimiento").report_action(self)
 
 
-    @api.model
-    def _group_expand_stages(self, stages, domain, order):
-        return self.env['etapa.tarea.mantenimiento'].search([], order=order)
-
+    def _read_group_stage_ids(self, stages, domain):
+        stage_ids = stages.sudo()._search([], order=stages._order)
+        return stages.browse(stage_ids)
     def name_get(self):
         result = []
         for record in self:
@@ -182,10 +177,10 @@ class Tarea(models.Model):
     @api.model
     def create(self, vals):
         record = super(Tarea, self).create(vals)
-        if 'create_user' not in vals:
-            vals['create_user'] = self.env.user.id
-        if 'compania' not in vals:
-            vals['compania'] = self.env.company.id
+        # if 'create_user' not in vals:
+        #     vals['create_user'] = self.env.user.id
+        # if 'compania' not in vals:
+        #     vals['compania'] = self.env.company.id
 
         record._set_fecha_movimiento()
         return record
@@ -253,9 +248,6 @@ class Tarea(models.Model):
                     planes_por_fecha[fecha_ejecprox] = []
 
                 planes_por_fecha[fecha_ejecprox].append((equipo, alertas))
-            # for planequipo in self.planequipo:
-            #     print("DATOS DEL EQUIPO FECHAS  PROXIMAS DE SERVICIO")
-            #     print(planequipo.equipo.fecha_prox)
             for fecha, equipos_alertas in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([equipo for equipo, _ in equipos_alertas])
                 
@@ -264,7 +256,10 @@ class Tarea(models.Model):
                     ('start', '=', fecha),
                     ('ots_id', '=', record.ots[0].id if record.ots else False),
                 ], limit=1)
-                
+                group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False) or self.env.ref("pmant.group_pmant_admin", raise_if_not_found=False)
+                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                print("USER PARA EL EVENTO:", user)
+                print("GROUP PARA EL EVENTO:", group)
                 if not existing_event :
                     event = self.env['calendar.event'].create({
                         'name': f'Proximo servicio - {cliente}',
@@ -275,6 +270,7 @@ class Tarea(models.Model):
                         'location': ubicacion,
                         'description': f'Servicios de equipos: {descripcion_equipos}',
                         'partner_ids': [(6, 0, partner_ids)],
+                        'user_id': user.id if user else False,
                     })
 
                     for _, alertas in equipos_alertas:
@@ -338,10 +334,11 @@ class Tarea(models.Model):
             "empresa": self.cliente.id,
             "ubicacion": self.ubicacion.id,
             "notas_venta": self.notas,
-            # "order_compra" : self.oc_id.id
+            "schedule_date": datetime.now(),
+            "order_compra" : self.oc_id.id
         })
 
-        # self.oc_id.ot_servicio = ot.id
+        self.oc_id.ot_servicio = ot.id
 
         return {
             "type" : "ir.actions.act_window",

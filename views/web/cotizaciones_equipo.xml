@@ -51,7 +51,7 @@
 								<strong>
 									Celular :
 								</strong>
-								<t t-esc="user_partner.mobile" />
+								<t t-esc="user_partner.phone" />
 							</span>
 							<span>
 								<strong>

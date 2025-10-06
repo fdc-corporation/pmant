@@ -9,8 +9,7 @@
     <field name="lang">{{ object.partner_id.lang }}</field>
     <!-- <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" /> -->
 
-    <field name="body_html">
-        <![CDATA[
+    <field name="body_html" type="html">
             <div style="font-family: Arial, sans-serif; font-size: 14px; color: #111827;">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px;">
                     <tr>
@@ -41,7 +40,7 @@
                     <tr>
                         <td style="font-size: 11px; color: gray; text-align: center;">
                             Si aún no cuentas con un usuario para nuestro portal, contacte a 
-                            <a t-att-href="'tel:' + str(object.create_uid.company_id.mobile)"
+                            <a t-att-href="'tel:' + str(object.create_uid.company_id.phone or '')"
                                style="color: #008f8c; text-decoration: none;">
                                 +51 908 912 551
                             </a>
@@ -50,7 +49,6 @@
                     </tr>
                 </table>
             </div>
-        ]]>
     </field>
 	</record>
 </odoo>

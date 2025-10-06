@@ -20,7 +20,7 @@
         <field name="model">sign.send.request</field>
         <field name="inherit_id" ref="sign.sign_send_request_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='filename']" position="after">
+            <xpath expr="//field[@name='activity_id']" position="after">
                 <field name="ot_id" readonly="1" />
                 <field name="equipo_id" readonly="1" />
             </xpath>
@@ -32,7 +32,7 @@
         <field name="model">sign.request</field>
         <field name="inherit_id" ref="sign.sign_request_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='validity']" position="after">
+            <xpath expr="//field[@name='active']" position="after">
                 <field name="ot_id" readonly="1" />
                 <field name="equipo_id" readonly="1" />
             </xpath>

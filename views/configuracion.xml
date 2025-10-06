@@ -5,7 +5,7 @@
             <field name="name">Estado Procesos</field>
             <field name="res_model">estadoproceso.mantenimiento</field>
             <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">Crea tu primera Estado Proceso
                 </p>
@@ -21,7 +21,7 @@
             <field name="name">Plantilla Certificado</field>
             <field name="res_model">plantilla.mantenimiento</field>
             <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">Crea tu primera Plantilla para el Certificado
                 </p>
@@ -57,7 +57,7 @@
             <field name="name">Plantilla Ticket</field>
             <field name="res_model">plantillaticket.mantenimiento</field>
             <!-- <field name="view_type">form</field> -->
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">Crea tu primera Plantilla para el Ticket
                 </p>

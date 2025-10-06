@@ -35,12 +35,12 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Incidencias" group="pmant.group_pmant_admin">
+                        <page string="Incidencias" group="pmant.group_pmant_admin,pmant.group_pmant_planner">
                             <field name="tab_comentarios">
-                                <tree>
-                                    <field name="file_ref" />
+                                <list>
+                                    <field name="file_ref" widget="image" />
                                     <field name="comentario" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -56,7 +56,7 @@
         <field name="name">programacion.mantenimiento.view.tree</field>
         <field name="model">programacion.mantenimiento</field>
         <field name="arch" type="xml">
-            <tree string="Horas trabajadas" >
+            <list string="Horas trabajadas" >
                 <field name="fecha_date"/>
                 <field name="duracion"/>
                 <field name="event_calendario"/>
@@ -64,7 +64,7 @@
                 <field name="fecha_fin"/>
                 <field name="horas_trabajado"/>
                 <field name="tecnicos" widget="many2many_avatar_user"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -100,11 +100,11 @@
         <field name="name">inconveniente.servicio.view.tree</field>
         <field name="model">inconveniente.servicio</field>
         <field name="arch" type="xml">
-            <tree string="Incidencias" >
+            <list string="Incidencias" >
                 <field name="ot_id"/>
                 <field name="file_ref"/>
                 <field name="comentario"/>
-            </tree>
+            </list>
         </field>
     </record>
 

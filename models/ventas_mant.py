@@ -6,7 +6,8 @@ class SaleOrder(models.Model):
 
     ots = fields.Many2one("tarea.mantenimiento", string="Tarea")
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
-    is_servicio = fields.Boolean(string="Es servicio", compute="verify_service")
+    is_servicio = fields.Boolean(string="Es servicio", compute="_compute_verify_service")
+    titulo_cotizacion = fields.Char(string="Título de la cotización")
 
 
 
@@ -23,33 +24,40 @@ class SaleOrder(models.Model):
             "context": {"default_order_id": self.id},
         }  
 
-
-    def verify_service(self):
+    @api.depends("order_line", "order_line.product_template_id", "order_line.id_equipo")
+    def _compute_verify_service(self):
         for order in self:
+            if not order.order_line:
+                order.is_servicio = False
+                continue
+
+            # Si hay alguna línea con id_equipo, no es servicio
             if any(line.id_equipo for line in order.order_line):
                 order.is_servicio = False
-            order.is_servicio = any(
-                line.product_template_id.detailed_type == "service"
-                for line in order.order_line
-            )
+            else:
+                # Si hay al menos un producto de tipo servicio, es servicio
+                order.is_servicio = any(
+                    line.product_template_id.type == "service"
+                    for line in order.order_line
+                )
 
     def action_confirm(self):
         res = super().action_confirm()
         self.create_mantenimiento()
         return res
 
-    def action_cancel(self):
-        res = super().action_cancel()
-        self.delete_mantenimiento()
-        return res
+ 
+
 
     def delete_mantenimiento(self):
         for record in self:
             tareas = self.env["tarea.mantenimiento"].search([("sale_order", "=", record.id)])
+            print("Tareas encontradas para eliminar:", tareas)
             for mantenimiento in tareas:
                 if not mantenimiento.ots:
                     mantenimiento.planequipo.unlink()
                     mantenimiento.unlink()
+            self.action_cancel()
 
     def create_mantenimiento(self):
         for order in self:
@@ -61,17 +69,20 @@ class SaleOrder(models.Model):
                 continue
 
             try:
-                group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
-                user = self.env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
+                group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
+                print("Group:", group)
+                print("Group:", group.name)
+
+                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                print("User:", user)
                 format_html_nota = self.template_format_nota(order)
                 
                 mantenimiento_vals = {
-                    "name": f"{' '.join(order.partner_id.name.split()[:2])} {order.name} - Servicios de mantenimiento",
+                    "name": f"{order.name} - {order.titulo_cotizacion or 'Servicios de mantenimiento'}",
                     "cliente": order.partner_id.id,
                     "ubicacion": order.partner_shipping_id.id,
                     "create_user": user.id,
-                    "creado_por": user.id,
-                    "oc_id": order.oc_id.id if order.oc_id else False,
+                    # "oc_id": order.oc_id.id if order.oc_id else False,
                     "sale_order": order.id,
                     "notas": format_html_nota,
                 }
@@ -88,13 +99,14 @@ class SaleOrder(models.Model):
 
                 if lines_to_add:
                     mantenimiento.write({"planequipo": lines_to_add})
+                    mantenimiento.write({"create_user": user.id})
                     order.ots = mantenimiento
 
                     # Actualizar estado de OC si aplica
-                    if order.oc_id:
-                        estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
-                        if estado:
-                            order.oc_id.state = estado.id
+                    # if order.oc_id:
+                    #     estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
+                    #     if estado:
+                    #         order.oc_id.state = estado.id
 
             except Exception as e:
                 raise UserError(f"Error al crear la solicitud de mantenimiento: {str(e)}")

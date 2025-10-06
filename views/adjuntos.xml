@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model="ir.ui.view" id="planequipoproce_tree_view">
-            <field name="name">planequipoproceso.tree</field>
+    <record model="ir.ui.view" id="planequipoproce_list_view">
+            <field name="name">planequipoproceso.list</field>
             <field name="model">adjunto.mantenimiento</field>
             <field name="arch" type="xml">
-                <tree string="PlanEquipo Tree" >
+                <list string="PlanEquipo list" >
                     <field name="name"/>
                     <field name="adjunto" widget="binary" filename="filename"/>
-                </tree>
+                </list>
             </field>
     </record>
 
     <record model="ir.ui.view" id="planequipoproce_form_view">
-            <field name="name">planequipoproceso.tree</field>
+            <field name="name">planequipoproceso.list</field>
             <field name="model">adjunto.mantenimiento</field>
             <field name="arch" type="xml">
                 <form string="Tarea Form">
@@ -26,14 +26,14 @@
             </field>
     </record>
 
-     <record model="ir.ui.view" id="adj__tree_view">
-            <field name="name">image.tree</field>
+     <record model="ir.ui.view" id="adj__list_view">
+            <field name="name">image.list</field>
             <field name="model">adjuntoimage.mantenimiento</field>
             <field name="arch" type="xml">
-                <tree string="PlanEquipo Tree" >
+                <list string="PlanEquipo list" >
                     <field name="name"/>
                     <field name="adjunto" widget="binary" filename="filename"/>
-                </tree>
+                </list>
             </field>
     </record>
 
@@ -44,9 +44,9 @@
                 <form string="Tarea Form">
                     <sheet>
                          <group>
-                             <field name="name" string="Nombre Adjunto"/>
-                             <field name="adjunto" widget="image"  filename="name"/>
-                             <field name="comentario"/>
+                            <field name="comentario"/>
+                            <field name="name" string="Nombre Adjunto" invisible="1"/>
+                            <field name="adjunto" widget="image"  filename="name"/>
                         </group>
                 </sheet>
                 </form>

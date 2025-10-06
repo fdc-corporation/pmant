@@ -13,8 +13,8 @@ class PlanEquipo(models.Model):
     name = fields.Char(compute='_generate_name')
     plan = fields.Many2one('plan.mantenimiento', string='Plan de Tarea')
     equipo = fields.Many2one('maintenance.equipment', string='Equipo', required=True)
-    ubicacion = fields.Many2one('res.partner', string='Ubicacion')
-    cliente = fields.Many2one('res.partner', string='Cliente')
+    ubicacion = fields.Many2one('res.partner', string='Ubicacion', store=True)
+    cliente = fields.Many2one('res.partner', string='Cliente', store=True)
     tarea = fields.Many2one('tarea.mantenimiento', string='Tarea', required=True)
     ots = fields.One2many('maintenance.request', 'tarea', related="tarea.ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'planequipo', string="Procesos a Utilizar")
@@ -64,16 +64,16 @@ class PlanEquipo(models.Model):
     @api.model
     def create(self, vals):
         # Usa valores predeterminados del contexto si no están definidos explícitamente
-        vals['cliente'] = vals.get('cliente', self.env.context.get('default_cliente'))
-        vals['ubicacion'] = vals.get('ubicacion', self.env.context.get('default_ubicacion'))
-        vals['tarea'] = vals.get('tarea', self.env.context.get('default_tarea'))
+        self.cliente =  self.env.context.get('default_cliente') or None
+        self.ubicacion =  self.env.context.get('default_ubicacion') or None
+        self.tarea = self.env.context.get('default_tarea') or None
         return super(PlanEquipo, self).create(vals)
 
     @api.depends('fecha_ejec')
     def _generate_tecnico(self):
         for record in self:
             record.creador_id = record.equipo.create_uid.id
-            record.is_admin = self.env.user.has_group('pmant.group_pmant_admin')
+            record.is_admin = self.env.user.has_group('pmant.group_pmant_planner') or self.env.user.has_group('pmant.group_pmant_admin')
 
 
             if record.fecha_ejec:

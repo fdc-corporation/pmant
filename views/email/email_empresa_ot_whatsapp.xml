@@ -9,9 +9,7 @@
         <field name="lang">{{ object.partner_id.lang }}</field>
         <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" />
 
-		<field name="body_html">
-			<![CDATA[
-               <!-- Traducción de días -->
+<field name="body_html" type="html">               <!-- Traducción de días -->
                 <t t-set="days_translation" t-value="{
                     'Monday': 'Lunes',
                     'Tuesday': 'Martes',
@@ -52,7 +50,6 @@
                 <p style="box-sizing:border-box;margin:0 0 16px 0;">📄 *Una vez finalizado el servicio, se le enviará el reporte técnico al correo*.</p>
 
                 <p style="box-sizing:border-box;margin:0 0 16px 0;">Gracias por confiar en nuestro equipo.</p>
-			]]>
 		</field>
 	</record>
 </odoo>

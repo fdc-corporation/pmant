@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta, time
 from odoo.exceptions import UserError
 import datetime
 import logging
-from odoo.models import NewId
+# from odoo.models import NewId
 _logger = logging.getLogger(__name__)
 
 
@@ -42,27 +42,37 @@ class HojaHoras(models.Model):
                 record.event_calendario.unlink()
         return super().unlink()
 
+
     @api.depends("fecha_date", "duracion", "tecnicos")
     def _set_evento(self):
         for record in self:
-            evento = None  # siempre debe inicializarse
+            evento = False  # usar False, no None
 
             try:
                 if not record.ot_id or not record.fecha_date or not record.duracion:
                     _logger.info(f"⚠️ Faltan datos para crear evento en OT {record.ot_id.name if record.ot_id else 'Sin OT'}")
+
                 elif any(
-                    isinstance(user.id, NewId)
-                    or not user.partner_id
-                    or isinstance(user.partner_id.id, NewId)
+                    not user.partner_id
+                    or isinstance(user.partner_id.id, (bool, type(None)))
                     for user in record.tecnicos
                 ):
                     _logger.warning(f"⚠️ Técnicos sin partner persistido en OT {record.ot_id.name if record.ot_id else 'Sin OT'}")
+
                 else:
-                    partner_ids = [user.partner_id.id for user in record.tecnicos]
-                    if record.ot_id.empresa:
-                        if record.ot_id.ubicacion:
-                            partner_ids.append(record.ot_id.ubicacion.id)
+                    partner_ids = [
+                        user.partner_id.id
+                        for user in record.tecnicos
+                        if user.partner_id and user.partner_id.id
+                    ]
+
+                    if record.ot_id.empresa and record.ot_id.empresa.id:
                         partner_ids.append(record.ot_id.empresa.id)
+                    if record.ot_id.ubicacion and record.ot_id.ubicacion.id:
+                        partner_ids.append(record.ot_id.ubicacion.id)
+
+                    partner_ids = list(set([pid for pid in partner_ids if pid]))
+
                     valores_evento = {
                         "name": f"Servicio programado / {record.ot_id.name or record.name}",
                         "start": record.fecha_date,
@@ -75,7 +85,8 @@ class HojaHoras(models.Model):
 
                     # Reutilizar evento si ya existe
                     evento = record.event_calendario or self.env["calendar.event"].search(
-                        [("ots_id", "=", record.ot_id.id), ("programacion_id", "=", record.id)], limit=1
+                        [("ots_id", "=", record.ot_id.id), ("programacion_id", "=", record.id)],
+                        limit=1,
                     )
 
                     if evento:
@@ -86,7 +97,7 @@ class HojaHoras(models.Model):
             except Exception as e:
                 _logger.error(f"❌ Error al generar evento: {e}")
 
-            # 🚨 Esta línea debe ejecutarse SIEMPRE para evitar el ValueError
+            # 🔒 Siempre asigna algo, aunque sea False
             record.event_calendario = evento
 
     # def init_cronograma(self):

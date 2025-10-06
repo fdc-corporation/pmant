@@ -118,7 +118,7 @@
 										<hr />
 										<span t-esc="area.street" />
 										<span t-esc="area.email" />
-										<span t-esc="area.mobile" />
+										<span t-esc="area.phone" />
 									</div>
 								</a>
 							</t>

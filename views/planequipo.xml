@@ -13,13 +13,13 @@
 		<field name="name">planequipo.tree</field>
 		<field name="model">planequipo.mantenimiento</field>
 		<field name="arch" type="xml">
-			<tree string="PlanEquipo Tree">
+			<list string="PlanEquipo Tree">
 				<field name="equipo" />
 				<field name="plan" string="Plan de Mantenimiento"  />
 				<field name="estado" />
 				<field name="fecha_ejec" string="Fecha Ejecutada" />
 				<!-- <button name="%(pmant.action_plan_equipo)d" string="Reporte" type="action"/> -->
-			</tree>
+			</list>
 		</field>
 	</record>
 	<record model="ir.ui.view" id="PlanEquipov_form_view">
@@ -38,7 +38,7 @@
 						<field name="ots" invisible="1"/>
 						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<!-- <field name="equipo" options="{'no_open': True}"/> -->
-						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" readonly="not is_admin and not tarea.is_evaluacion"/>
 						<field name="fecha_ejec" invisible="1" readonly="1"/>
 						<field name="fecha_ejec" invisible="1"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
@@ -55,11 +55,11 @@
 						<!-- Procesos de mantenimiento -->
 						<page string="Procesos de Mantenimiento" invisible="is_admin or is_informe_file" >
 							<field name="procesos" nolabel="1" >
-								<tree >
+								<list >
 									<field name="estado"/>
 									<field name="proceso"/>
 									<field name="descripcion"/>
-								</tree>
+								</list>
 							</field>
 						</page>
 						<page string="Conclusiones" invisible="is_admin">

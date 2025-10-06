@@ -57,8 +57,8 @@
                 <div style="margin-top: 25px; text-align: center;">
                     <small style="color: gray; font-size: 11px;">
                         Si aún no cuentas con un usuario para nuestro portal, contacte a
-                        <a t-att-href="'tel:' + str(object.create_uid.company_id.mobile or '')" style="text-decoration: none; color: #008f8c;">
-                            <t t-esc="object.create_uid.company_id.mobile or ''"></t>
+                        <a t-att-href="'tel:' + str(object.create_uid.company_id.phone or '')" style="text-decoration: none; color: #008f8c;">
+                            <t t-esc="object.create_uid.company_id.phone or ''"></t>
                         </a>
                         para obtener acceso a todos sus servicios.
                     </small>

@@ -15,8 +15,8 @@
     "version": "1.9",
     # any module necessary for this one to work correctly
     "depends": [
-        "base","hr_attendance", "hr_contract", "hr_payroll","sale","web","documents","product","crm","portal","mail",
-        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign"
+        "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign", "stock",
     ],
     # always loaded
     "data": [
@@ -26,20 +26,15 @@
         "views/reportes/report_acta.xml",
         "views/reportes/report_certificado_operatividad.xml",
         "views/ots.xml",
-        "views/views.xml",
-        "views/templates.xml",
         "views/general.xml",
         "views/herencia.xml",
         "views/configuracion.xml",
-        "views/wizard.xml",
         'views/reportes/report_planequipo.xml',
         "views/reporteticket.xml",
         "views/planequipo_reporte.xml",
         "views/horas_trabajo.xml",
         "views/planequipo.xml",
         "views/equipos.xml",
-        "views/rules_cliente.xml",
-        "views/rules_cliente_empresa.xml",
         "views/rules_tecnico.xml",
         "views/res_partner.xml",
         "views/adjuntos.xml",
@@ -47,6 +42,7 @@
         "views/paramatros.xml",
         "data/ir_module_category_data.xml",
         "views/reporteweb.xml",
+        "views/documents/documneto_firmado.xml",
         # VISTAS DEL PORTAL MANTENIMIENTO
         "views/web/index_portal.xml",
         "views/web/sedes_portal.xml",
@@ -64,10 +60,8 @@
         "views/web/servicios_ejecucion.xml",
         "views/web/cotizaciones_equipo.xml",
         "views/web/index_servicios_ejecuccion.xml",
-        "views/pmant_view_inherit_kanban.xml",
         "views/web/pagijna_gracias_web.xml",
         "views/web/form_calificacion.xml",
-        "views/documents/documneto_firmado.xml",
         "views/web/areas_sede.xml",
         "views/web/solicitudes_servicio.xml",
         # CODIGO - VENTAS A PMANT SERVICIOS

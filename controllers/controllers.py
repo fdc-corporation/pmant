@@ -28,4 +28,4 @@ class ReportePlain(http.Controller):
                 data = {
                     'docs': ots
                 }
-                return http.request.render("pmant.prueba_reporte_plain", data)
+                return http.request.render("pmant.prueba_reporte", data)

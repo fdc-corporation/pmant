@@ -20,7 +20,7 @@
                 <page string="Equipos" invisible="is_tecnico" >
                     <field name="is_tecnico" invisible="true"></field>
                     <field name="equipos_ubicacion" >
-                        <tree string="Equipos">
+                        <list string="Equipos">
                             <field name="name"/>
                             <field name="assign_date"/>
                             <field name="serial_no"/>
@@ -28,18 +28,18 @@
                             <field name="category_id"/>
                             <field name="serial_no"/>
                             <field name="company_id"/>
-                        </tree>                        
+                        </list>                        
                     </field>
                 </page>
                 <page string="Areas" name="areas" invisible="not tienen_areas">
                     <field name="areas">
-                        <tree>
+                        <list>
                             <field name="name"></field>
                             <field name="parent_id"></field>
                             <field name="email"></field>
-                            <field name="mobile"></field>
+                            <field name="phone"></field>
                             <field name="vat"></field>
-                        </tree>
+                        </list>
                     </field>
                 </page>
             </xpath>

@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 import logging
 import base64
 from odoo.tools import html2plaintext
+from odoo.tools import float_round
 
 # Crear un logger
 _logger = logging.getLogger(__name__)
@@ -16,15 +17,11 @@ class OTS(models.Model):
     _inherit = "maintenance.request"
     _description = "Peticion de mantenimiento"
 
-    sequence = fields.Char()
-    tarea = fields.Many2one("tarea.mantenimiento", string="Tarea")
-    estado = fields.Boolean(related="tarea.revisar", string="Estado")
+    # sequence = fields.Char()
+    tarea = fields.Many2one("tarea.mantenimiento", string="Tarea", required=True)
     tex = fields.Char(string="Text")
     empresa = fields.Many2one("res.partner", related="tarea.cliente")
     ubicacion = fields.Many2one("res.partner", related="tarea.ubicacion")
-    # order_compra = fields.Many2one(
-    #     "oc.compras", string="Orden de compra", ondelete="set null"
-    # )
     factura = fields.Many2one("account.move", string="Factura")
     factura_sunat = fields.Char(string="Factura Sunat")
     selec_sunat = fields.Boolean(string="Factura Sunat?")
@@ -32,13 +29,10 @@ class OTS(models.Model):
     partner_id = fields.Many2one("res.partner", related="tarea.cliente")
     fecha_ejec = fields.Date(string="Fecha Ejecutada", readonly=False)
     subodinados = fields.Many2many("res.users", string="Subordinados")
-    # event_id = fields.Many2one("calendar.event", string="Evento en calendario")
     is_evaluacion = fields.Boolean(string="Es una Evaluacion")
     is_tecnico = fields.Boolean(
         compute="_compute_is_tecnico", string="Is Técnico", store=False
     )
-    # oc_cliente = fields.Char(related="order_compra.oc", store=True)
-    # not_oc = fields.Boolean(string="No tiene OC?")
     tab_horas = fields.One2many(
         "programacion.mantenimiento", "ot_id", string="Hoja de horas"
     )
@@ -52,22 +46,22 @@ class OTS(models.Model):
     )
     cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
     notas_venta = fields.Html(string="Notas Venta", sanitize_style=True, sanitize_tags=False)
+    duration = fields.Float(string="Duración (H)", required=True, default=0.0, compute="_compute_horas_duracion", store=True)
+    
+    
 
-    @api.depends("estado")
-    def _get_tex(self):
-        if self.estado:
-            self.tex = "Urgente"
+ 
+    @api.depends("schedule_date", "schedule_end")
+    def _compute_horas_duracion(self):
+        for record in self:
+            if record.schedule_date and record.schedule_end:
+                delta = record.schedule_end - record.schedule_date
+                horas = delta.total_seconds() / 3600.0
+                # 🔒 redondear a 2 decimales
+                record.duration = float_round(horas, precision_digits=2)
+            else:
+                record.duration = 0.0
 
-    # OBTENER LA OC DE LA TAREA PARA EL MODULO DE OC_COMPRAS
-    # @api.onchange("tarea", "order_compra")
-    # def _compute_order_compra(self):
-    #     for record in self:
-    #         if record.tarea and record.tarea.oc_id:
-    #             record.order_compra = record.tarea.oc_id.id
-    #             if record.tarea.oc_id:
-    #                 record.tarea.oc_id.ot_servicio = self.id
-    #         else:
-    #             record.order_compra = False
 
     # ACCION PARA VER TODOS LOS DOCUMENTOS RELACIONADOS A LA OT
     def action_view_documentos(self):
@@ -111,13 +105,28 @@ class OTS(models.Model):
             record.is_tecnico = self.env.user.has_group("pmant.group_pmant_tecnico")
 
     @api.model
-    def create(self, vals):
-        record = super(OTS, self).create(vals)
-        if "duration" in vals and "schedule_date" in vals:
+    def create(self, vals_list):
+        records = self.browse()
+        for vals in vals_list:
+            # print("VALORES DE LA CREACION DE LA OT")
+            # print(vals.get("schedule_date"))
+
+            # Validación de campos requeridos
+            # if "schedule_date" not in vals:
+            #     print("NO HAY DATOS PARA CREAR LA PROGRAMACION DE OT")
+            #     raise UserError(_("Coloca la fecha programada antes de crear la OT."))
+
+            # Crear el registro
+            record = super().create([vals])
+
+            # Acciones posteriores a la creación
             print("EJECUCION DE CREATE PROGRAMACION DE OT")
             record.send_programacion_inicial()
             record.action_programacion_inicial()
-        return record
+
+            records |= record
+
+        return records
 
     def write(self, vals):
         res = super(OTS, self).write(vals)
@@ -140,14 +149,14 @@ class OTS(models.Model):
                         else:
                             print("ejecucion manual")
                             print(record.tarea.planequipo[:1].fecha_ejec)
-                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec
+                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec if record.tarea.planequipo else None
                             record.tarea._evento_calendario_proximo_servicio()
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
             self._change_createui()
         if "schedule_date" in vals:
             self.action_programacion_inicial()
-        if "duration" in vals or "subodinados" in vals or "user_id" in vals:
+        if "schedule_end" in vals or "subodinados" in vals or "user_id" in vals:
             self.action_programacion_inicial()
         return res
 
@@ -160,7 +169,7 @@ class OTS(models.Model):
         group = self.env.ref(group_xml_id)
         
         # Obtener los usuarios del grupo
-        users = group.users
+        users = group.user_ids
         if not users:
             return  # No hay usuarios para notificar
 
@@ -183,7 +192,7 @@ class OTS(models.Model):
             lista_user += record.subodinados.ids  # optimizado
 
             # Validar datos obligatorios
-            if not record.schedule_date or not record.duration or record.duration <= 0:
+            if not record.schedule_date:
                 raise UserError(_("Para crear una Orden de Trabajo debes colocar la fecha programada y una duración mayor a 0."))
 
             valores = {
@@ -399,7 +408,7 @@ class OTS(models.Model):
             "type": "ir.actions.act_window",
             "name": "OT " + self.name,
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "view_mode": "kanban",  # Esto es para ver primero la lista (list)
             "target": "current",
         }
 
@@ -440,7 +449,7 @@ class OTS(models.Model):
             "type": "ir.actions.act_window",
             "name": "Acta - " + self.name,
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
+            "view_mode": "kanban",  # Esto es para ver primero la lista (list)
             "target": "current",
         }
 
@@ -574,7 +583,7 @@ class OTS(models.Model):
                 "name": "Incidencias",
                 "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
                 "domain": [("id", "in", cant_data.ids)],
-                "view_mode": "tree,form",  # puedes permitir también la vista formulario
+                "view_mode": "list,form",  # puedes permitir también la vista formulario
                 "res_model": "inconveniente.servicio",
                 "context": {"create": False},
             }

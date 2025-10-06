@@ -22,10 +22,12 @@
 			                <field name="descripcion_proceso"  string="Proceso a Realizar"/>
 			                <field name="estado" required="1"/>
                             <field name="descripcion" string="Comentarios del Servicio"/>
-                             <field name="adjuntos"/>
-			                <field name="name_file" string="Nombre Adjunto" invisible="1"/>
-                            <field name="adjunto" widget="image" class="col-sm-2 col-md-3" filename="name_file" invisible="1"/>
-			                <field name="adjunto2" string="descargar" filename="name_file" invisible="1"/>
+                             <field name="adjuntos">
+                                <list>
+                                    <field name="adjunto"></field>
+                                    <field name="comentario"></field>
+                                </list>
+                             </field>
 			                <field name="planequipo" invisible="1"/>
 			                <field name="plan" invisible="1"/>
 			                <field name="tarea" invisible="1"/>
@@ -41,13 +43,13 @@
             <field name="name">planequipoproceso.tree</field>
             <field name="model">planequipoproceso.mantenimiento</field>
             <field name="arch" type="xml">
-                <tree string="PlanEquipo Tree" >
+                <list string="PlanEquipo Tree" >
 			        <field name="proceso"/>
 			        <field name="estado" />
 			        <field name="descripcion2" string="Comentario"/>
-			         <field name="name_file" string="Adjunto" />
+			         <!-- <field name="name_file" string="Adjunto" /> -->
 			         <field name="is_admin" column_invisible="True"/>
-                </tree>
+                </list>
             </field>
          </record>
 

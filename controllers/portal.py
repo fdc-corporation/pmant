@@ -1,5 +1,5 @@
-from odoo import http
-from odoo.http import request
+# from odoo import http
+from odoo.http import request, route, Controller
 import smtplib
 from math import ceil
 from email.mime.multipart import MIMEMultipart
@@ -14,9 +14,9 @@ import json
 _logger = logging.getLogger(__name__)
 
 
-class PortalPmant(http.Controller):
+class PortalPmant(Controller):
 
-    @http.route(
+    @route(
         ["/my/sedes/", "/my/sedes/page/<int:pagina>"],
         type="http",
         auth="user",
@@ -72,7 +72,7 @@ class PortalPmant(http.Controller):
 
 
     # Areas de las sedes
-    @http.route(
+    @route(
         [
             "/my/sede/<int:sede_id>/areas/",
             "/my/sede/<int:sede_id>/areas/page/<int:pagina>",
@@ -124,7 +124,7 @@ class PortalPmant(http.Controller):
 
 
     # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
-    @http.route(
+    @route(
         [
             "/my/sede/<int:sede_id>/equipos/",
             "/my/sede/<int:sede_id>/equipos/page/<int:pagina>",
@@ -177,7 +177,7 @@ class PortalPmant(http.Controller):
 
     
     # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
-    @http.route(
+    @route(
         [
             "/my/area/<int:sede_id>/equipos/",
             "/my/area/<int:sede_id>/equipos/page/<int:pagina>",
@@ -231,7 +231,7 @@ class PortalPmant(http.Controller):
 
     # EQUIPOS REGISTRADOS AL USUARIO DE LA CENTRAL
 
-    @http.route(
+    @route(
         [
             "/my/<int:empresa_id>/equipos/",
             "/my/<int:empresa_id>/equipos/page/<int:pagina>",
@@ -287,7 +287,7 @@ class PortalPmant(http.Controller):
 
 
     # SOLICITUD DE REGISTRO DE EQUIPO - SEDE -  CENTRAL
-    @http.route(
+    @route(
         ["/solicitud/equipo/"], type="http", auth="user", methods=["POST"], website=True
     )
     def solicitud_registro_equipo(self, **kwargs):
@@ -337,7 +337,7 @@ class PortalPmant(http.Controller):
         return request.redirect(f"/my/{user_partner.id}/equipos/")
 
     # SOLICITUD DE REGISTRO DE HNUEVO SERVICIO
-    @http.route(
+    @route(
         ["/solicitud/equipo/"], type="http", auth="user", methods=["POST"], website=True
     )
     def solicitud_registro_equipo(self, **kwargs):
@@ -388,7 +388,7 @@ class PortalPmant(http.Controller):
 
     # REGISTROS - DETALLES DEL EQUIPO
 
-    @http.route(
+    @route(
         ["/my/equipos/<int:equipo_id>/detalles"], type="http", auth="user", website=True
     )
     def detalle_equipo(self, equipo_id, filtro=None, pagina=1, **kw):
@@ -416,15 +416,15 @@ class PortalPmant(http.Controller):
             )
 
     # DETALLES DE HISTORIALD E MNATENIMIENTO - EQUIPO
-    @http.route(
+    @route(
         [
-            "/my/equipo/<int:equipo_id>/historial",
-            "/my/equipo/<int:equipo_id>/historial/page/<int:pagina>",
+            "/my/equipo/<int:equipo_id>/servicios/historial/",
+            "/my/equipo/<int:equipo_id>/servicios/historial//page/<int:pagina>",
         ],
         type="http",
-        methods=["GET"],
         auth="user",
         website=True,
+        sitemap=False
     )
     def historial_mantenimiento(self, equipo_id, pagina=1, **kwargs):
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
@@ -437,7 +437,7 @@ class PortalPmant(http.Controller):
 
         # Paginador
         pager = {
-            "page": pagina,
+            "page": int(pagina),
             "size": total_paginas,
         }
 
@@ -459,11 +459,13 @@ class PortalPmant(http.Controller):
                 "pager": pager,
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
+                "website_meta_description": f"Historial de mantenimiento del equipo {equipo.name} en FDC Corporation",
+
             },
         )
 
 
-    @http.route("/my/equipo/<int:equipo_id>/solicitudes/servicios", methods=["GET"], type="http", auth='user', website=True)
+    @route("/my/equipo/<int:equipo_id>/solicitudes/servicios", methods=["GET"], type="http", auth='user', website=True)
     def view_solicitudes_servicios(self, equipo_id, page=1, sort='desc', **kwargs):
         page = int(page)
         sort = request.params.get('sort', 'desc').lower()
@@ -495,7 +497,7 @@ class PortalPmant(http.Controller):
         })
 
 
-    @http.route("/my/equipo/<int:equipo_id>/cotizaciones", methods=["GET"], type="http", auth='user', website=True)
+    @route("/my/equipo/<int:equipo_id>/cotizaciones", methods=["GET"], type="http", auth='user', website=True)
     def view_cotizaciones_equipo(self, equipo_id, page=1, **kwargs):
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
         user_partner = request.env.user.partner_id
@@ -536,7 +538,7 @@ class PortalPmant(http.Controller):
 
 
 
-    @http.route(
+    @route(
         ["/my/servicios/ejecucion", "/my/servicios/ejecucion/page/<int:page>"],
         type="http",
         auth="user",
@@ -585,7 +587,7 @@ class PortalPmant(http.Controller):
             },
         )
 
-    @http.route(
+    @route(
         [
             "/my/equipo/<int:equipo_id>/adjuntos",
             "/my/equipo/<int:equipo_id>/adjuntos/page/<int:pagina>",
@@ -633,7 +635,7 @@ class PortalPmant(http.Controller):
             },
         )
 
-    @http.route(
+    @route(
         "/descargas/reporte/mantenimiento/<int:tarea_id>",
         type="http",
         auth="user",
@@ -667,7 +669,7 @@ class PortalPmant(http.Controller):
             ]
             return request.make_response(content, headers=headers)
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
-    @http.route(
+    @route(
         ["/descargas/adjuntos/equipo/<int:id_adjunto>"],
         type="http",
         auth="user",
@@ -692,7 +694,7 @@ class PortalPmant(http.Controller):
         return request.make_response(file_content_decoded, headers=headers)
 
     # RUTA PARA DESCARGA DE DOCUMENTOS DEL EQUIPO
-    @http.route(
+    @route(
         ["/descargas/documento/equipo/<int:id_equipo>"],
         type="http",
         auth="user",
@@ -717,7 +719,7 @@ class PortalPmant(http.Controller):
         return request.make_response(file_content_decoded, headers=headers)
 
     # RUTA PARA LOS CERTIFICADOS DE OPERATIVIDAD DEL EQUIPO
-    @http.route(
+    @route(
         ["/my/equipo/<int:id_equipo>/certificados"],
         type="http",
         auth="user",
@@ -728,7 +730,7 @@ class PortalPmant(http.Controller):
         return request.render("pmant.certificados_equipo", {"equipo": equipo})
 
     # RUTA PARA LOS ADJUNTOS DEL EQUIPO
-    @http.route(
+    @route(
         ["/descargas/certificado/equipo/<int:id_adjunto>"],
         type="http",
         methods=["GET"],
@@ -749,7 +751,7 @@ class PortalPmant(http.Controller):
 
 
 
-    @http.route('/solicitud/mantenimiento/servicio', type='http', auth='public', methods=['POST'], csrf=True)
+    @route('/solicitud/mantenimiento/servicio', type='http', auth='public', methods=['POST'], csrf=True)
     def recibir_solicitud_servicio(self, **post):
         try:
             print("📩 Iniciando procesamiento del formulario de servicio...")
@@ -798,8 +800,8 @@ class PortalPmant(http.Controller):
             </body></html>"""
 
             # Buscar usuarios del grupo
-            group = request.env.ref('pmant.group_pmant_admin')
-            internal_users = group.sudo().users.filtered(lambda u: u.email)
+            group = request.env.ref('pmant.group_pmant_planner')
+            internal_users = group.sudo().user_ids.filtered(lambda u: u.email)
             print(f"👥 Usuarios internos con permiso: {[u.login for u in internal_users]}")
 
             destinatarios = [u.email for u in internal_users]
@@ -853,7 +855,7 @@ class PortalPmant(http.Controller):
 
 
     # EVALUACIONES DEL EQUIPO, HISTORIAL
-    @http.route(
+    @route(
         [
             "/my/equipo/<int:id_equipo>/evaluaciones",
             "/my/equipo/<int:id_equipo>/evaluaciones/page/<int:pagina>",
@@ -902,7 +904,7 @@ class PortalPmant(http.Controller):
         )
 
     # DECARGA DE LA HOJA DE EVALUACION
-    @http.route(
+    @route(
         ["/descargas/reporte/evaluacion/<int:tarea_id>"],
         type="http",
         auth="user",
@@ -925,7 +927,7 @@ class PortalPmant(http.Controller):
         return request.make_response(content, headers=headers)
 
     # Descarga de reprote de equipos de la sede
-    @http.route(
+    @route(
         ["/download/reporte_sede_equipos/<int:id_ubicacion>"],
         type="http",
         auth="user",
@@ -949,7 +951,7 @@ class PortalPmant(http.Controller):
         # Retornar la respuesta para descargar el archivo
         return request.make_response(pdf, headers=pdfhttpheaders)
 
-    @http.route(
+    @route(
         ["/download/planequipo/<int:planequipo>"],
         type="http",
         auth="public",
@@ -977,14 +979,14 @@ class PortalPmant(http.Controller):
         return request.make_response(pdf, headers=pdfhttpheaders)
 
 
-    @http.route("/calificacion/<int:order_id>", type="http", auth="public", website=True)
+    @route("/calificacion/<int:order_id>", type="http", auth="public", website=True)
     def page_calificacion(self, order_id, **kwargs):
         order = request.env["maintenance.request"].sudo().browse(int(order_id))
         if order.exists():
             return request.render("pmant.form_calificaciones", { "object" : order })
 
 
-    @http.route(
+    @route(
         "/rate_service", type="http", auth="public", methods=["GET"], csrf=False
     )
     def rate_service(self, **post):
@@ -1008,12 +1010,12 @@ class PortalPmant(http.Controller):
 
         return request.redirect("/gracias")
 
-    @http.route("/gracias", type="http", auth="public", website=True)
+    @route("/gracias", type="http", auth="public", website=True)
     def page_gracias(self, **kwargs):
 
         return request.render("pmant.page_gracias_form")
 
-    @http.route('/guardar/medicion/equipo', type='json', auth='user', csrf=False)
+    @route('/guardar/medicion/equipo', type='json', auth='user', csrf=False)
     def guardar_medicion_equipo(self, **kwargs):
         try:
             data = json.loads(request.httprequest.data.decode('utf-8'))
