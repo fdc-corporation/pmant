@@ -101,7 +101,7 @@ class Equipo(models.Model):
     )
     qr_image2 = fields.Binary("QR equipo", compute="_generate_qr_code", attachment=True)
     url_qr = fields.Char(string="URL del QR", compute="_generate_qr_code")
-    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code")
+    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code", store=True)
     hoy = fields.Date(default=str(datetime.now()))
     avisado_prox = fields.Char(compute="_comparar_fechas")
     avisado_prox = fields.Char(string="Avisado aprox")
