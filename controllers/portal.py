@@ -659,7 +659,7 @@ class PortalPmant(http.Controller):
                 content, _content_type = report_action._render_qweb_pdf(
                     "pmant.action_report_equipo", res_ids=record.ids
                 )
-            filename = f"Reporte Tecnico.pdf"
+            filename = f"{tarea.ots.name}.pdf"
             headers = [
                 ("Content-Type", "application/pdf"),
                 ("Content-Length", len(content)),
