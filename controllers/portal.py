@@ -10,6 +10,7 @@ import math
 import urllib.parse
 import base64
 import json
+import re
 
 _logger = logging.getLogger(__name__)
 
@@ -659,9 +660,12 @@ class PortalPmant(http.Controller):
                 content, _content_type = report_action._render_qweb_pdf(
                     "pmant.action_report_equipo", res_ids=record.ids
                 )
-            name = tarea.ots.name.replace(",", "_")
-            name_new = name.replace("/", "_")
-            filename = f"{name_new}.pdf"
+            raw = tarea.ots.name or ""
+
+            sanitized = re.sub(r'[\\/:\*\?"<>\|]', '', raw)
+            sanitized = re.sub(r'\s+', '_', sanitized).strip('_')
+
+            filename = f"{sanitized}.pdf"
             headers = [
                 ("Content-Type", "application/pdf"),
                 ("Content-Length", len(content)),
