@@ -659,7 +659,7 @@ class PortalPmant(http.Controller):
                 content, _content_type = report_action._render_qweb_pdf(
                     "pmant.action_report_equipo", res_ids=record.ids
                 )
-            name = tarea.ots.name.replace(" ", "_")
+            name = tarea.ots.name.replace(",", "_")
             name_new = name.replace("/", "_")
             filename = f"{name_new}.pdf"
             headers = [
