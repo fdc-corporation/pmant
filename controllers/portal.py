@@ -3,6 +3,7 @@ from odoo.http import request
 import smtplib
 from math import ceil
 from email.mime.multipart import MIMEMultipart
+from werkzeug.utils import secure_filename
 from email.mime.text import MIMEText
 import logging
 import base64
@@ -660,12 +661,7 @@ class PortalPmant(http.Controller):
                 content, _content_type = report_action._render_qweb_pdf(
                     "pmant.action_report_equipo", res_ids=record.ids
                 )
-            raw = tarea.ots.name or ""
-
-            sanitized = re.sub(r'[\\/:\*\?"<>\|]', '', raw)
-            sanitized = re.sub(r'\s+', '_', sanitized).strip('_')
-
-            filename = f"{sanitized}.pdf"
+            filename = secure_filename(f"{tarea.ots.name}.pdf")
             headers = [
                 ("Content-Type", "application/pdf"),
                 ("Content-Length", len(content)),
