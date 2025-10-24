@@ -645,7 +645,7 @@ class PortalPmant(http.Controller):
         tarea = request.env["planequipo.mantenimiento"].sudo().browse(tarea_id)
         if tarea.is_informe_file:
             filecontent = base64.b64decode(tarea.informe_file)
-            filename = f'reporte_mantenimiento_{tarea.equipo.name}.pdf'
+            filename = f'{tarea.ots.name}.pdf'
 
             return request.make_response(
                 filecontent,
