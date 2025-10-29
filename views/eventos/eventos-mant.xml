@@ -9,6 +9,7 @@
             <xpath expr="//field[@name='event_tz']" position="before">
                 <field name="ots_id" readonly="1"/>
                 <field name="programacion_id" readonly="1"/>
+                <field name="equipos_ids" widget="many2many_tags" />
             </xpath>
             <xpath expr="//sheet" position="before">
                 <header>

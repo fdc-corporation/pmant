@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<template id="historial_mantenimiento" name="Historial del Equipo">
-		<t t-set="website_meta" t-value="{}"/>
-		<t t-set="website_meta_description" t-value="''"/>
-		<t t-set="no_index" t-value="False"/>
+		<t t-set="website_meta" t-value="{}" />
+		<t t-set="website_meta_description" t-value="''" />
+		<t t-set="no_index" t-value="False" />
 		<t t-call="website.layout">
 			<div class="main">
 				<div class="card-contacto-main">
@@ -95,7 +95,7 @@
 								<div>
 									<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter-right" viewBox="0 0 16 16">
-											<path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5"/>
+											<path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5" />
 										</svg>
 									</button>
 									<ul class="dropdown-menu">
@@ -129,50 +129,89 @@
 					<div class="main_historail_pmant">
 						<t t-if="len(historial) > 0">
 							<t t-foreach="historial" t-as="plan">
-								<div class="card-mantenimiento">
+								<t t-if="not plan['is_otro']">
+									<div class="card-mantenimiento">
 										<div class="head-card-mg">
 											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
 											<div class="text-card-mantenimiento">
-												<strong t-esc="plan.ots.name if plan.ots else plan.tarea.name"/>
+												<strong t-esc="plan['record'].ots.name if plan['record'].ots else plan['record'].tarea.name" />
 												<span>
 													<span>
 														Tipo de Mant. :
 													</span>
-													<span t-esc="plan.tarea.tipo.name" />
+													<span t-esc="plan['record'].tarea.tipo.name" />
 												</span>
 												<span>
 													<span>
 														Fecha de ejecución :
 													</span>
-													<span t-esc="plan.fecha_ejec.strftime('%d/%m/%Y') if plan.fecha_ejec else ''" />
+													<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else ''" />
 												</span>
 												<span>
 													<span>
 														Etapa :
 													</span>
-													<span t-esc="plan.estado" />
+													<span t-esc="plan['record'].estado" />
 												</span>
 											</div>
 										</div>
-										<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.id)" class="bg-primary">
+										<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan['record'].id)" class="bg-primary">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
 												<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
 												<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
 											</svg>
 										</a>
 									</div>
+								</t>
+								<t t-else="">
+									<div class="card-mantenimiento">
+										<div class="head-card-mg">
+											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
+											<div class="text-card-mantenimiento">
+												<strong t-esc="plan['record'].name" />
+												<span>
+													<span>
+														Tipo de Mant. :
+													</span>
+													<span t-esc="plan['record'].tipo.name" />
+												</span>
+												<span>
+													<span>
+														Fecha de ejecución :
+													</span>
+													<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else ''" />
+												</span>
+												<span>
+													<span>
+														Etapa :
+													</span>
+													<span>
+														Finalizado
+													</span>
+												</span>
+											</div>
+										</div>
+										<a t-att-href="'/descargas/reporte/mantenimiento/' + str(plan['record'].id) + '/otros'" class="bg-primary">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+												<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+												<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+											</svg>
+										</a>
+									</div>
+								</t>
 							</t>
 						</t>
 						<t t-else="">
-							Aún no cuenta con Servicios registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
+							Aún no cuenta con Servicios registrados en el equipo. Contáctate con Compresores de Tornillo S.A.C. para registrar uno nuevo.
 						</t>
 					</div>
+					<!-- Paginación -->
 					<!-- Paginación -->
 					<nav aria-label="Paginación de Historial">
 						<ul class="pagination justify-content-center">
 							<!-- Botón Anterior -->
 							<li t-if="pagina_actual > 1" class="page-item">
-								<a t-att-href="'/my/equipo/' + str(equipo.id) + '/servicios/historial/page/' + str(pagina_actual - 1)" class="page-link">
+								<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial/page/' + str(pagina_actual - 1)" class="page-link">
 									« Anterior
 								</a>
 							</li>
@@ -184,14 +223,14 @@
 							<!-- Números de página -->
 							<t t-foreach="range(1, total_paginas + 1)" t-as="page">
 								<li t-att-class="'page-item ' + ('active' if page == pagina_actual else '')">
-									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/servicios/historial/page/' + str(page)" class="page-link">
+									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial/page/' + str(page)" class="page-link">
 										<t t-esc="page" />
 									</a>
 								</li>
 							</t>
 							<!-- Botón Siguiente -->
 							<li t-if="pagina_actual &lt; total_paginas" class="page-item">
-								<a t-att-href="'/my/equipo/' + str(equipo.id) + '/servicios/historial/page/' + str(pagina_actual + 1)" class="page-link">
+								<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial/page/' + str(pagina_actual + 1)" class="page-link">
 									Siguiente »
 								</a>
 							</li>

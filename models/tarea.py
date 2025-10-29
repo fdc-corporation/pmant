@@ -267,6 +267,7 @@ class Tarea(models.Model):
                         'stop': fecha,
                         'allday': False,
                         'ots_id': record.ots[0].id if record.ots else False,
+                        "equipos_ids": [(6, 0, [plan.equipo.id for plan in record.planequipo])],
                         'location': ubicacion,
                         'description': f'Servicios de equipos: {descripcion_equipos}',
                         'partner_ids': [(6, 0, partner_ids)],

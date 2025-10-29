@@ -418,49 +418,77 @@ class PortalPmant(Controller):
     # DETALLES DE HISTORIALD E MNATENIMIENTO - EQUIPO
     @route(
         [
-            "/my/equipo/<int:equipo_id>/servicios/historial/",
-            "/my/equipo/<int:equipo_id>/servicios/historial//page/<int:pagina>",
+            "/my/equipo/<int:equipo_id>/historial",
+            "/my/equipo/<int:equipo_id>/historial/page/<int:pagina>",
         ],
         type="http",
+        methods=["GET"],
         auth="user",
         website=True,
-        sitemap=False
     )
     def historial_mantenimiento(self, equipo_id, pagina=1, **kwargs):
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
-        per_page = 10  # Registros por página
-        # Filtrar historial de mantenimiento relacionado con el equipo
-        order = kwargs.get("filtro", False)
-        domain = [("equipo", "=", equipo_id)]
-        total = request.env["planequipo.mantenimiento"].sudo().search_count(domain)
-        total_paginas = math.ceil(total / per_page)
+        per_page = 10
+        offset = (pagina - 1) * per_page
 
-        # Paginador
+        # Obtener orden de filtro: ascendente o descendente
+        orden = kwargs.get("filtro", "desc").lower()
+        reverse_sort = True if orden == "desc" else False
+
+        # Dominio por equipo_id
+        domain = [("equipo", "=", equipo_id)]
+
+        # Buscar en ambos modelos
+        historial_1 = request.env["planequipo.mantenimiento"].sudo().search(domain)
+        historial_2 = request.env["mantenimento.equipo.otros"].sudo().search(domain)
+        print("--------------------DATOS PORTAL-----------------------")
+        print(historial_1)
+        print(historial_2)
+        # Convertir en lista con campo auxiliar
+        historial_1_list = [
+            {
+                "record": rec,
+                "fecha_ejec": rec.fecha_ejec or date.min,
+                "is_otro": False,
+            }
+            for rec in historial_1
+        ]
+
+        historial_2_list = [
+            {
+                "record": rec,
+                "fecha_ejec": rec.fecha_ejec or date.min,
+                "is_otro": True,
+            }
+            for rec in historial_2
+        ]
+        print(historial_1_list)
+        print(historial_2_list)
+
+        # Combinar listas y ordenar por fecha
+        historial_combinado = historial_1_list + historial_2_list
+        historial_ordenado = sorted(historial_combinado, key=lambda x: x["fecha_ejec"], reverse=reverse_sort)
+
+        # Paginación
+        total = len(historial_ordenado)
+        total_paginas = math.ceil(total / per_page)
+        historial_paginado = historial_ordenado[offset:offset + per_page]
+        print(historial_paginado)
+        # Generar el pager
         pager = {
-            "page": int(pagina),
+            "page": pagina,
             "size": total_paginas,
         }
-
-        # Obtener registros de la página actual
-        offset = (pagina - 1) * per_page
-        filtro = f"fecha_ejec {order if order else 'asc'}"
-
-        historial = (
-            request.env["planequipo.mantenimiento"]
-            .sudo()
-            .search(domain, offset=offset, limit=per_page, order=filtro)
-        )
 
         return request.render(
             "pmant.historial_mantenimiento",
             {
                 "equipo": equipo,
-                "historial": historial,
+                "historial": historial_paginado,
                 "pager": pager,
                 "pagina_actual": pagina,
                 "total_paginas": total_paginas,
-                "website_meta_description": f"Historial de mantenimiento del equipo {equipo.name} en FDC Corporation",
-
+                "filtro": orden,
             },
         )
 

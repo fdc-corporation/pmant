@@ -6,6 +6,10 @@ class EventoCalendario (models.Model):
     
     ots_id = fields.Many2one('maintenance.request', string='OTS')
     programacion_id = fields.Many2one("programacion.mantenimiento", string="Hoja de horas")
+    equipos_ids = fields.Many2many(
+        'maintenance.equipment',
+        string='Equipos'
+    )
 
     # GENERA UN LEED PARA EL SEGUIMIENTO DE LA OT PROXIMA
     def action_create_crm(self):

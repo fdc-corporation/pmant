@@ -35,6 +35,12 @@
 				<button class="oe_stat_button" type="object" name="action_view_certificados" icon="fa-file-text-o">
 					<field string="Certificados firmados" name="cantidad_certificados" widget="statinfo"/>
 				</button>
+				<button class="oe_stat_button" type="object" name="action_view_prox_mant" icon="fa-file-text-o">
+					<field string="Proximos mantenimiento" name="count_recordatorios" widget="statinfo"/>
+				</button>
+				<button class="oe_stat_button" type="object" name="action_programacion_equipo" icon="fa-file-text-o">
+					<field string="Historial de programaciones" name="count_programacion" widget="statinfo"/>
+				</button>
 			</xpath>
 			<!-- ADD -->
 			<xpath expr="//field[@name='employee_id']" position="after">
@@ -52,12 +58,12 @@
 			<xpath expr="//field[@name='fecha_compra']" position="after">
 				<field name="fabricante" string="Fabricante" />
 			</xpath>
-			<!-- <xpath expr="//field[@name='fabricante']" position="after">
-				<field name="otro1" string="Clasificacion 1" />
+			<xpath expr="//sheet" position="before">
+				<header>
+					<button name="programar_mantenimiento" type="object" string="Programar Mantenimiento" class="oe_highlight"/>
+					<button name="generar_n_serie" string="Generar N° de serie" type="object" />
+				</header>
 			</xpath>
-			<xpath expr="//field[@name='otro1']" position="after">
-				<field name="otro2" string="Clasificacion 2" />
-			</xpath> -->
 			<xpath expr="//field[@name='fabricante']" position="after">
 				<field name="time_uso" string="Horas de uso Promedio diario" widget="float_time" />
 			</xpath>
@@ -78,12 +84,30 @@
 						</field>
 						<group>
 							<field name="fecha_prox" string="Proximo Mantenimiento" />
-							<field name="hoy" invisible="1" />
-							<field name="avisado" invisible="1" />
-							<field name="avisado_prox" invisible="1" />
 						</group>
 					</page>
-
+					<page name="otros_mant" string="Otros Mantenimientos">
+						<field name="otros_mantenimientos" >
+							<list>
+								<field name="name" />
+								<field name="fecha_ejec" />
+								<field name="file_adjunto" />
+								<field name="tipo" />
+							</list>
+							<form string="Subir reporte técnico">
+								<group>
+									<field name="name"/>
+									<field name="equipo" readonly="1"/>
+									<!-- <field name="planequipo"/> -->
+									<field name="fecha_ejec"/>
+									<field name="tipo"/>
+									<field name="file_adjunto" filename="file_name" />
+									<field name="file_name" invisible="1"/>
+								</group>
+							</form>
+						</field>
+						
+					</page>
 					<page string="Solicitudes de mantenimiento">
 						<field name="solicitudes_servicio">
 							<list>
@@ -188,9 +212,6 @@
 				<div class="oe_image">
 					<field name="image" widget="image" class="oe_avatar" style="width:128px;height:128px;" />
 				</div>
-			</xpath>
-			<xpath expr="//field[@name='serial_no']" position="after">
-				<button name="generar_n_serie" string="Generar N° de serie" type="object" />
 			</xpath>
 		</field>
 	</record>

@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 from odoo.http import request
 import qrcode
 import base64
@@ -101,15 +102,7 @@ class Equipo(models.Model):
     )
     qr_image2 = fields.Binary("QR equipo", compute="_generate_qr_code", attachment=True)
     url_qr = fields.Char(string="URL del QR", compute="_generate_qr_code")
-    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code")
-    hoy = fields.Date(default=str(datetime.now()))
-    avisado_prox = fields.Char(compute="_comparar_fechas")
-    avisado_prox = fields.Char(string="Avisado aprox")
-    fecha_ult = fields.Date(compute="_generate_f_prox")
-    plan = fields.Char(compute="_generate_f_prox")
-    avisado = fields.Boolean(compute="_comparar_fechas")
-    avisado = fields.Boolean(string="Avisado")
-    anticipo = fields.Integer(compute="_generate_f_prox")
+    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code", store=True, readonly=False)
     image = fields.Binary("Image", attachment=True)
     certificados = fields.One2many(
         "sign.request", "equipo_id", domain=[("state", "=", "signed")], string="Certificados de operatividad"
@@ -122,7 +115,13 @@ class Equipo(models.Model):
     cantidad_certificados = fields.Integer(
         compute="_get_certificados", string="Cantidad de Certificados"
     )
-
+    otros_mantenimientos = fields.One2many("mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
+    count_recordatorios = fields.Integer(
+        compute="_compute_count_recordatorios", string="Cantidad de Recordatorios"
+    )
+    count_programacion = fields.Integer(
+        compute="_compute_count_programacion", string="Cantidad de Programaciones"
+    )
     def action_view_certificados(self):
         self.ensure_one()
         return {
@@ -193,7 +192,9 @@ class Equipo(models.Model):
             record.qr_image = qr_image_b64
             record.qr_image2 = qr_image_b64
             record.url_qr = url
-            record.fecha_prox = fecha_prox
+            if record.planequipo:
+                if record.fecha_prox < fecha_prox:
+                    record.fecha_prox = fecha_prox
 
 
     def generar_n_serie(self):
@@ -204,3 +205,98 @@ class Equipo(models.Model):
             if not equipo.serial_no:
                 equipo.serial_no = "FDC-" + str(equipo.id)
 
+    def programar_mantenimiento(self):
+        for record in self:
+            # Buscar grupo planificador
+            if not record.fecha_prox:
+                raise UserError(_(f"El equipo {record.name} no tiene una fecha de próximo mantenimiento definida."))
+            group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
+
+            # Buscar usuario del grupo
+            user = self.env['res.users'].search([
+                ('group_ids', 'in', [group.id]),
+                ('share', '=', False)
+            ], limit=1) if group else False
+
+            # Buscar TODAS las alarmas disponibles
+            alarms = self.env['calendar.alarm'].sudo().search([])
+
+            # Construir lista de partners (sin None)
+            partner_ids = []
+            if record.propietario:
+                partner_ids.append(record.propietario.id)
+            if record.ubicacion:
+                partner_ids.append(record.ubicacion.id)
+            if user and user.partner_id:
+                partner_ids.append(user.partner_id.id)
+
+            # Crear evento de calendario con todas las alarmas
+            calendario = self.env['calendar.event'].create({
+                'name': f'Programación de mantenimiento para {record.name}',
+                'start': record.fecha_prox,
+                'stop': record.fecha_prox,
+                'alarm_ids': [(6, 0, alarms.ids)],  # 🔔 Todas las alarmas
+                'equipos_ids': [(6, 0, [record.id])],
+                'partner_ids': [(6, 0, partner_ids)],
+            })
+
+        # Mostrar el último evento creado
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Calendario',
+            'res_model': 'calendar.event',
+            'view_mode': 'form',
+            'res_id': calendario.id,
+        }
+
+
+    def _compute_count_recordatorios (self):
+        for record in self:
+            record.count_recordatorios = self.env['calendar.event'].search_count([
+                ('equipos_ids', 'in', record.id),
+                ('start', '>=', fields.Date.today())
+            ])
+    
+    def action_view_prox_mant(self):
+        for record in self:
+            return {
+                "name": "Próximos Mantenimientos",
+                "type": "ir.actions.act_window",
+                "res_model": "calendar.event",
+                "view_mode": "list,form",
+                "domain": [
+                    ('equipos_ids', 'in', record.id),
+                    ('start', '>=', fields.Date.today())
+                ],
+            }
+
+
+    def _compute_count_programacion (self):
+        for record in self:
+            record.count_programacion = self.env['calendar.event'].search_count([
+                ('equipos_ids', 'in', record.id),
+                ('start', '>=', fields.Date.today())
+            ])
+    def action_programacion_equipo(self):
+        for record in self:
+            return {
+                "name": "Historial de Programaciones",
+                "type": "ir.actions.act_window",
+                "res_model": "calendar.event",
+                "view_mode": "list,form",
+                "domain": [
+                    ('equipos_ids', 'in', record.id)
+                ],
+            }
+
+class MasMantenimiento (models.Model):
+    _name = "mantenimento.equipo.otros"
+    _descriptiion = "Mas mantenimitnos externos"
+
+    name = fields.Char(string="Nombre", required="1")
+    # planequipo = fields.Many2one("planequipo.mantenimiento", string="Plan de mantenimiento")
+    fecha_ejec = fields.Date(string="Fecha ejecutada")
+    file_adjunto = fields.Binary(string="Reporte Tecnico")
+    file_name = fields.Char(string="Nombre de archivo")
+    tipo = fields.Many2one("tipotarea.mantenimiento", string="tipo de mantenimiento")
+    equipo = fields.Many2one("maintenance.equipment", string="Equipo")
