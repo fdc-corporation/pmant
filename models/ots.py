@@ -160,8 +160,10 @@ class OTS(models.Model):
                 if new_date:
                     new_date_obj = fields.Date.to_date(new_date)
                     old_date = record.schedule_end
-                    if old_date != new_date:
+                    _logger.info(f"Old date: {old_date}, New date: {new_date_obj}")
+                    if old_date != new_date_obj:
                         print("Fecha cambiada.")
+                        _logger.info("Fecha cambiada, actualizando programación inicial.")
                         record.action_programacion_inicial()
         return res
 
