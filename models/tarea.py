@@ -329,25 +329,21 @@ class Tarea(models.Model):
             }
 
     def create_ot(self):
-        ot = self.env["maintenance.request"].create({
-            "name": self.name,
-            "tarea": self.id,
-            "empresa": self.cliente.id,
-            "ubicacion": self.ubicacion.id,
-            "notas_venta": self.notas,
-            "schedule_date": datetime.now(),
-            "order_compra" : self.oc_id.id
-        })
-
-        self.oc_id.ot_servicio = ot.id
-
         return {
-            "type" : "ir.actions.act_window",
-            "name" : "Crear Solicitud de Mantenimiento",
-            "res_model" : "maintenance.request",
-            "view_mode" : "form",
-            "res_id" : ot.id,
-
+            "type": "ir.actions.act_window",
+            "name": "Crear Solicitud de Mantenimiento",
+            "res_model": "maintenance.request",
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                "default_name": self.name,
+                "default_tarea": self.id,
+                "default_empresa": self.cliente.id,
+                "default_ubicacion": self.ubicacion.id,
+                "default_notas_venta": self.notas,
+                "default_schedule_date": datetime.now(),
+                "default_order_compra": self.oc_id.id,
+            },
         }
 
 
