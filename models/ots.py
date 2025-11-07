@@ -335,7 +335,7 @@ class MaintenanceRequestOTS(models.Model):
                     _logger.warning(
                         "Correo de programación no se envió automáticamente para OT %s, reintentando...", rec.id
                     )
-                    self.env["mail.mail"].sudo().process_email_queue()
+                    self.env["mail.mail"].sudo().action_send_and_close()
 
                 # Registrar en chatter
                 rec.message_post(
