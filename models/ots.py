@@ -142,26 +142,8 @@ class MaintenanceRequestOTS(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
-        template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
-        if template:
-            for rec in records:
-                try:
-                    # Construir lista de destinatarios si procede
-                    correos = []
-                    if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
-                        correos.append(rec.ubicacion.email_jefe)
-                    if rec.ubicacion and getattr(rec.ubicacion, "email", None):
-                        correos.append(rec.ubicacion.email)
-                    if rec.empresa and getattr(rec.empresa, "email", None):
-                        correos.append(rec.empresa.email)
-                    email_to = ",".join(filter(None, correos)) if correos else None
-                    with self.env.cr.savepoint():
-                        template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
-                except Exception as e:
-                    _logger.exception("Error al encolar correo de programación para OT %s: %s", rec.id, e)
-                    rec.message_post(body = _("Error al encolar correo de programación: %s") % e)
-        # Crear programación si aplica (no dependemos de UI)
         try:
+            records.send_programacion_inicial()
             records.action_programacion_inicial()
         except Exception as e:
             _logger.exception("Error al crear/actualizar programación inicial para OTs: %s", e)
