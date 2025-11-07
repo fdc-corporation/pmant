@@ -224,6 +224,8 @@ class OTS(models.Model):
                     "default_composition_mode": "comment",
                     "force_email": True,
                 }
+                print("ENVIAR CORREO A LA SUCURSAL")
+                print("ctx:", ctx)
                 return {
                     "type": "ir.actions.act_window",
                     "name": "Enviar Correo de Programación",
