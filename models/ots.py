@@ -155,6 +155,11 @@ class MaintenanceRequestOTS(models.Model):
     def write(self, vals):
         res = super().write(vals)
         # Si cambia la etapa, ejecutar lógica por registro
+        campos_sincro = {'schedule_date', 'duration', 'user_id', 'subodinados'}
+        if campos_sincro.intersection(vals.keys()):
+            for rec in self:
+                rec.action_programacion_inicial()
+
         if "stage_id" in vals:
             for rec in self:
                 try:
