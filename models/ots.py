@@ -155,11 +155,14 @@ class MaintenanceRequestOTS(models.Model):
     def write(self, vals):
         res = super().write(vals)
         # Si cambia la etapa, ejecutar lógica por registro
-        campos_sincro = {'schedule_date', 'duration', 'user_id', 'subodinados'}
-        if campos_sincro.intersection(vals.keys()):
-            for rec in self:
-                rec.action_programacion_inicial()
 
+        if 'scheduled_end' in vals or 'duration' in vals:
+            try:
+                self.action_programacion_inicial()
+            except Exception as e:
+                _logger.exception("Error al actualizar programación inicial para OTs: %s", e)
+                for rec in self:
+                    rec.message_post(body=_("Error al actualizar programación inicial: %s") % e)
         if "stage_id" in vals:
             for rec in self:
                 try:
@@ -196,7 +199,7 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Lógica de programación y notificaciones
     # --------------------
-    @api.depends("schedule_date", "duration")
+    @api.depends("scheduled_end", "duration")
     def action_programacion_inicial(self):
         for rec in self:
             if not rec.schedule_date:
