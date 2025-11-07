@@ -471,7 +471,7 @@ class MaintenanceRequestOTS(models.Model):
             if not (planequipo and any(planequipo.mapped("is_informe_file"))):
                 if rec.stage_id and rec.stage_id.sequence == 3:
                     rec._fecha_estado()
-            if rec.stage_id and rec.stage_id.sequence == 5:
+            if rec.stage_id and rec.stage_id.sequence == 3:
                 rec.send_reporte_final()
 
     def _fecha_estado(self):
