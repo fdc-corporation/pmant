@@ -216,24 +216,26 @@ class OTS(models.Model):
             # Verificar que existe la plantilla
             template = self.env.ref("pmant.email_template_custom_sucursal")
             if template:
-                # Enviar el correo
-                template.send_mail(self.id, force_send=True)
-                # Publicar el contenido del correo en el Chatter
-                self.message_post(
-                    body=f"✅ Correo de programación enviado exitosamente a la sucursal.",
-                    subtype_xmlid="mail.mt_comment",
-                )
-            else:
-                self.message_post(
-                    body="⚠️ No se pudo enviar el correo: Plantilla no encontrada.",
-                    subtype_xmlid="mail.mt_comment",
-                )
+                ctx = {
+                    "default_model": "maintenance.request",
+                    "default_res_id": self.id,
+                    "default_template_id": template.id,
+                    "default_use_template": True,
+                    "default_composition_mode": "comment",
+                    "force_email": True,
+                }
+                return {
+                    "type": "ir.actions.act_window",
+                    "name": "Enviar Correo de Programación",
+                    "res_model": "mail.compose.message",
+                    "view_mode": "form",
+                    "target": "new",
+                    "context": ctx,
+                }
         except Exception as e:
             _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-            self.message_post(
-                body=f"❌ Error al enviar el correo: {str(e)}",
-                subtype_xmlid="mail.mt_comment",
-            )
+            self.message_post(body=f"Error al enviar el correo: {str(e)}")
+
 
     # ESTA FUNCION EJECUTA FUCIONES PARA ACTUALIZACION DE ESTADOS, FECHAS DE EJECUCION
     def _change_createui(self):
