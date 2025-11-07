@@ -254,30 +254,42 @@ class MaintenanceRequestOTS(models.Model):
                 )
 
     def send_reporte_final(self):
+        """Envía los correos finales (servicio finalizado + calificación) y los registra en el chatter."""
         for rec in self:
-            template_servicio = self.env.ref("pmant.email_template_servicio_finalizado", raise_if_not_found=False)
-            calificacion = self.env.ref("pmant.email_template_calificacion_servicio", raise_if_not_found=False)
+            template_servicio = self.env.ref(
+                "pmant.email_template_servicio_finalizado", raise_if_not_found=False
+            )
+            calificacion = self.env.ref(
+                "pmant.email_template_calificacion_servicio", raise_if_not_found=False
+            )
+
+            # --- Enviar plantilla de servicio finalizado ---
             if template_servicio:
                 try:
-                    template_servicio.send_mail(rec.id, force_send=True)
+                    rec.message_post_with_template(template_servicio.id, email_layout_xmlid="mail.mail_notification_light")
+                    _logger.info("Correo de servicio finalizado enviado para OT %s", rec.id)
                 except Exception as e:
                     _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
-                    rec.message_post(body=_("Error al enviar correo finalización: %s") % e)
+                    rec.message_post(body=_("❌ Error al enviar correo finalización: %s") % e)
+
+            # --- Enviar plantilla de calificación ---
             if calificacion:
                 try:
-                    calificacion.send_mail(rec.id, force_send=True)
+                    rec.message_post_with_template(calificacion.id, email_layout_xmlid="mail.mail_notification_light")
+                    _logger.info("Correo de calificación enviado para OT %s", rec.id)
                 except Exception as e:
-                    _logger.exception("Error al enviar template calificacion para OT %s: %s", rec.id, e)
-                    rec.message_post(body=_("Error al enviar correo de calificación: %s") % e)
+                    _logger.exception("Error al enviar template calificación para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("❌ Error al enviar correo de calificación: %s") % e)
 
     def send_programacion_inicial(self):
-        """Metodo para encolar envio de correo de programación; diseñado para no abrir UI."""
+        """Envía correo de programación inicial y registra el mensaje en el chatter."""
         for rec in self:
             template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
             if not template:
                 _logger.info("Plantilla pmant.email_template_custom_sucursal no encontrada")
-                rec.message_post(body=_("Plantilla de programación no encontrada."))
+                rec.message_post(body=_("❌ Plantilla de programación no encontrada."))
                 continue
+
             correos = []
             if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
                 correos.append(rec.ubicacion.email_jefe)
@@ -285,12 +297,16 @@ class MaintenanceRequestOTS(models.Model):
                 correos.append(rec.ubicacion.email)
             if rec.empresa and getattr(rec.empresa, "email", None):
                 correos.append(rec.empresa.email)
+
             email_to = ",".join(filter(None, correos)) if correos else None
+
             try:
-                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
+                ctx = {"email_to": email_to} if email_to else {}
+                rec.with_context(ctx).message_post_with_template(template.id, email_layout_xmlid="mail.mail_notification_light")
+                _logger.info("Correo de programación enviado para OT %s a %s", rec.id, email_to)
             except Exception as e:
-                _logger.exception("Error al encolar correo de programación (OT %s): %s", rec.id, e)
-                rec.message_post(body=_("Error al encolar correo de programación: %s") % e)
+                _logger.exception("Error al enviar correo de programación (OT %s): %s", rec.id, e)
+                rec.message_post(body=_("❌ Error al enviar correo de programación: %s") % e)
 
     def send_report_empresa(self):
         for rec in self:
