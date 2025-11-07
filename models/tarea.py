@@ -1,58 +1,61 @@
-from odoo import models, fields, api, exceptions
-from datetime import date, datetime, timedelta, time
-from odoo.exceptions import UserError
+# -*- coding: utf-8 -*-
+from datetime import datetime, date, timedelta
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import logging
-from odoo.exceptions import UserError
-import base64
+
 _logger = logging.getLogger(__name__)
 
 
-class AdjuntoEvaluacion (models.Model):
+class AdjuntoEvaluacion(models.Model):
     _name = 'adjunto.evaluacion'
     _description = 'Adjuntos de evaluación'
 
-    tarea  = fields.Many2one('tarea.mantenimiento', string="Tarea")
-    adjuntoimage     = fields.Binary(attachment=True)
-    comentario       = fields.Text()
+    tarea = fields.Many2one('tarea.mantenimiento', string="Tarea")
+    adjuntoimage = fields.Binary(attachment=True)
+    comentario = fields.Text()
 
-class EstapaTarea(models.Model):
+
+class EtapaTarea(models.Model):
     _name = "etapa.tarea.mantenimiento"
     _description = "Etapas de Tarea de Mantenimiento"
 
-    name = fields.Char(size=60, required=True, string='Nombre')
-    sequence = fields.Integer(string='Secuencia', default=1, help="Determina el orden en que se muestran las etapas de la tarea de mantenimiento. Las etapas con menor número se mostrarán primero.")
-    dias_promedio    = fields.Integer(string="Dias de estadia")
-    color_error     = fields.Integer(string="Color error")
-    color_warning   = fields.Integer(string="Color warning")
+    name = fields.Char(required=True, string='Nombre')
+    sequence = fields.Integer(string='Secuencia', default=1,
+                              help="Orden en que se muestran las etapas.")
+    dias_promedio = fields.Integer(string="Días de estadía")
+    color_error = fields.Integer(string="Color error")
+    color_warning = fields.Integer(string="Color warning")
+
 
 class TipoTarea(models.Model):
-   _name = 'tipotarea.mantenimiento'
-   name = fields.Char(size=25, required=True, string='Nombre')
+    _name = 'tipotarea.mantenimiento'
+    name = fields.Char(required=True, string='Nombre')
+
 
 class Tarea(models.Model):
     _name = 'tarea.mantenimiento'
     _description = 'Tareas de mantenimiento'
-    _inherit = ['mail.thread', 'mail.activity.mixin']  # Hereda de mail.thread y mail.activity.mixin
-    
-    name = fields.Char(size=60, required=True, string='Nombre', tracking=True)
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    # ----------------------------
+    # Campos principales
+    # ----------------------------
+    name = fields.Char(required=True, string='Nombre', tracking=True)
     tipo = fields.Many2one('tipotarea.mantenimiento', string="Tipo")
-    cliente = fields.Many2one('res.partner', string="Cliente", tracking=True, domain=[('is_company', '=', 'True')], required=False)
+    cliente = fields.Many2one('res.partner', string="Cliente", tracking=True,
+                              domain=[('is_company', '=', True)])
     ubicacion = fields.Many2one('res.partner', string="Ubicacion", tracking=True)
-    planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True, store=True)
-    clasi1 = fields.Char(size=50, string="Clasificacion 1")
-    clasi2 = fields.Char(size=50, string="Clasificacion 2")
+    planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True)
+    clasi1 = fields.Char(string="Clasificacion 1")
+    clasi2 = fields.Char(string="Clasificacion 2")
     prioridad = fields.Selection(related="ots.priority")
     adjunto = fields.Binary(attachment=True)
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
-    stage_id = fields.Many2one(
-        'etapa.tarea.mantenimiento',
-        string="Etapa",
-        store=True,
-        tracking=True,
-        ondelete='set null',group_expand='_read_group_stage_ids',
-        default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id
-    )
+    stage_id = fields.Many2one('etapa.tarea.mantenimiento', string="Etapa", store=True, tracking=True,
+                               ondelete='set null', group_expand='_read_group_stage_ids',
+                               default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id)
     kanban_state = fields.Selection([
         ('inportante', 'Importante'),
         ('realizado', 'Realizado'),
@@ -64,131 +67,118 @@ class Tarea(models.Model):
     dni = fields.Char(string="DNI del Firmante")
     is_admin = fields.Boolean(compute="_is_admin", default=True)
     comentario = fields.Text('Comentario del firmante')
-    fecha_entrada = fields.Date( string="Fecha de ingreso", compute="_fecha_entrada")
-    create_user     = fields.Many2one('res.users', string='Creado por', default=lambda self: self.env.user)
-    compania        = fields.Many2one('res.company', string='Compañía', default=lambda self: self.env.company)
+    fecha_entrada = fields.Date(string="Fecha de ingreso", compute="_compute_fecha_entrada", store=False)
+    create_user = fields.Many2one('res.users', string='Creado por', default=lambda self: self.env.user)
+    compania = fields.Many2one('res.company', string='Compañía', default=lambda self: self.env.company, required=True)
     comentario_tecnico = fields.Text(string="Comentario ingreso")
-    adjuntos_evaluaciones     = fields.One2many("adjunto.evaluacion", 'tarea', string='Adjuntos de Evaluacion')
+    adjuntos_evaluaciones = fields.One2many("adjunto.evaluacion", 'tarea', string='Adjuntos de Evaluacion')
     id_tipo = fields.Integer()
-    fecha_hoy = fields.Char(string="Fecha Formateada", compute="_fecha_formateada")
+    fecha_hoy = fields.Char(string="Fecha Formateada", compute="_compute_fecha_formateada")
     is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
-    is_tecnico = fields.Boolean(
-        compute='_compute_is_tecnico',
-        string='Is Técnico',
-        store=False
-    )
+    is_tecnico = fields.Boolean(compute='_compute_is_tecnico', string='Is Técnico', store=False)
     firma_evaluacion = fields.Binary(attachment=True)
     firmante = fields.Char(string="Nombre del firmante")
     comentario_firma = fields.Text('Comentario del firmante')
     action_servicio = fields.Boolean(string="Is init servicio")
-    active_servicio =  fields.Boolean(string="Tiene Programacion?", compute="_set_action")
+    active_servicio = fields.Boolean(string="Tiene Programacion?", compute="_compute_active_servicio")
     fecha_etapa = fields.Date(string="Fecha de movimiento de etapa")
-    color = fields.Integer(
-        string='Color',
-        help='Color de la tarea, utilizado en el kanban y en la vista de lista.'
-    )
+    color = fields.Integer(string='Color')
     sale_order = fields.Many2one("sale.order", string="Orden de venta")
-
-    cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
-    compania = fields.Many2one(
-        comodel_name="res.company",
-        string="Compañía",
-        default=lambda self: self.env.company,
-        required=True,
-    )
+    cotizacion_cantidad = fields.Integer(compute="_compute_total_cotizaciones", store=False)
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
 
-    def _total_cotizaciones(self):
-        self.cotizacion_cantidad = len(self.sale_order)
+    # ----------------------------
+    # Computed / Constraints
+    # ----------------------------
+    def _compute_total_cotizaciones(self):
+        for rec in self:
+            rec.cotizacion_cantidad = 1 if rec.sale_order else 0
 
     def action_view_cotizaciones(self):
+        if not self.sale_order:
+            return {'type': 'ir.actions.act_window_close'}
         return {
             "type": "ir.actions.act_window",
             "name": "Ventas",
             "view_mode": "form",
             "res_model": "sale.order",
             "res_id": self.sale_order.id,
-            "context": "{'create' : False}",
+            "context": {"create": False},
         }
 
-    def action_print_report (self):
+    def action_print_report(self):
         return self.env.ref("pmant.action_ot_mantenimiento").report_action(self)
-
 
     def _read_group_stage_ids(self, stages, domain):
         stage_ids = stages.sudo()._search([], order=stages._order)
         return stages.browse(stage_ids)
+
     def name_get(self):
         result = []
         for record in self:
             estado = dict(self._fields['state'].selection).get(record.state, '')
-            name = f"{record.name} / [{estado}]"
-            result.append((record.id, name))
+            display = f"{record.name} / [{estado}]"
+            result.append((record.id, display))
         return result
 
-    def _set_action(self):
+    @api.depends('ots')
+    def _compute_active_servicio(self):
         """Activa 'active_servicio' si la primera OT tiene al menos una hora programada."""
         for record in self:
             record.active_servicio = False
-            print("INICIO DE LA FUNCION ACTIVESERVICIO")
             if record.ots:
-                primera_ot = record.ots[0].tab_horas
-                print("DATOPS DE LA PROGRAMACION")
-                print(primera_ot)
-                print(len(primera_ot))                
-                if len(primera_ot) > 0:
-                    record.active_servicio = True
+                primera_ot = record.ots[0]
+                # usar search_count para mejor rendimiento si es necesario
+                horas_count = self.env['programacion.mantenimiento'].search_count([('ot_id', '=', primera_ot.id)])
+                record.active_servicio = horas_count > 0
 
     @api.onchange('tipo')
     def tipo_click(self):
         for record in self:
-            if record.tipo.name == 'Evaluación' or record.tipo.name == 'Evaluacion':
+            if record.tipo and record.tipo.name and record.tipo.name.lower().startswith('evalu'):
                 record.id_tipo = record.tipo.id
             else:
                 record.id_tipo = 0
 
     @api.model
-    def _fecha_formateada(self):
-        # Diccionario para traducir el mes al español
-        meses_espanol = {
+    def _compute_fecha_formateada(self):
+        # Este compute lo convertimos a un método que establece el campo por registro
+        # pero mantenemos compatibilidad con tu uso anterior.
+        meses = {
             "January": "enero", "February": "febrero", "March": "marzo",
             "April": "abril", "May": "mayo", "June": "junio",
             "July": "julio", "August": "agosto", "September": "septiembre",
             "October": "octubre", "November": "noviembre", "December": "diciembre"
         }
-        
-        # Obtener la fecha actual
-        fecha_actual = datetime.now()
-        # Formatear la fecha con el mes en inglés y luego traducir
-        fecha_formateada = fecha_actual.strftime("Lima, %d de %B del %Y")
-        
-        # Obtener el nombre del mes en inglés y buscar su traducción en el diccionario
-        mes_en_ing = fecha_actual.strftime("%B")
-        mes_en_espanol = meses_espanol.get(mes_en_ing, mes_en_ing)  # Usa el mes en inglés si no se encuentra en el diccionario
-        fecha_formateada = fecha_formateada.replace(mes_en_ing, mes_en_espanol)
-
-        # Asignar la fecha formateada a los registros
+        hoy = datetime.now()
+        mes_en = hoy.strftime("%B")
+        mes_es = meses.get(mes_en, mes_en)
+        fecha_formato = hoy.strftime("Lima, %d de %B del %Y").replace(mes_en, mes_es)
         for record in self:
-            record.fecha_hoy = fecha_formateada
+            record.fecha_hoy = fecha_formato
+            # actualizar fecha_hoy en planequipo si existe el campo
             for plan in record.planequipo:
-                plan.fecha_hoy = fecha_formateada  # Asegúrate de que el campo exista en el modelo relacionado
+                if 'fecha_hoy' in plan._fields:
+                    plan.fecha_hoy = fecha_formato
 
-        
     @api.model
     def create(self, vals):
-        record = super(Tarea, self).create(vals)
-        # if 'create_user' not in vals:
-        #     vals['create_user'] = self.env.user.id
-        # if 'compania' not in vals:
-        #     vals['compania'] = self.env.company.id
-
-        record._set_fecha_movimiento()
-        return record
+        rec = super().create(vals)
+        try:
+            rec._set_fecha_movimiento()
+        except Exception as e:
+            _logger.exception("Error al establecer fecha_movimiento en create(): %s", e)
+            rec.message_post(body=_("Error al setear fecha de movimiento: %s") % e)
+        return rec
 
     def write(self, vals):
         res = super().write(vals)
-        if "stage_id" in vals:
-            self._set_fecha_movimiento()
+        if 'stage_id' in vals:
+            try:
+                self._set_fecha_movimiento()
+            except Exception as e:
+                _logger.exception("Error en _set_fecha_movimiento desde write(): %s", e)
+                self.message_post(body=_("Error al actualizar fecha de movimiento: %s") % e)
         return res
 
     def _set_fecha_movimiento(self):
@@ -197,42 +187,56 @@ class Tarea(models.Model):
 
     @api.model
     def _cron_fecha_movimiento(self):
-        leads = self.search([])
+        """Cron: colorea tareas según días en la etapa."""
         hoy = fields.Date.today()
-        for lead in leads:
+        for lead in self.search([]):
+            if not lead.fecha_etapa:
+                continue
             dias = (hoy - lead.fecha_etapa).days
-            if lead.stage_id.dias_promedio:
-                if dias > lead.stage_id.dias_promedio:
-                    lead.color = lead.stage_id.color_error
-                elif dias == (lead.stage_id.dias_promedio - 1):
-                    lead.color = lead.stage_id.color_warning
-                    
-    def _fecha_entrada(self):
-        for record in self:
-            record.fecha_entrada = fields.Date.today()
-                    
+            etapa = lead.stage_id
+            if etapa and etapa.dias_promedio:
+                if dias > etapa.dias_promedio:
+                    lead.color = etapa.color_error
+                elif dias == (etapa.dias_promedio - 1):
+                    lead.color = etapa.color_warning
+
+    def _compute_fecha_entrada(self):
+        for rec in self:
+            rec.fecha_entrada = fields.Date.today()
+
     def _fecha_ejecutada(self):
+        """Marcar fecha ejecutada en planequipo solo cuando aplique"""
         fecha_actual = fields.Date.today()
         for record in self:
             for equipo in record.planequipo:
                 if not equipo.is_informe_file:
-                    equipo.write({'fecha_ejec': fecha_actual})
+                    try:
+                        equipo.fecha_ejec = fecha_actual
+                    except Exception:
+                        _logger.exception("No se pudo actualizar fecha_ejec en planequipo %s", equipo.id)
 
     def _compute_is_tecnico(self):
-        for record in self:
-            record.is_tecnico = self.env.user.has_group('pmant.group_pmant_tecnico')
+        for rec in self:
+            rec.is_tecnico = self.env.user.has_group('pmant.group_pmant_tecnico')
 
+    # ----------------------------
+    # Evento calendario: solo acciones explícitas
+    # ----------------------------
     def _evento_calendario_proximo_servicio(self):
-        for record in self:
-            cliente = record.cliente.name
-            ubicacion = record.ubicacion.name
-            planes_por_fecha = {}
+        """
+        Crea eventos agrupados por fecha para el próximo servicio.
+        ***IMPORTANTE***: este método NO debe ejecutarse en lecturas; llamarlo explícitamente.
+        """
+        for rec in self:
+            cliente = rec.cliente.name if rec.cliente else "Cliente"
+            ubicacion_name = rec.ubicacion.name if rec.ubicacion else False
+
+            # Recolectar partner ids (evitar duplicados)
             partner_ids = set()
-            
-            for ot in record.ots:
-                if ot.user_id:
+            for ot in rec.ots:
+                if ot.user_id and ot.user_id.partner_id:
                     partner_ids.add(ot.user_id.partner_id.id)
-                if ot.employee_id:
+                if ot.employee_id and getattr(ot.employee_id, 'user_id', None) and ot.employee_id.user_id.partner_id:
                     partner_ids.add(ot.employee_id.user_id.partner_id.id)
                 if ot.empresa:
                     partner_ids.add(ot.empresa.id)
@@ -240,84 +244,111 @@ class Tarea(models.Model):
                     partner_ids.add(ot.ubicacion.id)
             partner_ids = list(partner_ids)
 
-            for plan in record.planequipo:
+            # Agrupar planes por fecha válida
+            planes_por_fecha = {}
+            for plan in rec.planequipo:
                 fecha_ejecprox = plan.fecha_ejecprox
-                equipo = plan.equipo.name
-                alertas = plan.plan.alarm_ids
-                if fecha_ejecprox not in planes_por_fecha:
-                    planes_por_fecha[fecha_ejecprox] = []
+                if not fecha_ejecprox:
+                    continue
+                equipo_nombre = plan.equipo.name if plan.equipo else "Equipo"
+                planes_por_fecha.setdefault(fecha_ejecprox, []).append((plan, equipo_nombre, plan.plan.alarm_ids))
 
-                planes_por_fecha[fecha_ejecprox].append((equipo, alertas))
-            for fecha, equipos_alertas in planes_por_fecha.items():
-                descripcion_equipos = ", ".join([equipo for equipo, _ in equipos_alertas])
-                
-                existing_event = self.env['calendar.event'].search([
+            # Obtener grupo/usuario responsable (buscar uno, si existe)
+            group = (self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
+                     or self.env.ref('pmant.group_pmant_admin', raise_if_not_found=False))
+            user = False
+            if group:
+                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1)
+
+            # Para cada fecha, crear o actualizar un evento
+            for fecha, items in planes_por_fecha.items():
+                descripcion_equipos = ", ".join([nombre for _, nombre, _ in items])
+                # Buscamos eventos existentes con los mismos criterios; limit a 1
+                domain = [
                     ('name', '=', f'Proximo servicio - {cliente}'),
                     ('start', '=', fecha),
-                    ('ots_id', '=', record.ots[0].id if record.ots else False),
-                ], limit=1)
-                group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False) or self.env.ref("pmant.group_pmant_admin", raise_if_not_found=False)
-                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
-                print("USER PARA EL EVENTO:", user)
-                print("GROUP PARA EL EVENTO:", group)
-                if not existing_event :
-                    event = self.env['calendar.event'].create({
-                        'name': f'Proximo servicio - {cliente}',
-                        'start': fecha,
-                        'stop': fecha,
-                        'allday': False,
-                        'ots_id': record.ots[0].id if record.ots else False,
-                        "equipos_ids": [(6, 0, [plan.equipo.id for plan in record.planequipo])],
-                        'location': ubicacion,
-                        'description': f'Servicios de equipos: {descripcion_equipos}',
-                        'partner_ids': [(6, 0, partner_ids)],
-                        'user_id': user.id if user else False,
-                    })
+                    ('ots_id', '=', rec.ots[0].id if rec.ots else False),
+                ]
+                existing_event = self.env['calendar.event'].search(domain, limit=1)
 
-                    for _, alertas in equipos_alertas:
-                        if alertas:
-                            event.alarm_ids = [(4, alarma.id) for alarma in alertas]
+                # Datos a escribir/crear
+                vals_event = {
+                    'name': f'Proximo servicio - {cliente}',
+                    'start': fecha,
+                    'stop': fecha,
+                    'allday': False,
+                    'description': f'Servicios de equipos: {descripcion_equipos}',
+                    'partner_ids': [(6, 0, partner_ids)] if partner_ids else False,
+                    'location': ubicacion_name,
+                    'user_id': user.id if user else False,
+                    'equipos_ids': [(6, 0, [p.equipo.id for p, _, _ in items if p.equipo])]
+                }
 
+                try:
+                    if existing_event:
+                        # Escribir solo si hay cambios reales (para evitar disparar notificaciones)
+                        write_vals = {}
+                        # comparar campos relevantes
+                        if existing_event.description != vals_event['description']:
+                            write_vals['description'] = vals_event['description']
+                        if existing_event.location != vals_event['location']:
+                            write_vals['location'] = vals_event['location']
+                        # comparar partner_ids (set)
+                        existing_partner_ids = set(existing_event.partner_ids.ids)
+                        new_partner_ids = set(partner_ids)
+                        if existing_partner_ids != new_partner_ids:
+                            write_vals['partner_ids'] = [(6, 0, partner_ids)]
+                        # equipos_ids
+                        existing_eq = set(existing_event.equipos_ids.ids)
+                        new_eq = set([p.equipo.id for p, _, _ in items if p.equipo])
+                        if existing_eq != new_eq:
+                            write_vals['equipos_ids'] = [(6, 0, list(new_eq))]
+                        # solo escribir si hay algo que actualizar
+                        if write_vals:
+                            existing_event.sudo().write(write_vals)
+                    else:
+                        # crear evento
+                        create_vals = {k: v for k, v in vals_event.items() if v}
+                        # asociar ots_id si existe
+                        if rec.ots:
+                            create_vals['ots_id'] = rec.ots[0].id
+                        event = self.env['calendar.event'].sudo().create(create_vals)
+                        # agregar alarmas si las hay
+                        for _, _, alertas in items:
+                            if alertas:
+                                event.sudo().alarm_ids = [(4, a.id) for a in alertas]
+                except Exception as e:
+                    _logger.exception("Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error al crear evento de calendario: %s") % e)
+
+    # ----------------------------
+    # Email / Reporte / Firma
+    # ----------------------------
     def action_send_email_recepcion(self):
-        template = self.env.ref('pmant.email_template_hoja_recepcion')
-        statement_report_action = self.env.ref('pmant.action_reporte_recepcion')
-        ir_actions_report_sudo = self.env['ir.actions.report'].sudo()
+        template = self.env.ref('pmant.email_template_hoja_recepcion', raise_if_not_found=False)
+        statement_report_action = self.env.ref('pmant.action_reporte_recepcion', raise_if_not_found=False)
+        ir_actions_report = self.env['ir.actions.report'].sudo()
 
         if not template or not statement_report_action:
-            raise UserError("No se encuentra la plantilla o el reporte configurado.")
+            raise UserError(_("No se encuentra la plantilla o el reporte configurado."))
 
+        # Abrir composer con contexto para el usuario (mantener comportamiento actual)
         for record in self:
-            # Generar el reporte PDF
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report_action, [record.id]
-            )
+            try:
+                content, _ = ir_actions_report._render_qweb_pdf(statement_report_action, [record.id])
+            except Exception as e:
+                _logger.exception("Error generando PDF para hoja de recepción %s: %s", record.id, e)
+                raise UserError(_("No se pudo generar el PDF: %s") % e)
 
-            # Crear el archivo adjunto
-            # attachment = self.env['ir.attachment'].create({
-            #     'name': f'Hoja_Recepcion_{record.name}.pdf',  # Nombre del archivo
-            #     'type': 'binary',
-            #     'datas': base64.b64encode(content).decode('utf-8'),  # Codificar el PDF a base64
-            #     'res_model': record._name,  # Modelo relacionado
-            #     'res_id': record.id,  # ID del registro relacionado
-            #     'mimetype': 'application/pdf',
-            #     'public': True,
-            # })
-
-            # Preparar el contexto para enviar el correo
             ctx = {
-                'default_model': 'tarea.mantenimiento',  # Modelo actual
-                'default_res_ids': [record.id],  # ID del registro
+                'default_model': 'tarea.mantenimiento',
+                'default_res_ids': [record.id],
                 'default_use_template': True,
                 'default_template_id': template.id,
-                'default_composition_mode': 'comment',  # Modo de composición
+                'default_composition_mode': 'comment',
                 'force_email': True,
-                # 'attachment_ids': [(4, attachment.id)],  # Agregar el archivo adjunto
             }
 
-            # Verificar el contexto (Debugging)
-            print("Contexto de envío:", ctx)
-
-            # Retornar la acción para abrir el asistente de composición de correos
             return {
                 'type': 'ir.actions.act_window',
                 'view_mode': 'form',
@@ -338,27 +369,29 @@ class Tarea(models.Model):
             "context": {
                 "default_name": self.name,
                 "default_tarea": self.id,
-                "default_empresa": self.cliente.id,
-                "default_ubicacion": self.ubicacion.id,
+                "default_empresa": self.cliente.id if self.cliente else False,
+                "default_ubicacion": self.ubicacion.id if self.ubicacion else False,
                 "default_notas_venta": self.notas,
                 "default_schedule_date": datetime.now(),
-                "default_order_compra": self.oc_id.id,
             },
         }
 
-
-    def init_servicio (self):
+    def init_servicio(self):
         for record in self:
             if record.ots:
                 record.action_servicio = True
-                horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "=", False)], limit=1)
-                horas.fecha_inicio = datetime.now()
-                record.ots[0].stage_id = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1).id
-                # hoja_horas._compute_horas_trabajado()
-        # return ''
-    
+                hoja = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "=", False)], limit=1)
+                if hoja:
+                    hoja.fecha_inicio = datetime.now()
+                # Cambiar etapa OT (buscar stage por sequence)
+                stage = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1)
+                if stage and record.ots:
+                    record.ots[0].stage_id = stage.id
+
     def cancel_servicio(self):
         for record in self:
+            if not record.ots:
+                continue
             horas = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_fin", "=", False)], limit=1)
             return {
                 "type": "ir.actions.act_window",
@@ -367,31 +400,34 @@ class Tarea(models.Model):
                 "view_mode": "form",
                 "target": "new",
                 "context": {
-                    "default_programacion_id": horas.id,  # si estás dentro de programacion.mantenimiento
-                    "default_ot_id": self.ots[0].id,  # si estás dentro de programacion.mantenimiento
-                    "default_tarea_id": self.id,  # si estás dentro de programacion.mantenimiento
+                    "default_programacion_id": horas.id if horas else False,
+                    "default_ot_id": record.ots[0].id if record.ots else False,
+                    "default_tarea_id": record.id,
                 },
             }
 
-    # @api.multi
-    # @api.onchange('state_id')
-    # def fecha_prox_equipo(self):
-    #     for record in self:
-    #         print('----------------------------------')
-    #         print(self.id)
-    #         # Busca una solicitud de mantenimiento relacionada con la tarea actual
-    #         ot = self.env['maintenance.request'].search([("tarea.id", "=", self.id)])
-    #         print('----------------------------------')
-    #         print(ot)
-    #         if ot:
-                
-    #             ot.stage_id = record.state_id.id
-    #             print('----------------------------------')
-    #             print(ot.stage_id)
-    #        # Si el estado tiene una secuencia específica (en este caso, 3)
-    #         if record.state_id.sequence == 3:
-    #             # Llama a métodos internos para realizar acciones adicionales
-    #             self._notify_on_change()
-    #             self._fecha_ejecutada()
-    #             self._evento_calendario_proximo_servicio()
+    def crm_oportunidad_create(self):
+        for rec in self:
+            equipos = rec.planequipo.mapped("equipo.id") if rec.planequipo else []
+            valores = {
+                "name": rec.name,
+                "user_id": rec.create_user.id if rec.create_user else False,
+                "partner_id": rec.cliente.id if rec.cliente else False,
+                "ubicacion": rec.ubicacion.id if rec.ubicacion else False,
+                "orden_trabajo": rec.id,
+                "equipo_tarea": [(6, 0, equipos)],
+            }
+            lead = self.env["crm.lead"].create(valores)
+            rec.oportunidad = lead.id
 
+    # ----------------------------
+    # Utilidades / Validaciones
+    # ----------------------------
+    def _set_fecha_movimiento_manual(self):
+        """Método público para setear fecha de movimiento (llamar explícitamente)."""
+        self._set_fecha_movimiento()
+
+    def action_trigger_proximo_servicio(self):
+        """Método público para generar/actualizar eventos de próximo servicio.
+        Llamar desde botón o cron, nunca automáticamente en read/compute."""
+        self._evento_calendario_proximo_servicio()
