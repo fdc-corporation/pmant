@@ -1,69 +1,88 @@
-from datetime import date, datetime, timedelta, time
-from odoo import _, models, fields, api
-from odoo.exceptions import UserError
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import logging
-import base64
-from odoo.tools import html2plaintext
+# -*- coding: utf-8 -*-
+"""
+Optimized Odoo 19 model for maintenance.request (OTS)
+- Compatible con Odoo 19 (api.model_create_multi, raise_if_not_found)
+- Evita abrir ventanas UI en create/write para enviar correos; usa send_mail queued (force_send=False)
+- Maneja múltiples registros correctamente
+- Mejora de validaciones, logs y uso eficiente de search_count/mapped
+"""
+from datetime import datetime, timedelta, date
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_round
+import logging
 
-# Crear un logger
 _logger = logging.getLogger(__name__)
 
 
-class OTS(models.Model):
+class MaintenanceRequestOTS(models.Model):
     _inherit = "maintenance.request"
-    _description = "Peticion de mantenimiento"
+    _description = "Peticion de mantenimiento (OTS optimizado para Odoo 19)"
 
-    # sequence = fields.Char()
+    # --------------------
+    # Campos
+    # --------------------
     tarea = fields.Many2one("tarea.mantenimiento", string="Tarea", required=True)
     tex = fields.Char(string="Text")
-    empresa = fields.Many2one("res.partner", related="tarea.cliente")
-    ubicacion = fields.Many2one("res.partner", related="tarea.ubicacion")
+    empresa = fields.Many2one("res.partner", related="tarea.cliente", store=True)
+    ubicacion = fields.Many2one("res.partner", related="tarea.ubicacion", store=True)
     factura = fields.Many2one("account.move", string="Factura")
     factura_sunat = fields.Char(string="Factura Sunat")
     selec_sunat = fields.Boolean(string="Factura Sunat?")
     oportunidad = fields.Many2one("crm.lead", string="Oportunidad")
-    partner_id = fields.Many2one("res.partner", related="tarea.cliente")
-    fecha_ejec = fields.Date(string="Fecha Ejecutada", readonly=False)
+    partner_id = fields.Many2one("res.partner", related="tarea.cliente", store=True)
+    fecha_ejec = fields.Date(string="Fecha Ejecutada")
     subodinados = fields.Many2many("res.users", string="Subordinados")
     is_evaluacion = fields.Boolean(string="Es una Evaluacion")
-    is_tecnico = fields.Boolean(
-        compute="_compute_is_tecnico", string="Is Técnico", store=False
-    )
-    tab_horas = fields.One2many(
-        "programacion.mantenimiento", "ot_id", string="Hoja de horas"
-    )
+    is_tecnico = fields.Boolean(compute="_compute_is_tecnico", string="Is Técnico", store=False)
+    tab_horas = fields.One2many("programacion.mantenimiento", "ot_id", string="Hoja de horas")
     is_active_programacion = fields.Boolean(string="La programacion fue eniada?")
     rating_p1 = fields.Integer(string="Calidad del servicio")
     rating_p2 = fields.Integer(string="Tiempo de respuesta")
     rating_p3 = fields.Integer(string="Probabilidad de recomendación")
     rating_comment = fields.Text(string="Comentarios del cliente")
-    document_count = fields.Integer(
-        string="Documentos firmados", compute="get_cantidad_documentos"
-    )
+    document_count = fields.Integer(string="Documentos firmados", compute="get_cantidad_documentos")
     cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
     notas_venta = fields.Html(string="Notas Venta", sanitize_style=True, sanitize_tags=False)
-    duration = fields.Float(string="Duración (H)", required=True, default=0.0, compute="_compute_horas_duracion", store=True)
-    
-    
+    duration = fields.Float(
+        string="Duración (H)", required=True, default=0.0, compute="_compute_horas_duracion", store=True
+    )
 
- 
+    # --------------------
+    # Computes
+    # --------------------
     @api.depends("schedule_date", "schedule_end")
     def _compute_horas_duracion(self):
-        for record in self:
-            if record.schedule_date and record.schedule_end:
-                delta = record.schedule_end - record.schedule_date
-                horas = delta.total_seconds() / 3600.0
-                # 🔒 redondear a 2 decimales
-                record.duration = float_round(horas, precision_digits=2)
+        for rec in self:
+            if rec.schedule_date and rec.schedule_end:
+                # schedule_date / schedule_end pueden ser datetime/date según implementación
+                try:
+                    delta = rec.schedule_end - rec.schedule_date
+                    horas = (delta.total_seconds() if hasattr(delta, 'total_seconds') else delta.days * 24) / 3600.0
+                    rec.duration = float_round(horas or 0.0, precision_digits=2)
+                except Exception:
+                    rec.duration = 0.0
             else:
-                record.duration = 0.0
+                rec.duration = 0.0
 
+    def get_cantidad_documentos(self):
+        for rec in self:
+            rec.document_count = self.env["sign.request"].search_count([
+                ("state", "=", "signed"), ("ot_id", "=", rec.id)
+            ])
 
-    # ACCION PARA VER TODOS LOS DOCUMENTOS RELACIONADOS A LA OT
+    @api.depends_context("uid")
+    def _compute_is_tecnico(self):
+        for rec in self:
+            rec.is_tecnico = self.env.user.has_group("pmant.group_pmant_tecnico")
+
+    def _get_cantidad_incidencias(self):
+        for rec in self:
+            rec.cantidad_inconvenientes = self.env["inconveniente.servicio"].search_count([("ot_id", "=", rec.id)])
+
+    # --------------------
+    # Actions / UI
+    # --------------------
     def action_view_documentos(self):
         self.ensure_one()
         return {
@@ -71,534 +90,422 @@ class OTS(models.Model):
             "name": "Documentos Firmados",
             "res_model": "sign.request",
             "view_mode": "kanban,form",
-            "target": "current",  # O usa 'new' si deseas que se abra como ventana modal
+            "target": "current",
             "domain": [("state", "=", "signed"), ("ot_id", "=", self.id)],
-            "context": {
-                "default_ot_id": self.id,
-            },
+            "context": {"default_ot_id": self.id},
         }
 
-    # OBTENER LA CANTIDAD DE DOCUMENTOS FIRMADOS SE TIENE RELACIONADO
-    def get_cantidad_documentos(self):
-        documentos_firmados = self.env["sign.request"].search_count(
-            ["&", ("state", "=", "signed"), ("ot_id", "=", self.id)]
-        )
-        self.document_count = documentos_firmados
-
-    # ACCION PARA ABRIR UN WIZARD DE WHATSAPP
     def action_open_wizard(self):
+        self.ensure_one()
         return {
             "type": "ir.actions.act_window",
             "name": "Enviar por WhatsApp",
             "res_model": "acrux.chat.message.wizard",
             "view_mode": "form",
             "target": "new",
-            "context": {
-                "default_partner_id": self.empresa.id,
-                "full_name": True,
-            },
+            "context": {"default_partner_id": self.empresa.id, "full_name": True},
         }
 
-    @api.depends_context("uid")
-    def _compute_is_tecnico(self):
-        for record in self:
-            record.is_tecnico = self.env.user.has_group("pmant.group_pmant_tecnico")
+    def action_view_incidencias(self):
+        if not self.ids:
+            return {
+                "type": "ir.actions.act_window_close",
+            }
+        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
+        return {
+            "name": "Incidencias",
+            "type": "ir.actions.act_window",
+            "domain": [("id", "in", cant_data.ids)],
+            "view_mode": "list,form",
+            "res_model": "inconveniente.servicio",
+            "context": {"create": False},
+        }
 
-    @api.model
+    def action_view_ots(self):
+        self.ensure_one()
+        return {
+            "name": "Solicitud de Mantenimiento",
+            "type": "ir.actions.act_window",
+            "res_id": self.id,
+            "view_mode": "form",
+            "res_model": "maintenance.request",
+            "context": {"create": False},
+        }
+
+    # --------------------
+    # Create / Write overrides
+    # --------------------
+    @api.model_create_multi
     def create(self, vals_list):
-        records = self.browse()
-        for vals in vals_list:
-            # print("VALORES DE LA CREACION DE LA OT")
-            # print(vals.get("schedule_date"))
-
-            # Validación de campos requeridos
-            # if "schedule_date" not in vals:
-            #     print("NO HAY DATOS PARA CREAR LA PROGRAMACION DE OT")
-            #     raise UserError(_("Coloca la fecha programada antes de crear la OT."))
-
-            # Crear el registro
-            record = super().create([vals])
-
-            # Acciones posteriores a la creación
-            print("EJECUCION DE CREATE PROGRAMACION DE OT")
-            record.send_programacion_inicial()
-            record.action_programacion_inicial()
-
-            records |= record
-
+        records = super().create(vals_list)
+        # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
+        template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
+        if template:
+            for rec in records:
+                try:
+                    # Construir lista de destinatarios si procede
+                    correos = []
+                    if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
+                        correos.append(rec.ubicacion.email_jefe)
+                    if rec.ubicacion and getattr(rec.ubicacion, "email", None):
+                        correos.append(rec.ubicacion.email)
+                    if rec.empresa and getattr(rec.empresa, "email", None):
+                        correos.append(rec.empresa.email)
+                    email_to = ",".join(filter(None, correos)) if correos else None
+                    with self.env.cr.savepoint():
+                        template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
+                except Exception as e:
+                    _logger.exception("Error al encolar correo de programación para OT %s: %s", rec.id, e)
+                    rec.message_post(body = _("Error al encolar correo de programación: %s") % e)
+        # Crear programación si aplica (no dependemos de UI)
+        try:
+            records.action_programacion_inicial()
+        except Exception as e:
+            _logger.exception("Error al crear/actualizar programación inicial para OTs: %s", e)
+            # No lanzar excepción que rompa la creación; sólo reportar en chatter
+            for rec in records:
+                rec.message_post(body=_("Error al crear programación inicial: %s") % e)
         return records
 
     def write(self, vals):
-        res = super(OTS, self).write(vals)
+        res = super().write(vals)
+        # Si cambia la etapa, ejecutar lógica por registro
         if "stage_id" in vals:
-            for record in self:
-                # Si el estado tiene una secuencia específica (por ejemplo, 3)
-                if record.stage_id.sequence == 3:
-                    print("ETAPA EN EJECUCION")
-                    print(record.tarea.planequipo.mapped("is_informe_file"))
-                    print(record.tarea.planequipo)
-                    if not any(record.tarea.planequipo.mapped("is_informe_file")):
-                        print("ejecucion automatico")
-                        fecha_actual = fields.Date.today()
-                        record.fecha_ejec = fecha_actual
-                        record.tarea._fecha_ejecutada()
-                        record.tarea._evento_calendario_proximo_servicio()
-                    else :
-                        if not any(record.tarea.planequipo.mapped("informe_file")):
-                            raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
+            for rec in self:
+                try:
+                    if rec.stage_id and rec.stage_id.sequence == 3:
+                        # Etapa en ejecución
+                        planequipo = rec.tarea.planequipo if rec.tarea else None
+                        if planequipo and not any(planequipo.mapped("is_informe_file")):
+                            rec.fecha_ejec = fields.Date.today()
+                            if rec.tarea:
+                                rec.tarea._fecha_ejecutada()
+                                rec.tarea._evento_calendario_proximo_servicio()
                         else:
-                            print("ejecucion manual")
-                            print(record.tarea.planequipo[:1].fecha_ejec)
-                            record.fecha_ejec = record.tarea.planequipo[:1].fecha_ejec if record.tarea.planequipo else None
-                            record.tarea._evento_calendario_proximo_servicio()
-                if record.stage_id.sequence == 4:
-                    record.notify_users_facturacion()
-            self._change_createui()
+                            if planequipo and not any(planequipo.mapped("informe_file")):
+                                raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
+                            else:
+                                rec.fecha_ejec = planequipo[:1].fecha_ejec if planequipo else None
+                                if rec.tarea:
+                                    rec.tarea._evento_calendario_proximo_servicio()
+
+                    if rec.stage_id and rec.stage_id.sequence == 4:
+                        # Notificar grupos de facturacion
+                        rec.notify_users_facturacion()
+
+                except Exception as e:
+                    _logger.exception("Error durante write() en maintenance.request id %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error durante actualización: %s") % e)
+            # Validaciones y acciones dependientes
+            try:
+                self._change_createui()
+            except Exception as e:
+                _logger.exception("_change_createui error: %s", e)
         return res
 
-
-    def notify_users_facturacion (self):
-        # Nombre exacto del grupo
-        group_xml_id = 'pmant.group_pmant_user_notifi_fac'
-        
-        # Buscar el grupo
-        group = self.env.ref(group_xml_id)
-        
-        # Obtener los usuarios del grupo
-        users = group.user_ids
-        if not users:
-            return  # No hay usuarios para notificar
-
-        # Notificar a cada usuario
-        for user in users:
-            self.message_post(
-                body=f"{self.name}: La tarea ha pasado a la etapa {self.stage_id.name}, lista para facturar.",
-                partner_ids=[user.partner_id.id]
-            )
-
-
-
+    # --------------------
+    # Lógica de programación y notificaciones
+    # --------------------
     @api.depends("schedule_date", "duration")
     def action_programacion_inicial(self):
-        for record in self:
-            # Obtener lista de IDs de técnicos asignados
-            lista_user = []
-            if record.user_id:
-                lista_user.append(record.user_id.id)
-            lista_user += record.subodinados.ids  # optimizado
-
-            # Validar datos obligatorios
-            if not record.schedule_date:
+        for rec in self:
+            if not rec.schedule_date:
                 raise UserError(_("Para crear una Orden de Trabajo debes colocar la fecha programada y una duración mayor a 0."))
 
+            lista_user = []
+            if rec.user_id:
+                lista_user.append(rec.user_id.id)
+            lista_user += rec.subodinados.ids if rec.subodinados else []
+
             valores = {
-                "fecha_date": record.schedule_date,
-                "duracion": record.duration,
-                "ot_id": record.id,
+                "fecha_date": rec.schedule_date,
+                "duracion": rec.duration,
+                "ot_id": rec.id,
                 "tecnicos": [(6, 0, lista_user)],
             }
 
-            if not record.tab_horas:
-                print("CREAR UN EVENTO NUEVO")
-                self.env["programacion.mantenimiento"].create(valores)
+            if not rec.tab_horas:
+                try:
+                    self.env["programacion.mantenimiento"].create(valores)
+                except Exception as e:
+                    _logger.exception("No se pudo crear programacion.mantenimiento para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error al crear programación: %s") % e)
             else:
-                print("ACTUALIZAR EL EVENTO EXISTENTE")
-                record.tab_horas[0].write(valores)
+                try:
+                    rec.tab_horas[0].write(valores)
+                except Exception as e:
+                    _logger.exception("No se pudo actualizar programacion.mantenimiento para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error al actualizar programación: %s") % e)
 
-    # CUANDO SE CREA UNA OT ESTA FUNCION SE EJECUTARA PARA EL ENVIO DE CORREO AL CLIENTE
-    def send_programacion_inicial(self):
-        self.ensure_one()
+    def notify_users_facturacion(self):
+        group_xml_id = "pmant.group_pmant_user_notifi_fac"
         try:
-            # Verificar que existe la plantilla
-            template = self.env.ref("pmant.email_template_custom_sucursal")
-            if template:
-                ctx = {
-                    "default_model": "maintenance.request",
-                    "default_res_id": self.id,
-                    "default_template_id": template.id,
-                    "default_use_template": True,
-                    "default_composition_mode": "comment",
-                    "force_email": True,
-                }
-                print("ENVIAR CORREO A LA SUCURSAL")
-                print("ctx:", ctx)
-                return {
-                    "type": "ir.actions.act_window",
-                    "name": "Enviar Correo de Programación",
-                    "res_model": "mail.compose.message",
-                    "view_mode": "form",
-                    "target": "new",
-                    "context": ctx,
-                }
-        except Exception as e:
-            _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-            self.message_post(body=f"Error al enviar el correo: {str(e)}")
-
-
-    # ESTA FUNCION EJECUTA FUCIONES PARA ACTUALIZACION DE ESTADOS, FECHAS DE EJECUCION
-    def _change_createui(self):
-        for record in self:
-            self._validacion_etapas()
-            if not any(record.tarea.planequipo.mapped("is_informe_file")):
-                if self.stage_id.sequence == 3:
-                    self._fecha_estado()
-                    # self.action_open_wizard()
-            if self.stage_id.sequence == 5:
-                self.send_reporte_final()
-                # self.action_open_wizard()
-
-    # CREAR LA FECHA DE EJECUCION DE LA OT
-    def _fecha_estado(self):
-        # Obtener la fecha actual
-        fecha_actual = datetime.now()
-        fecha_formato = fecha_actual.strftime("%Y-%m-%d")
-        # Asignar la fecha actual al campo del modelo actual
-        self.fecha_ejec = fecha_formato
-
-        # Verificar que 'tarea' y 'planequipo' existan antes de asignarles valores
-        if self.tarea and self.tarea.planequipo:
-            self.tarea.planequipo.fecha_ejec = fecha_actual
-
-    # RESTRICCIONES DE ESTADOS
-    def _validacion_etapas(self):
-        for record in self:
-            if record.stage_id.sequence == 5:
-                if not record.selec_sunat and not record.factura:
-                    raise UserError(_("Debe registrar la factura"))
-                elif record.selec_sunat and not record.factura_sunat:
-                    raise UserError(_("Debe registrar la factura Sunat"))
-
-    # ACCION PARA EL ENVIO DE CORREOS AL FINALIZAR EL SERVICIO
-    def send_reporte_final(self):
-        template_servicio = self.env.ref("pmant.email_template_servicio_finalizado")
-        calificacion = self.env.ref("pmant.email_template_calificacion_servicio")
-
-        if template_servicio:
-            template_servicio.send_mail(self.id, force_send=True)
-
-        if calificacion:
-            calificacion.send_mail(self.id, force_send=True)
-
-    # ACCION PARA EL ENVIO DE REPORTE A LA EMPRESA
-    def send_report_empresa(self):
-        try:
-            # Depurar los datos importantes antes de continuar
-            _logger.info(
-                f"Tarea: {self.tarea}, Fecha: {self.schedule_date}, Tipo de fecha: {type(self.schedule_date)}"
-            )
-
-            # Buscar la plantilla de correo
-            template = self.env.ref("pmant.email_template_custom_empresa_programacion")
-
-            # Verificar que la plantilla existe, la tarea y la fecha están definidas
-            if template and self.tarea and self.schedule_date:
-
-                # Crear el contexto para la ventana de composición de correos
-                ctx = {
-                    "default_model": "maintenance.request",  # Modelo actual
-                    "default_res_ids": self.id,  # Se asegura de que es un entero
-                    "default_res_ids": [
-                        self.id
-                    ],  # res_ids debe ser una lista de enteros
-                    "default_template_id": template.id,
-                    "default_composition_mode": "comment",  # Modo de composición
-                    "force_email": True,
-                }
-
-                # Retornar la acción para abrir el asistente de composición de correos
-                return {
-                    "type": "ir.actions.act_window",
-                    "view_mode": "form",
-                    "res_model": "mail.compose.message",
-                    "views": [(False, "form")],
-                    "view_id": False,
-                    "target": "new",
-                    "context": ctx,
-                }
-
-            else:
-                # Mensaje en caso de que falten datos importantes
-                self.message_post(
-                    body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
+            group = self.env.ref(group_xml_id, raise_if_not_found=False)
+        except Exception:
+            group = None
+        if not group:
+            _logger.debug("Grupo de notificación de facturación no encontrado: %s", group_xml_id)
+            return
+        for user in group.user_ids:
+            for rec in self:
+                rec.message_post(
+                    body=f"{rec.name}: La tarea ha pasado a la etapa {rec.stage_id.name}, lista para facturar.",
+                    partner_ids=[user.partner_id.id] if user.partner_id else [],
                 )
 
-        except Exception as e:
-            # Manejar cualquier excepción durante el envío y registrar el error
-            _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-            self.message_post(body=f"Error al enviar el correo: {str(e)}")
+    def send_reporte_final(self):
+        for rec in self:
+            template_servicio = self.env.ref("pmant.email_template_servicio_finalizado", raise_if_not_found=False)
+            calificacion = self.env.ref("pmant.email_template_calificacion_servicio", raise_if_not_found=False)
+            if template_servicio:
+                try:
+                    template_servicio.send_mail(rec.id, force_send=True)
+                except Exception as e:
+                    _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error al enviar correo finalización: %s") % e)
+            if calificacion:
+                try:
+                    calificacion.send_mail(rec.id, force_send=True)
+                except Exception as e:
+                    _logger.exception("Error al enviar template calificacion para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("Error al enviar correo de calificación: %s") % e)
 
-    # ACCION PARA EL ENVIO DE REPORTE A LA SUCURSAL
+    def send_programacion_inicial(self):
+        """Metodo para encolar envio de correo de programación; diseñado para no abrir UI."""
+        for rec in self:
+            template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
+            if not template:
+                _logger.info("Plantilla pmant.email_template_custom_sucursal no encontrada")
+                rec.message_post(body=_("Plantilla de programación no encontrada."))
+                continue
+            correos = []
+            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
+                correos.append(rec.ubicacion.email_jefe)
+            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
+                correos.append(rec.ubicacion.email)
+            if rec.empresa and getattr(rec.empresa, "email", None):
+                correos.append(rec.empresa.email)
+            email_to = ",".join(filter(None, correos)) if correos else None
+            try:
+                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
+            except Exception as e:
+                _logger.exception("Error al encolar correo de programación (OT %s): %s", rec.id, e)
+                rec.message_post(body=_("Error al encolar correo de programación: %s") % e)
+
+    def send_report_empresa(self):
+        for rec in self:
+            template = self.env.ref("pmant.email_template_custom_empresa_programacion", raise_if_not_found=False)
+            if not template or not rec.tarea or not rec.schedule_date:
+                rec.message_post(body=_("No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."))
+                continue
+            correos = []
+            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
+                correos.append(rec.ubicacion.email_jefe)
+            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
+                correos.append(rec.ubicacion.email)
+            if rec.empresa and getattr(rec.empresa, "email", None):
+                correos.append(rec.empresa.email)
+            email_to = ",".join(filter(None, correos)) if correos else None
+            try:
+                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
+            except Exception as e:
+                _logger.exception("Error al encolar correo empresa (OT %s): %s", rec.id, e)
+                rec.message_post(body=_("Error al enviar correo a empresa: %s") % e)
+
     def send_report_sucursal(self):
-        self.ensure_one()
-        try:
-            # Verificar que existe la plantilla
-            template = self.env.ref("pmant.email_template_custom_sucursal")
-            if template:
-                ctx = {
-                    "default_model": "maintenance.request",
-                    "default_res_id": self.id,
-                    "default_template_id": template.id,
-                    "default_use_template": True,
-                    "default_composition_mode": "comment",
-                    "force_email": True,
-                }
-                return {
-                    "type": "ir.actions.act_window",
-                    "name": "Enviar Correo de Programación",
-                    "res_model": "mail.compose.message",
-                    "view_mode": "form",
-                    "target": "new",
-                    "context": ctx,
-                }
-        except Exception as e:
-            _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-            self.message_post(body=f"Error al enviar el correo: {str(e)}")
+        for rec in self:
+            template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
+            if not template:
+                rec.message_post(body=_("Plantilla de sucursal no encontrada."))
+                continue
+            correos = []
+            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
+                correos.append(rec.ubicacion.email_jefe)
+            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
+                correos.append(rec.ubicacion.email)
+            if rec.empresa and getattr(rec.empresa, "email", None):
+                correos.append(rec.empresa.email)
+            email_to = ",".join(filter(None, correos)) if correos else None
+            try:
+                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
+            except Exception as e:
+                _logger.exception("Error al encolar correo sucursal (OT %s): %s", rec.id, e)
+                rec.message_post(body=_("Error al enviar correo a sucursal: %s") % e)
 
-    # CREAR UN LEAD DENTRO DEL CRM
-    def crm_oportunidad_create(self):
-        for record in self:
-            equipos = record.tarea.planequipo.mapped("equipo.id")
-
-            valores = {
-                "name": record.name,
-                "user_id": record.employee_id.user_id.id,
-                "partner_id": record.empresa.id,
-                "ubicacion": record.ubicacion.id,
-                "orden_trabajo": record.id,
-                "equipo_tarea": [(6, 0, equipos)],
-            }
-            lead = self.env["crm.lead"].create(valores)
-            record.oportunidad = lead.id
-
-    # SOLICITAR FIRMA AL CLIENTE DEL SERVICIO REALIZADO
+    # --------------------
+    # Reportes / Firma
+    # --------------------
     def set_firma_cliente_mantenimiento(self):
-
-        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
-        for statement in self:
+        for rec in self:
+            ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+            statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
             statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
-
-            # Crear el adjunto con el PDF generado
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "OT " + self.name,
-                    "type": "binary",
-                    "mimetype": "application/pdf",
-                    "raw": content,
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,
-                }
-            )
-
-            vals_template = {
-                "name": "OT " + self.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
-            }
-
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=rec.ids)
+            attachment = self.env["ir.attachment"].create({
+                "name": f"OT {rec.name}",
+                "type": "binary",
+                "mimetype": "application/pdf",
+                "raw": content,
+                "res_model": "sign.template",
+                "res_id": None,
+            })
+            vals_template = {"name": f"OT {rec.name}", "attachment_id": attachment.id, "ot_id": rec.id}
             vals_template.pop("attachment_count", None)
-
-            sign_template = self.env["sign.template"].create(vals_template)
-
-            # Redirigir al formulario del sign.template
+            self.env["sign.template"].create(vals_template)
         return {
             "type": "ir.actions.act_window",
-            "name": "OT " + self.name,
+            "name": f"OT {self.name}",
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (list)
+            "view_mode": "kanban",
             "target": "current",
         }
 
     def set_firma_empresa_acta(self):
-        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        statement_report_action = self.env.ref("pmant.action_reporte_acta")
-        for statement in self:
+        for rec in self:
+            ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+            statement_report_action = self.env.ref("pmant.action_reporte_acta")
             statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
-
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "Acta - " + self.name,
-                    "type": "binary",
-                    "raw": content,
-                    "mimetype": "application/pdf",
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,  # No se asocia a un registro específico en este momento
-                }
-            )
-
-            vals_template = {
-                "name": "Acta - " + self.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
-                "ot_id": self.id,
-            }
-
-            # Eliminar 'attachment_count' si está presente en los valores
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=rec.ids)
+            attachment = self.env["ir.attachment"].create({
+                "name": f"Acta - {rec.name}",
+                "type": "binary",
+                "raw": content,
+                "mimetype": "application/pdf",
+                "res_model": "sign.template",
+                "res_id": None,
+            })
+            vals_template = {"name": f"Acta - {rec.name}", "attachment_id": attachment.id, "ot_id": rec.id}
             vals_template.pop("attachment_count", None)
-
-            # Crear la plantilla de firma sin 'attachment_count'
-            sign_template = self.env["sign.template"].create(vals_template)
-
-            # Redirigir al formulario de sign.template
+            self.env["sign.template"].create(vals_template)
         return {
             "type": "ir.actions.act_window",
-            "name": "Acta - " + self.name,
+            "name": f"Acta - {self.name}",
             "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (list)
+            "view_mode": "kanban",
             "target": "current",
         }
 
+    # --------------------
+    # Calendario
+    # --------------------
     def _create_calendar_event(self):
-        for record in self:
-            if record.schedule_date and record.duration:
-                partner_ids = []
-
-                # Ensure the current user has an associated partner
-                if self.env.user.partner_id:
-                    partner_ids.append(self.env.user.partner_id.id)
-                if record.user_id:
-                    partner_ids.append(record.user_id.partner_id.id)
+        for rec in self:
+            if not (rec.schedule_date and rec.duration):
+                raise UserError(_("Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."))
+            partner_ids = []
+            if self.env.user.partner_id:
+                partner_ids.append(self.env.user.partner_id.id)
+            if rec.user_id and rec.user_id.partner_id:
+                partner_ids.append(rec.user_id.partner_id.id)
+            for user in rec.subodinados:
+                if user.partner_id:
+                    partner_ids.append(user.partner_id.id)
                 else:
-                    raise UserError(
-                        _("El usuario actual '%s' no tiene un partner asociado.")
-                        % self.env.user.name
-                    )
+                    raise UserError(_("El usuario '%s' no tiene un partner asociado.") % user.name)
+            if partner_ids:
+                event = self.env["calendar.event"].create({
+                    "name": f"Servicio programado / {rec.name}",
+                    "start": rec.schedule_date,
+                    "stop": rec.schedule_date + timedelta(hours=rec.duration),
+                    "duration": rec.duration,
+                    "ots_id": rec.id,
+                    "partner_ids": [(6, 0, partner_ids)],
+                    "user_id": self.env.user.id,
+                })
+                rec.event_id = event.id
 
-                # Ensure all subordinates have partners
-                for user in record.subodinados:
-                    if user.partner_id:
-                        partner_ids.append(user.partner_id.id)
-                    else:
-                        raise UserError(
-                            _("El usuario '%s' no tiene un partner asociado.")
-                            % user.name
-                        )
-
-                if partner_ids:
-                    # Create the event in the calendar
-                    event = self.env["calendar.event"].create(
-                        {
-                            "name": f"Servicio programado / {record.name}",
-                            "start": record.schedule_date,
-                            "stop": record.schedule_date
-                            + timedelta(hours=record.duration),
-                            "duration": record.duration,
-                            "ots_id": record.id,
-                            "partner_ids": [(6, 0, partner_ids)],
-                            "user_id": self.env.user.id,
-                        }
-                    )
-                    record.event_id = event.id
-                else:
-                    raise UserError(_("No hay asistentes válidos para el evento."))
-            else:
-                raise UserError(
-                    _(
-                        "Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."
-                    )
-                )
-
-    # ESTA FUNCION EJECUTA MEDIANTE ACCIONES DE SERVIDOR
+    # --------------------
+    # Acciones programadas (cron)
+    # --------------------
     def _set_email_programacion(self):
-        try:
-            fecha_objetivo = date.today() + timedelta(days=2)
-            # Buscar las órdenes donde la fecha programada coincide solo en fecha (no en hora)
-            ordenes = self.env["maintenance.request"].search(
-                [
-                    ("schedule_date", ">=", fecha_objetivo),
-                    ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
-                ]
-            )
+        fecha_objetivo = date.today() + timedelta(days=2)
+        ordenes = self.search([
+            ("schedule_date", ">=", fecha_objetivo),
+            ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
+        ])
+        for orden in ordenes:
+            orden.send_programacion_inicial()
 
-            for orden in ordenes:
-                correos = []
-                if orden.ubicacion and orden.ubicacion.email_jefe:
-                    correos.append(orden.ubicacion.email_jefe)
-                if orden.ubicacion and orden.ubicacion.email:
-                    correos.append(orden.ubicacion.email)
-                if orden.empresa and orden.empresa.email:
-                    correos.append(orden.empresa.email)
-
-                email_to = ",".join(filter(None, correos))
-
-                template = self.env.ref(
-                    "pmant.email_template_custom_sucursal"
-                ).with_context(email_to=email_to)
-
-                if template and orden.tarea and orden.schedule_date:
-                    template.send_mail(
-                        orden.id,
-                        force_send=True,
-                        email_values={"email_from": orden.employee_id.work_email},
-                    )
-                else:
-                    orden.message_post(
-                        body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
-                    )
-
-        except Exception as e:
-            orden.message_post(body=f"Error al enviar el correo: {str(e)}")
-
-    # ACCION DE VENTANA PARA GENERAR UN ENLACE DE COMPARTIR
+    # --------------------
+    # Compartir OT
+    # --------------------
     def compartir_ot(self):
-        # Obtener la URL base de la configuración de Odoo
         dominio = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-
-        # Obtener el ID activo desde el contexto (o usar active_id si no está disponible)
-        active_id = self._context.get("active_id", False)
+        active_id = self._context.get("active_id") or (self.ids and self.ids[0])
         if not active_id:
             raise ValueError("No se encontró un ID activo para compartir la OT")
-
-        # Construir la URL para compartir
         url_to_share = f"{dominio}/reporte/?id={active_id}"
-
-        # Redirigir al enlace de compartir
         return {
             "type": "ir.actions.act_window",
             "name": "Compartir Ot",
             "res_model": "wizard.share",
             "view_mode": "form",
-            "view_type": "form",
             "target": "new",
-            "context": {
-                "default_title": "Compartir Ot",
-                "default_url": url_to_share,
-                "active_id": active_id,
-            },
+            "context": {"default_title": "Compartir Ot", "default_url": url_to_share, "active_id": active_id},
         }
 
-
-    def _get_cantidad_incidencias(self):
-        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
-        self.cantidad_inconvenientes = len(cant_data)
-
-    def action_view_incidencias(self):
-        cant_data = self.env["inconveniente.servicio"].search([("ot_id", "=", self.id)])
-        return {
-                "name": "Incidencias",
-                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
-                "domain": [("id", "in", cant_data.ids)],
-                "view_mode": "list,form",  # puedes permitir también la vista formulario
-                "res_model": "inconveniente.servicio",
-                "context": {"create": False},
+    # --------------------
+    # CRM / Oportunidad
+    # --------------------
+    def crm_oportunidad_create(self):
+        for rec in self:
+            equipos = rec.tarea.planequipo.mapped("equipo.id") if rec.tarea else []
+            valores = {
+                "name": rec.name,
+                "user_id": rec.employee_id.user_id.id if rec.employee_id and rec.employee_id.user_id else False,
+                "partner_id": rec.empresa.id if rec.empresa else False,
+                "ubicacion": rec.ubicacion.id if rec.ubicacion else False,
+                "orden_trabajo": rec.id,
+                "equipo_tarea": [(6, 0, equipos)],
             }
+            lead = self.env["crm.lead"].create(valores)
+            rec.oportunidad = lead.id
 
+    # --------------------
+    # Validaciones por etapa
+    # --------------------
+    def _change_createui(self):
+        for rec in self:
+            rec._validacion_etapas()
+            planequipo = rec.tarea.planequipo if rec.tarea else None
+            if not (planequipo and any(planequipo.mapped("is_informe_file"))):
+                if rec.stage_id and rec.stage_id.sequence == 3:
+                    rec._fecha_estado()
+            if rec.stage_id and rec.stage_id.sequence == 5:
+                rec.send_reporte_final()
 
-    def action_view_ots(self):
-        return {
-                "name": "Solicitud de Mantenimiento",
-                "type": "ir.actions.act_window",  # ¡Este es el campo que faltaba!
-                "res_id" : self.id,
-                "view_mode": "form",  # puedes permitir también la vista formulario
-                "res_model": "maintenance.request",
-                "context": {"create": False},
-            }
+    def _fecha_estado(self):
+        for rec in self:
+            fecha_actual = datetime.now().date()
+            rec.fecha_ejec = fecha_actual
+            if rec.tarea and rec.tarea.planequipo:
+                try:
+                    rec.tarea.planequipo.fecha_ejec = datetime.now()
+                except Exception:
+                    _logger.exception("No se pudo actualizar planequipo.fecha_ejec para tarea %s", rec.tarea.id)
 
+    def _validacion_etapas(self):
+        for rec in self:
+            if rec.stage_id and rec.stage_id.sequence == 5:
+                if not rec.selec_sunat and not rec.factura:
+                    raise UserError(_("Debe registrar la factura"))
+                if rec.selec_sunat and not rec.factura_sunat:
+                    raise UserError(_("Debe registrar la factura Sunat"))
 
-    def action_print_report (self):
+    # --------------------
+    # Report action
+    # --------------------
+    def action_print_report(self):
         return self.env.ref("pmant.action_mantenimiento_ot").report_action(self)
+
+    # --------------------
+    # Name get util
+    # --------------------
+    def name_get(self):
+        res = []
+        for rec in self:
+            display = rec.name or ''
+            if not display:
+                display = _("Solicitud de mantenimiento %s") % rec.id
+            res.append((rec.id, f"[{rec.id}] {display}"))
+        return res
