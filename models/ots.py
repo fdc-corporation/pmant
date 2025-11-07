@@ -17,7 +17,10 @@ _logger = logging.getLogger(__name__)
 
 class MaintenanceRequestOTS(models.Model):
     _inherit = 'maintenance.request'
-    _description = "Peticion de mantenimiento (OTS optimizado para Odoo 19)"
+    _name = 'maintenance.request'  # asegúrate de no duplicar este modelo
+
+    # 👇 Agregamos herencia de mail.thread y mail.activity.mixin
+    _inherit = ['maintenance.request', 'mail.thread', 'mail.activity.mixin']
 
     # --------------------
     # Campos
