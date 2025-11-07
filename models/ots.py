@@ -157,9 +157,12 @@ class OTS(models.Model):
         if "schedule_end" in vals:
             for record in self:
                 new_date = vals.get("schedule_end")
-                if new_date and record.schedule_end != new_date:
-                    print("La fecha de programación inicial ha cambiado.")
-                    record.action_programacion_inicial()
+                if new_date:
+                    new_date_obj = fields.Date.to_date(new_date)
+                    old_date = record.schedule_end
+                    if old_date != new_date:
+                        print("Fecha cambiada.")
+                        record.action_programacion_inicial()
         return res
 
 
