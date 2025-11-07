@@ -309,7 +309,7 @@ class MaintenanceRequestOTS(models.Model):
                     rec.message_post(body=_("❌ Error al enviar correo de calificación: %s") % e)
 
     def send_programacion_inicial(self):
-        """Enviar correo de programación inicial y registrar en chatter (envío inmediato)."""
+        """Enviar correo de programación inicial y registrar en chatter (envío inmediato con validación)."""
         for rec in self:
             template_servicio = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
             if not template_servicio:
@@ -322,11 +322,20 @@ class MaintenanceRequestOTS(models.Model):
                 subject = template_servicio._render_field("subject", [rec.id])[rec.id]
                 body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
 
-                # Crear y enviar correo (se genera en cola)
-                mail_id = template_servicio.send_mail(rec.id, force_send=True)
+                # Crear y enviar correo (lanza excepción si falla el SMTP)
+                mail_id = template_servicio.send_mail(
+                    rec.id,
+                    force_send=True,
+                    raise_exception=True,  # 🔥 Fuerza error si el servidor SMTP falla
+                )
 
-                # 🔥 Forzar procesamiento inmediato de la cola
-                self.env["mail.mail"].sudo().process_email_queue()
+                mail_obj = self.env["mail.mail"].browse(mail_id)
+                if mail_obj.state != "sent":
+                    # Si no se envió, reintenta manualmente
+                    _logger.warning(
+                        "Correo de programación no se envió automáticamente para OT %s, reintentando...", rec.id
+                    )
+                    self.env["mail.mail"].sudo().process_email_queue()
 
                 # Registrar en chatter
                 rec.message_post(
@@ -336,10 +345,10 @@ class MaintenanceRequestOTS(models.Model):
                     subtype_xmlid="mail.mt_note",
                 )
 
-                _logger.info("Correo de programación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
+                _logger.info("✅ Correo de programación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
 
             except Exception as e:
-                _logger.exception("Error al enviar programación para OT %s: %s", rec.id, e)
+                _logger.exception("❌ Error al enviar programación para OT %s: %s", rec.id, e)
                 rec.message_post(body=_("❌ Error al enviar correo programación: %s") % e)
 
 
