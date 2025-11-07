@@ -311,46 +311,33 @@ class MaintenanceRequestOTS(models.Model):
     def send_programacion_inicial(self):
         """Enviar correo de programación inicial y registrar en chatter (envío inmediato)."""
         for rec in self:
-            template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
-            if not template:
-                rec.message_post(body=_("❌ Plantilla de programación no encontrada."))
-                _logger.warning("Plantilla pmant.email_template_custom_sucursal no encontrada")
-                continue
+            # Buscar plantillas
+            template_servicio = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
 
-            # Recolectar destinatarios
-            correos = []
-            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
-                correos.append(rec.ubicacion.email_jefe)
-            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
-                correos.append(rec.ubicacion.email)
-            if rec.empresa and getattr(rec.empresa, "email", None):
-                correos.append(rec.empresa.email)
+            # --- SERVICIO FINALIZADO ---
+            if template_servicio:
+                try:
+                    # Renderizar asunto y cuerpo
+                    subject = template_servicio._render_field("subject", [rec.id])[rec.id]
+                    body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
 
-            email_to = ",".join(filter(None, correos)) if correos else None
+                    # Enviar correo
+                    mail_id = template_servicio.send_mail(rec.id, force_send=True)
 
-            try:
-                ctx = {"email_to": email_to} if email_to else {}
+                    # Registrar en chatter
+                    rec.message_post(
+                        body=body_html or _("Correo de programacion enviado."),
+                        subject=subject or _("Correo de programacion"),
+                        message_type="comment",
+                        subtype_xmlid="mail.mt_note",
+                    )
 
-                # Renderizar contenido
-                subject = template.with_context(ctx)._render_field("subject", [rec.id])[rec.id]
-                body_html = template.with_context(ctx)._render_field("body_html", [rec.id])[rec.id]
+                    _logger.info("Correo de servicio programacion enviado para OT %s (mail_id=%s)", rec.id, mail_id)
 
-                # Enviar correo
-                mail_id = template.with_context(ctx).send_mail(rec.id, force_send=True)
+                except Exception as e:
+                    _logger.exception("Error al enviar programacion para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("❌ Error al enviar correo programacion: %s") % e)
 
-                # Registrar en chatter
-                rec.message_post(
-                    body=body_html or _("Correo de programación enviado a: %s") % (email_to or ""),
-                    subject=subject or _("Correo de programación"),
-                    message_type="comment",
-                    subtype_xmlid="mail.mt_note",
-                )
-
-                _logger.info("Correo de programación enviado para OT %s a %s (mail_id=%s)", rec.id, email_to, mail_id)
-
-            except Exception as e:
-                _logger.exception("Error al enviar correo de programación (OT %s): %s", rec.id, e)
-                rec.message_post(body=_("❌ Error al enviar correo de programación: %s") % e)
 
     def send_report_empresa(self):
         for rec in self:
