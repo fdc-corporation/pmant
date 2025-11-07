@@ -293,46 +293,31 @@ class MaintenanceRequestOTS(models.Model):
     def send_programacion_inicial(self):
         """Enviar correo de programación inicial y registrar en chatter (envío inmediato con validación)."""
         for rec in self:
-            template_servicio = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
-            if not template_servicio:
-                rec.message_post(body=_("❌ Plantilla de programación no encontrada."))
-                _logger.warning("Plantilla pmant.email_template_custom_sucursal no encontrada")
-                continue
+            template_servicio = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
 
-            try:
-                # Renderizar asunto y cuerpo
-                subject = template_servicio._render_field("subject", [rec.id])[rec.id]
-                body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
+            # --- SERVICIO FINALIZADO ---
+            if template_servicio:
+                try:
+                    # Renderizar asunto y cuerpo
+                    subject = template_servicio._render_field("subject", [rec.id])[rec.id]
+                    body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
 
-                # Crear y enviar correo (lanza excepción si falla el SMTP)
-                mail_id = template_servicio.send_mail(
-                    rec.id,
-                    force_send=True,
-                    raise_exception=True,  # 🔥 Fuerza error si el servidor SMTP falla
-                )
+                    # Enviar correo
+                    mail_id = template_servicio.send_mail(rec.id, force_send=True)
 
-                mail_obj = self.env["mail.mail"].browse(mail_id)
-                if mail_obj.state != "sent":
-                    # Si no se envió, reintenta manualmente
-                    _logger.warning(
-                        "Correo de programación no se envió automáticamente para OT %s, reintentando...", rec.id
+                    # Registrar en chatter
+                    rec.message_post(
+                        body=body_html or _("Correo de trabajo programado enviado."),
+                        subject=subject or _("Correo de trabajo programado"),
+                        message_type="comment",
+                        subtype_xmlid="mail.mt_note",
                     )
-                    self.env["mail.mail"].sudo().action_send_and_close()
 
-                # Registrar en chatter
-                rec.message_post(
-                    body=body_html or _("Correo de programación enviado."),
-                    subject=subject or _("Correo de programación"),
-                    message_type="comment",
-                    subtype_xmlid="mail.mt_note",
-                )
+                    _logger.info("Correo de trabajo programado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
 
-                _logger.info("✅ Correo de programación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
-
-            except Exception as e:
-                _logger.exception("❌ Error al enviar programación para OT %s: %s", rec.id, e)
-                rec.message_post(body=_("❌ Error al enviar correo programación: %s") % e)
-
+                except Exception as e:
+                    _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
+                    rec.message_post(body=_("❌ Error al enviar correo trabajo programado: %s") % e)
 
     def send_report_empresa(self):
         for rec in self:
