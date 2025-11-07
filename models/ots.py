@@ -154,10 +154,12 @@ class OTS(models.Model):
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
             self._change_createui()
-        if "schedule_date" in vals:
-            self.action_programacion_inicial()
-        if "schedule_end" in vals or "subodinados" in vals or "user_id" in vals:
-            self.action_programacion_inicial()
+        if "schedule_end" in vals:
+            for record in self:
+                new_date = vals.get("schedule_end")
+                if new_date and record.schedule_end != new_date:
+                    print("La fecha de programación inicial ha cambiado.")
+                    record.action_programacion_inicial()
         return res
 
 
