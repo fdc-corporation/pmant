@@ -269,7 +269,10 @@ class MaintenanceRequestOTS(models.Model):
             # --- Enviar plantilla de servicio finalizado ---
             if template_servicio:
                 try:
-                    rec.message_post_with_template(template_servicio.id, email_layout_xmlid="mail.mail_notification_light")
+                    rec.message_post_with_template(
+                        template_servicio.id,
+                        email_layout_xmlid="mail.mail_notification_light",
+                    )
                     _logger.info("Correo de servicio finalizado enviado para OT %s", rec.id)
                 except Exception as e:
                     _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
@@ -278,7 +281,10 @@ class MaintenanceRequestOTS(models.Model):
             # --- Enviar plantilla de calificación ---
             if calificacion:
                 try:
-                    rec.message_post_with_template(calificacion.id, email_layout_xmlid="mail.mail_notification_light")
+                    rec.message_post_with_template(
+                        calificacion.id,
+                        email_layout_xmlid="mail.mail_notification_light",
+                    )
                     _logger.info("Correo de calificación enviado para OT %s", rec.id)
                 except Exception as e:
                     _logger.exception("Error al enviar template calificación para OT %s: %s", rec.id, e)
@@ -305,7 +311,10 @@ class MaintenanceRequestOTS(models.Model):
 
             try:
                 ctx = {"email_to": email_to} if email_to else {}
-                rec.with_context(ctx).message_post_with_template(template.id, email_layout_xmlid="mail.mail_notification_light")
+                rec.with_context(ctx).message_post_with_template(
+                    template.id,
+                    email_layout_xmlid="mail.mail_notification_light",
+                )
                 _logger.info("Correo de programación enviado para OT %s a %s", rec.id, email_to)
             except Exception as e:
                 _logger.exception("Error al enviar correo de programación (OT %s): %s", rec.id, e)
