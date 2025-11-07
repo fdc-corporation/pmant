@@ -279,7 +279,6 @@ class MaintenanceRequestOTS(models.Model):
                         subject=subject or _("Correo de finalización"),
                         message_type="comment",
                         subtype_xmlid="mail.mt_note",
-                        content_subtype="html",
                     )
 
                     _logger.info("Correo de servicio finalizado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
@@ -301,7 +300,6 @@ class MaintenanceRequestOTS(models.Model):
                         subject=subject or _("Correo de calificación"),
                         message_type="comment",
                         subtype_xmlid="mail.mt_note",
-                        content_subtype="html",
                     )
 
                     _logger.info("Correo de calificación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
@@ -346,7 +344,6 @@ class MaintenanceRequestOTS(models.Model):
                     subject=subject or _("Correo de programación"),
                     message_type="comment",
                     subtype_xmlid="mail.mt_note",
-                    content_subtype="html",
                 )
 
                 _logger.info("Correo de programación enviado para OT %s a %s (mail_id=%s)", rec.id, email_to, mail_id)
