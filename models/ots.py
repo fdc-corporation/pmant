@@ -154,17 +154,6 @@ class OTS(models.Model):
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
             self._change_createui()
-        if "schedule_end" in vals:
-            for record in self:
-                new_date = vals.get("schedule_end")
-                if new_date:
-                    new_date_obj = fields.Date.to_date(new_date)
-                    old_date = record.schedule_end
-                    _logger.info(f"Old date: {old_date}, New date: {new_date_obj}")
-                    if old_date != new_date_obj:
-                        print("Fecha cambiada.")
-                        _logger.info("Fecha cambiada, actualizando programación inicial.")
-                        record.action_programacion_inicial()
         return res
 
 
@@ -189,7 +178,7 @@ class OTS(models.Model):
 
 
 
-
+    @api.depends("schedule_date", "duration")
     def action_programacion_inicial(self):
         for record in self:
             # Obtener lista de IDs de técnicos asignados
