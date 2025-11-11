@@ -192,11 +192,13 @@ class Equipo(models.Model):
             record.qr_image = qr_image_b64
             record.qr_image2 = qr_image_b64
             record.url_qr = url
-            if record.planequipo:
-                if fecha_prox and (not record.fecha_prox or record.fecha_prox < fecha_prox):
-                    record.fecha_prox = fecha_prox
-                else:
-                    record.fecha_prox = record.fecha_prox
+            if fecha_max:
+                if not record.fecha_prox or record.fecha_prox < fecha_max:
+                    record.fecha_prox = fecha_max
+                # Si fecha_prox ya es mayor a la fecha máxima, la dejamos (modificada a mano)
+            else:
+                # Si no hay fechas futuras, dejamos la fecha actual sin cambio
+                record.fecha_prox = record.fecha_prox
 
     def generar_n_serie(self):
         equipos_filtro = self.search(
