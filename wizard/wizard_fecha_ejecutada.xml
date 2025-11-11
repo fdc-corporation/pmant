@@ -6,14 +6,17 @@
         <field name="model">wizard.fecha.ejecutada.ot</field>
         <field name="arch" type="xml">
             <form string="">
-                <sheet>
                     <group>
                         <field name="ot_id" invisible="1"></field>
                         <field name="nueva_fecha" string="Nueva fecha jecutada" required="1"/>
                         <field name="descripcion"></field>
                     </group>
-                </sheet>
+                    <footer>
+                        <button string="Actualizar" type="object" name="action_update_fecha_ejecutada" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
             </form>
+
         </field>
     </record>
 </odoo>
