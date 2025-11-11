@@ -568,13 +568,25 @@ class WizardFechaEjecutadaOT(models.TransientModel):
     ot_id = fields.Many2one("maintenance.request", string="Órdenes de Trabajo")
     nueva_fecha = fields.Date(string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today)
     descripcion = fields.Text(string="Motivo de la actualización")
+
     def action_update_fecha_ejecutada(self):
+        self.ensure_one()  
+        self.ot_id.ensure_one()  
         self.ot_id.fecha_ejec = self.nueva_fecha
+
         if self.ot_id.tarea and self.ot_id.tarea.planequipo:
             try:
-                self.ot_id.tarea.planequipo.fecha_ejec = self.nueva_fecha
+                self.ot_id.tarea.planequipo.write({"fecha_ejec": self.nueva_fecha})
             except Exception:
-                _logger.exception("No se pudo actualizar planequipo.fecha_ejec para tarea %s", self.ot_id.tarea.id)
-        self.ot_id.ensure_one()
-        self.ot_id.message_post(body=f"La fecha ejecutada fue actualizada a {self.nueva_fecha}.\nMotivo: {self.descripcion}")
+                _logger.exception(
+                    "No se pudo actualizar planequipo.fecha_ejec para tarea %s", 
+                    self.ot_id.tarea.id
+                )
+
+        cuerpo = (
+            f"La fecha ejecutada fue actualizada a {self.nueva_fecha}."
+            f"\nMotivo: {self.descripcion or 'Sin descripción proporcionada.'}"
+        )
+        self.ot_id.message_post(body=cuerpo)
+
         return {"type": "ir.actions.act_window_close"}
