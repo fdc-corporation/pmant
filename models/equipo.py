@@ -193,9 +193,10 @@ class Equipo(models.Model):
             record.qr_image2 = qr_image_b64
             record.url_qr = url
             if record.planequipo:
-                if record.fecha_prox != fecha_prox:
+                if fecha_prox and (not record.fecha_prox or record.fecha_prox < fecha_prox):
                     record.fecha_prox = fecha_prox
-
+                else:
+                    record.fecha_prox = record.fecha_prox
 
     def generar_n_serie(self):
         equipos_filtro = self.search(
@@ -232,7 +233,7 @@ class Equipo(models.Model):
 
             # Crear evento de calendario con todas las alarmas
             calendario = self.env['calendar.event'].create({
-                'name': f'Programación de mantenimiento para {record.name}',
+                'name': f'Proximo mantenimiento para {record.name}',
                 'start': record.fecha_prox,
                 'stop': record.fecha_prox,
                 'alarm_ids': [(6, 0, alarms.ids)],  # 🔔 Todas las alarmas
@@ -249,6 +250,11 @@ class Equipo(models.Model):
             'res_id': calendario.id,
         }
 
+    @api.depends('fecha_prox')
+    def _compute_prox_mant(self):
+        for record in self:
+            if record.fecha_prox:
+                record.prox_mant = record.fecha_prox
 
     def _compute_count_recordatorios (self):
         for record in self:
