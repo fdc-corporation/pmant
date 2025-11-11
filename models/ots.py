@@ -575,5 +575,6 @@ class WizardFechaEjecutadaOT(models.TransientModel):
                 self.ot_id.tarea.planequipo.fecha_ejec = self.nueva_fecha
             except Exception:
                 _logger.exception("No se pudo actualizar planequipo.fecha_ejec para tarea %s", self.ot_id.tarea.id)
+        self.ot_id.ensure_one()
         self.ot_id.message_post(body=f"La fecha ejecutada fue actualizada a {self.nueva_fecha}.\nMotivo: {self.descripcion}")
         return {"type": "ir.actions.act_window_close"}
