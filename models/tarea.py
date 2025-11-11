@@ -363,6 +363,7 @@ class Tarea(models.Model):
             }
 
     def create_ot(self):
+        self.stage_id = self.env['etapa.tarea.mantenimiento'].search([], order='sequence asc', limit=1).id
         return {
             "type": "ir.actions.act_window",
             "name": "Crear Solicitud de Mantenimiento",
