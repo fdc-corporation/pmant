@@ -193,8 +193,9 @@ class Equipo(models.Model):
             record.qr_image2 = qr_image_b64
             record.url_qr = url
             if record.planequipo:
-                if fecha_prox and (not record.fecha_prox or record.fecha_prox < fecha_prox):
+                if record.fecha_prox != fecha_prox:
                     record.fecha_prox = fecha_prox
+
 
     def generar_n_serie(self):
         equipos_filtro = self.search(
