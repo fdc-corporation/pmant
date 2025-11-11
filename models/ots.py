@@ -6,7 +6,7 @@ Optimized Odoo 19 model for maintenance.request (OTS)
 - Maneja múltiples registros correctamente
 - Mejora de validaciones, logs y uso eficiente de search_count/mapped
 """
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, time
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_round
@@ -571,7 +571,25 @@ class WizardFechaEjecutadaOT(models.TransientModel):
 
     def action_update_fecha_ejecutada(self):
         self.ensure_one()  
-        self.ot_id.ensure_one()  
+        self.ot_id.ensure_one()
+        for equipo in self.ot_id.tarea.planequipo:
+            domain = [
+                        ('name', 'ilike', 'Proximo servicio'),
+                        ('start', '=', datetime.combine(equipo.fecha_ejecprox, time(hour=8))),
+                        ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
+                    ]
+            evento = self.env["calendar.event"].search(domain, limit=1)
+            start_datetime = datetime.combine(self.nueva_fecha, time(hour=8))
+            stop_datetime = datetime.combine(self.nueva_fecha, time(hour=9))
+
+            if evento:
+                try:
+                    evento.write({"start": start_datetime, "stop": stop_datetime})
+                except Exception:
+                    _logger.exception(
+                        "No se pudo actualizar calendar.event para OT %s", 
+                        self.ot_id.id
+                    )
         self.ot_id.fecha_ejec = self.nueva_fecha
 
         if self.ot_id.tarea and self.ot_id.tarea.planequipo:

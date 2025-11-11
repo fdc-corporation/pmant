@@ -263,19 +263,22 @@ class Tarea(models.Model):
             # Para cada fecha, crear o actualizar un evento
             for fecha, items in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([nombre for _, nombre, _ in items])
+                start_datetime = datetime.combine(fecha, time(hour=8))
+                stop_datetime = datetime.combine(fecha, time(hour=9))
                 # Buscamos eventos existentes con los mismos criterios; limit a 1
                 domain = [
                     ('name', '=', f'Proximo servicio - {cliente}'),
-                    ('start', '=', fecha),
+                    ('start', '=', start_datetime),
                     ('ots_id', '=', rec.ots[0].id if rec.ots else False),
                 ]
                 existing_event = self.env['calendar.event'].search(domain, limit=1)
+                
 
                 # Datos a escribir/crear
                 vals_event = {
                     'name': f'Proximo servicio - {cliente}',
-                    'start': fecha,
-                    'stop': fecha,
+                    'start': start_datetime,
+                    'stop': stop_datetime,
                     'allday': False,
                     'description': f'Servicios de equipos: {descripcion_equipos}',
                     'partner_ids': [(6, 0, partner_ids)] if partner_ids else False,

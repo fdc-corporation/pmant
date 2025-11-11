@@ -4,7 +4,7 @@ from odoo.http import request
 import qrcode
 import base64
 from io import BytesIO
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 
 
 def generate_qr_code(url):
@@ -236,8 +236,8 @@ class Equipo(models.Model):
             # Crear evento de calendario con todas las alarmas
             calendario = self.env['calendar.event'].create({
                 'name': f'Proximo mantenimiento para {record.name}',
-                'start': record.fecha_prox,
-                'stop': record.fecha_prox,
+                'start': datetime.combine(record.fecha_prox, time(hour=8)),
+                'stop': datetime.combine(record.fecha_prox, time(hour=9)),
                 'alarm_ids': [(6, 0, alarms.ids)],  # 🔔 Todas las alarmas
                 'equipos_ids': [(6, 0, [record.id])],
                 'partner_ids': [(6, 0, partner_ids)],
