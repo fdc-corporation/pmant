@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_fecha_ejecutada_ot_view" model="ir.ui.view">
+        <field name="name">wizard.fecha.ejecutada.ot.view.form</field>
+        <field name="model">wizard.fecha.ejecutada.ot</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="ot_id" invisible="1"></field>
+                        <field name="nueva_fecha" string="Nueva fecha jecutada" required="1"/>
+                        <field name="descripcion"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

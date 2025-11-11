@@ -544,3 +544,32 @@ class MaintenanceRequestOTS(models.Model):
                 display = _("Solicitud de mantenimiento %s") % rec.id
             res.append((rec.id, f"[{rec.id}] {display}"))
         return res
+
+    # --------------------
+    # Update Fecha Ejecutada from Planequipo
+    # --------------------
+    def action_fech_up(self):
+        return { 
+            "type": "ir.actions.act_window",
+            "name": "Actualizar Fecha Ejecutada",
+            "res_model": "wizard.fecha.ejecutada.ot",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_ot_ids": [(6, 0, self.ids)]},
+        }
+
+
+
+
+class WizardFechaEjecutadaOT(models.TransientModel):
+    _name = "wizard.fecha.ejecutada.ot"
+    _description = "Actualizar Fecha Ejecutada de OTs"
+
+    ot_id = fields.Many2one("maintenance.request", string="Órdenes de Trabajo")
+    nueva_fecha = fields.Date(string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today)
+    descripcion = fields.Text(string="Motivo de la actualización")
+    def action_actualizar_fecha(self):
+        for wizard in self:
+            ot_id.fecha_ejec = wizard.nueva_fecha
+            ot_id.message_post(body=f"La fecha ejecutada fue actualizada a {wizard.nueva_fecha}.\nMotivo: {wizard.descripcion}")
+        return {"type": "ir.actions.act_window_close"}

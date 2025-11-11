@@ -65,7 +65,7 @@ class HojaHoras(models.Model):
                     partner_ids.append(record.ot_id.ubicacion.id)
 
                 partner_ids = list(set(pid for pid in partner_ids if pid))
-
+                recordatorios = self.env["calendar.alarm"].search([("type", "=", "email")])
                 valores_evento = {
                     "name": f"Servicio programado / {record.ot_id.name or 'Sin nombre'}",
                     "start": record.fecha_date,
@@ -74,6 +74,7 @@ class HojaHoras(models.Model):
                     "ots_id": record.ot_id.id,
                     "programacion_id": record.id,
                     "partner_ids": [(6, 0, partner_ids)],
+                    "alarm_ids": [(6, 0, recordatorios.ids)],
                 }
 
                 # Buscar evento existente
@@ -90,7 +91,7 @@ class HojaHoras(models.Model):
                             cambios[campo] = valor
                     if cambios:
                         _logger.info(f"🔁 Actualizando evento {evento.id} con cambios: {list(cambios.keys())}")
-                        evento.with_context(no_mail_to_attendees=True).write(cambios)
+                        evento.write(cambios)
                     else:
                         _logger.debug(f"✅ Sin cambios en evento {evento.id}, no se actualiza ni se reenvían correos.")
                 else:

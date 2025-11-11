@@ -93,6 +93,7 @@
         "wizard/wizard-share.xml",
         "wizard/wizard_inconvenientes.xml",
         "views/etapas_tarea.xml",
+        "wizard/wizard_fecha_ejecutada.xml",
     ],
     "assets": {
         "web.assets_frontend": [
