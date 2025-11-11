@@ -65,7 +65,7 @@ class HojaHoras(models.Model):
                     partner_ids.append(record.ot_id.ubicacion.id)
 
                 partner_ids = list(set(pid for pid in partner_ids if pid))
-                recordatorios = self.env["calendar.alarm"].search([("type", "=", "email")])
+                recordatorios = self.env["calendar.alarm"].search([("alarm_type", "=", "email")])
                 valores_evento = {
                     "name": f"Servicio programado / {record.ot_id.name or 'Sin nombre'}",
                     "start": record.fecha_date,
