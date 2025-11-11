@@ -555,7 +555,7 @@ class MaintenanceRequestOTS(models.Model):
             "res_model": "wizard.fecha.ejecutada.ot",
             "view_mode": "form",
             "target": "new",
-            "context": {"default_ot_ids": [(6, 0, self.ids)]},
+            "context": {"default_ot_id": self.id},
         }
 
 
