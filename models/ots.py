@@ -569,7 +569,11 @@ class WizardFechaEjecutadaOT(models.TransientModel):
     nueva_fecha = fields.Date(string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today)
     descripcion = fields.Text(string="Motivo de la actualización")
     def action_update_fecha_ejecutada(self):
-        for wizard in self:
-            ot_id.fecha_ejec = wizard.nueva_fecha
-            ot_id.message_post(body=f"La fecha ejecutada fue actualizada a {wizard.nueva_fecha}.\nMotivo: {wizard.descripcion}")
+        self.ot_id.fecha_ejec = self.nueva_fecha
+        if self.ot_id.tarea and self.ot_id.tarea.planequipo:
+            try:
+                self.ot_id.tarea.planequipo.fecha_ejec = self.nueva_fecha
+            except Exception:
+                _logger.exception("No se pudo actualizar planequipo.fecha_ejec para tarea %s", self.ot_id.tarea.id)
+        self.ot_id.message_post(body=f"La fecha ejecutada fue actualizada a {wizard.nueva_fecha}.\nMotivo: {wizard.descripcion}")
         return {"type": "ir.actions.act_window_close"}
