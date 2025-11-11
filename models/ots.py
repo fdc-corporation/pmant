@@ -587,6 +587,12 @@ class WizardFechaEjecutadaOT(models.TransientModel):
             f"La fecha ejecutada fue actualizada a {self.nueva_fecha}."
             f"\nMotivo: {self.descripcion or 'Sin descripción proporcionada.'}"
         )
-        self.ot_id.message_post(body=cuerpo)
+        subject = "Actualización de Fecha Ejecutada"
+        self.ot_id.message_post(
+                        body=cuerpo or _("fecha ejecutada fue actualizada."),
+                        subject=subject or _("fecha ejecutada fue actualizada"),
+                        message_type="comment",
+                        subtype_xmlid="mail.mt_note",
+                    )
 
         return {"type": "ir.actions.act_window_close"}
