@@ -45,7 +45,7 @@ pmant_admin_acc14,ADMIN_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pma
 pmant_admin_acc15,ADMIN_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc17,ADMIN_mantenimento_equipo_otros,model_mantenimento_equipo_otros,pmant.group_pmant_admin,1,1,1,1
-pmant_planner_acc18,ADMIN_WIZARD_FECHA_EJECUTADA_OT,model_wizard_fecha_ejecutada_ot,pmant.group_pmant_admin,1,1,1,1
+pmant_admin_acc18,ADMIN_WIZARD_FECHA_EJECUTADA_OT,model_wizard_fecha_ejecutada_ot,pmant.group_pmant_admin,1,1,1,1
 ,,,,,,,
 ,,,,,,,
 pmant_planner_acc,ADMIN_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_planner,1,1,1,1
