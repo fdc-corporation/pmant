@@ -23,19 +23,19 @@
 		<field name="arch" type="xml">
 			<xpath expr="//button[@name='reset_equipment_request']" position="after">
 				<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
-				<button string="Enviar correo a la Empresa" name="send_report_empresa" type="object" />
-				<button string="Enviar correo a la Sucursal" name="send_report_sucursal" type="object" />
-				<button name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
-				<button name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
-				<button name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
-				<button class="oe_stat_button"
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Enviar correo a la Empresa" name="send_report_empresa" type="object" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Enviar correo a la Sucursal" name="send_report_sucursal" type="object" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_stat_button"
 						type="object"
 						name="action_open_wizard"
 						icon="fa-whatsapp"
 						context="{'default_partner_id': empresa.id, 'full_name': True}">
 					<span class="o_stat_info">Enviar</span>
 				</button>
-				<button name="action_fech_up" invisible="stage_id != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
+				<button name="action_fech_up" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" invisible="stage_id != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
 
 			</xpath>
 		
@@ -89,7 +89,7 @@
 							</list>
 						</field>
 				</page>
-				<page string="Calificaciones">
+				<page groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Calificaciones">
 					<group >
 						<field name="rating_p1" />
 						<field name="rating_p2" />
@@ -102,7 +102,7 @@
 				</page> -->
 			</xpath>
 			<xpath expr="//sheet/div[@invisible='not archive']" position="before">
-				<div class="oe_button_box" name="button_box">
+				<div groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_button_box" name="button_box">
 						<button class="oe_stat_button" type="object" name="action_view_documentos"
 								icon="fa-file-text-o">
 								<field string="Documentos firmados" name="document_count" widget="statinfo"/>
