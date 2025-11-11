@@ -35,7 +35,7 @@
 						context="{'default_partner_id': empresa.id, 'full_name': True}">
 					<span class="o_stat_info">Enviar</span>
 				</button>
-				<button name="action_fech_up" invisible="stage_id.sequence != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
+				<button name="action_fech_up" invisible="stage_id != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
 
 			</xpath>
 		
