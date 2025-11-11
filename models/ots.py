@@ -565,7 +565,7 @@ class WizardFechaEjecutadaOT(models.TransientModel):
     _name = "wizard.fecha.ejecutada.ot"
     _description = "Actualizar Fecha Ejecutada de OTs"
 
-    ot_id = fields.Many2one("maintenance.request", string="Órdenes de Trabajo")
+    ot_id = fields.Many2one("maintenance.request", string="Órdenes de Trabajo", default=lambda self: self._context.get("default_ot_id"))
     nueva_fecha = fields.Date(string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today)
     descripcion = fields.Text(string="Motivo de la actualización")
 
