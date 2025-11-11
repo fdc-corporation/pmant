@@ -186,7 +186,7 @@ class Equipo(models.Model):
                 if tarea and tarea.plan and tarea.plan.frecuencia > 0 and tarea.fecha_ejecprox
             ]
 
-            fecha_prox = max(fechas) if fechas else False
+            fecha_max = max(fechas) if fechas else False
 
             # Asignar a campos
             record.qr_image = qr_image_b64
