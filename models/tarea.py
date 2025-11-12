@@ -258,7 +258,7 @@ class Tarea(models.Model):
                      or self.env.ref('pmant.group_pmant_admin', raise_if_not_found=False))
             user = False
             if group:
-                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1)
+                user = self.env['res.users'].sudo().search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1)
 
             # Para cada fecha, crear o actualizar un evento
             for fecha, items in planes_por_fecha.items():
