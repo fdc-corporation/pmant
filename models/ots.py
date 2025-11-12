@@ -138,7 +138,7 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Create / Write overrides
     # --------------------
-    @api.model_create_multi
+    @api.model
     def create(self, vals_list):
         records = super().create(vals_list)
         # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
