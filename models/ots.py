@@ -308,10 +308,9 @@ class MaintenanceRequestOTS(models.Model):
                 template = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
 
                 # Verificar que la plantilla existe, la tarea y la fecha están definidas
-                if template and self.tarea and self.schedule_date:
 
                     # Crear el contexto para la ventana de composición de correos
-                    ctx = {
+                ctx = {
                         "default_model": "maintenance.request",  # Modelo actual
                         "default_res_ids": self.id,  # Se asegura de que es un entero
                         "default_res_ids": [
@@ -320,10 +319,10 @@ class MaintenanceRequestOTS(models.Model):
                         "default_template_id": template.id,
                         "default_composition_mode": "comment",  # Modo de composición
                         "force_email": True,
-                    }
+                }
 
                     # Retornar la acción para abrir el asistente de composición de correos
-                    return {
+                return {
                         "type": "ir.actions.act_window",
                         "view_mode": "form",
                         "res_model": "mail.compose.message",
@@ -331,13 +330,9 @@ class MaintenanceRequestOTS(models.Model):
                         "view_id": False,
                         "target": "new",
                         "context": ctx,
-                    }
+                }
 
-                else:
-                    # Mensaje en caso de que falten datos importantes
-                    self.message_post(
-                        body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
-                    )
+
             except Exception as e:
                 # Manejar cualquier excepción durante el envío y registrar el error
                 _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
