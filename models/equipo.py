@@ -236,8 +236,8 @@ class Equipo(models.Model):
             # Crear evento de calendario con todas las alarmas
             calendario = self.env['calendar.event'].create({
                 'name': f'Proximo mantenimiento para {record.name}',
-                'start': datetime.combine(record.fecha_prox, time(hour=8)),
-                'stop': datetime.combine(record.fecha_prox, time(hour=9)),
+                'start': datetime.combine(record.fecha_prox, time(hour=13)),
+                'stop': datetime.combine(record.fecha_prox, time(hour=14)),
                 'alarm_ids': [(6, 0, alarms.ids)],  # 🔔 Todas las alarmas
                 'equipos_ids': [(6, 0, [record.id])],
                 'partner_ids': [(6, 0, partner_ids)],

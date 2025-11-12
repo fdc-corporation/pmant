@@ -263,8 +263,8 @@ class Tarea(models.Model):
             # Para cada fecha, crear o actualizar un evento
             for fecha, items in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([nombre for _, nombre, _ in items])
-                start_datetime = datetime.combine(fecha, time(hour=8))
-                stop_datetime = datetime.combine(fecha, time(hour=9))
+                start_datetime = datetime.combine(fecha, time(hour=13))
+                stop_datetime = datetime.combine(fecha, time(hour=14))
                 # Buscamos eventos existentes con los mismos criterios; limit a 1
                 domain = [
                     ('name', '=', f'Proximo servicio - {cliente}'),

@@ -616,8 +616,8 @@ class WizardFechaEjecutadaOT(models.TransientModel):
                         ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
                     ]
             evento = self.env["calendar.event"].search(domain, limit=1)
-            start_datetime = datetime.combine(self.nueva_fecha, time(hour=8))
-            stop_datetime = datetime.combine(self.nueva_fecha, time(hour=9))
+            start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
+            stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
 
             if evento:
                 try:
