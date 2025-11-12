@@ -304,6 +304,8 @@ class Tarea(models.Model):
                         # equipos_ids
                         existing_eq = set(existing_event.equipos_ids.ids)
                         new_eq = set([p.equipo.id for p, _, _ in items if p.equipo])
+                        if existing_event.start != vals_event['start']:
+                            write_vals['start'] = vals_event['start']
                         if existing_eq != new_eq:
                             write_vals['equipos_ids'] = [(6, 0, list(new_eq))]
                         # solo escribir si hay algo que actualizar

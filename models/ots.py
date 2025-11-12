@@ -609,28 +609,32 @@ class WizardFechaEjecutadaOT(models.TransientModel):
     def action_update_fecha_ejecutada(self):
         self.ensure_one()  
         self.ot_id.ensure_one()
-        domain = [
-                    ('name', 'ilike', 'Proximo servicio'),
-                    ('start', '=', datetime.combine(self.ot_id.fecha_ejec, time(hour=8))),
-                    ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
-        ]
-        evento = self.env["calendar.event"].search(domain, limit=1)
-        start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
-        stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
-
-        if evento:
-            try:
-                evento.write({"start": start_datetime, "stop": stop_datetime})
-            except Exception:
-                _logger.exception(
-                        "No se pudo actualizar calendar.event para OT %s", 
-                        self.ot_id.id
-                )
-        self.ot_id.fecha_ejec = self.nueva_fecha
+        # for equipo in self.ot_id.tarea.planequipo:
+        #     domain = [
+        #                 ('name', 'ilike', 'Proximo servicio'),
+        #                 ('start', '=', datetime.combine(equipo.fecha_ejecprox, time(hour=8))),
+        #                 ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
+        #             ]
+        #     _logger.info("Buscando calendar.event con dominio: %s", domain)
+        #     evento = self.env["calendar.event"].search(domain, limit=1)
+        #     _logger.info("Evento encontrado: %s", evento)
+        #     start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
+        #     stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
+        #     _logger.info("Actualizando evento calendar.event %s con start: %s, stop: %s", evento, start_datetime, stop_datetime)    
+        #     if evento:
+        #         try:
+        #             evento.write({"start": start_datetime, "stop": stop_datetime})
+        #         except Exception:
+        #             _logger.exception(
+        #                 "No se pudo actualizar calendar.event para OT %s", 
+        #                 self.ot_id.id
+        #             )
+        # self.ot_id.fecha_ejec = self.nueva_fecha
 
         if self.ot_id.tarea and self.ot_id.tarea.planequipo:
             try:
                 self.ot_id.tarea.planequipo.write({"fecha_ejec": self.nueva_fecha})
+                self.ot_id.tarea._evento_calendario_proximo_servicio()
             except Exception:
                 _logger.exception(
                     "No se pudo actualizar planequipo.fecha_ejec para tarea %s", 

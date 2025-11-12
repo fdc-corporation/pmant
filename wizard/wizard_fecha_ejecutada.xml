@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="">
                     <group>
-                        <field name="ot_id" ></field>
+                        <field name="ot_id" invisible="1"></field>
                         <field name="nueva_fecha" string="Nueva fecha jecutada" required="1"/>
                         <field name="descripcion"></field>
                     </group>
