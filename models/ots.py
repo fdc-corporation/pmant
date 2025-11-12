@@ -316,7 +316,8 @@ class MaintenanceRequestOTS(models.Model):
                 # Renderizar asunto y cuerpo para el chatter
                 subject = template._render_field("subject", [rec.id])[rec.id]
                 body_html = template._render_field("body_html", [rec.id])[rec.id]
-                mail_id.action_send_and_close()
+                mail = self.env['mail.mail'].browse(mail_id)
+                mail.action_send_and_close()
                 # rec.message_post(
                 #     body=body_html or _("✅ Correo de programación enviado."),
                 #     subject=subject or _("Correo de programación"),
