@@ -145,8 +145,8 @@ class MaintenanceRequestOTS(models.Model):
         try:
             print("Creando/actualizando programación inicial para OTs...")
 
-            records.send_programacion_inicial()
             records.action_programacion_inicial()
+            records.send_programacion_inicial()
         except Exception as e:
             _logger.exception("Error al crear/actualizar programación inicial para OTs: %s", e)
             # No lanzar excepción que rompa la creación; sólo reportar en chatter
