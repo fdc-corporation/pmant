@@ -199,7 +199,7 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Lógica de programación y notificaciones
     # --------------------
-    @api.depends("schedule_date", "schedule_end")
+    @api.onchange("schedule_date", "schedule_end")
     def action_programacion_inicial(self):
         for rec in self:
             if not rec.schedule_date:
