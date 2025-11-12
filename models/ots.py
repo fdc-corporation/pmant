@@ -609,24 +609,23 @@ class WizardFechaEjecutadaOT(models.TransientModel):
     def action_update_fecha_ejecutada(self):
         self.ensure_one()  
         self.ot_id.ensure_one()
-        for equipo in self.ot_id.tarea.planequipo:
-            domain = [
-                        ('name', 'ilike', 'Proximo servicio'),
-                        ('start', '=', datetime.combine(equipo.fecha_ejecprox, time(hour=8))),
-                        ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
-                    ]
-            evento = self.env["calendar.event"].search(domain, limit=1)
-            start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
-            stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
+        domain = [
+                    ('name', 'ilike', 'Proximo servicio'),
+                    ('start', '=', datetime.combine(equipo.fecha_ejecprox, time(hour=8))),
+                    ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
+        ]
+        evento = self.env["calendar.event"].search(domain, limit=1)
+        start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
+        stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
 
-            if evento:
-                try:
-                    evento.write({"start": start_datetime, "stop": stop_datetime})
-                except Exception:
-                    _logger.exception(
+        if evento:
+            try:
+                evento.write({"start": start_datetime, "stop": stop_datetime})
+            except Exception:
+                _logger.exception(
                         "No se pudo actualizar calendar.event para OT %s", 
                         self.ot_id.id
-                    )
+                )
         self.ot_id.fecha_ejec = self.nueva_fecha
 
         if self.ot_id.tarea and self.ot_id.tarea.planequipo:
