@@ -138,7 +138,7 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Create / Write overrides
     # --------------------
-    @api.model
+    @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
         # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
@@ -301,42 +301,34 @@ class MaintenanceRequestOTS(models.Model):
                     _logger.exception("Error al enviar template calificación para OT %s: %s", rec.id, e)
                     rec.message_post(body=_("❌ Error al enviar correo de calificación: %s") % e)
 
-    def send_programacion_inicial(self):
-        """Enviar correo de programación inicial y registrar en chatter (envío inmediato con validación)."""
+    def send_programacion_inicial_direct(self):
+        """Envia correo de programación automáticamente (sin abrir la UI) y registra en el chatter."""
         for rec in self:
             try:
-                template = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
+                template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
+                if not template:
+                    rec.message_post(body=_("❌ No se encontró la plantilla de correo para programación inicial."))
+                    continue
 
-                # Verificar que la plantilla existe, la tarea y la fecha están definidas
+                # Enviar correo
+                mail_id = template.send_mail(rec.id, force_send=False)
 
-                    # Crear el contexto para la ventana de composición de correos
-                ctx = {
-                        "default_model": "maintenance.request",  # Modelo actual
-                        "default_res_ids": self.id,  # Se asegura de que es un entero
-                        "default_res_ids": [
-                            self.id
-                        ],  # res_ids debe ser una lista de enteros
-                        "default_template_id": template.id,
-                        "default_composition_mode": "comment",  # Modo de composición
-                        "force_email": True,
-                }
+                # Renderizar asunto y cuerpo para el chatter
+                subject = template._render_field("subject", [rec.id])[rec.id]
+                body_html = template._render_field("body_html", [rec.id])[rec.id]
 
-                    # Retornar la acción para abrir el asistente de composición de correos
-                return {
-                        "type": "ir.actions.act_window",
-                        "view_mode": "form",
-                        "res_model": "mail.compose.message",
-                        "views": [(False, "form")],
-                        "view_id": False,
-                        "target": "new",
-                        "context": ctx,
-                }
+                rec.message_post(
+                    body=body_html or _("✅ Correo de programación enviado."),
+                    subject=subject or _("Correo de programación"),
+                    message_type="comment",
+                    subtype_xmlid="mail.mt_note",
+                )
 
+                _logger.info("Correo de programación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
 
             except Exception as e:
-                # Manejar cualquier excepción durante el envío y registrar el error
-                _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
-                self.message_post(body=f"Error al enviar el correo: {str(e)}")
+                _logger.exception("Error al enviar correo programado para OT %s: %s", rec.id, e)
+                rec.message_post(body=_("❌ Error al enviar correo de programación: %s") % e)
 
 
     def send_report_empresa(self):
