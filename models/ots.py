@@ -629,7 +629,7 @@ class WizardFechaEjecutadaOT(models.TransientModel):
         #                 "No se pudo actualizar calendar.event para OT %s", 
         #                 self.ot_id.id
         #             )
-        # self.ot_id.fecha_ejec = self.nueva_fecha
+        self.ot_id.fecha_ejec = self.nueva_fecha
 
         if self.ot_id.tarea and self.ot_id.tarea.planequipo:
             try:

@@ -271,8 +271,9 @@ class Tarea(models.Model):
                     ('start', '=', start_datetime),
                     ('ots_id', '=', rec.ots[0].id if rec.ots else False),
                 ]
+                _logger.info("Buscando evento calendario con dominio: %s", domain)
                 existing_event = self.env['calendar.event'].search(domain, limit=1)
-                
+                _logger.info("Evento encontrado: %s", existing_event)
 
                 # Datos a escribir/crear
                 vals_event = {
@@ -286,7 +287,7 @@ class Tarea(models.Model):
                     'user_id': user.id if user else False,
                     'equipos_ids': [(6, 0, [p.equipo.id for p, _, _ in items if p.equipo])]
                 }
-
+                _logger.info("Datos para evento calendario: %s", vals_event)
                 try:
                     if existing_event:
                         # Escribir solo si hay cambios reales (para evitar disparar notificaciones)
@@ -306,10 +307,12 @@ class Tarea(models.Model):
                         new_eq = set([p.equipo.id for p, _, _ in items if p.equipo])
                         if existing_event.start != vals_event['start']:
                             write_vals['start'] = vals_event['start']
+                            _logger.info("Actualizando start de evento %s", existing_event.id)
                         if existing_eq != new_eq:
                             write_vals['equipos_ids'] = [(6, 0, list(new_eq))]
                         # solo escribir si hay algo que actualizar
                         if write_vals:
+                            _logger.info("Actualizando evento calendario %s con valores: %s", existing_event.id, write_vals)
                             existing_event.sudo().write(write_vals)
                     else:
                         # crear evento
