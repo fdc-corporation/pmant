@@ -277,7 +277,7 @@ class Tarea(models.Model):
 
                 # Datos a escribir/crear
                 vals_event = {
-                    'name': f'Proximo servicio - {cliente}',
+                    'name': f'Proximo servicio - {cliente} / {descripcion_equipos}',
                     'start': start_datetime,
                     'stop': stop_datetime,
                     'allday': False,
