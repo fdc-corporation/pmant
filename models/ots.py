@@ -301,7 +301,7 @@ class MaintenanceRequestOTS(models.Model):
                     _logger.exception("Error al enviar template calificación para OT %s: %s", rec.id, e)
                     rec.message_post(body=_("❌ Error al enviar correo de calificación: %s") % e)
 
-    def send_programacion_inicial_direct(self):
+    def send_programacion_inicial(self):
         """Envia correo de programación automáticamente (sin abrir la UI) y registra en el chatter."""
         for rec in self:
             try:
