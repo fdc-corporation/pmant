@@ -315,13 +315,13 @@ class MaintenanceRequestOTS(models.Model):
 
                     # Registrar en chatter
                     rec.message_post(
-                        body=body_html or _("Correo de trabajo programado enviado."),
-                        subject=subject or _("Correo de trabajo programado"),
+                        body=body_html or _("Correo de template_servicio enviado."),
+                        subject=subject or _("Correo de template_servicio"),
                         message_type="comment",
                         subtype_xmlid="mail.mt_note",
                     )
 
-                    _logger.info("Correo de trabajo programado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
+                    _logger.info("Correo de servicio finalizado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
 
                 except Exception as e:
                     _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
