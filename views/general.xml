@@ -199,7 +199,7 @@
 				<sheet>
 					<div class="oe_button_box" name="button_box">
 						<!-- BOTON DE COTIZACIONES -->
-						<button class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-pencil-square-o">
+						<button group="pmant.group_pmant_planner,pmant.group_pmant_admin" class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-pencil-square-o">
 							<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo" />
 						</button>
 					</div>
