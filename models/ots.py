@@ -304,72 +304,118 @@ class MaintenanceRequestOTS(models.Model):
     def send_programacion_inicial(self):
         """Enviar correo de programación inicial y registrar en chatter (envío inmediato con validación)."""
         for rec in self:
-            template_servicio = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
-            print("Template servicio inicial:", template_servicio)
-            # --- SERVICIO FINALIZADO ---
-            if template_servicio:
-                try:
-                    # Renderizar asunto y cuerpo
-                    subject = template_servicio._render_field("subject", [rec.id])[rec.id]
-                    body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
-                    _logger.info("Asunto renderizado para OT %s: %s", rec.id, subject)
-                    # Enviar correo
-                    mail_id = template_servicio.send_mail(rec.id, force_send=True)
-                    _logger.info("Correo de programación inicial enviado para OT %s (mail_id=%s)", rec.id, mail_id)
-                    # Registrar en chatter
-                    rec.message_post(
-                        body=body_html or _("Correo de template_servicio enviado."),
-                        subject=subject or _("Correo de template_servicio"),
-                        message_type="comment",
-                        subtype_xmlid="mail.mt_note",
+            try:
+                template = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
+
+                # Verificar que la plantilla existe, la tarea y la fecha están definidas
+                if template and self.tarea and self.schedule_date:
+
+                    # Crear el contexto para la ventana de composición de correos
+                    ctx = {
+                        "default_model": "maintenance.request",  # Modelo actual
+                        "default_res_ids": self.id,  # Se asegura de que es un entero
+                        "default_res_ids": [
+                            self.id
+                        ],  # res_ids debe ser una lista de enteros
+                        "default_template_id": template.id,
+                        "default_composition_mode": "comment",  # Modo de composición
+                        "force_email": True,
+                    }
+
+                    # Retornar la acción para abrir el asistente de composición de correos
+                    return {
+                        "type": "ir.actions.act_window",
+                        "view_mode": "form",
+                        "res_model": "mail.compose.message",
+                        "views": [(False, "form")],
+                        "view_id": False,
+                        "target": "new",
+                        "context": ctx,
+                    }
+
+                else:
+                    # Mensaje en caso de que falten datos importantes
+                    self.message_post(
+                        body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
                     )
+            except Exception as e:
+                # Manejar cualquier excepción durante el envío y registrar el error
+                _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
+                self.message_post(body=f"Error al enviar el correo: {str(e)}")
 
-                    _logger.info("Correo de servicio finalizado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
-
-                except Exception as e:
-                    _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
-                    rec.message_post(body=_("❌ Error al enviar correo trabajo programado: %s") % e)
 
     def send_report_empresa(self):
-        for rec in self:
-            template = self.env.ref("pmant.email_template_custom_empresa_programacion", raise_if_not_found=False)
-            if not template or not rec.tarea or not rec.schedule_date:
-                rec.message_post(body=_("No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."))
-                continue
-            correos = []
-            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
-                correos.append(rec.ubicacion.email_jefe)
-            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
-                correos.append(rec.ubicacion.email)
-            if rec.empresa and getattr(rec.empresa, "email", None):
-                correos.append(rec.empresa.email)
-            email_to = ",".join(filter(None, correos)) if correos else None
-            try:
-                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
-            except Exception as e:
-                _logger.exception("Error al encolar correo empresa (OT %s): %s", rec.id, e)
-                rec.message_post(body=_("Error al enviar correo a empresa: %s") % e)
+        try:
+            # Depurar los datos importantes antes de continuar
+            _logger.info(
+                f"Tarea: {self.tarea}, Fecha: {self.schedule_date}, Tipo de fecha: {type(self.schedule_date)}"
+            )
+
+            # Buscar la plantilla de correo
+            template = self.env.ref("pmant.email_template_custom_empresa_programacion")
+
+            # Verificar que la plantilla existe, la tarea y la fecha están definidas
+            if template and self.tarea and self.schedule_date:
+
+                # Crear el contexto para la ventana de composición de correos
+                ctx = {
+                    "default_model": "maintenance.request",  # Modelo actual
+                    "default_res_ids": self.id,  # Se asegura de que es un entero
+                    "default_res_ids": [
+                        self.id
+                    ],  # res_ids debe ser una lista de enteros
+                    "default_template_id": template.id,
+                    "default_composition_mode": "comment",  # Modo de composición
+                    "force_email": True,
+                }
+
+                # Retornar la acción para abrir el asistente de composición de correos
+                return {
+                    "type": "ir.actions.act_window",
+                    "view_mode": "form",
+                    "res_model": "mail.compose.message",
+                    "views": [(False, "form")],
+                    "view_id": False,
+                    "target": "new",
+                    "context": ctx,
+                }
+
+            else:
+                # Mensaje en caso de que falten datos importantes
+                self.message_post(
+                    body="No se pudo enviar el correo: faltan datos como la tarea o la fecha programada."
+                )
+
+        except Exception as e:
+            # Manejar cualquier excepción durante el envío y registrar el error
+            _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
+            self.message_post(body=f"Error al enviar el correo: {str(e)}")
 
     def send_report_sucursal(self):
-        for rec in self:
-            template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
-            if not template:
-                rec.message_post(body=_("Plantilla de sucursal no encontrada."))
-                continue
-            correos = []
-            if rec.ubicacion and getattr(rec.ubicacion, "email_jefe", None):
-                correos.append(rec.ubicacion.email_jefe)
-            if rec.ubicacion and getattr(rec.ubicacion, "email", None):
-                correos.append(rec.ubicacion.email)
-            if rec.empresa and getattr(rec.empresa, "email", None):
-                correos.append(rec.empresa.email)
-            email_to = ",".join(filter(None, correos)) if correos else None
-            try:
-                template.with_context(email_to=email_to).send_mail(rec.id, force_send=False)
-            except Exception as e:
-                _logger.exception("Error al encolar correo sucursal (OT %s): %s", rec.id, e)
-                rec.message_post(body=_("Error al enviar correo a sucursal: %s") % e)
-
+        self.ensure_one()
+        try:
+            # Verificar que existe la plantilla
+            template = self.env.ref("pmant.email_template_custom_sucursal")
+            if template:
+                ctx = {
+                    "default_model": "maintenance.request",
+                    "default_res_id": self.id,
+                    "default_template_id": template.id,
+                    "default_use_template": True,
+                    "default_composition_mode": "comment",
+                    "force_email": True,
+                }
+                return {
+                    "type": "ir.actions.act_window",
+                    "name": "Enviar Correo de Programación",
+                    "res_model": "mail.compose.message",
+                    "view_mode": "form",
+                    "target": "new",
+                    "context": ctx,
+                }
+        except Exception as e:
+            _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
+            self.message_post(body=f"Error al enviar el correo: {str(e)}")
     # --------------------
     # Reportes / Firma
     # --------------------
