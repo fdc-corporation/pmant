@@ -143,6 +143,8 @@ class MaintenanceRequestOTS(models.Model):
         records = super().create(vals_list)
         # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
         try:
+            print("Creando/actualizando programación inicial para OTs...")
+
             records.send_programacion_inicial()
             records.action_programacion_inicial()
         except Exception as e:
@@ -303,17 +305,18 @@ class MaintenanceRequestOTS(models.Model):
         """Enviar correo de programación inicial y registrar en chatter (envío inmediato con validación)."""
         for rec in self:
             template_servicio = self.env.ref("pmant.email_tempemail_template_custom_sucursallate_servicio_finalizado", raise_if_not_found=False)
-
+            print("Template servicio inicial:", template_servicio)
             # --- SERVICIO FINALIZADO ---
             if template_servicio:
                 try:
                     # Renderizar asunto y cuerpo
                     subject = template_servicio._render_field("subject", [rec.id])[rec.id]
                     body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
-
+                    print("Subject:", subject)
+                    print("Body HTML:", body_html)
                     # Enviar correo
                     mail_id = template_servicio.send_mail(rec.id, force_send=True)
-
+                    print("Mail ID:", mail_id)
                     # Registrar en chatter
                     rec.message_post(
                         body=body_html or _("Correo de template_servicio enviado."),
