@@ -267,8 +267,8 @@ class Tarea(models.Model):
                 stop_datetime = datetime.combine(fecha, time(hour=14))
                 # Buscamos eventos existentes con los mismos criterios; limit a 1
                 domain = [
-                    ('name', '=', f'Proximo servicio - {cliente}'),
-                    ('start', '=', start_datetime),
+                    ('name', '=', f'Proximo servicio - {cliente} / {descripcion_equipos}'),
+                    # ('start', '=', start_datetime),
                     ('ots_id', '=', rec.ots[0].id if rec.ots else False),
                 ]
                 _logger.info("Buscando evento calendario con dominio: %s", domain)
