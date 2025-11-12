@@ -611,7 +611,7 @@ class WizardFechaEjecutadaOT(models.TransientModel):
         self.ot_id.ensure_one()
         domain = [
                     ('name', 'ilike', 'Proximo servicio'),
-                    ('start', '=', datetime.combine(equipo.fecha_ejecprox, time(hour=8))),
+                    ('start', '=', datetime.combine(self.ot_id.fecha_ejec, time(hour=8))),
                     ('ots_id', '=', self.ot_id.id if self.ot_id.id else False),
         ]
         evento = self.env["calendar.event"].search(domain, limit=1)
