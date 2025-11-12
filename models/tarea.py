@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, time
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 import logging
