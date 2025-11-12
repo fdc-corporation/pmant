@@ -156,8 +156,9 @@ class MaintenanceRequestOTS(models.Model):
         res = super().write(vals)
         # Si cambia la etapa, ejecutar lógica por registro
 
-        if 'scheduled_end' in vals or 'duration' in vals:
+        if 'scheduled_end' in vals or 'schedule_date' in vals:
             try:
+                print("Actualizando programación inicial para OTs...")
                 self.action_programacion_inicial()
             except Exception as e:
                 _logger.exception("Error al actualizar programación inicial para OTs: %s", e)
@@ -199,7 +200,7 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Lógica de programación y notificaciones
     # --------------------
-    @api.onchange("schedule_date", "schedule_end")
+    # @api.onchange("schedule_date", "schedule_end")
     def action_programacion_inicial(self):
         for rec in self:
             if not rec.schedule_date:
