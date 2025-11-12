@@ -312,11 +312,10 @@ class MaintenanceRequestOTS(models.Model):
                     # Renderizar asunto y cuerpo
                     subject = template_servicio._render_field("subject", [rec.id])[rec.id]
                     body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
-                    print("Subject:", subject)
-                    print("Body HTML:", body_html)
+                    _logger.info("Asunto renderizado para OT %s: %s", rec.id, subject)
                     # Enviar correo
                     mail_id = template_servicio.send_mail(rec.id, force_send=True)
-                    print("Mail ID:", mail_id)
+                    _logger.info("Correo de programación inicial enviado para OT %s (mail_id=%s)", rec.id, mail_id)
                     # Registrar en chatter
                     rec.message_post(
                         body=body_html or _("Correo de template_servicio enviado."),
