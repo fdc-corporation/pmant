@@ -16,11 +16,11 @@ _logger = logging.getLogger(__name__)
 
 
 class MaintenanceRequestOTS(models.Model):
-    _inherit = 'maintenance.request'
-    _name = 'maintenance.request'  # asegúrate de no duplicar este modelo
+    _inherit = "maintenance.request"
+    _name = "maintenance.request"  # asegúrate de no duplicar este modelo
 
     # 👇 Agregamos herencia de mail.thread y mail.activity.mixin
-    _inherit = ['maintenance.request', 'mail.thread', 'mail.activity.mixin']
+    _inherit = ["maintenance.request", "mail.thread", "mail.activity.mixin"]
 
     # --------------------
     # Campos
@@ -37,18 +37,32 @@ class MaintenanceRequestOTS(models.Model):
     fecha_ejec = fields.Date(string="Fecha Ejecutada")
     subodinados = fields.Many2many("res.users", string="Subordinados")
     is_evaluacion = fields.Boolean(string="Es una Evaluacion")
-    is_tecnico = fields.Boolean(compute="_compute_is_tecnico", string="Is Técnico", store=False)
-    tab_horas = fields.One2many("programacion.mantenimiento", "ot_id", string="Hoja de horas")
+    is_tecnico = fields.Boolean(
+        compute="_compute_is_tecnico", string="Is Técnico", store=False
+    )
+    tab_horas = fields.One2many(
+        "programacion.mantenimiento", "ot_id", string="Hoja de horas"
+    )
     is_active_programacion = fields.Boolean(string="La programacion fue eniada?")
     rating_p1 = fields.Integer(string="Calidad del servicio")
     rating_p2 = fields.Integer(string="Tiempo de respuesta")
     rating_p3 = fields.Integer(string="Probabilidad de recomendación")
     rating_comment = fields.Text(string="Comentarios del cliente")
-    document_count = fields.Integer(string="Documentos firmados", compute="get_cantidad_documentos")
-    cantidad_inconvenientes = fields.Integer(string="Incidencias", compute="_get_cantidad_incidencias")
-    notas_venta = fields.Html(string="Notas Venta", sanitize_style=True, sanitize_tags=False)
+    document_count = fields.Integer(
+        string="Documentos firmados", compute="get_cantidad_documentos"
+    )
+    cantidad_inconvenientes = fields.Integer(
+        string="Incidencias", compute="_get_cantidad_incidencias"
+    )
+    notas_venta = fields.Html(
+        string="Notas Venta", sanitize_style=True, sanitize_tags=False
+    )
     duration = fields.Float(
-        string="Duración (H)", required=True, default=0.0, compute="_compute_horas_duracion", store=True
+        string="Duración (H)",
+        required=True,
+        default=0.0,
+        compute="_compute_horas_duracion",
+        store=True,
     )
 
     # --------------------
@@ -61,7 +75,11 @@ class MaintenanceRequestOTS(models.Model):
                 # schedule_date / schedule_end pueden ser datetime/date según implementación
                 try:
                     delta = rec.schedule_end - rec.schedule_date
-                    horas = (delta.total_seconds() if hasattr(delta, 'total_seconds') else delta.days * 24) / 3600.0
+                    horas = (
+                        delta.total_seconds()
+                        if hasattr(delta, "total_seconds")
+                        else delta.days * 24
+                    ) / 3600.0
                     rec.duration = float_round(horas or 0.0, precision_digits=2)
                 except Exception:
                     rec.duration = 0.0
@@ -70,9 +88,9 @@ class MaintenanceRequestOTS(models.Model):
 
     def get_cantidad_documentos(self):
         for rec in self:
-            rec.document_count = self.env["sign.request"].search_count([
-                ("state", "=", "signed"), ("ot_id", "=", rec.id)
-            ])
+            rec.document_count = self.env["sign.request"].search_count(
+                [("state", "=", "signed"), ("ot_id", "=", rec.id)]
+            )
 
     @api.depends_context("uid")
     def _compute_is_tecnico(self):
@@ -81,7 +99,9 @@ class MaintenanceRequestOTS(models.Model):
 
     def _get_cantidad_incidencias(self):
         for rec in self:
-            rec.cantidad_inconvenientes = self.env["inconveniente.servicio"].search_count([("ot_id", "=", rec.id)])
+            rec.cantidad_inconvenientes = self.env[
+                "inconveniente.servicio"
+            ].search_count([("ot_id", "=", rec.id)])
 
     # --------------------
     # Actions / UI
@@ -148,7 +168,9 @@ class MaintenanceRequestOTS(models.Model):
             records.action_programacion_inicial()
             records.send_programacion_inicial()
         except Exception as e:
-            _logger.exception("Error al crear/actualizar programación inicial para OTs: %s", e)
+            _logger.exception(
+                "Error al crear/actualizar programación inicial para OTs: %s", e
+            )
             # No lanzar excepción que rompa la creación; sólo reportar en chatter
             for rec in records:
                 rec.message_post(body=_("Error al crear programación inicial: %s") % e)
@@ -158,14 +180,18 @@ class MaintenanceRequestOTS(models.Model):
         res = super().write(vals)
         # Si cambia la etapa, ejecutar lógica por registro
 
-        if 'scheduled_end' in vals or 'schedule_date' in vals:
+        if "scheduled_end" in vals or "schedule_date" in vals:
             try:
                 print("Actualizando programación inicial para OTs...")
                 self.action_programacion_inicial()
             except Exception as e:
-                _logger.exception("Error al actualizar programación inicial para OTs: %s", e)
+                _logger.exception(
+                    "Error al actualizar programación inicial para OTs: %s", e
+                )
                 for rec in self:
-                    rec.message_post(body=_("Error al actualizar programación inicial: %s") % e)
+                    rec.message_post(
+                        body=_("Error al actualizar programación inicial: %s") % e
+                    )
         if "stage_id" in vals:
             for rec in self:
                 try:
@@ -178,10 +204,18 @@ class MaintenanceRequestOTS(models.Model):
                                 rec.tarea._fecha_ejecutada()
                                 rec.tarea._evento_calendario_proximo_servicio()
                         else:
-                            if planequipo and not any(planequipo.mapped("informe_file")):
-                                raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
+                            if planequipo and not any(
+                                planequipo.mapped("informe_file")
+                            ):
+                                raise UserError(
+                                    _(
+                                        "Debe subir el informe técnico antes de cambiar a esta etapa."
+                                    )
+                                )
                             else:
-                                rec.fecha_ejec = planequipo[:1].fecha_ejec if planequipo else None
+                                rec.fecha_ejec = (
+                                    planequipo[:1].fecha_ejec if planequipo else None
+                                )
                                 if rec.tarea:
                                     rec.tarea._evento_calendario_proximo_servicio()
 
@@ -190,7 +224,11 @@ class MaintenanceRequestOTS(models.Model):
                         rec.notify_users_facturacion()
 
                 except Exception as e:
-                    _logger.exception("Error durante write() en maintenance.request id %s: %s", rec.id, e)
+                    _logger.exception(
+                        "Error durante write() en maintenance.request id %s: %s",
+                        rec.id,
+                        e,
+                    )
                     rec.message_post(body=_("Error durante actualización: %s") % e)
             # Validaciones y acciones dependientes
             try:
@@ -206,7 +244,11 @@ class MaintenanceRequestOTS(models.Model):
     def action_programacion_inicial(self):
         for rec in self:
             if not rec.schedule_date:
-                raise UserError(_("Para crear una Orden de Trabajo debes colocar la fecha programada y una duración mayor a 0."))
+                raise UserError(
+                    _(
+                        "Para crear una Orden de Trabajo debes colocar la fecha programada y una duración mayor a 0."
+                    )
+                )
 
             lista_user = []
             if rec.user_id:
@@ -224,13 +266,21 @@ class MaintenanceRequestOTS(models.Model):
                 try:
                     self.env["programacion.mantenimiento"].create(valores)
                 except Exception as e:
-                    _logger.exception("No se pudo crear programacion.mantenimiento para OT %s: %s", rec.id, e)
+                    _logger.exception(
+                        "No se pudo crear programacion.mantenimiento para OT %s: %s",
+                        rec.id,
+                        e,
+                    )
                     rec.message_post(body=_("Error al crear programación: %s") % e)
             else:
                 try:
                     rec.tab_horas[0].write(valores)
                 except Exception as e:
-                    _logger.exception("No se pudo actualizar programacion.mantenimiento para OT %s: %s", rec.id, e)
+                    _logger.exception(
+                        "No se pudo actualizar programacion.mantenimiento para OT %s: %s",
+                        rec.id,
+                        e,
+                    )
                     rec.message_post(body=_("Error al actualizar programación: %s") % e)
 
     def notify_users_facturacion(self):
@@ -240,7 +290,9 @@ class MaintenanceRequestOTS(models.Model):
         except Exception:
             group = None
         if not group:
-            _logger.debug("Grupo de notificación de facturación no encontrado: %s", group_xml_id)
+            _logger.debug(
+                "Grupo de notificación de facturación no encontrado: %s", group_xml_id
+            )
             return
         for user in group.user_ids:
             for rec in self:
@@ -253,15 +305,23 @@ class MaintenanceRequestOTS(models.Model):
         """Enviar correos finales (servicio finalizado + calificación) y registrar en chatter."""
         for rec in self:
             # Buscar plantillas
-            template_servicio = self.env.ref("pmant.email_template_servicio_finalizado", raise_if_not_found=False)
-            template_calificacion = self.env.ref("pmant.email_template_calificacion_servicio", raise_if_not_found=False)
+            template_servicio = self.env.ref(
+                "pmant.email_template_servicio_finalizado", raise_if_not_found=False
+            )
+            template_calificacion = self.env.ref(
+                "pmant.email_template_calificacion_servicio", raise_if_not_found=False
+            )
 
             # --- SERVICIO FINALIZADO ---
             if template_servicio:
                 try:
                     # Renderizar asunto y cuerpo
-                    subject = template_servicio._render_field("subject", [rec.id])[rec.id]
-                    body_html = template_servicio._render_field("body_html", [rec.id])[rec.id]
+                    subject = template_servicio._render_field("subject", [rec.id])[
+                        rec.id
+                    ]
+                    body_html = template_servicio._render_field("body_html", [rec.id])[
+                        rec.id
+                    ]
 
                     # Enviar correo
                     mail_id = template_servicio.send_mail(rec.id, force_send=True)
@@ -274,17 +334,29 @@ class MaintenanceRequestOTS(models.Model):
                         subtype_xmlid="mail.mt_note",
                     )
 
-                    _logger.info("Correo de servicio finalizado enviado para OT %s (mail_id=%s)", rec.id, mail_id)
+                    _logger.info(
+                        "Correo de servicio finalizado enviado para OT %s (mail_id=%s)",
+                        rec.id,
+                        mail_id,
+                    )
 
                 except Exception as e:
-                    _logger.exception("Error al enviar template_servicio para OT %s: %s", rec.id, e)
-                    rec.message_post(body=_("❌ Error al enviar correo finalización: %s") % e)
+                    _logger.exception(
+                        "Error al enviar template_servicio para OT %s: %s", rec.id, e
+                    )
+                    rec.message_post(
+                        body=_("❌ Error al enviar correo finalización: %s") % e
+                    )
 
             # --- CALIFICACIÓN ---
             if template_calificacion:
                 try:
-                    subject = template_calificacion._render_field("subject", [rec.id])[rec.id]
-                    body_html = template_calificacion._render_field("body_html", [rec.id])[rec.id]
+                    subject = template_calificacion._render_field("subject", [rec.id])[
+                        rec.id
+                    ]
+                    body_html = template_calificacion._render_field(
+                        "body_html", [rec.id]
+                    )[rec.id]
 
                     mail_id = template_calificacion.send_mail(rec.id, force_send=True)
 
@@ -295,19 +367,35 @@ class MaintenanceRequestOTS(models.Model):
                         subtype_xmlid="mail.mt_note",
                     )
 
-                    _logger.info("Correo de calificación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
+                    _logger.info(
+                        "Correo de calificación enviado para OT %s (mail_id=%s)",
+                        rec.id,
+                        mail_id,
+                    )
 
                 except Exception as e:
-                    _logger.exception("Error al enviar template calificación para OT %s: %s", rec.id, e)
-                    rec.message_post(body=_("❌ Error al enviar correo de calificación: %s") % e)
+                    _logger.exception(
+                        "Error al enviar template calificación para OT %s: %s",
+                        rec.id,
+                        e,
+                    )
+                    rec.message_post(
+                        body=_("❌ Error al enviar correo de calificación: %s") % e
+                    )
 
     def send_programacion_inicial(self):
         """Envia correo de programación automáticamente (sin abrir la UI) y registra en el chatter."""
         for rec in self:
             try:
-                template = self.env.ref("pmant.email_template_custom_sucursal", raise_if_not_found=False)
+                template = self.env.ref(
+                    "pmant.email_template_custom_sucursal", raise_if_not_found=False
+                )
                 if not template:
-                    rec.message_post(body=_("❌ No se encontró la plantilla de correo para programación inicial."))
+                    rec.message_post(
+                        body=_(
+                            "❌ No se encontró la plantilla de correo para programación inicial."
+                        )
+                    )
                     continue
 
                 # Enviar correo
@@ -316,7 +404,7 @@ class MaintenanceRequestOTS(models.Model):
                 # Renderizar asunto y cuerpo para el chatter
                 subject = template._render_field("subject", [rec.id])[rec.id]
                 body_html = template._render_field("body_html", [rec.id])[rec.id]
-                mail = self.env['mail.mail'].browse(mail_id)
+                mail = self.env["mail.mail"].browse(mail_id)
                 mail.sudo().action_send_and_close()
                 # rec.message_post(
                 #     body=body_html or _("✅ Correo de programación enviado."),
@@ -325,12 +413,19 @@ class MaintenanceRequestOTS(models.Model):
                 #     subtype_xmlid="mail.mt_note",
                 # )
 
-                _logger.info("Correo de programación enviado para OT %s (mail_id=%s)", rec.id, mail_id)
+                _logger.info(
+                    "Correo de programación enviado para OT %s (mail_id=%s)",
+                    rec.id,
+                    mail_id,
+                )
 
             except Exception as e:
-                _logger.exception("Error al enviar correo programado para OT %s: %s", rec.id, e)
-                rec.message_post(body=_("❌ Error al enviar correo de programación: %s") % e)
-
+                _logger.exception(
+                    "Error al enviar correo programado para OT %s: %s", rec.id, e
+                )
+                rec.message_post(
+                    body=_("❌ Error al enviar correo de programación: %s") % e
+                )
 
     def send_report_empresa(self):
         try:
@@ -404,6 +499,7 @@ class MaintenanceRequestOTS(models.Model):
         except Exception as e:
             _logger.error(f"Error al enviar el correo: {str(e)}", exc_info=True)
             self.message_post(body=f"Error al enviar el correo: {str(e)}")
+
     # --------------------
     # Reportes / Firma
     # --------------------
@@ -412,16 +508,24 @@ class MaintenanceRequestOTS(models.Model):
             ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
             statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
             statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=rec.ids)
-            attachment = self.env["ir.attachment"].create({
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report, res_ids=rec.ids
+            )
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": f"OT {rec.name}",
+                    "type": "binary",
+                    "mimetype": "application/pdf",
+                    "raw": content,
+                    "res_model": "sign.template",
+                    "res_id": None,
+                }
+            )
+            vals_template = {
                 "name": f"OT {rec.name}",
-                "type": "binary",
-                "mimetype": "application/pdf",
-                "raw": content,
-                "res_model": "sign.template",
-                "res_id": None,
-            })
-            vals_template = {"name": f"OT {rec.name}", "attachment_id": attachment.id, "ot_id": rec.id}
+                "attachment_id": attachment.id,
+                "ot_id": rec.id,
+            }
             vals_template.pop("attachment_count", None)
             self.env["sign.template"].create(vals_template)
         return {
@@ -437,16 +541,24 @@ class MaintenanceRequestOTS(models.Model):
             ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
             statement_report_action = self.env.ref("pmant.action_reporte_acta")
             statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(statement_report, res_ids=rec.ids)
-            attachment = self.env["ir.attachment"].create({
+            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+                statement_report, res_ids=rec.ids
+            )
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": f"Acta - {rec.name}",
+                    "type": "binary",
+                    "raw": content,
+                    "mimetype": "application/pdf",
+                    "res_model": "sign.template",
+                    "res_id": None,
+                }
+            )
+            vals_template = {
                 "name": f"Acta - {rec.name}",
-                "type": "binary",
-                "raw": content,
-                "mimetype": "application/pdf",
-                "res_model": "sign.template",
-                "res_id": None,
-            })
-            vals_template = {"name": f"Acta - {rec.name}", "attachment_id": attachment.id, "ot_id": rec.id}
+                # "attachment_id": attachment.id,
+                "ot_id": rec.id,
+            }
             vals_template.pop("attachment_count", None)
             self.env["sign.template"].create(vals_template)
         return {
@@ -463,7 +575,11 @@ class MaintenanceRequestOTS(models.Model):
     def _create_calendar_event(self):
         for rec in self:
             if not (rec.schedule_date and rec.duration):
-                raise UserError(_("Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."))
+                raise UserError(
+                    _(
+                        "Para crear una Ordne de Trabajo tienes que colocar la fecha programada y la durecion en horas."
+                    )
+                )
             partner_ids = []
             if self.env.user.partner_id:
                 partner_ids.append(self.env.user.partner_id.id)
@@ -473,17 +589,21 @@ class MaintenanceRequestOTS(models.Model):
                 if user.partner_id:
                     partner_ids.append(user.partner_id.id)
                 else:
-                    raise UserError(_("El usuario '%s' no tiene un partner asociado.") % user.name)
+                    raise UserError(
+                        _("El usuario '%s' no tiene un partner asociado.") % user.name
+                    )
             if partner_ids:
-                event = self.env["calendar.event"].create({
-                    "name": f"Servicio programado / {rec.name}",
-                    "start": rec.schedule_date,
-                    "stop": rec.schedule_date + timedelta(hours=rec.duration),
-                    "duration": rec.duration,
-                    "ots_id": rec.id,
-                    "partner_ids": [(6, 0, partner_ids)],
-                    "user_id": self.env.user.id,
-                })
+                event = self.env["calendar.event"].create(
+                    {
+                        "name": f"Servicio programado / {rec.name}",
+                        "start": rec.schedule_date,
+                        "stop": rec.schedule_date + timedelta(hours=rec.duration),
+                        "duration": rec.duration,
+                        "ots_id": rec.id,
+                        "partner_ids": [(6, 0, partner_ids)],
+                        "user_id": self.env.user.id,
+                    }
+                )
                 rec.event_id = event.id
 
     # --------------------
@@ -491,10 +611,12 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     def _set_email_programacion(self):
         fecha_objetivo = date.today() + timedelta(days=2)
-        ordenes = self.search([
-            ("schedule_date", ">=", fecha_objetivo),
-            ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
-        ])
+        ordenes = self.search(
+            [
+                ("schedule_date", ">=", fecha_objetivo),
+                ("schedule_date", "<", fecha_objetivo + timedelta(days=1)),
+            ]
+        )
         for orden in ordenes:
             orden.send_programacion_inicial()
 
@@ -513,7 +635,11 @@ class MaintenanceRequestOTS(models.Model):
             "res_model": "wizard.share",
             "view_mode": "form",
             "target": "new",
-            "context": {"default_title": "Compartir Ot", "default_url": url_to_share, "active_id": active_id},
+            "context": {
+                "default_title": "Compartir Ot",
+                "default_url": url_to_share,
+                "active_id": active_id,
+            },
         }
 
     # --------------------
@@ -524,7 +650,11 @@ class MaintenanceRequestOTS(models.Model):
             equipos = rec.tarea.planequipo.mapped("equipo.id") if rec.tarea else []
             valores = {
                 "name": rec.name,
-                "user_id": rec.employee_id.user_id.id if rec.employee_id and rec.employee_id.user_id else False,
+                "user_id": (
+                    rec.employee_id.user_id.id
+                    if rec.employee_id and rec.employee_id.user_id
+                    else False
+                ),
                 "partner_id": rec.empresa.id if rec.empresa else False,
                 "ubicacion": rec.ubicacion.id if rec.ubicacion else False,
                 "orden_trabajo": rec.id,
@@ -554,7 +684,10 @@ class MaintenanceRequestOTS(models.Model):
                 try:
                     rec.tarea.planequipo.fecha_ejec = datetime.now()
                 except Exception:
-                    _logger.exception("No se pudo actualizar planequipo.fecha_ejec para tarea %s", rec.tarea.id)
+                    _logger.exception(
+                        "No se pudo actualizar planequipo.fecha_ejec para tarea %s",
+                        rec.tarea.id,
+                    )
 
     def _validacion_etapas(self):
         for rec in self:
@@ -576,7 +709,7 @@ class MaintenanceRequestOTS(models.Model):
     def name_get(self):
         res = []
         for rec in self:
-            display = rec.name or ''
+            display = rec.name or ""
             if not display:
                 display = _("Solicitud de mantenimiento %s") % rec.id
             res.append((rec.id, f"[{rec.id}] {display}"))
@@ -586,7 +719,7 @@ class MaintenanceRequestOTS(models.Model):
     # Update Fecha Ejecutada from Planequipo
     # --------------------
     def action_fech_up(self):
-        return { 
+        return {
             "type": "ir.actions.act_window",
             "name": "Actualizar Fecha Ejecutada",
             "res_model": "wizard.fecha.ejecutada.ot",
@@ -596,18 +729,22 @@ class MaintenanceRequestOTS(models.Model):
         }
 
 
-
-
 class WizardFechaEjecutadaOT(models.TransientModel):
     _name = "wizard.fecha.ejecutada.ot"
     _description = "Actualizar Fecha Ejecutada de OTs"
 
-    ot_id = fields.Many2one("maintenance.request", string="Órdenes de Trabajo", default=lambda self: self._context.get("default_ot_id"))
-    nueva_fecha = fields.Date(string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today)
+    ot_id = fields.Many2one(
+        "maintenance.request",
+        string="Órdenes de Trabajo",
+        default=lambda self: self._context.get("default_ot_id"),
+    )
+    nueva_fecha = fields.Date(
+        string="Nueva Fecha Ejecutada", required=True, default=fields.Date.today
+    )
     descripcion = fields.Text(string="Motivo de la actualización")
 
     def action_update_fecha_ejecutada(self):
-        self.ensure_one()  
+        self.ensure_one()
         self.ot_id.ensure_one()
         # for equipo in self.ot_id.tarea.planequipo:
         #     domain = [
@@ -620,13 +757,13 @@ class WizardFechaEjecutadaOT(models.TransientModel):
         #     _logger.info("Evento encontrado: %s", evento)
         #     start_datetime = datetime.combine(self.nueva_fecha, time(hour=13))
         #     stop_datetime = datetime.combine(self.nueva_fecha, time(hour=14))
-        #     _logger.info("Actualizando evento calendar.event %s con start: %s, stop: %s", evento, start_datetime, stop_datetime)    
+        #     _logger.info("Actualizando evento calendar.event %s con start: %s, stop: %s", evento, start_datetime, stop_datetime)
         #     if evento:
         #         try:
         #             evento.write({"start": start_datetime, "stop": stop_datetime})
         #         except Exception:
         #             _logger.exception(
-        #                 "No se pudo actualizar calendar.event para OT %s", 
+        #                 "No se pudo actualizar calendar.event para OT %s",
         #                 self.ot_id.id
         #             )
         self.ot_id.fecha_ejec = self.nueva_fecha
@@ -637,8 +774,8 @@ class WizardFechaEjecutadaOT(models.TransientModel):
                 self.ot_id.tarea._evento_calendario_proximo_servicio()
             except Exception:
                 _logger.exception(
-                    "No se pudo actualizar planequipo.fecha_ejec para tarea %s", 
-                    self.ot_id.tarea.id
+                    "No se pudo actualizar planequipo.fecha_ejec para tarea %s",
+                    self.ot_id.tarea.id,
                 )
 
         cuerpo = (
@@ -647,10 +784,10 @@ class WizardFechaEjecutadaOT(models.TransientModel):
         )
         subject = "Actualización de Fecha Ejecutada"
         self.ot_id.message_post(
-                        body=cuerpo or _("fecha ejecutada fue actualizada."),
-                        subject=subject or _("fecha ejecutada fue actualizada"),
-                        message_type="comment",
-                        subtype_xmlid="mail.mt_note",
-                    )
+            body=cuerpo or _("fecha ejecutada fue actualizada."),
+            subject=subject or _("fecha ejecutada fue actualizada"),
+            message_type="comment",
+            subtype_xmlid="mail.mt_note",
+        )
 
         return {"type": "ir.actions.act_window_close"}
