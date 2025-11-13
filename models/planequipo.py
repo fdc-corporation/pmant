@@ -144,7 +144,7 @@ class PlanEquipo(models.Model):
                 # "equipo_id": self.equipo.id,
             }
             document_sign = self.env["sign.document"].create(vals_sign_document)
-            attachment.res_id = template_firma
+            attachment.res_id = sign_template
 
         return {
             "type": "ir.actions.act_window",
