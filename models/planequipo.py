@@ -138,8 +138,15 @@ class PlanEquipo(models.Model):
             vals_template.pop("attachment_count", None)
 
             sign_template = self.env["sign.template"].create(vals_template)
+            vals_sign_document = {
+                "name": f"Certificado {self.equipo.name}",
+                "attachment_id": attachment.id,
+                "template_id": sign_template.id,
+                "equipo_id": self.equipo.id,
+            }
+            document_sign = self.env["sign.document"].create(vals_sign_document)
+            attachment.res_id = template_firma
 
-            # Redirigir al formulario del sign.template
         return {
             "type": "ir.actions.act_window",
             "name": "Certificado " + self.equipo.name,

@@ -527,7 +527,16 @@ class MaintenanceRequestOTS(models.Model):
                 "ot_id": rec.id,
             }
             vals_template.pop("attachment_count", None)
-            self.env["sign.template"].create(vals_template)
+            template_id = self.env["sign.template"].create(vals_template)
+            vals_sign_document = {
+                "name": f"OT - {rec.name}",
+                "attachment_id": attachment.id,
+                "template_id": template_id.id,
+                "equipo_id": [0, 6, rec.tarea.planequipo.mapped("equipo.id")],
+            }
+            document_sign = self.env["sign.document"].create(vals_sign_document)
+            attachment.res_id = template_firma
+
         return {
             "type": "ir.actions.act_window",
             "name": f"OT {self.name}",
