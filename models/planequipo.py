@@ -141,7 +141,7 @@ class PlanEquipo(models.Model):
                 "name": f"Certificado {self.equipo.name}",
                 "attachment_id": attachment.id,
                 "template_id": sign_template.id,
-                "equipo_id": self.equipo.id,
+                # "equipo_id": self.equipo.id,
             }
             document_sign = self.env["sign.document"].create(vals_sign_document)
             attachment.res_id = template_firma
