@@ -131,7 +131,6 @@ class PlanEquipo(models.Model):
 
             vals_template = {
                 "name": "Certificado " + self.equipo.name,
-                "attachment_id": attachment.id,  # Asociar el adjunto creado
                 "equipo_id": self.equipo.id,
             }
 
