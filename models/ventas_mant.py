@@ -154,7 +154,7 @@ class SaleOrder(models.Model):
             "context": {"create": False},
         }
 
-    @api.depends("ots")
+    @api.depends("ots", "state")
     def _total_tareas(self):
         for record in self:
             record.servicios_cantidad = bool(record.ots)
