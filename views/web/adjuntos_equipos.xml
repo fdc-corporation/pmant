@@ -158,30 +158,27 @@
 							Aún no cuenta con Adjuntos registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
 						</t>
 					</div>
-					<nav aria-label="Page navigation example">
+					<!-- PAGINACIÓN -->
+					<nav class="mt-4">
 						<ul class="pagination justify-content-center">
-							<!-- Enlace a la página anterior -->
-							<li t-if="pager['has_prev']" class="page-item">
-								<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] - 1)" class="page-link" aria-label="Previous">
-									<span aria-hidden="true">
-										«
-									</span>
+							<!-- Prev -->
+							<li class="page-item" t-att-class="not prev_page and 'disabled'">
+								<a class="page-link" t-att-href="'/my/equipo/%s/adjuntos/page/%s' % (equipo.id, prev_page)">
+									«
 								</a>
 							</li>
-							<!-- Enlaces a las páginas -->
-							<t t-foreach="range(1, pager['size'] + 1)" t-as="page">
-								<li t-att-class="'page-item %s' % ('active' if page == pager['page'] else '')">
-									<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, page)" class="page-link">
-										<t t-esc="page" />
+							<!-- Números -->
+							<t t-foreach="pages" t-as="p">
+								<li class="page-item" t-att-class="p == pagina and 'active'">
+									<a class="page-link" t-att-href="'/my/equipo/%s/adjuntos/page/%s' % (equipo.id, p)">
+										<t t-esc="p" />
 									</a>
 								</li>
 							</t>
-							<!-- Enlace a la página siguiente -->
-							<li t-if="pager['has_next']" class="page-item">
-								<a t-att-href="'/my/equipo/%d/adjuntos/page/%d' % (equipo.id, pager['page'] + 1)" class="page-link" aria-label="Next">
-									<span aria-hidden="true">
-										»
-									</span>
+							<!-- Next -->
+							<li class="page-item" t-att-class="not next_page and 'disabled'">
+								<a class="page-link" t-att-href="'/my/equipo/%s/adjuntos/page/%s' % (equipo.id, next_page)">
+									»
 								</a>
 							</li>
 						</ul>

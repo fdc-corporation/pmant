@@ -416,8 +416,7 @@ class PortalPmant(Controller):
             )
 
     # DETALLES DE HISTORIALD E MNATENIMIENTO - EQUIPO
-    @route(
-        [
+    @route([
             "/my/equipo/<int:equipo_id>/historial",
             "/my/equipo/<int:equipo_id>/historial/page/<int:pagina>",
         ],
@@ -427,70 +426,74 @@ class PortalPmant(Controller):
         website=True,
     )
     def historial_mantenimiento(self, equipo_id, pagina=1, **kwargs):
-        equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
+
+        env = request.env
+        pagina = int(pagina)
+
+        equipo = env["maintenance.equipment"].sudo().browse(equipo_id)
+        if not equipo.exists():
+            return request.not_found()
+
         per_page = 10
-        offset = (pagina - 1) * per_page
 
-        # Obtener orden de filtro: ascendente o descendente
-        orden = kwargs.get("filtro", "desc").lower()
+        # Ordenamiento
+        orden = (kwargs.get("filtro") or "desc").lower()
         reverse_sort = True if orden == "desc" else False
+        next_sort = "asc" if orden == "desc" else "desc"
 
-        # Dominio por equipo_id
+        # Dominio
         domain = [("equipo", "=", equipo_id)]
 
-        # Buscar en ambos modelos
-        historial_1 = request.env["planequipo.mantenimiento"].sudo().search(domain)
-        historial_2 = request.env["mantenimento.equipo.otros"].sudo().search(domain)
-        print("--------------------DATOS PORTAL-----------------------")
-        print(historial_1)
-        print(historial_2)
-        # Convertir en lista con campo auxiliar
-        historial_1_list = [
-            {
+        # Buscar registros
+        historial_1 = env["planequipo.mantenimiento"].sudo().search(domain)
+        historial_2 = env["mantenimento.equipo.otros"].sudo().search(domain)
+
+        # Convertir a listas combinadas con estructura uniforme
+        def convert(rec, is_otro):
+            return {
                 "record": rec,
                 "fecha_ejec": rec.fecha_ejec or date.min,
-                "is_otro": False,
+                "is_otro": is_otro,
             }
-            for rec in historial_1
-        ]
 
-        historial_2_list = [
-            {
-                "record": rec,
-                "fecha_ejec": rec.fecha_ejec or date.min,
-                "is_otro": True,
-            }
-            for rec in historial_2
-        ]
-        print(historial_1_list)
-        print(historial_2_list)
+        lista_1 = [convert(r, False) for r in historial_1]
+        lista_2 = [convert(r, True) for r in historial_2]
 
-        # Combinar listas y ordenar por fecha
-        historial_combinado = historial_1_list + historial_2_list
-        historial_ordenado = sorted(historial_combinado, key=lambda x: x["fecha_ejec"], reverse=reverse_sort)
+        combinado = lista_1 + lista_2
 
-        # Paginación
-        total = len(historial_ordenado)
-        total_paginas = math.ceil(total / per_page)
-        historial_paginado = historial_ordenado[offset:offset + per_page]
-        print(historial_paginado)
-        # Generar el pager
-        pager = {
-            "page": pagina,
-            "size": total_paginas,
-        }
+        # Ordenar
+        combinado_ordenado = sorted(combinado, key=lambda x: x["fecha_ejec"], reverse=reverse_sort)
 
-        return request.render(
-            "pmant.historial_mantenimiento",
-            {
-                "equipo": equipo,
-                "historial": historial_paginado,
-                "pager": pager,
-                "pagina_actual": pagina,
-                "total_paginas": total_paginas,
-                "filtro": orden,
-            },
-        )
+        total = len(combinado_ordenado)
+        total_paginas = max(1, math.ceil(total / per_page))
+
+        # Ajustar página fuera de rango
+        if pagina < 1:
+            pagina = 1
+        elif pagina > total_paginas:
+            pagina = total_paginas
+
+        offset = (pagina - 1) * per_page
+        historial_paginado = combinado_ordenado[offset:offset + per_page]
+
+        # Navegación
+        prev_page = pagina - 1 if pagina > 1 else False
+        next_page = pagina + 1 if pagina < total_paginas else False
+
+        return request.render("pmant.historial_servicios", {
+            "equipo": equipo,
+            "historial": historial_paginado,
+            "pagina": pagina,
+            "total_paginas": total_paginas,
+            "prev_page": prev_page,
+            "next_page": next_page,
+            "has_prev": bool(prev_page),
+            "has_next": bool(next_page),
+            "filtro": orden,
+            "next_sort": next_sort,
+            "total": total,
+        })
+
 
 
     @route("/my/equipo/<int:equipo_id>/solicitudes/servicios", methods=["GET"], type="http", auth='user', website=True)
@@ -624,44 +627,59 @@ class PortalPmant(Controller):
         auth="user",
         website=True,
     )
-    def adjuntos_equipo(self, equipo_id, pagina=1):
-        per_page = 10  # Registros por página
+    def adjuntos_equipo(self, equipo_id, pagina=1, **kwargs):
 
-        # Filtrar adjuntos relacionados con el equipo
-        domain = [
-            ("equipo", "=", equipo_id)
-        ]  # Ajusta el campo "equipo_id" según tu modelo
-        total_adjuntos = (
-            request.env["adjunto.mantenimiento"].sudo().search_count(domain)
-        )
-        total_paginas = math.ceil(total_adjuntos / per_page)
+        env = request.env
+        pagina = int(pagina)
+        per_page = 10
 
-        # Calcular el offset para la página actual
+        equipo = env["maintenance.equipment"].sudo().browse(equipo_id)
+        if not equipo.exists():
+            return request.not_found()
+
+        # Dominio
+        domain = [("equipo", "=", equipo_id)]
+
+        # Total de registros
+        total_adj = env["adjunto.mantenimiento"].sudo().search_count(domain)
+        total_paginas = max(1, ceil(total_adj / per_page))
+
+        # Asegurar página válida
+        if pagina < 1:
+            pagina = 1
+        elif pagina > total_paginas:
+            pagina = total_paginas
+
         offset = (pagina - 1) * per_page
+
+        # Obtener adjuntos paginados
         adjuntos = (
-            request.env["adjunto.mantenimiento"]
+            env["adjunto.mantenimiento"]
             .sudo()
             .search(domain, offset=offset, limit=per_page)
         )
 
-        # Paginador
-        pager = {
-            "page": pagina,
-            "size": total_paginas,
-            "has_prev": pagina > 1,
-            "has_next": pagina < total_paginas,
-        }
+        # Prev / Next
+        prev_page = pagina - 1 if pagina > 1 else False
+        next_page = pagina + 1 if pagina < total_paginas else False
 
-        equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
+        # Numeración central
+        pages = list(range(1, total_paginas + 1))
 
         return request.render(
             "pmant.adjuntos_equipo",
             {
                 "equipo": equipo,
                 "adjuntos": adjuntos,
-                "pager": pager,
+                "pagina": pagina,
+                "total_paginas": total_paginas,
+                "prev_page": prev_page,
+                "next_page": next_page,
+                "pages": pages,
+                "total": total_adj,
             },
         )
+
 
     @route(
         "/descargas/reporte/mantenimiento/<int:tarea_id>",
