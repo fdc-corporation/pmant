@@ -22,9 +22,7 @@ class EquipmentSelectionWizard(models.TransientModel):
             else False
         ),
     )
-    equipment_ids = fields.Many2many("maintenance.equipment", string="Equipos", domain=lambda self: [
-        ("ubicacion", "=", self.ubicacion.id) if self.ubicacion else ()
-    ])
+    equipment_ids = fields.Many2many("maintenance.equipment", string="Equipos")
 
     def action_add_equipment(self):
         sale_order = self.order_id

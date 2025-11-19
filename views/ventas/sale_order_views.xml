@@ -26,7 +26,7 @@
                 <group>
                     <field name="order_id" readonly="1"  />
                     <field name="ubicacion"/>
-                    <field name="equipment_ids"  widget="many2many_tags"/>
+                    <field name="equipment_ids" domain="[('ubicacion', '=', ubicacion)]" widget="many2many_tags"/>
                 </group>
                 <footer>
                     <button string="Agregar" type="object" name="action_add_equipment" class="btn-primary"/>
