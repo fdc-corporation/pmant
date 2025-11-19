@@ -382,6 +382,7 @@ class Tarea(models.Model):
                 "default_ubicacion": self.ubicacion.id if self.ubicacion else False,
                 "default_notas_venta": self.notas,
                 "default_schedule_date": datetime.now(),
+                "default_order_compra": self.oc_id.id if self.oc_id else False,
             },
         }
 
