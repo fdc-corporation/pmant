@@ -230,10 +230,11 @@ class Tarea(models.Model):
         for rec in self:
             cliente = rec.cliente.name if rec.cliente else "Cliente"
             ubicacion_name = rec.ubicacion.name if rec.ubicacion else False
-
+            group = (self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False) or self.env.ref('pmant.group_pmant_admin', raise_if_not_found=False)) 
+            user = False
             # Buscar usuario Jesús Dávila por login
-            user = self.env['res.users'].search([('login', '=', 'servicio@fdc-corporation.com')], limit=1)
-            if not user:
+            if group: 
+                user = self.env['res.users'].sudo().search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) 
                 rec.message_post(body="⚠️ No se encontró el usuario Jesús Dávila (login: servicio@fdc-corporation.com)")
                 _logger.warning("Usuario Jesús Dávila no encontrado")
                 continue
