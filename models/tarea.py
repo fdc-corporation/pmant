@@ -313,14 +313,14 @@ class Tarea(models.Model):
                         # solo escribir si hay algo que actualizar
                         if write_vals:
                             _logger.info("Actualizando evento calendario %s con valores: %s", existing_event.id, write_vals)
-                            existing_event.sudo().write(write_vals)
+                            existing_event.with_user(user).write(write_vals)
                     else:
                         # crear evento
                         create_vals = {k: v for k, v in vals_event.items() if v}
                         # asociar ots_id si existe
                         if rec.ots:
                             create_vals['ots_id'] = rec.ots[0].id
-                        event = self.env['calendar.event'].sudo().create(create_vals)
+                        event = self.with_user(user).env['calendar.event'].create(create_vals)
                         # agregar alarmas si las hay
                         for _, _, alertas in items:
                             if alertas:
