@@ -284,6 +284,7 @@ class Tarea(models.Model):
                     'description': f'Servicios de equipos: {descripcion_equipos}',
                     'partner_ids': [(6, 0, partner_ids)] if partner_ids else False,
                     'location': ubicacion_name,
+                    'current_status' : 'accepted',
                     'user_id': user.id if user else False,
                     'equipos_ids': [(6, 0, [p.equipo.id for p, _, _ in items if p.equipo])]
                 }
@@ -321,6 +322,7 @@ class Tarea(models.Model):
                         if rec.ots:
                             create_vals['ots_id'] = rec.ots[0].id
                         event = self.with_user(user).env['calendar.event'].create(create_vals)
+                        event.sudo().action_sedmail()
                         # agregar alarmas si las hay
                         for _, _, alertas in items:
                             if alertas:
