@@ -225,13 +225,20 @@ class Tarea(models.Model):
     def _evento_calendario_proximo_servicio(self):
         """
         Crea eventos agrupados por fecha para el próximo servicio.
-        ***IMPORTANTE***: este método NO debe ejecutarse en lecturas; llamarlo explícitamente.
+        Los eventos se crean como el usuario Jesús Dávila (correo configurado).
         """
         for rec in self:
             cliente = rec.cliente.name if rec.cliente else "Cliente"
             ubicacion_name = rec.ubicacion.name if rec.ubicacion else False
 
-            # Recolectar partner ids (evitar duplicados)
+            # Buscar usuario Jesús Dávila por login
+            user = self.env['res.users'].search([('login', '=', 'servicio@fdc-corporation.com')], limit=1)
+            if not user:
+                rec.message_post(body="⚠️ No se encontró el usuario Jesús Dávila (login: servicio@fdc-corporation.com)")
+                _logger.warning("Usuario Jesús Dávila no encontrado")
+                continue
+
+            # Recolectar partners invitados
             partner_ids = set()
             for ot in rec.ots:
                 if ot.user_id and ot.user_id.partner_id:
@@ -242,94 +249,81 @@ class Tarea(models.Model):
                     partner_ids.add(ot.empresa.id)
                 if ot.ubicacion:
                     partner_ids.add(ot.ubicacion.id)
+
+            if user.partner_id:
+                partner_ids.add(user.partner_id.id)
             partner_ids = list(partner_ids)
 
-            # Agrupar planes por fecha válida
+            # Agrupar planes por fecha
             planes_por_fecha = {}
             for plan in rec.planequipo:
-                fecha_ejecprox = plan.fecha_ejecprox
-                if not fecha_ejecprox:
+                if not plan.fecha_ejecprox:
                     continue
                 equipo_nombre = plan.equipo.name if plan.equipo else "Equipo"
-                planes_por_fecha.setdefault(fecha_ejecprox, []).append((plan, equipo_nombre, plan.plan.alarm_ids))
+                planes_por_fecha.setdefault(plan.fecha_ejecprox, []).append((plan, equipo_nombre, plan.plan.alarm_ids))
 
-            # Obtener grupo/usuario responsable (buscar uno, si existe)
-            group = (self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
-                     or self.env.ref('pmant.group_pmant_admin', raise_if_not_found=False))
-            user = False
-            if group:
-                user = self.env['res.users'].sudo().search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1)
-            partner_ids.append(user.partner_id.id) if user and user.partner_id else None
-            # Para cada fecha, crear o actualizar un evento
             for fecha, items in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([nombre for _, nombre, _ in items])
                 start_datetime = datetime.combine(fecha, time(hour=13))
                 stop_datetime = datetime.combine(fecha, time(hour=14))
-                # Buscamos eventos existentes con los mismos criterios; limit a 1
+
+                event_name = f'Proximo servicio - {cliente} / {descripcion_equipos}'
+
                 domain = [
-                    ('name', '=', f'Proximo servicio - {cliente} / {descripcion_equipos}'),
-                    # ('start', '=', start_datetime),
+                    ('name', '=', event_name),
                     ('ots_id', '=', rec.ots[0].id if rec.ots else False),
                 ]
-                _logger.info("Buscando evento calendario con dominio: %s", domain)
                 existing_event = self.env['calendar.event'].search(domain, limit=1)
-                _logger.info("Evento encontrado: %s", existing_event)
 
-                # Datos a escribir/crear
                 vals_event = {
-                    'name': f'Proximo servicio - {cliente} / {descripcion_equipos}',
+                    'name': event_name,
                     'start': start_datetime,
                     'stop': stop_datetime,
                     'allday': False,
                     'description': f'Servicios de equipos: {descripcion_equipos}',
                     'partner_ids': [(6, 0, partner_ids)] if partner_ids else False,
                     'location': ubicacion_name,
-                    'current_status' : 'accepted',
-                    'user_id': user.id if user else False,
+                    'current_status': 'accepted',
+                    'user_id': user.id,
                     'equipos_ids': [(6, 0, [p.equipo.id for p, _, _ in items if p.equipo])]
                 }
-                _logger.info("Datos para evento calendario: %s", vals_event)
+
                 try:
                     if existing_event:
-                        # Escribir solo si hay cambios reales (para evitar disparar notificaciones)
                         write_vals = {}
-                        # comparar campos relevantes
                         if existing_event.description != vals_event['description']:
                             write_vals['description'] = vals_event['description']
                         if existing_event.location != vals_event['location']:
                             write_vals['location'] = vals_event['location']
-                        # comparar partner_ids (set)
-                        existing_partner_ids = set(existing_event.partner_ids.ids)
-                        new_partner_ids = set(partner_ids)
-                        if existing_partner_ids != new_partner_ids:
+                        if set(existing_event.partner_ids.ids) != set(partner_ids):
                             write_vals['partner_ids'] = [(6, 0, partner_ids)]
-                        # equipos_ids
-                        existing_eq = set(existing_event.equipos_ids.ids)
-                        new_eq = set([p.equipo.id for p, _, _ in items if p.equipo])
                         if existing_event.start != vals_event['start']:
                             write_vals['start'] = vals_event['start']
-                            _logger.info("Actualizando start de evento %s", existing_event.id)
-                        if existing_eq != new_eq:
-                            write_vals['equipos_ids'] = [(6, 0, list(new_eq))]
-                        # solo escribir si hay algo que actualizar
+                        if set(existing_event.equipos_ids.ids) != set([p.equipo.id for p, _, _ in items if p.equipo]):
+                            write_vals['equipos_ids'] = [(6, 0, [p.equipo.id for p, _, _ in items if p.equipo])]
+
                         if write_vals:
-                            _logger.info("Actualizando evento calendario %s con valores: %s", existing_event.id, write_vals)
                             existing_event.with_user(user).write(write_vals)
+                            _logger.info("Evento actualizado correctamente por %s", user.name)
                     else:
-                        # crear evento
                         create_vals = {k: v for k, v in vals_event.items() if v}
-                        # asociar ots_id si existe
                         if rec.ots:
                             create_vals['ots_id'] = rec.ots[0].id
+
                         event = self.with_user(user).env['calendar.event'].create(create_vals)
-                        event.sudo().action_sedmail()
-                        # agregar alarmas si las hay
+                        _logger.info("Evento creado correctamente por %s", user.name)
+
+                        # Agregar alarmas si hay
                         for _, _, alertas in items:
                             if alertas:
                                 event.sudo().alarm_ids = [(4, a.id) for a in alertas]
+
+                        # Enviar invitación como Jesús Dávila
+                        event.with_user(user).action_sedmail()
+
                 except Exception as e:
-                    _logger.exception("Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
-                    rec.message_post(body=_("Error al crear evento de calendario: %s") % e)
+                    _logger.exception("❌ Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
+                    rec.message_post(body=_("⚠️ Error al crear evento de calendario: %s") % e)
 
     # ----------------------------
     # Email / Reporte / Firma
