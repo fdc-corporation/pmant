@@ -235,10 +235,6 @@ class Tarea(models.Model):
             # Buscar usuario Jesús Dávila por login
             if group: 
                 user = self.env['res.users'].sudo().search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) 
-                rec.message_post(body="⚠️ No se encontró el usuario Jesús Dávila (login: servicio@fdc-corporation.com)")
-                _logger.warning("Usuario Jesús Dávila no encontrado")
-                continue
-
             # Recolectar partners invitados
             partner_ids = set()
             for ot in rec.ots:
