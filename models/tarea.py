@@ -317,7 +317,9 @@ class Tarea(models.Model):
 
                         # Enviar invitación como Jesús Dávila
                         event.sudo().action_sendmail()
-
+                        eventos = self.env["mail.mail"].sudo().search([("res_id", "=", event.id), ("model", "=", "calendar.event"), ("state", "=", "outgoing")])
+                        for mail in eventos:
+                            mail.sudo().action_send_and_close()
  
                 except Exception as e:
                     _logger.exception("❌ Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
