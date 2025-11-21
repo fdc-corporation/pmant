@@ -316,7 +316,7 @@ class Tarea(models.Model):
                                 event.sudo().alarm_ids = [(4, a.id) for a in alertas]
 
                         # Enviar invitación como Jesús Dávila
-                        event.with_user(user).action_sedmail()
+                        event.with_user(user).action_sendmail()
 
                 except Exception as e:
                     _logger.exception("❌ Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
