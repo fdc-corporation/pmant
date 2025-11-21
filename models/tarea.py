@@ -259,7 +259,7 @@ class Tarea(models.Model):
             user = False
             if group:
                 user = self.env['res.users'].sudo().search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1)
-
+            partner_ids.append(user.partner_id.id) if user and user.partner_id else None
             # Para cada fecha, crear o actualizar un evento
             for fecha, items in planes_por_fecha.items():
                 descripcion_equipos = ", ".join([nombre for _, nombre, _ in items])
