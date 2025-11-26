@@ -84,6 +84,7 @@
         "views/email/service_finalizado.xml",
         "views/email/calificacion_service.xml",
         "views/email/email_empresa_ot_whatsapp.xml",
+        "views/email/email_reprogramacion_sucursal.xml",
         # VISTAS DE MODELO DE EVENTO
         "views/eventos/eventos-mant.xml",
         "views/adjunto/it_attchment_inherit.xml",

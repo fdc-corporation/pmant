@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="email_template_reprogramacion_sucursal" model="mail.template">
+		<field name="name">Orden de trabajo reprogramado sucursal</field>
+		<field name="model_id" ref="maintenance.model_programacion_mantenimiento" />
+		<field name="subject">Orden de trabajo reprogramado: {{ object.ot_id.empresa.name }} en la ubicación - {{ object.ot_id.ubicacion.name }}</field>
+		<field name="email_from">{{ (user.email_formatted or object.ot_id.employee_id.work_email) }}</field>
+		<field name="email_to">{{ object.ot_id.ubicacion.email }}</field>
+		<field name="lang">{{ object.ot_id.ubicacion.lang }}</field>
+		<field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" />
+		<field name="body_html" type="html">
+<div>
+    <div>
+        <t t-set="color" t-value="'#3191c5'"></t>
+        <t t-set="days_translation" t-value="{'Monday': 'Lunes','Tuesday': 'Martes','Wednesday': 'Miércoles','Thursday': 'Jueves','Friday': 'Viernes','Saturday': 'Sábado','Sunday': 'Domingo'}"></t>
+
+        <p style="margin:0px 0 14px 0;box-sizing:border-box;">
+            Estimado <t t-out="object.ot_id.empresa.name or 'Cliente'"></t> 
+            <t t-out="object.ot_id.ubicacion.name or 'Cliente'">:</t>
+        </p>
+
+        <p style="margin:0px 0 14px 0;box-sizing:border-box;">
+            Se agendó una orden de trabajo para la ubicación:
+            <t t-out="object.ot_id.ubicacion.name"></t> programada para la fecha
+            <t t-if="object.fecha_date">
+                <t t-set="day_of_week" t-value="object.fecha_date.strftime('%A')"></t>
+                
+                <t t-out="days_translation.get(day_of_week, day_of_week)"></t>
+                
+                <t t-out="object.fecha_date.strftime('%d/%m/%Y')"></t>
+            </t>
+            <t t-else="">Fecha no disponible</t>
+        </p>
+    </div>
+
+
+
+    <table border="0" cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-collapse:collapse;caption-side:bottom; border:0px !important;">
+        <tbody style="border:0px !important;">
+            <tr style="border:0px !important;">
+                <td width="130px;" style="box-sizing:border-box;min-width: 130px; display:flex; border:0px !important;">
+                    <t t-if="object.fecha_date">
+                        <t t-set="day_of_week" t-value="object.fecha_date.strftime('%A')"> </t>
+
+                        <table border="0" cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-collapse:collapse; border:0px !important;">
+                            <tbody>
+                                <tr style="background-color:#1ea8e7;color:#ffffff;font-weight:bold;text-align:center; border:1px solid #1ea8e7;">
+                                    <td width="130px">
+                                        <t t-out="days_translation.get(day_of_week, day_of_week)">
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="130px" style="font-size:48px;text-align:center;color:#5F5F5F;background-color:#F8F8F8;border:1px solid #1ea8e7;">
+                                        <t t-out="object.fecha_date.strftime('%d')">
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="130px" style="font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#1ea8e7;border:1px solid #1ea8e7;">
+                                        <t t-out="object.fecha_date.strftime('%B %Y')">
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:12px;text-align:center;color:#5F5F5F;border:1px solid #1ea8e7;">
+                                        <div>
+                                            <t t-out="format_time(time=object.fecha_date, tz=mail_tz, time_format='short', lang_code=object.env.lang) or '8:00'">
+                                            </t>
+                                        </div>
+                                        <t t-if="mail_tz">
+                                            <div style="font-size:10px;">(<t t-out="mail_tz">)</t>
+                                            </div>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </td>
+                <td style="padding:0px 0px 0px 20px; border:0px !important;">
+
+                    <table style="border:0px !important;">
+                        <tbody style="border:0px !important;">
+                            <tr style="border:0px !important;">
+                                <td style="border:0px !important;">
+                                    <p><strong>Detalles de la orden de trabajo</strong></p>
+                                    <ul>
+                                        <li>Ubicación: <t t-out="object.ot_id.ubicacion.name"></t>
+                                        </li>
+                                        <li>Título: <t t-out="object.ot_id.name"></t>
+                                        </li>
+                                        <li>Estado: <t t-out="object.ot_id.stage_id.name"></t>
+                                        </li>
+                                        <li>Cuándo: <t t-out="object.fecha_date"></t>
+                                        </li>
+                                        <li>Duración: <t t-out="object.duracion"> horas</t>
+                                        </li>
+                                        <li>Responsable: <t t-out="object.ot_id.user_id.name"></t>
+                                        </li>
+                                        <li>Asistentes:
+                                            <ul>
+                                                <t t-foreach="object.tecnicos" t-as="res">
+                                                    <li>
+                                                        <t t-out="res.name"></t>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            Puedes revisar el reporte técnico con puntos a revisar en el siguiente
+                                            link:
+                                            <a t-att-href="'https://equiposindustriales.pe/reporte?id=' + str(object.ot_id.id)">Reporte
+                                                del servicio</a>
+
+                                        </li>
+                                        <li>
+                                            Si desea ver el historial de mantenimiento de sus equipos, puede revisar
+                                            <a href="https://equiposindustriales.pe/my/home">Ver historial de equipos</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Si desea no recibir más correos como estos, comuníquese con <a href="mailto:fdccorp@fdc-corporation.com">fdccorp@fdc-corporation.com</a>.</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    		</field>
+	</record>
+</odoo>
