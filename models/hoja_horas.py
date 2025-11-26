@@ -134,20 +134,48 @@ class HojaHoras(models.Model):
                     )
                     continue
 
-                # ENVIAR CORREO CON CONTEXTO CORRECTO
-                mail_id = template.with_context(
-                    default_model='programacion.mantenimiento',
-                    default_res_id=rec.id,
-                    email_to=rec.ot_id.ubicacion.email if rec.ot_id.ubicacion else False,
-                    email_cc=rec.ot_id.empresa.email if rec.ot_id.empresa else False,
-                    force_email=True,
-                ).send_mail(rec.id, force_send=True)
-                _logger.info("Email_to: %s", rec.ot_id.ubicacion.email if rec.ot_id.ubicacion else "No tiene email")
-                _logger.info("Email_cc: %s", rec.ot_id.empresa.email if rec.ot_id.empresa else "No tiene email")
-                _logger.info(
-                    "Correo de reprogramación enviado para OT %s (mail_id=%s)",
-                    rec.id, mail_id
+                destinatario = (
+                    rec.ot_id.ubicacion.email
+                    if rec.ot_id.ubicacion and rec.ot_id.ubicacion.email
+                    else ""
                 )
+                copia = (
+                    rec.ot_id.empresa.email
+                    if rec.ot_id.empresa and rec.ot_id.empresa.email
+                    else ""
+                )
+
+                # Usar email_values para forzar email_to / email_cc
+                mail_id = template.with_context(
+                    default_model="programacion.mantenimiento",
+                    default_res_id=rec.id,
+                    force_email=True,
+                ).send_mail(
+                    rec.id,
+                    force_send=True,
+                    email_values={
+                        "email_to": destinatario,
+                        "email_cc": copia,
+                    },
+                )
+
+                _logger.info("Email_to: %s", destinatario or "No tiene email")
+                _logger.info("Email_cc: %s", copia or "No tiene email")
+                _logger.info(
+                    "Correo de reprogramación (mail_id=%s) creado para OT %s",
+                    mail_id,
+                    rec.id,
+                )
+
+                # Depuración adicional: revisar el mail antes de enviarlo (opcional)
+                mail = self.env["mail.mail"].browse(mail_id)
+                _logger.info("mail.email_to (registro): %s", mail.email_to)
+                _logger.info("mail.email_cc (registro): %s", mail.email_cc)
+
+                # Si necesitas forzar cambios en el mail creado antes de enviarlo:
+                # if mail and (mail.email_to != destinatario or mail.email_cc != copia):
+                #     mail.sudo().write({'email_to': destinatario, 'email_cc': copia})
+                #     mail.sudo().send()  # o mail.sudo()._send() según versión
 
             except Exception as e:
                 _logger.exception(
@@ -156,7 +184,6 @@ class HojaHoras(models.Model):
                 rec.ot_id.message_post(
                     body=f"❌ Error al enviar correo de reprogramación: {e}"
                 )
-
 
     @api.depends("fecha_inicio", "fecha_fin")
     def _compute_horas_trabajado(self):
