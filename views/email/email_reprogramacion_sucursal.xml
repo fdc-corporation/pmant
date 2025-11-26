@@ -3,11 +3,11 @@
 	<record id="email_template_reprogramacion_sucursal" model="mail.template">
 		<field name="name">Orden de trabajo reprogramado sucursal</field>
 		<field name="model_id" ref="pmant.model_programacion_mantenimiento" />
-		<field name="subject">Orden de trabajo reprogramado: {{ object.ot_id.empresa.name }} en la ubicación - {{ object.ot_id.ubicacion.name }}</field>
+		<field name="subject">Reprogramación de su orden de trabajo: {{ object.ot_id.empresa.name }} en la ubicación - {{ object.ot_id.ubicacion.name }}</field>
 		<field name="email_from">{{ (user.email_formatted or object.ot_id.employee_id.work_email) }}</field>
 		<field name="email_to">{{ object.ot_id.ubicacion.email }}</field>
 		<field name="lang">{{ object.ot_id.ubicacion.lang }}</field>
-		<field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" />
+		<!-- <field name="report_template_ids" eval="[(4, ref('pmant.action_mantenimiento_ot'))]" /> -->
 		<field name="body_html" type="html">
 <div>
     <div>
