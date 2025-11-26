@@ -169,8 +169,6 @@ class HojaHoras(models.Model):
 
                 # Depuración adicional: revisar el mail antes de enviarlo (opcional)
                 mail = self.env["mail.mail"].browse(mail_id)
-                _logger.info("mail.email_to (registro): %s", mail.email_to)
-                _logger.info("mail.email_cc (registro): %s", mail.email_cc)
 
                 # Si necesitas forzar cambios en el mail creado antes de enviarlo:
                 # if mail and (mail.email_to != destinatario or mail.email_cc != copia):
