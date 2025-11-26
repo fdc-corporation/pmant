@@ -97,6 +97,9 @@ class HojaHoras(models.Model):
                 else:
                     _logger.info(f"🆕 Creando nuevo evento para OT {record.ot_id.name}")
                     evento = self.env["calendar.event"].with_context(no_mail_to_attendees=False).create(valores_evento)
+                    _logger.info(f"✅ Evento creado con ID {len(record.ot_id.tab_horas)}")
+                    if evento and len(record.ot_id.tab_horas) > 1: 
+                        self.ot_id.send_programacion_inicial()
 
             except Exception as e:
                 _logger.error(f"❌ Error al generar evento: {e}")
