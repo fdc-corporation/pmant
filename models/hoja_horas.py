@@ -42,14 +42,16 @@ class HojaHoras(models.Model):
                 record.event_calendario.unlink()
         return super().unlink()
     
-    def create(self, vals):
-        record = super().create(vals)
-        record._set_evento()
-        return record
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._set_evento()
+        return records
 
     def write(self, vals):
         res = super().write(vals)
-        self._set_evento()
+        if any(f in vals for f in ["fecha_date", "duracion", "tecnicos"]):
+            self._set_evento()
         return res
 
     # @api.depends("fecha_date", "duracion", "tecnicos")
