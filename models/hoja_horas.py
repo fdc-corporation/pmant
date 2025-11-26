@@ -41,8 +41,18 @@ class HojaHoras(models.Model):
             if record.event_calendario:
                 record.event_calendario.unlink()
         return super().unlink()
+    
+    def create(self, vals):
+        record = super().create(vals)
+        record._set_evento()
+        return record
 
-    @api.depends("fecha_date", "duracion", "tecnicos")
+    def write(self, vals):
+        res = super().write(vals)
+        self._set_evento()
+        return res
+
+    # @api.depends("fecha_date", "duracion", "tecnicos")
     def _set_evento(self):
         """Crea o actualiza el evento en el calendario sin reenviar correos si no hay cambios reales."""
         for record in self:
