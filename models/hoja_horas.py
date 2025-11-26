@@ -91,7 +91,7 @@ class HojaHoras(models.Model):
                             cambios[campo] = valor
                     if cambios:
                         _logger.info(f"🔁 Actualizando evento {evento.id} con cambios: {list(cambios.keys())}")
-                        evento.with_context(no_mail_to_attendees=True).write(cambios)
+                        evento.with_context(no_mail_to_attendees=False).write(cambios)
                     else:
                         _logger.debug(f"✅ Sin cambios en evento {evento.id}, no se actualiza ni se reenvían correos.")
                 else:
