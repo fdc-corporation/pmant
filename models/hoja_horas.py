@@ -103,13 +103,13 @@ class HojaHoras(models.Model):
                             cambios[campo] = valor
                     if cambios:
                         _logger.info(f"🔁 Actualizando evento {evento.id} con cambios: {list(cambios.keys())}")
-                        evento.with_context(no_mail_to_attendees=False).write(cambios)
+                        evento.with_context(no_mail_to_attendees=True).write(cambios)
                     else:
                         _logger.debug(f"✅ Sin cambios en evento {evento.id}, no se actualiza ni se reenvían correos.")
                 else:
                     _logger.info(f"🆕 Creando nuevo evento para OT {record.ot_id.name}")
-                    evento = self.env["calendar.event"].with_context(no_mail_to_attendees=False).create(valores_evento)
-                    _logger.info(f"✅ Evento creado con ID {len(record.ot_id.tab_horas)}")
+                    evento = self.env["calendar.event"].with_context(no_mail_to_attendees=True).create(valores_evento)
+                    _logger.info(f"✅ logitud de programacion {len(record.ot_id.tab_horas)}")
                     if evento and len(record.ot_id.tab_horas) > 1: 
                         self.send_report_reporgramacion_ot()
 
@@ -149,17 +149,17 @@ class HojaHoras(models.Model):
                 # )
 
                 _logger.info(
-                    "Correo de programación enviado para OT %s (mail_id=%s)",
+                    "Correo de reprogramación enviado para OT %s (mail_id=%s)",
                     rec.id,
                     mail_id,
                 )
 
             except Exception as e:
                 _logger.exception(
-                    "Error al enviar correo programado para OT %s: %s", rec.id, e
+                    "Error al enviar correo reprogramado para OT %s: %s", rec.id, e
                 )
                 rec.ot_id.message_post(
-                    body=_("❌ Error al enviar correo de programación: %s") % e
+                    body=_("❌ Error al enviar correo de reprogramación: %s") % e
                 )
 
     @api.depends("fecha_inicio", "fecha_fin")
