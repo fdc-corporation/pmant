@@ -142,7 +142,8 @@ class HojaHoras(models.Model):
                     email_cc=rec.ot_id.empresa.email if rec.ot_id.empresa else False,
                     force_email=True,
                 ).send_mail(rec.id, force_send=True)
-
+                _logger.info("Email_to: %s", rec.ot_id.ubicacion.email if rec.ot_id.ubicacion else "No tiene email")
+                _logger.info("Email_cc: %s", rec.ot_id.empresa.email if rec.ot_id.empresa else "No tiene email")
                 _logger.info(
                     "Correo de reprogramación enviado para OT %s (mail_id=%s)",
                     rec.id, mail_id
