@@ -138,6 +138,8 @@ class HojaHoras(models.Model):
                 mail_id = template.with_context(
                     default_model='programacion.mantenimiento',
                     default_res_id=rec.id,
+                    email_to=rec.ot_id.ubicacion.email if rec.ot_id.ubicacion else False,
+                    email_cc=rec.ot_id.empresa.email if rec.ot_id.empresa else False,
                     force_email=True,
                 ).send_mail(rec.id, force_send=True)
 
