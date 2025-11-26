@@ -99,12 +99,56 @@ class HojaHoras(models.Model):
                     evento = self.env["calendar.event"].with_context(no_mail_to_attendees=False).create(valores_evento)
                     _logger.info(f"✅ Evento creado con ID {len(record.ot_id.tab_horas)}")
                     if evento and len(record.ot_id.tab_horas) > 1: 
-                        self.ot_id.send_programacion_inicial()
+                        self.send_report_reporgramacion_ot()
 
             except Exception as e:
                 _logger.error(f"❌ Error al generar evento: {e}")
 
             record.event_calendario = evento
+
+    def send_report_reporgramacion_ot(self):
+        """Envia correo de programación automáticamente (sin abrir la UI) y registra en el chatter."""
+        for rec in self:
+            try:
+                template = self.env.ref(
+                    "pmant.email_template_reprogramacion_sucursal", raise_if_not_found=False
+                )
+                if not template:
+                    rec.ot_id.message_post(
+                        body=_(
+                            "❌ No se encontró la plantilla de correo para programación inicial."
+                        )
+                    )
+                    continue
+
+                # Enviar correo
+                mail_id = template.send_mail(rec.id, force_send=False)
+
+                # Renderizar asunto y cuerpo para el chatter
+                subject = template._render_field("subject", [rec.id])[rec.id]
+                body_html = template._render_field("body_html", [rec.id])[rec.id]
+                mail = self.env["mail.mail"].browse(mail_id)
+                mail.sudo().action_send_and_close()
+                # rec.message_post(
+                #     body=body_html or _("✅ Correo de programación enviado."),
+                #     subject=subject or _("Correo de programación"),
+                #     message_type="comment",
+                #     subtype_xmlid="mail.mt_note",
+                # )
+
+                _logger.info(
+                    "Correo de programación enviado para OT %s (mail_id=%s)",
+                    rec.id,
+                    mail_id,
+                )
+
+            except Exception as e:
+                _logger.exception(
+                    "Error al enviar correo programado para OT %s: %s", rec.id, e
+                )
+                rec.ot_id.message_post(
+                    body=_("❌ Error al enviar correo de programación: %s") % e
+                )
 
     @api.depends("fecha_inicio", "fecha_fin")
     def _compute_horas_trabajado(self):
