@@ -18,6 +18,7 @@ class Inconvenientes(models.Model):
 
 class HojaHoras(models.Model):
     _name = "programacion.mantenimiento"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Hoja de horas de servicios técnicos"
 
     fecha_date = fields.Datetime(string="Fecha programada", required=True)
