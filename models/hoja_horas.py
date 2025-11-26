@@ -110,7 +110,8 @@ class HojaHoras(models.Model):
                     _logger.info(f"🆕 Creando nuevo evento para OT {record.ot_id.name}")
                     evento = self.env["calendar.event"].with_context(no_mail_to_attendees=True).create(valores_evento)
                     _logger.info(f"✅ logitud de programacion {len(record.ot_id.tab_horas)}")
-                    if evento and len(record.ot_id.tab_horas) > 1: 
+                    if evento and len(record.ot_id.tab_horas) > 1:
+                        _logger.info(f"📧 Enviando correo de reprogramación para OT {record.ot_id.name}") 
                         self.send_report_reporgramacion_ot()
 
             except Exception as e:
@@ -119,39 +120,29 @@ class HojaHoras(models.Model):
             record.event_calendario = evento
 
     def send_report_reporgramacion_ot(self):
-        """Envia correo de programación automáticamente (sin abrir la UI) y registra en el chatter."""
         for rec in self:
             try:
                 template = self.env.ref(
-                    "pmant.email_template_reprogramacion_sucursal", raise_if_not_found=False
-                )
+                    "pmant.email_template_reprogramacion_sucursal",
+                    raise_if_not_found=False,
+                ).sudo()
+
                 if not template:
                     rec.ot_id.message_post(
-                        body=_(
-                            "❌ No se encontró la plantilla de correo para programación inicial."
-                        )
+                        body="❌ No se encontró la plantilla de correo para reprogramación."
                     )
                     continue
 
-                # Enviar correo
-                mail_id = template.send_mail(rec.id, force_send=False)
-
-                # Renderizar asunto y cuerpo para el chatter
-                subject = template._render_field("subject", [rec.id])[rec.id]
-                body_html = template._render_field("body_html", [rec.id])[rec.id]
-                mail = self.env["mail.mail"].browse(mail_id)
-                mail.sudo().action_send_and_close()
-                # rec.message_post(
-                #     body=body_html or _("✅ Correo de programación enviado."),
-                #     subject=subject or _("Correo de programación"),
-                #     message_type="comment",
-                #     subtype_xmlid="mail.mt_note",
-                # )
+                # ENVIAR CORREO CON CONTEXTO CORRECTO
+                mail_id = template.with_context(
+                    default_model='programacion.mantenimiento',
+                    default_res_id=rec.id,
+                    force_email=True,
+                ).send_mail(rec.id, force_send=True)
 
                 _logger.info(
                     "Correo de reprogramación enviado para OT %s (mail_id=%s)",
-                    rec.id,
-                    mail_id,
+                    rec.id, mail_id
                 )
 
             except Exception as e:
@@ -159,8 +150,9 @@ class HojaHoras(models.Model):
                     "Error al enviar correo reprogramado para OT %s: %s", rec.id, e
                 )
                 rec.ot_id.message_post(
-                    body=_("❌ Error al enviar correo de reprogramación: %s") % e
+                    body=f"❌ Error al enviar correo de reprogramación: {e}"
                 )
+
 
     @api.depends("fecha_inicio", "fecha_fin")
     def _compute_horas_trabajado(self):
