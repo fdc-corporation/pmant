@@ -24,7 +24,7 @@ class HojaHoras(models.Model):
     ot_id = fields.Many2one("maintenance.request", string="OT", required=True)
     duracion = fields.Float(string="Duración (H)", required=True)
     event_calendario = fields.Many2one(
-        "calendar.event", compute="_set_evento", string="Evento calendario", store=True
+        "calendar.event",  string="Evento calendario"
     )
     fecha_inicio = fields.Datetime(string="Fecha de inicio")
     fecha_fin = fields.Datetime(string="Fecha de finalización")
