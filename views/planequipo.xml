@@ -45,6 +45,7 @@
 						<field name="fecha_ejec" invisible="1" readonly="1"/>
 						<field name="fecha_ejec" invisible="1"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
+						<field name="evento" invisible="1"/>
 						<field name="is_informe_file" invisible="not is_admin"/>
 					</group>
 					<notebook>

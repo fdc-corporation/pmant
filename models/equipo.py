@@ -122,6 +122,9 @@ class Equipo(models.Model):
         compute="_get_certificados", string="Cantidad de Certificados"
     )
 
+
+
+
     def action_view_certificados(self):
         self.ensure_one()
         return {
@@ -195,19 +198,21 @@ class Equipo(models.Model):
             qr_image_b64 = base64.b64encode(buffer.getvalue())
 
             # Obtener última fecha
-            fechas = [
-                tarea.fecha_ejecprox
-                for tarea in record.planequipo
-                if tarea and tarea.plan and tarea.plan.frecuencia > 0 and tarea.fecha_ejecprox
-            ]
+            # fechas = [
+            #     tarea.fecha_ejecprox
+            #     for tarea in record.planequipo
+            #     if tarea and tarea.plan and tarea.plan.frecuencia > 0 and tarea.fecha_ejecprox
+            # ]
 
-            fecha_prox = max(fechas) if fechas else False
+            # fecha_prox = max(fechas) if fechas else False
 
             # Asignar a campos
             record.qr_image = qr_image_b64
             record.qr_image2 = qr_image_b64
             record.url_qr = url
-            record.fecha_prox = fecha_prox
+            # record.fecha_prox = fecha_prox
+    
+
 
     def generar_n_serie(self):
         prefix = "CT-"
@@ -235,7 +240,8 @@ class Adjunto(models.Model):
 
 class AdjuntoImagw(models.Model):
     _name = "adjuntoimage.mantenimiento"
-    name = fields.Char(size=60, string="Referencia Archivo")
+    
+    name = fields.Char(string="Referencia Archivo")
     adjunto = fields.Binary()
     # equipo       = fields.Many2one('maintenance.equipment',string='Equipo')
     planequipoproceso = fields.Many2one("planequipoproceso.mantenimiento")

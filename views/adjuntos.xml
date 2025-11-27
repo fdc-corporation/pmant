@@ -31,7 +31,7 @@
             <field name="model">adjuntoimage.mantenimiento</field>
             <field name="arch" type="xml">
                 <tree string="PlanEquipo Tree" >
-                    <field name="name"/>
+                    <field name="comentario"/>
                     <field name="adjunto" widget="binary" filename="filename"/>
                 </tree>
             </field>
@@ -44,7 +44,7 @@
                 <form string="Tarea Form">
                     <sheet>
                          <group>
-                             <field name="name" string="Nombre Adjunto"/>
+                             <field name="name" string="Nombre Adjunto" invisible="1"/>
                              <field name="adjunto" widget="image"  filename="name"/>
                              <field name="comentario"/>
                         </group>

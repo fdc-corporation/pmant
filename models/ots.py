@@ -122,36 +122,51 @@ class OTS(models.Model):
 
     def write(self, vals):
         res = super(OTS, self).write(vals)
+
         if "stage_id" in vals:
             for record in self:
-                # Si el estado tiene una secuencia específica (por ejemplo, 3)
+
+                tarea = record.tarea
+                plane = tarea.planequipo if tarea else False
+
+                # Seguridad: validar planequipo
+                if not plane:
+                    raise UserError(_("No existe un plan de equipo asociado a la orden."))
+
+                # --- ETAPA 3: EN EJECUCIÓN ---
                 if record.stage_id.sequence == 3:
-                    print("ETAPA EN EJECUCION")
-                    print(record.tarea.planequipo.is_informe_file)
-                    print(record.tarea.planequipo)
-                    if not record.tarea.planequipo.is_informe_file:
-                        print("ejecucion automatico")
+
+                    if not plane.fecha_ejecprox:
+                        raise UserError(_("Antes de pasar a revisión, registre la fecha del próximo mantenimiento."))
+
+                    # Caso automático
+                    if not plane.is_informe_file:
                         fecha_actual = fields.Date.today()
                         record.fecha_ejec = fecha_actual
-                        record.tarea._fecha_ejecutada()
-                        record.tarea._evento_calendario_proximo_servicio()
-                    else :
-                        if not record.tarea.planequipo.informe_file:
+                        tarea._fecha_ejecutada()
+
+                    # Caso manual
+                    else:
+                        if not plane.informe_file:
                             raise UserError(_("Debe subir el informe técnico antes de cambiar a esta etapa."))
-                        else:
-                            print("ejecucion manual")
-                            print(record.tarea.planequipo.fecha_ejec)
-                            record.fecha_ejec = record.tarea.planequipo.fecha_ejec
-                            record.tarea._evento_calendario_proximo_servicio()
+
+                        if not plane.fecha_ejec:
+                            raise UserError(_("Debe registrar la fecha de ejecución manual."))
+
+                        record.fecha_ejec = plane.fecha_ejec
+
+                # --- ETAPA 4: FACTURACIÓN ---
                 if record.stage_id.sequence == 4:
                     record.notify_users_facturacion()
-            self._change_createui()
-        if "schedule_date" in vals:
-            self.action_programacion_inicial()
-        if "duration" in vals or "subodinados" in vals or "user_id" in vals:
-            self.action_programacion_inicial()
-        return res
 
+            # Se ejecuta solo una vez por lote
+            self._change_createui()
+
+        # --- Sincronizar programación ---
+        if {"schedule_date", "duration", "subodinados", "user_id"} & set(vals.keys()):
+            self.action_programacion_inicial()
+
+        return res
 
     def notify_users_facturacion (self):
         # Nombre exacto del grupo

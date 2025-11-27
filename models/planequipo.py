@@ -21,7 +21,7 @@ class PlanEquipo(models.Model):
     fecha_ejec = fields.Date(string="Fecha Ejecutada", store=True)
     is_admin = fields.Boolean(compute="_generate_tecnico", default=True)
     creador_id = fields.Integer(compute="_generate_tecnico")
-    fecha_ejecprox = fields.Date(compute="_generate_tecnico", store=True)
+    fecha_ejecprox = fields.Datetime(store=True)
     avisado = fields.Boolean(default=False)
     estado = fields.Char(string="Estado", related="ots.stage_id.name")
     fecha_hoy = fields.Char(string="Fecha Formateada")
@@ -39,6 +39,8 @@ class PlanEquipo(models.Model):
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
     informe_filename = fields.Char(string="Nombre del archivo")
     stage_informe = fields.Selection([("registrado","Registrado"),("sin_realizar","Sin Realizar")], string="Estado del Informe", default="sin_realizar")
+    evento = fields.Many2one('calendar.event', string='Evento relacionado')
+
 
     def data_parametros(self):
         return [
@@ -97,10 +99,75 @@ class PlanEquipo(models.Model):
             record.is_admin = self.env.user.has_group('pmant.group_pmant_admin')
 
 
-            if record.fecha_ejec:
-                fecha_prox = datetime.strptime(str(record.fecha_ejec), '%Y-%m-%d')
-                fecha_prox += timedelta(days=(record.plan.frecuencia * record.plan.tipo.dias))
-                record.fecha_ejecprox = fecha_prox
+            # if record.fecha_ejec:
+            #     fecha_prox = datetime.strptime(str(record.fecha_ejec), '%Y-%m-%d')
+            #     fecha_prox += timedelta(days=(record.plan.frecuencia * record.plan.tipo.dias))
+            #     record.fecha_ejecprox = fecha_prox
+
+
+    @api.onchange("fecha_ejecprox")
+    def _onchange_fecha_ejecprox(self):
+        if self.fecha_ejecprox:
+            self.equipo.fecha_prox = self.fecha_ejecprox
+            self._create_event_proximo_mantenimiento(fecha=self.fecha_ejecprox)
+
+
+    def _create_event_proximo_mantenimiento(self, fecha):
+        for record in self:
+
+            partner_ids = set()
+
+            # Iterar OTS correctamente (One2many)
+            for ot in record.ots:
+
+                if ot.user_id and ot.user_id.partner_id:
+                    partner_ids.add(ot.user_id.partner_id.id)
+
+                if ot.employee_id and ot.employee_id.user_id and ot.employee_id.user_id.partner_id:
+                    partner_ids.add(ot.employee_id.user_id.partner_id.id)
+
+                if ot.empresa:
+                    partner_ids.add(ot.empresa.id)
+
+                if ot.ubicacion:
+                    partner_ids.add(ot.ubicacion.id)
+
+            partner_ids = list(partner_ids)
+
+            # Datos seguros
+            cliente = record.tarea.cliente.name if record.tarea.cliente else "Cliente"
+            ubicacion = record.tarea.ubicacion.name if record.tarea.ubicacion else "Ubicación"
+            fecha_cierre = fecha + timedelta(hours=3)
+
+            # SI existe evento → actualizar
+            if record.evento:
+                record.evento.write({
+                    'name': f'Próximo servicio - {cliente}',
+                    'start': fecha,
+                    'stop': fecha_cierre,
+                    'allday': False,
+                    'ots_id': record.ots[0].id if record.ots else False,
+                    'location': ubicacion,
+                    'description': f'Servicios de equipos: {record.equipo.name}',
+                    'partner_ids': [(6, 0, partner_ids)],
+                })
+                continue
+
+            # SI NO existe → crear
+            event = self.env['calendar.event'].create({
+                'name': f'Próximo servicio - {cliente}',
+                'start': fecha,
+                'stop': fecha_cierre,
+                'allday': False,
+                'ots_id': record.ots[0].id if record.ots else False,
+                'location': ubicacion,
+                'description': f'Servicios de equipos: {record.equipo.name}',
+                'partner_ids': [(6, 0, partner_ids)],
+            })
+
+            record.evento = event
+
+
 
     def _generate_name(self):
         for record in self:
