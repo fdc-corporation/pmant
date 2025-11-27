@@ -179,7 +179,7 @@
 								<field class="fw-bold fs-5" name="name"/>
 								<div class="content_name"></div>
 							</div>
-							<hr class="mt-1 mb-1"/>
+							<!-- <hr class="mt-1 mb-1"/> -->
 							<!-- Cliente -->
 							<div class="cliente d-flex align-items-center mb-1">
 								<span class="me-1">
