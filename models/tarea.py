@@ -86,6 +86,10 @@ class Tarea(models.Model):
     sale_order = fields.Many2one("sale.order", string="Orden de venta")
     cotizacion_cantidad = fields.Integer(compute="_compute_total_cotizaciones", store=False)
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
+    user_id = fields.Many2one('res.users', string='Responsable', related='ots.user_id', store=True)
+    prioridad = fields.Selection(related="ots.priority", string="Prioridad", store=True)
+
+
 
     # ----------------------------
     # Computed / Constraints

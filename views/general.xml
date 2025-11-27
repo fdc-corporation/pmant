@@ -108,6 +108,17 @@
 			</p>
 		</field>
 	</record>
+	<record model="ir.actions.act_window" id="recepcion_list_action">
+		<field name="name">Recepciones de equipos</field>
+		<field name="res_model">tarea.mantenimiento</field>
+		<field name="domain">[("is_evaluacion", "=", True)]</field>
+		<field name="view_mode">kanban,list,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Crea tu primera Tarea
+			</p>
+		</field>
+	</record>
 	<record model="ir.actions.act_window" id="reporte_tecnico_list_action">
 		<field name="name">Reporte Tecnico</field>
 		<field name="res_model">tarea.mantenimiento</field>
@@ -152,31 +163,73 @@
                 <field name="archive"/>
                 <field name="kanban_state"/>
                 <progressbar field="kanban_state" colors="{&quot;done&quot;: &quot;success&quot;, &quot;blocked&quot;: &quot;danger&quot;}"/>
-                <templates>
-                    <t t-name="menu">
-                        <t t-if="widget.editable"><a role="menuitem" type="open" class="dropdown-item">Edit...</a></t>
-                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
-                        <field name="color" widget="kanban_color_picker"/>
-                    </t>
-                    <t t-name="card">
-                        <field name="name" class="fw-bold fs-5"/>
-                        <span name="create_user" t-if="record.create_user.raw_value">Creado por: <field name="create_user"/></span>
-                        <div><b>Cliente: </b><field name="cliente"/></div>
-                        <div><b>Ubicacion: </b><field name="ubicacion"/></div>
-                        <!-- <field name="ubicacion"/> -->
-                        <footer>
-                            <div class="d-flex">
-                                <field name="activity_ids" widget="kanban_activity" class="ms-3"/>
-                            </div>
-                            <div class="d-flex ms-auto align-items-center">
-                                <div class="badge text-bg-warning float-end" invisible="not archive">
-                                    Cancelled
-                                </div>
-                                <field name="kanban_state" widget="state_selection" class="ms-1"/>
-                            </div>
-                        </footer>
-                    </t>
-                </templates>
+				<templates>
+					<t t-name="menu">
+						<t t-if="widget.editable">
+							<a role="menuitem" type="open" class="dropdown-item">Edit...</a>
+						</t>
+						<t t-if="widget.deletable">
+							<a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+						</t>
+						<field name="color" widget="kanban_color_picker"/>
+					</t>
+					<t t-name="card">
+						<div>
+							<div class="titulo d-flex align-items-center gap-2">
+								<field class="fw-bold fs-5" name="name"/>
+								<div class="content_name"></div>
+							</div>
+							<hr class="mt-1 mb-1"/>
+							<!-- Cliente -->
+							<div class="cliente d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-building" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.cliente.raw_value">
+									<field name="cliente"/>
+								</t>
+								<t t-else="">
+									<span>Sin cliente</span>
+								</t>
+							</div>
+							<!-- Ubicación -->
+							<div class="ubuntu d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-truck" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.ubicacion.raw_value">
+									<field name="ubicacion"/>
+								</t>
+								<t t-else="">
+									<span>Sin ubicacion de servicio</span>
+								</t>
+							</div>
+							<!-- Tipo de servicio -->
+							<div class="tipo_servicio d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-wrench" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.tipo.raw_value">
+									<field name="tipo"/>
+								</t>
+								<t t-else="">
+									<span>Sin tipo de servicio</span>
+								</t>
+							</div>
+						</div>
+						<footer>
+							<div class="d-flex mt-auto align-items-center">
+								<field name="prioridad" widget="priority" groups="base.group_user" class="me-2"/>
+								<field name="activity_ids" widget="kanban_activity"/>
+							</div>
+							<div class="ms-auto d-flex">
+								<!--<field name="is_rotting" invisible="1"/>-->
+								<!--<field name="rotting_days" class="d-flex" widget="rotting"/>-->
+								<field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]" class="ms-2"/>
+							</div>
+						</footer>
+					</t>
+				</templates>
             </kanban>
 		</field>
 	</record>
@@ -259,6 +312,8 @@
 									</button>
 								</list>
 							</field>
+							<field name="user_id" invisible="1"></field>
+							<field name="prioridad" invisible="1"></field>
 						</page>
 						<page string="Hoja de Recepcion" invisible="not is_evaluacion ">
 							<group>
@@ -282,7 +337,7 @@
 			</form>
 		</field>
 	</record>
-	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="tarea_list_action" />
+	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="recepcion_list_action" />
 	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request" action="tarea_list_action" />
 	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title" action="reporte_tecnico_list_action" />
 </odoo>

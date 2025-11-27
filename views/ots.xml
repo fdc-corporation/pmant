@@ -173,4 +173,116 @@
 	</record>
 	<!-- FIN VISTA MAINTANCE REQUEST -->
 
+
+	<!-- VISTA KANBAN -->
+	<record id="view_form_kanban_ot_id" model="ir.ui.view">
+		<field name="name">maintenance.request.view.kanban.inherit</field>
+		<field name="model">maintenance.request</field>
+		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+		<field name="arch" type="xml">
+			<xpath expr="//t[@t-name='card']" position="replace">
+				<t t-name="card">
+					<div>
+						<div class="titulo d-flex align-items-center gap-2">
+							<field class="fw-bold fs-5" name="name"/>
+							<div class="content_name"/></div>
+						<hr class="mt-1 mb-1"/>
+						<!-- Creado por -->
+						<div class="cliente d-flex align-items-center mb-1">
+							<span class="me-1">
+								<i class="fa fa-user" style="font-size:16px;"/>
+							</span>
+							<t t-if="record.employee_id.raw_value">
+								<span >
+									<field name="employee_id"/>
+								</span>
+							</t>
+							<t t-else="">
+								<span>No tiene usuario creado</span>
+							</t>
+						</div>
+						<div class="d-none">
+							<span class="d-none hidden" name="owner_user_id" t-if="record.owner_user_id.raw_value">Solicitado por: 
+								
+								
+								
+								
+								
+								<field name="owner_user_id"/>
+							</span>
+						</div>
+						<!-- Cliente -->
+						<div class="cliente d-flex align-items-center mb-1">
+							<span class="me-1">
+								<i class="fa fa-building" style="font-size:16px;"/>
+							</span>
+							<t t-if="record.empresa.raw_value">
+								<field name="empresa"/>
+							</t>
+							<t t-else="">
+								<span>Sin cliente</span>
+							</t>
+						</div>
+						<!-- Ubicación -->
+						<div class="ubicacion d-flex align-items-center mb-1">
+							<span class="me-1">
+								<i class="fa fa-truck" style="font-size:16px;"/>
+							</span>
+							<t t-if="record.ubicacion.raw_value">
+								<field name="ubicacion"/>
+							</t>
+							<t t-else="">
+								<span>Sin ubicacion de servicio</span>
+							</t>
+						</div>
+						<div class="row g-0">
+							<!-- Fecha de solicitud -->
+							<div class="col-3 d-flex align-items-center gap-1 flex-nowrap mb-1">
+								<i class="fa fa-calendar " style="font-size:14px;"/>
+								<t t-if="record.request_date.raw_value">
+									<field name="request_date" class="text-truncate"/>
+								</t>
+								<t t-else="">
+									<span class=" text-truncate" style="font-size:12px;">Sin solicitud</span>
+								</t>
+							</div>
+							<!-- Fecha de servicio -->
+							<div class="col-5 d-flex pe-3 align-items-center gap-1 flex-nowrap mb-1">
+								<i class="fa fa-calendar " style="font-size:14px;"/>
+								<t t-if="record.schedule_date.raw_value">
+									<field name="schedule_date" class="text-truncate"/>
+								</t>
+								<t t-else="">
+									<span class=" text-truncate" style="font-size:12px;">Sin servicio</span>
+								</t>
+							</div>
+							<!-- Duración -->
+							<div class="col-4 d-flex align-items-center gap-1 flex-nowrap mb-1">
+								<i class="fa fa-clock-o " style="font-size:14px;"/>
+								<t t-if="record.duration.raw_value">
+									<field name="duration" class="text-truncate"/>
+								</t>
+								<t t-else="">
+									<span class=" text-truncate" style="font-size:12px;">Sin duración</span>
+								</t>
+							</div>
+						</div>
+					</div>
+					<footer>
+						<div class="d-flex">
+							<field name="priority" widget="priority"/>
+							<field name="activity_ids" widget="kanban_activity" class="ms-3"/>
+						</div>
+						<div class="d-flex ms-auto align-items-center">
+							<div class="badge text-bg-warning float-end" invisible="not archive">
+											Cancelado
+										</div>
+							<field name="kanban_state" widget="state_selection" class="ms-1"/>
+							<field name="user_id" widget="many2one_avatar_user" class="ms-1"/>
+						</div>
+					</footer>
+				</t>
+			</xpath>
+		</field>
+	</record>
 </odoo>
