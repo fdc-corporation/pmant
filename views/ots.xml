@@ -186,7 +186,7 @@
 						<div class="titulo d-flex align-items-center gap-2">
 							<field class="fw-bold fs-5" name="name"/>
 							<div class="content_name"/></div>
-						<hr class="mt-1 mb-1"/>
+						<!-- <hr class="mt-1 mb-1"/> -->
 						<!-- Creado por -->
 						<div class="cliente d-flex align-items-center mb-1">
 							<span class="me-1">
