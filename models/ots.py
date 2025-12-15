@@ -551,7 +551,7 @@ class MaintenanceRequestOTS(models.Model):
         return {
             "type": "ir.actions.act_window",
             "name": "Generar Acta de Conformidad",
-            "res_model": "wizard.open.conformidad",
+            "res_model": "wizard.open.acta.confirmidad",
             "view_mode": "form",
             "target": "new",
             "context": {
