@@ -10,7 +10,6 @@
                     <group>
                         <field name="fecha_finalizado"/>
                         <field name="ots_id" 
-                               widget="many2many_tags" 
                                options="{'no_create': True, 'no_open': True}" 
                                domain="[('stage_id.done', '=', False)]" 
                                />
