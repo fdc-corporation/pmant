@@ -78,44 +78,68 @@
 		<field name="name">planequipo.mantenimiento.kanban</field>
 		<field name="model">planequipo.mantenimiento</field>
 		<field name="arch" type="xml">
-			<kanban default_group_by="tarea">
-				<field name="plan" />
+			<kanban default_group_by="equipo" sample="1">
+				<!-- Campos necesarios -->
+				<field name="plan"/>
+				<field name="equipo"/>
+				<field name="procesos"/>
+
 				<templates>
-					<t t-name="kanban-box">
-						<div t-attf-class="oe_kanban_global_click_edit oe_semantic_html_override oe_kanban_card ">
-							<div class="oe_dropdown_kanban">
-								<!-- dropdown menu -->
-								<div class="oe_dropdown_toggle">
-									<i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage" />
-									<ul class="oe_dropdown_menu">
-										<li>
-											<a type="delete">
-												Delete
-											</a>
-										</li>
-										<li>
-											<ul class="oe_kanban_colorpicker" data-field="color" />
-										</li>
-									</ul>
-								</div>
-								<div class="oe_clear">
-								</div>
+
+					<!-- Menú (⋮) -->
+					<t t-name="menu">
+						<t t-if="widget.editable">
+							<a role="menuitem" type="open" class="dropdown-item">Editar</a>
+						</t>
+						<t t-if="widget.deletable">
+							<a role="menuitem" type="delete" class="dropdown-item">Eliminar</a>
+						</t>
+					</t>
+
+					<!-- Tarjeta -->
+					<t t-name="card">
+						<div class="oe_kanban_card p-2">
+
+							<!-- Título -->
+							<div class="titulo d-flex align-items-center gap-2 mb-1">
+								<i class="fa fa-tasks"/>
+								<strong>
+									<field name="plan"/>
+								</strong>
 							</div>
-							<div t-attf-class="oe_kanban_content">
-								<!-- title -->
-								Plan de Tarea:
-								<field name="plan" />
-								<br />
-								Equipo:
-								<field name="equipo" />
-								<br />
-								Procesos:
-								<field name="procesos" />
+
+							<!-- Equipo -->
+							<div class="d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-cogs" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.equipo.raw_value">
+									<field name="equipo"/>
+								</t>
+								<t t-else="">
+									<span>Sin equipo</span>
+								</t>
 							</div>
+
+							<!-- Procesos -->
+							<div class="d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-random" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.procesos.raw_value">
+									<field name="procesos"/>
+								</t>
+								<t t-else="">
+									<span>Sin procesos</span>
+								</t>
+							</div>
+
 						</div>
 					</t>
+
 				</templates>
 			</kanban>
+
 		</field>
 	</record>
 	<menuitem id="planequipo_menuv" name="OTS asignadas" parent="maintenance.menu_maintenance_title" action="planequipo_list_action" />
