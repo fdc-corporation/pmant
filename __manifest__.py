@@ -96,6 +96,7 @@
         "wizard/wizard_inconvenientes.xml",
         "views/etapas_tarea.xml",
         "wizard/wizard_fecha_ejecutada.xml",
+        "wizard/wizard_open_conformidad.xml",
     ],
     "assets": {
         "web.assets_frontend": [

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_wizard_open_acta_confirmidad_form" model="ir.ui.view">
+        <field name="name">wizard.open.acta.confirmidad.form</field>
+        <field name="model">wizard.open.acta.confirmidad</field>
+        <field name="arch" type="xml">
+            <form string="Generar Acta de Conformidad">
+                <sheet>
+                    <group>
+                        <field name="fecha_finalizado"/>
+                        <field name="ots_id" 
+                               widget="many2many_tags" 
+                               options="{'no_create': True, 'no_open': True}" 
+                               domain="[('stage_id.done', '=', False)]" 
+                               />
+                    </group>
+                    
+                </sheet>
+                <footer>
+                    <button name="action_generate_acta" 
+                            string="Generar Acta con firma electronica" 
+                            type="object" 
+                            class="btn-primary" 
+                            data-hotkey="q"/>
+                    <button name="action_generate_pdf_acta" 
+                            string="Generar PDF del Acta" 
+                            type="object" 
+                            class="btn-primary" 
+                            data-hotkey="q"/>
+                    <button string="Cancelar" 
+                            class="btn-secondary" 
+                            special="cancel" 
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_open_acta_confirmidad" model="ir.actions.act_window">
+        <field name="name">Abrir Acta de Conformidad</field>
+        <field name="res_model">wizard.open.acta.confirmidad</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+</odoo>

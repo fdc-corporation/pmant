@@ -64,6 +64,7 @@ class MaintenanceRequestOTS(models.Model):
         compute="_compute_horas_duracion",
         store=True,
     )
+    fecha_acta = fields.Date(string="Fecha Acta de Conformidad")
 
     # --------------------
     # Computes
@@ -545,6 +546,19 @@ class MaintenanceRequestOTS(models.Model):
             "target": "current",
         }
 
+    def open_wizard_firma_empresa_acta(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Generar Acta de Conformidad",
+            "res_model": "wizard.open.conformidad",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_ots_id": self.id,
+            },
+        }
+
     def set_firma_empresa_acta(self):
         for rec in self:
             ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
@@ -585,7 +599,8 @@ class MaintenanceRequestOTS(models.Model):
             "view_mode": "kanban",
             "target": "current",
         }
-
+    def print_acta_conformidad(self):
+        return self.env.ref("pmant.action_reporte_acta").report_action(self)
     # --------------------
     # Calendario
     # --------------------

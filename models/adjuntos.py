@@ -51,3 +51,30 @@ class DocuemntosEquipo(models.Model):
     _inherit = "documents.document"
 
     equipo = fields.Many2many("maintenance.equipment", string="Equipo")
+
+
+class WizardOpenActaConfirmidad(models.TransientModel):
+    _name = 'wizard.open.acta.confirmidad'
+    _description = 'Wizard para abrir Acta de Conformidad'
+
+    fecha_finalizado = fields.Date(string="Fecha de Finalización", required=True, default=fields.Date.context_today)
+    ots_id = fields.Many2one('maintenance.request', string="Órdenes de Trabajo", default=lambda self: self.get_default_ots())
+    
+    def get_default_ots(self):
+        active_ids = self.env.context.get('default_ots_id', [])
+        return self.env['maintenance.request'].browse(active_ids)
+
+
+    def action_generate_acta(self):
+        self.ensure_one()
+        self.ots_id.write({
+            'fecha_acta': self.fecha_finalizado,
+        })
+        self.ots_id.set_firma_empresa_acta()
+    
+    def action_generate_pdf_acta(self):
+        self.ensure_one()
+        self.ots_id.write({
+            'fecha_acta': self.fecha_finalizado,
+        })
+        return self.ots_id.print_acta_conformidad()
