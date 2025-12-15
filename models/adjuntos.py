@@ -67,14 +67,11 @@ class WizardOpenActaConfirmidad(models.TransientModel):
 
     def action_generate_acta(self):
         self.ensure_one()
-        self.ots_id.write({
-            'fecha_acta': self.fecha_finalizado,
-        })
+        self.ots_id.fecha_acta = self.fecha_finalizado
         self.ots_id.set_firma_empresa_acta()
     
     def action_generate_pdf_acta(self):
         self.ensure_one()
-        self.ots_id.write({
-            'fecha_acta': self.fecha_finalizado,
-        })
+        self.ots_id.fecha_acta = self.fecha_finalizado
+
         return self.ots_id.print_acta_conformidad()
