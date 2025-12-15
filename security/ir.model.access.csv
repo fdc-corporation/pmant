@@ -47,6 +47,7 @@ pmant_admin_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimie
 pmant_admin_acc17,ADMIN_mantenimento_equipo_otros,model_mantenimento_equipo_otros,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc18,ADMIN_WIZARD_FECHA_EJECUTADA_OT,model_wizard_fecha_ejecutada_ot,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc19,ADMIN_EMPLEADOS,model_hr_employee,pmant.group_pmant_admin,1,1,0,0
+pmant_admin_acc20,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,pmant.group_pmant_admin,1,1,1,1
 ,,,,,,,
 ,,,,,,,
 pmant_planner_acc,ADMIN_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_planner,1,1,1,1
@@ -69,6 +70,7 @@ pmant_planner_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenim
 pmant_planner_acc17,ADMIN_OTROS_MANTENIMIENTOS,model_mantenimento_equipo_otros,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc18,ADMIN_WIZARD_FECHA_EJECUTADA_OT,model_wizard_fecha_ejecutada_ot,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc19,ADMIN_EMPLEADOS,model_hr_employee,pmant.group_pmant_planner,1,1,0,0
+pmant_planner_acc20,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,pmant.group_pmant_planner,1,1,1,1
 ,,,,,,,
 ,,,,,,,
 pmant_vendedor_acc3,VENDEDOR_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_vendedor,1,1,1,0
@@ -100,3 +102,4 @@ access_servicio_solicitud_user,access.servicio.solicitud.user,model_servicio_sol
 access_etapa_tarea_mantenimiento_user,access.etapa.tarea.mantenimiento.user,model_etapa_tarea_mantenimiento,base.group_user,1,1,1,1
 access_wizard_sale_order,wizard.sale.order,model_wizard_sale_order,base.group_user,1,1,1,1
 access_wizard_order_cancel,wizard.order.cancel,model_wizard_order_cancel,base.group_user,1,1,1,1
+access_wizardacta_confirmidad,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,base.group_user,1,1,1,1

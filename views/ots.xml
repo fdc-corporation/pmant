@@ -27,7 +27,7 @@
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Enviar correo a la Sucursal" name="send_report_sucursal" type="object" />
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
-				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="set_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="open_wizard_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_stat_button"
 						type="object"
 						name="action_open_wizard"
