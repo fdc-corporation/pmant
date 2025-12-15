@@ -15,7 +15,7 @@
             <t t-call="web.external_layout">
                 <div class="page">
                     <h2 style="text-align:center;">Hoja de Recepción</h2>
-                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:30px;">
+                    <table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;margin-top:30px;">
                         <tr>
                             <th colspan="2" style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
                                 <span>Datos de la Empresa</span>
@@ -92,7 +92,7 @@
                             </td>
                         </tr>
                     </table>
-                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+                    <table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;margin-top:0px;">
                         <tr>
                             <th style="text-align: left; font-size: 13px;width:50%; border: 0px;border-bottom:4.5px solid #3191C5;">
                                 <span>Datos del Receptor </span>
@@ -116,7 +116,7 @@
                     <t t-foreach="doc.planequipo" t-as="pe">
                         <div>
                             <div>
-                                <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+                                <table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
                                     <tr>
                                         <td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
                                             <strong>
@@ -286,7 +286,7 @@
                         </div>
                     </t>
                     <t t-set="counter" t-value="0"/>
-                    <table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+                    <table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
                         <tr>
                             <th colspan="2" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
                                 Fotos de recepción

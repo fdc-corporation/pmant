@@ -14,7 +14,7 @@
 						<!-- <h2 style="text-align: left;"> -->
 						<!-- Reporte Técnico -->
 						<!-- </h2> -->
-						<table class="table " style="width: 100%; font-size: 11px;">
+						<table class="table table-borderless" style="width: 100%; font-size: 11px;">
 							<tbody>
 								<tr class="">
 									<td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
@@ -131,7 +131,7 @@
 						<t t-foreach="doc.tarea.planequipo" t-as="pe">
 							<div>
 								<div>
-									<table class="table" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
+									<table class="table table-borderless" style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
 										<thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
 											<tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
 												<td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
@@ -187,7 +187,7 @@
 									</table>
 									<br />
 									<t t-if="doc.tarea.is_evaluacion">
-										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+										<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;margin-top:0px;">
 											<thead>
 												<tr class="no-wrap">
 													<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
@@ -234,7 +234,7 @@
 										<br />
 									</t>
 									<div>
-										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 											<tr class="no-wrap">
 												<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
 													Procesos del servicio
@@ -278,7 +278,7 @@
 									</div>
 									<br />
 									<div>
-										<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 											<tbody>
 												<tr class="no-wrap">
 													<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
@@ -300,7 +300,7 @@
 										<t t-foreach="pe.procesos" t-as="pr">
 											<t t-if="pr.adjuntos">
 												<br />
-												<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+												<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 													<tr class="no-wrap" style=" background-color:  #F7F7F7;">
 														<td style="background-color:  #F7F7F7;border:0px 0px 0px 0px !important;border-top:0px !important;">
 															<strong>
@@ -343,6 +343,18 @@
 												<br />
 											</t>
 										</t>
+										<div id="conclusiones">
+                                    
+                                  <h4 t-if="pe.nota_observaciones" style="font-size:12px;"><strong>Observaciones general</strong></h4>
+                                  <span t-if="pe.nota_observaciones" style="font-size:11px;" t-field="pe.nota_observaciones"/>
+                                  <hr t-if="pe.nota_observaciones"/>
+                                  <h4 t-if="pe.nota_mantenimiento" style="font-size:12px;"><strong>Conclusiones</strong></h4>
+                                  <span t-if="pe.nota_mantenimiento" style="font-size:11px;" t-field="pe.nota_mantenimiento"/>
+                                  <hr t-if="pe.nota_mantenimiento"/>
+                                  <h4 t-if="pe.nota_recomendaciones" style="font-size:12px;"><strong>Recomendaciones</strong></h4>
+                                  <span t-if="pe.nota_recomendaciones" style="font-size:11px;" t-field="pe.nota_recomendaciones"/>
+                                  
+                                </div>
 									</div>
 								</div>
 							</div>

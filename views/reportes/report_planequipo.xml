@@ -15,7 +15,7 @@
 						<!-- <h2 style="text-align: left;color:black !important;"> -->
 						<!-- Reporte Técnico -->
 						<!-- </h2> -->
-						<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+						<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 							<tr>
 								<td colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
 									Orden de Trabajo
@@ -136,7 +136,7 @@
 						</table>
 						<div>
 							<div>
-								<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+								<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 									<tr>
 										<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
 											<strong>
@@ -190,7 +190,7 @@
 								</table>
 								<br />
 								<t t-if="doc.tarea.is_evaluacion">
-									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;margin-top:0px;">
+									<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;margin-top:0px;">
 										<thead>
 											<tr class="no-wrap">
 												<td colspan="3" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
@@ -235,7 +235,7 @@
 									</ul>
 								</t>
 								<div>
-									<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+									<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 										<tr>
 											<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
 												Procesos del servicio
@@ -278,7 +278,7 @@
 										</t>
 									</table>
 								</div>
-								<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+								<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 									<tr>
 										<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
 											<font style="vertical-align: inherit;">
@@ -298,7 +298,7 @@
 								<t t-foreach="doc.procesos" t-as="pr">
 									<t t-if="pr.adjuntos">
 										<br />
-										<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+										<table class="table table-sm o_main_table table-borderless" style="width: 100%; font-size: 11px;">
 											<tr>
 												<td>
 													<strong>
@@ -340,6 +340,18 @@
 										</table>
 									</t>
 								</t>
+								<div id="conclusiones">
+                                    
+                                  <h4 t-if="doc.nota_observaciones" style="font-size:12px;"><strong>Observaciones general</strong></h4>
+                                  <span t-if="doc.nota_observaciones" style="font-size:11px;" t-field="doc.nota_observaciones"/>
+                                  <hr t-if="doc.nota_observaciones"/>
+                                  <h4 t-if="doc.nota_mantenimiento" style="font-size:12px;"><strong>Conclusiones</strong></h4>
+                                  <span t-if="doc.nota_mantenimiento" style="font-size:11px;" t-field="doc.nota_mantenimiento"/>
+                                  <hr t-if="doc.nota_mantenimiento"/>
+                                  <h4 t-if="doc.nota_recomendaciones" style="font-size:12px;"><strong>Recomendaciones</strong></h4>
+                                  <span t-if="doc.nota_recomendaciones" style="font-size:11px;" t-field="doc.nota_recomendaciones"/>
+                                  
+                                </div>
 							</div>
 						</div>
 						<div>
