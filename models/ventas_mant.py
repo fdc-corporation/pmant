@@ -4,7 +4,7 @@ from odoo.exceptions import UserError
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    ots = fields.Many2one("tarea.mantenimiento", string="Tarea")
+    ots = fields.Many2one("tarea.mantenimiento", string="Tarea", domain="[('sale_order', '=', False)]")
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
     is_servicio = fields.Boolean(string="Es servicio", compute="verify_service")
     titulo_cotizacion = fields.Char(string="Título de la cotización")

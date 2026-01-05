@@ -103,12 +103,14 @@ class Tarea(models.Model):
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
     cantidad_ot = fields.Integer(string="Cantidad de OTs", compute="_get_cantidad_ot")
 
-    @api.model
-    def create(self, vals):
-        res = super(Tarea, self).create(vals)
-        if self.sale_order:
-            detalles_sale_order = self.sale_order.template_format_nota()
-            self.notas = detalles_sale_order
+
+    def search_sale_order(self):
+        for res in self:
+            if not res.sale_order:
+                sale_order = self.env["sale.order"].search([("ots", "=", res.id)], limit=1)
+                self.sale_order = sale_order
+                res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
+
 
     def _get_cantidad_ot(self):
         cant_data = self.env["maintenance.request"].search([("tarea", "=", self.id)])
@@ -126,8 +128,8 @@ class Tarea(models.Model):
 
 
     def _total_cotizaciones(self):
-        self.cotizacion_cantidad = len(self.sale_order)
-
+        self.cotizacion_cantidad = bool(self.sale_order)
+        self.search_sale_order()
     def action_view_cotizaciones(self):
         return {
             "type": "ir.actions.act_window",
