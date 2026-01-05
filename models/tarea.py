@@ -103,6 +103,12 @@ class Tarea(models.Model):
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
     cantidad_ot = fields.Integer(string="Cantidad de OTs", compute="_get_cantidad_ot")
 
+    @api.model
+    def create(self, vals):
+        res = super(Tarea, self).create(vals)
+        if self.sale_order:
+            detalles_sale_order = self.sale_order.template_format_nota()
+            self.notas = detalles_sale_order
 
     def _get_cantidad_ot(self):
         cant_data = self.env["maintenance.request"].search([("tarea", "=", self.id)])
