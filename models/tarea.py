@@ -94,9 +94,18 @@ class Tarea(models.Model):
     # ----------------------------
     # Computed / Constraints
     # ----------------------------
+    def search_sale_order(self):
+        for res in self:
+            if not res.sale_order:
+                sale_order = self.env["sale.order"].search([("ots", "=", res.id)], limit=1)
+                self.sale_order = sale_order
+                res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
+
+
     def _compute_total_cotizaciones(self):
-        for rec in self:
-            rec.cotizacion_cantidad = 1 if rec.sale_order else 0
+        self.cotizacion_cantidad = bool(self.sale_order)
+        self.search_sale_order()
+
 
     def action_view_cotizaciones(self):
         if not self.sale_order:
