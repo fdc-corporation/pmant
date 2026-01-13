@@ -136,6 +136,15 @@ class Equipo(models.Model):
             },
         }
 
+    def generar_qr(self):
+        # 1. Buscamos los registros que cumplen el criterio (ej: sin QR)
+        registros = self.search([('qr_image', '=', False)]) 
+        
+        # 2. Iteramos sobre ellos
+        for equipo in registros:
+            # Aquí va tu lógica para generar el QR o buscar la OC
+            equipo._generate_qr_code()
+
     def _get_certificados(self):
         documentos = self.env["sign.request"].search_count(
             [("equipo_id", "=", self.id), ("state", "=", "signed")]

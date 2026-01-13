@@ -88,6 +88,7 @@ class Tarea(models.Model):
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
     user_id = fields.Many2one('res.users', string='Responsable', related='ots.user_id', store=True)
     prioridad = fields.Selection(related="ots.priority", string="Prioridad", store=True)
+    count_ots = fields.Integer(string="Cantidad de OTs", compute="_compute_count_ots", store=False)
 
 
 
@@ -101,6 +102,9 @@ class Tarea(models.Model):
                 self.sale_order = sale_order
                 res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
 
+    def _compute_count_ots(self):
+        for rec in self:
+            rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):
         self.cotizacion_cantidad = bool(self.sale_order)
@@ -391,9 +395,9 @@ class Tarea(models.Model):
                 "default_ubicacion": self.ubicacion.id if self.ubicacion else False,
                 "default_notas_venta": self.notas,
                 "default_schedule_date": datetime.now(),
-                "default_order_compra": self.oc_id.id if self.oc_id else False,
+                "default_order_compra": self.oc_id.id if 'oc_id' in self._fields and self.oc_id else False,
             },
-        }
+        }   
 
     def init_servicio(self):
         for record in self:
@@ -450,3 +454,16 @@ class Tarea(models.Model):
         """Método público para generar/actualizar eventos de próximo servicio.
         Llamar desde botón o cron, nunca automáticamente en read/compute."""
         self._evento_calendario_proximo_servicio()
+
+    # ----------------------------
+    # REDIREC VIEWS
+    # ----------------------------
+    def action_view_services (self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Servicios",
+            "view_mode": "form",
+            "res_model": "maintenance.request",
+            "res_id": self.ots[0].id,
+            "context": {"create": False},
+        }

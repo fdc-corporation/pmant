@@ -255,6 +255,11 @@
 						<button group="pmant.group_pmant_planner,pmant.group_pmant_admin" class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-pencil-square-o">
 							<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo" />
 						</button>
+						<!-- BOTON DE COTIZACIONES -->
+						<button class="oe_stat_button" type="object" name="action_view_services"
+                            icon="fa-wrench">
+                            <field string="Servicios" name="count_ots" widget="statinfo"/>
+						</button>
 					</div>
 					<div class="alert alert-warning" role="alert" invisible="ots or is_evaluacion">
 						Alerta: Esta tarea ya puede ser programada / Crea una OT
