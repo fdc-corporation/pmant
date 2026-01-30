@@ -120,6 +120,11 @@
                         class="oe_stat_button"
                         string="Generar PDF"
                         type="object"/>
+                <button name="action_print_report_mantenimiento"
+                        id="action_print_report_mantenimiento"
+                        class="oe_stat_button"
+                        string="Generar Informe Tecnico"
+                        type="object"/>
             </xpath>
 
             <xpath expr="//button[@name='action_confirm'][2]" position="attributes">

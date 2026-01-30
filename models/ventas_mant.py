@@ -24,6 +24,19 @@ class SaleOrder(models.Model):
             "context": {"default_order_id": self.id},
         }  
 
+    def action_print_report_mantenimiento(self):
+        self.ensure_one()
+        if not self.ots.ots:
+            raise UserError(_("No hay órdenes de trabajo asociadas a esta tarea de mantenimiento."))
+        
+        return self.env.ref("pmant.action_mantenimiento_ot").report_action(self.ots.ots)
+
+            
+
+
+
+
+
     @api.depends("order_line", "order_line.product_template_id", "order_line.id_equipo")
     def _compute_verify_service(self):
         for order in self:
