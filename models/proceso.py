@@ -4,6 +4,7 @@ class PlanEquipoProcesos(models.Model):
     _name               = 'planequipoproceso.mantenimiento'
 
     proceso = fields.Many2one('proceso.mantenimiento', string="Proceso", required=True)  # Cambiado a Many2one
+    grupo =  fields.Many2one("grupoproceso.mantenimiento", string="Grupo")
     planequipo          = fields.Many2one('planequipo.mantenimiento',string='Plan Equipo')
     descripcion         = fields.Text(string="Comentarios")
     descripcion_proceso = fields.Text(related="proceso.descripcion")

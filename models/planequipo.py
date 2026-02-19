@@ -185,6 +185,7 @@ class PlanEquipo(models.Model):
             for proceso_plan in self.plan.proceso:
                 procesos_list.append((0, 0, {
                     'proceso': proceso_plan.id,
+                    'grupo': proceso_plan.grupo.id,
                     'planequipo': self.id,
                     'tarea': self.tarea.id,
                     'plan': self.plan.id,
