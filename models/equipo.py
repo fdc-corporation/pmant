@@ -42,7 +42,8 @@ class EquiposUbicacion(models.Model):
 
     def _compute_is_tecnico(self):
         for record in self:
-            record.is_tecnico = self.env.user.has_group("pmant.group_pmant_tecnico")
+            record.is_tecnico = self.env.user.has_group(
+                "pmant.group_pmant_tecnico")
 
     @api.model
     def equipos_model(self):
@@ -59,7 +60,6 @@ class Prioridad(models.Model):
     name = fields.Char(size=25, required=True)
 
 
-
 class DataEquipo(models.Model):
     _name = "medicion.equipo"
 
@@ -68,7 +68,9 @@ class DataEquipo(models.Model):
     presion_actual = fields.Float(string="Presion actual")
     temperatura_ambiente = fields.Float(string="Temperatura del ambiente")
     equipo_id = fields.Many2one('maintenance.equipment', string="Equipo")
-    fecha_registro = fields.Datetime(string="Fecha de registro", default=fields.Datetime.now)
+    fecha_registro = fields.Datetime(
+        string="Fecha de registro", default=fields.Datetime.now)
+
 
 class Equipo(models.Model):
     _name = "maintenance.equipment"
@@ -81,8 +83,10 @@ class Equipo(models.Model):
         domain=[("is_company", "=", "True")], tracking=True,
     )
     parent_id = fields.Integer(related="propietario.id")
-    ubicacion = fields.Many2one("res.partner", string="Ubicacion", tracking=True)
-    area = fields.Many2one("res.partner", string="Area asignada", tracking=True)
+    ubicacion = fields.Many2one(
+        "res.partner", string="Ubicacion", tracking=True)
+    area = fields.Many2one(
+        "res.partner", string="Area asignada", tracking=True)
     fabricante = fields.Char(size=60)
     marca = fields.Char(size=60)
     frecuencia_m = fields.Integer(string="Frecuencia de Mantenimiento")
@@ -100,28 +104,35 @@ class Equipo(models.Model):
     qr_image = fields.Binary(
         "QR equipo", compute="_generate_qr_code", attachment=True, store=True
     )
-    qr_image2 = fields.Binary("QR equipo", compute="_generate_qr_code", attachment=True)
+    qr_image2 = fields.Binary(
+        "QR equipo", compute="_generate_qr_code", attachment=True)
     url_qr = fields.Char(string="URL del QR", compute="_generate_qr_code")
-    fecha_prox = fields.Date(string="Proximo Mantenimiento", compute="_generate_qr_code", store=True, readonly=False)
+    fecha_prox = fields.Date(string="Proximo Mantenimiento",
+                             compute="_generate_qr_code", store=True, readonly=False)
     image = fields.Binary("Image", attachment=True)
     certificados = fields.One2many(
         "sign.request", "equipo_id", domain=[("state", "=", "signed")], string="Certificados de operatividad"
     )
-    documentos = fields.Many2many("documents.document", "equipo", string="Documentos")
+    documentos = fields.Many2many(
+        "documents.document", "equipo", string="Documentos")
     cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
-    mediciones = fields.One2many("medicion.equipo", "equipo_id", string="Mediciones")
+    mediciones = fields.One2many(
+        "medicion.equipo", "equipo_id", string="Mediciones")
 
-    solicitudes_servicio = fields.One2many("servicio.solicitud", "equipo_id", string="Solicitudes de Mantenimiento")
+    solicitudes_servicio = fields.One2many(
+        "servicio.solicitud", "equipo_id", string="Solicitudes de Mantenimiento")
     cantidad_certificados = fields.Integer(
-        compute="_get_certificados", string="Cantidad de Certificados"
-    )
-    otros_mantenimientos = fields.One2many("mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
+        compute="_get_certificados", string="Cantidad de Certificados")
+    otros_mantenimientos = fields.One2many(
+        "mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
     count_recordatorios = fields.Integer(
         compute="_compute_count_recordatorios", string="Cantidad de Recordatorios"
     )
     count_programacion = fields.Integer(
         compute="_compute_count_programacion", string="Cantidad de Programaciones"
     )
+    serial_no = fields.Char(string="Número de serie", copy=False, index=True, required=True)
+
     def action_view_certificados(self):
         self.ensure_one()
         return {
@@ -136,10 +147,15 @@ class Equipo(models.Model):
             },
         }
 
+    def create(self, vals):
+        record = super().create(vals)
+        record.generar_qr()
+        return record
+
     def generar_qr(self):
         # 1. Buscamos los registros que cumplen el criterio (ej: sin QR)
-        registros = self.search([('qr_image', '=', False)]) 
-        
+        registros = self.search([('qr_image', '=', False)])
+
         # 2. Iteramos sobre ellos
         for equipo in registros:
             # Aquí va tu lógica para generar el QR o buscar la OC
@@ -154,7 +170,7 @@ class Equipo(models.Model):
     def action_view_cotizaciones(self):
         for record in self:
             cotizaciones = self.env["sale.order"].search(
-               [("order_line.id_equipo", "in", [record.id])]
+                [("order_line.id_equipo", "in", [record.id])]
             )
             return {
                 "name": "Cotizaciones del Equipo",
@@ -173,14 +189,16 @@ class Equipo(models.Model):
             record.cotizacion_cantidad = len(cotizaciones)
 
     def _generate_qr_code(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        base_url = self.env["ir.config_parameter"].sudo(
+        ).get_param("web.base.url")
 
         for record in self:
             # Generar URL
             url = f"{base_url}/my/equipos/{record.id}/detalles"
 
             # Generar QR como imagen base64
-            qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+            qr = qrcode.QRCode(
+                error_correction=qrcode.constants.ERROR_CORRECT_H)
             qr.add_data(url)
             qr.make(fit=True)
             img = qr.make_image(fill_color="black", back_color="white")
@@ -221,8 +239,10 @@ class Equipo(models.Model):
         for record in self:
             # Buscar grupo planificador
             if not record.fecha_prox:
-                raise UserError(_(f"El equipo {record.name} no tiene una fecha de próximo mantenimiento definida."))
-            group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
+                raise UserError(
+                    _(f"El equipo {record.name} no tiene una fecha de próximo mantenimiento definida."))
+            group = self.env.ref('pmant.group_pmant_planner',
+                                 raise_if_not_found=False)
 
             # Buscar usuario del grupo
             user = self.env['res.users'].search([
@@ -267,13 +287,13 @@ class Equipo(models.Model):
             if record.fecha_prox:
                 record.prox_mant = record.fecha_prox
 
-    def _compute_count_recordatorios (self):
+    def _compute_count_recordatorios(self):
         for record in self:
             record.count_recordatorios = self.env['calendar.event'].search_count([
                 ('equipos_ids', 'in', record.id),
                 ('start', '>=', fields.Date.today())
             ])
-    
+
     def action_view_prox_mant(self):
         for record in self:
             return {
@@ -287,13 +307,13 @@ class Equipo(models.Model):
                 ],
             }
 
-
-    def _compute_count_programacion (self):
+    def _compute_count_programacion(self):
         for record in self:
             record.count_programacion = self.env['calendar.event'].search_count([
                 ('equipos_ids', 'in', record.id),
                 ('start', '>=', fields.Date.today())
             ])
+
     def action_programacion_equipo(self):
         for record in self:
             return {
@@ -306,6 +326,7 @@ class Equipo(models.Model):
                 ],
             }
 
+
 class MasMantenimiento (models.Model):
     _name = "mantenimento.equipo.otros"
     _descriptiion = "Mas mantenimitnos externos"
@@ -315,5 +336,6 @@ class MasMantenimiento (models.Model):
     fecha_ejec = fields.Date(string="Fecha ejecutada")
     file_adjunto = fields.Binary(string="Reporte Tecnico")
     file_name = fields.Char(string="Nombre de archivo")
-    tipo = fields.Many2one("tipotarea.mantenimiento", string="tipo de mantenimiento")
+    tipo = fields.Many2one("tipotarea.mantenimiento",
+                           string="tipo de mantenimiento")
     equipo = fields.Many2one("maintenance.equipment", string="Equipo")
