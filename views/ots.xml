@@ -286,4 +286,16 @@
 			</xpath>
 		</field>
 	</record>
+
+
+	<record id="view_maintenance_request_filter_pmant" model="ir.ui.view">
+		<field name="name">maintenance.request.search</field>
+		<field name="model">maintenance.request</field>
+		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_search"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="before">
+				<field name="empresa" string="Cliente" />
+			</xpath>	
+		</field>
+	</record>
 </odoo>

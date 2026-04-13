@@ -1,15 +1,16 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    ots = fields.Many2one("tarea.mantenimiento", string="Tarea", domain="[('sale_order', '=', False)]")
+    ots = fields.Many2one("tarea.mantenimiento", string="Tarea",
+                          domain="[('sale_order', '=', False)]")
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
-    is_servicio = fields.Boolean(string="Es servicio", compute="_compute_verify_service")
+    is_servicio = fields.Boolean(
+        string="Es servicio", compute="_compute_verify_service")
     titulo_cotizacion = fields.Char(string="Título de la cotización")
-
-
 
     def action_print_sale(self):
         return self.env.ref("sale.action_report_saleorder").report_action(self)
@@ -22,20 +23,15 @@ class SaleOrder(models.Model):
             "view_mode": "form",
             "target": "new",
             "context": {"default_order_id": self.id},
-        }  
+        }
 
     def action_print_report_mantenimiento(self):
         self.ensure_one()
         if not self.ots.ots:
-            raise UserError(_("No hay órdenes de trabajo asociadas a esta tarea de mantenimiento."))
-        
+            raise UserError(
+                _("No hay órdenes de trabajo asociadas a esta tarea de mantenimiento."))
+
         return self.env.ref("pmant.action_mantenimiento_ot").report_action(self.ots.ots)
-
-            
-
-
-
-
 
     @api.depends("order_line", "order_line.product_template_id", "order_line.id_equipo")
     def _compute_verify_service(self):
@@ -59,12 +55,20 @@ class SaleOrder(models.Model):
         self.create_mantenimiento()
         return res
 
- 
-
+    def action_open_confirm_sale(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Confirmación de venta",
+            "view_mode": "form",
+            "res_model": "wizard.sale.order.confirm",
+            "target": "new",
+            "context": {"default_order_id": self.id},
+        }
 
     def delete_mantenimiento(self):
         for record in self:
-            tareas = self.env["tarea.mantenimiento"].search([("sale_order", "=", record.id)])
+            tareas = self.env["tarea.mantenimiento"].search(
+                [("sale_order", "=", record.id)])
             print("Tareas encontradas para eliminar:", tareas)
             for mantenimiento in tareas:
                 if not mantenimiento.ots:
@@ -82,14 +86,16 @@ class SaleOrder(models.Model):
                 continue
 
             try:
-                group = self.env.ref('pmant.group_pmant_planner', raise_if_not_found=False)
+                group = self.env.ref(
+                    'pmant.group_pmant_planner', raise_if_not_found=False)
                 print("Group:", group)
                 print("Group:", group.name)
 
-                user = self.env['res.users'].search([('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                user = self.env['res.users'].search(
+                    [('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
                 print("User:", user)
                 format_html_nota = self.template_format_nota(order)
-                
+
                 mantenimiento_vals = {
                     "name": f"{order.name} - {order.titulo_cotizacion or 'Servicios de mantenimiento'}",
                     "cliente": order.partner_id.id,
@@ -99,7 +105,8 @@ class SaleOrder(models.Model):
                     "sale_order": order.id,
                     "notas": format_html_nota,
                 }
-                mantenimiento = self.env["tarea.mantenimiento"].create(mantenimiento_vals)
+                mantenimiento = self.env["tarea.mantenimiento"].create(
+                    mantenimiento_vals)
 
                 lines_to_add = []
                 for line in equipo_lines:
@@ -122,7 +129,8 @@ class SaleOrder(models.Model):
                     #         order.oc_id.state = estado.id
 
             except Exception as e:
-                raise UserError(f"Error al crear la solicitud de mantenimiento: {str(e)}")
+                raise UserError(
+                    f"Error al crear la solicitud de mantenimiento: {str(e)}")
 
     def template_format_nota(self, order):
         formato = ""
@@ -157,7 +165,8 @@ class SaleOrder(models.Model):
     def action_view_services(self):
         self.ensure_one()
         if not self.ots:
-            raise UserError("No hay tarea de mantenimiento asociada a esta orden.")
+            raise UserError(
+                "No hay tarea de mantenimiento asociada a esta orden.")
         return {
             "type": "ir.actions.act_window",
             "name": "Tareas de Mantenimiento",
@@ -174,20 +183,29 @@ class SaleOrder(models.Model):
 
 
 class SaleOrderLine(models.Model):
-    _inherit="sale.order.line"
-    _description ="Lineas de la orden"
-
+    _inherit = "sale.order.line"
+    _description = "Lineas de la orden"
 
     id_equipo = fields.Many2one("maintenance.equipment", string="Equipo")
-
 
 
 class WizardConfirmSaleOrder(models.TransientModel):
     _name = "wizard.sale.order"
     _description = "Wizard Sale Order"
 
-    sale_id = fields.Many2one("sale.order", string="Venta", default= lambda self: self.env.context.get("default_order_id"))
+    sale_id = fields.Many2one("sale.order", string="Venta",
+                              default=lambda self: self.env.context.get("default_order_id"))
 
+    def confirm_sale(self):
+        self.sale_id.action_confirm()
+
+
+class WizardConfirmSaleOrderConfirm(models.TransientModel):
+    _name = "wizard.sale.order.confirm"
+    _description = "Confirmación de venta"
+
+    sale_id = fields.Many2one("sale.order", string="Venta",
+                              default=lambda self: self.env.context.get("default_order_id"))
 
     def confirm_sale(self):
         self.sale_id.action_confirm()

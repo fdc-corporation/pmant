@@ -110,6 +110,11 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_confirm'][2]" position="after">
                 <field name="is_servicio" invisible="1"/>
+                <button name="action_open_confirm_sale"
+                        id="action_open_confirm_sale"
+                        string="Confirmar"
+                        type="object"
+                        invisible="state not in ['draft', 'sent'] or is_servicio"/>
                 <button name="action_open_wizard_sale"
                         id="action_open_wizard_sale"
                         string="Confirmar"
@@ -128,7 +133,8 @@
             </xpath>
 
             <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-                <attribute name="invisible">state not in ["draft", "sent"] or is_servicio</attribute>
+                <!-- <attribute name="invisible">state not in ["draft", "sent"] or is_servicio</attribute> -->
+                <attribute name="invisible">invisible</attribute>
                 
             </xpath>
         </field>
@@ -144,7 +150,27 @@
                 <sheet>
                     <div class="alert alert-warning">
                         <p>
-                            ¿Estás seguro de confirmar? Tiene un producto <b>Servicio</b> pero no has anexado un equipo.
+                            ¿Estás seguro de confirmar? Tiene un producto <b>Servicio</b> pero no has anexado un equipo y asegure de que la direccion de entrega sea la correcta.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="confirm_sale" groups="pmant.group_pmant_admin" string="Confirmar de todas formas" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>        
+        </field>
+    </record>
+
+    <record id="view_wizard_sale_order_confirm_form" model="ir.ui.view">
+        <field name="name">wizard.sale.order.form</field>
+        <field name="model">wizard.sale.order.confirm</field>
+        <field name="arch" type="xml">
+        <form string="Confirmacion de venta">
+                <sheet>
+                    <div class="alert alert-warning">
+                        <p>
+                            ¿Estás seguro de confirmar? Revise que la dirección de entrega sea la correcta.
                         </p>
                     </div>
                 </sheet>
