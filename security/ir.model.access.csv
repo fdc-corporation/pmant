@@ -90,6 +90,7 @@ pmant_vendedor_acc15,VENDEDOR_PLANTILLA_TICKET,model_plantillaticket_mantenimien
 pmant_vendedor_acc16,VENDEDOR_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_vendedor,1,1,1,1
 pmant_vendedor_acc17,VENDEDOR_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc18,VENDEDOR_MNATNEIMIENTO_OTROS,model_mantenimento_equipo_otros,pmant.group_pmant_vendedor,1,1,0,0
+pmant_vendedor_acc_20,VENDEDOR_MANTENIMIENTO_EQUIPOS,model_maintenance_equipment,pmant.group_pmant_vendedor,1,1,1,1
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
