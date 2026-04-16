@@ -105,3 +105,4 @@ access_etapa_tarea_mantenimiento_user,access.etapa.tarea.mantenimiento.user,mode
 access_wizard_sale_order,wizard.sale.order,model_wizard_sale_order,base.group_user,1,1,1,1
 access_wizard_order_cancel,wizard.order.cancel,model_wizard_order_cancel,base.group_user,1,1,1,1
 access_wizardacta_confirmidad,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,base.group_user,1,1,1,1
+access_wizard_confirm_sale,ADMIN_WIZARD_CONFIRM,model_wizard_sale_order_confirm,base.group_user,1,1,1,1
