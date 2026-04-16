@@ -175,7 +175,7 @@
                     </div>
                 </sheet>
                 <footer>
-                    <button name="confirm_sale" groups="pmant.group_pmant_admin" string="Confirmar de todas formas" type="object" class="btn-primary"/>
+                    <button name="confirm_sale" string="Confirmar de todas formas" type="object" class="btn-primary"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>        
