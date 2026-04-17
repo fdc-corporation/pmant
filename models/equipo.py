@@ -131,7 +131,7 @@ class Equipo(models.Model):
     count_programacion = fields.Integer(
         compute="_compute_count_programacion", string="Cantidad de Programaciones"
     )
-    serial_no = fields.Char(string="Número de serie", copy=False, index=True, required=True)
+    serial_no = fields.Char(string="Número de serie", copy=False, index=True)
 
     def action_view_certificados(self):
         self.ensure_one()
@@ -147,9 +147,12 @@ class Equipo(models.Model):
             },
         }
 
+    @api.model
     def create(self, vals):
         record = super().create(vals)
         record.generar_qr()
+        if not record.serial_no:
+            record.generar_n_serie()
         return record
 
     def generar_qr(self):
