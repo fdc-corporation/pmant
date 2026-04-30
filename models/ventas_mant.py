@@ -12,6 +12,28 @@ class SaleOrder(models.Model):
         string="Es servicio", compute="_compute_verify_service")
     titulo_cotizacion = fields.Char(string="Título de la cotización")
 
+
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        new_order_line = []
+
+        for line in self.order_line:
+            # Si la línea tiene id_equipo, no se copia
+            if line.id_equipo:
+                continue
+
+            values = line.copy_data()[0]
+            new_order_line.append((0, 0, values))
+
+        default.update({
+            "ots": False,
+            "order_line": new_order_line,
+        })
+
+        return super().copy(default)
+    
     def action_print_sale(self):
         return self.env.ref("sale.action_report_saleorder").report_action(self)
 
@@ -107,7 +129,7 @@ class SaleOrder(models.Model):
                 }
                 mantenimiento = self.env["tarea.mantenimiento"].create(
                     mantenimiento_vals)
-
+                
                 lines_to_add = []
                 for line in equipo_lines:
                     lines_to_add.append((0, 0, {
@@ -122,6 +144,13 @@ class SaleOrder(models.Model):
                     mantenimiento.write({"create_user": user.id})
                     order.ots = mantenimiento
 
+                    mensaje = f"Se creo una tarea de mantenimiento {mantenimiento.name}, revise el servicio y programelo"
+                    self.message_post(
+                        body=mensaje,
+                        message_type='comment',
+                        subtype_xmlid='mail.mt_comment',
+                        partner_ids=[user.partner_id.id],  # ← destinatario específico
+                    )
                     # Actualizar estado de OC si aplica
                     # if order.oc_id:
                     #     estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)

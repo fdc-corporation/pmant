@@ -73,7 +73,7 @@ pmant_planner_acc19,ADMIN_EMPLEADOS,model_hr_employee,pmant.group_pmant_planner,
 pmant_planner_acc20,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,pmant.group_pmant_planner,1,1,1,1
 ,,,,,,,
 ,,,,,,,
-pmant_vendedor_acc3,VENDEDOR_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_vendedor,1,1,1,0
+pmant_vendedor_acc3,VENDEDOR_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_vendedor,1,1,1,1
 pmant_vendedor_acc4,VENDEDOR_ADJUNTO,model_adjunto_mantenimiento,pmant.group_pmant_vendedor,1,1,1,0
 pmant_vendedor_acc5,VENDEDOR_PLAN,model_plan_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc19,VENDEDOR_TAREA,model_tarea_mantenimiento,pmant.group_pmant_vendedor,1,1,1,1
