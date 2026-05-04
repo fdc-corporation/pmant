@@ -32,7 +32,8 @@ class SaleOrder(models.Model):
             "order_line": new_order_line,
         })
 
-        return super().copy(default)
+        return super().copy(default)    
+    
     
     def action_print_sale(self):
         return self.env.ref("sale.action_report_saleorder").report_action(self)
