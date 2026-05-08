@@ -3,16 +3,17 @@
     <record id="sale_order_form" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//div[@class='oe_button_box']" position="inside">
-                    <button class="oe_stat_button" type="object" name="action_view_services"
-                            icon="fa-wrench">
-                            <field string="Servicios" name="servicios_cantidad" widget="statinfo"/>
-                    </button>
+                <button class="oe_stat_button" type="object" name="action_view_services"
+                    icon="fa-wrench">
+                    <field string="Servicios" name="servicios_cantidad" widget="statinfo" />
+                </button>
             </xpath>
-            <xpath expr="//field[@name='partner_shipping_id']"  position="after">
-                <field name="ots" string="Tarea" invisible="state == 'draft'"  />
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="ots" string="Tarea" widget="many2many_tags"
+                    invisible="state == 'draft'" />
             </xpath>
         </field>
     </record>

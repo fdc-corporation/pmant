@@ -36,7 +36,8 @@
 			</form>
 		</field>
 	</record>
-	<menuitem id="plantarea_menuv" name="Planes de mantenimiento" parent="maintenance.menu_m_request" action="planes_list_action" />
+	<menuitem id="plantarea_menuv" name="Planes de mantenimiento"
+		parent="maintenance.menu_m_request" action="planes_list_action" />
 	<record model="ir.actions.act_window" id="tipoplan_list_action">
 		<field name="name">Tipo Plan Fecuencia</field>
 		<field name="res_model">tipoplan.mantenimiento</field>
@@ -48,7 +49,8 @@
 			</p>
 		</field>
 	</record>
-	<menuitem id="tipoplan_menu" name="Tipo Plan Frecuencia" parent="maintenance.menu_maintenance_configuration" action="tipoplan_list_action" />
+	<menuitem id="tipoplan_menu" name="Tipo Plan Frecuencia"
+		parent="maintenance.menu_maintenance_configuration" action="tipoplan_list_action" />
 	<record model="ir.actions.act_window" id="proceso_list_action">
 		<field name="name">Proceso de Tarea</field>
 		<field name="res_model">proceso.mantenimiento</field>
@@ -85,7 +87,8 @@
 			</p>
 		</field>
 	</record>
-	<menuitem id="grupoprocesos_menuv" name="Grupo Procesos" parent="maintenance.menu_maintenance_configuration" action="grupoproceso_list_action" />
+	<menuitem id="grupoprocesos_menuv" name="Grupo Procesos"
+		parent="maintenance.menu_maintenance_configuration" action="grupoproceso_list_action" />
 	<record model="ir.actions.act_window" id="tipotarea_list_action">
 		<field name="name">Tipo Tareas</field>
 		<field name="res_model">tipotarea.mantenimiento</field>
@@ -180,7 +183,8 @@
 					</t>
 					<t t-name="kanban-box">
 						<t t-set="dummy" t-value="record.stage_id.raw_value" />
-						<div t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click oe_semantic_html_override">
+						<div
+							t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click oe_semantic_html_override">
 							<div class="oe_kanban_content" tooltip="kanban-tooltip">
 								<div class="o_kanban_record_top" tooltip="kanban-tooltip">
 									<b class="o_kanban_record_title" style="font-size:16px;">
@@ -235,21 +239,31 @@
 			<form string="Tarea Form">
 				<field name="action_servicio" invisible="1" />
 				<header>
-					<field name="stage_id" groups="pmant.group_pmant_admin" widget="statusbar" options="{'clickable': '1'}" />
-					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico" icon="fa-envelope" />
+					<field name="stage_id" groups="pmant.group_pmant_admin" widget="statusbar"
+						options="{'clickable': '1'}" />
+					<button name="action_send_email_recepcion" type="object"
+						string="Enviar hoja de recepción" class="oe_highlight" invisible="ots"
+						groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico"
+						icon="fa-envelope" />
 					<!-- CREAR BOTON DE CREAR OT -->
-					<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
-					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
-					<button string="Iniciar servicio" name="init_servicio" type="object" class="oe_highlight" invisible="action_servicio" />
-					<button string="Finalizar servicio" name="cancel_servicio" type="object" invisible="not action_servicio" />
+					<button name="action_print_report" type="object" string="Generar Reporte"
+						class="oe_highlight" />
+					<button name="create_ot" string="Crear OT" type="object"
+						invisible="is_tecnico or ots" class="oe_highlight" />
+					<button string="Iniciar servicio" name="init_servicio" type="object"
+						class="oe_highlight" invisible="action_servicio" />
+					<button string="Finalizar servicio" name="cancel_servicio" type="object"
+						invisible="not action_servicio" />
 				</header>
 				<sheet>
 					<div class="oe_button_box" name="button_box">
 						<!-- BOTON DE COTIZACIONES -->
-						<button class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-pencil-square-o">
+						<button class="oe_stat_button" type="object" name="action_view_cotizaciones"
+							icon="fa-pencil-square-o">
 							<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo" />
 						</button>
-						<button class="oe_stat_button" type="object" name="action_view_ot" icon="fa-wrench">
+						<button class="oe_stat_button" type="object" name="action_view_ot"
+							icon="fa-wrench">
 							<field string="Orden de trabajo" name="cantidad_ot" widget="statinfo" />
 						</button>
 					</div>
@@ -262,6 +276,7 @@
 							<field name="color" widget="color_picker" invisible="1" />
 							<field name="name" />
 							<field name="cliente" />
+							<field name="fecha_j" />
 						</group>
 						<group>
 							<field name="tipo" />
@@ -271,15 +286,18 @@
 							<field name="sale_order" invisible="1" />
 						</group>
 					</group>
-					<field nolabel="1" name="planequipo" readonly="not id" context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
-    							<tree>
-    								<field name="equipo"/>
-    								<field name="plan"/>
-    								<field name="fecha_ejec"/>
-    								<field name="estado"/>
-    								<button name="create_certificado_operatividad" string="Generar Certificado" type="object" groups="pmant.group_pmant_admin" class="btn-primary"/>
-    							</tree>
-						</field>
+					<field nolabel="1" name="planequipo" readonly="not id"
+						context="{'default_cliente': cliente, 'default_ubicacion': ubicacion , 'default_tarea': id}">
+						<tree>
+							<field name="equipo" />
+							<field name="plan" />
+							<field name="fecha_ejec" />
+							<field name="estado" />
+							<button name="create_certificado_operatividad"
+								string="Generar Certificado" type="object"
+								groups="pmant.group_pmant_admin" class="btn-primary" />
+						</tree>
+					</field>
 					<notebook>
 						<page string="Detalles de Venta" name="detalle_venta">
 							<field name="notas" placeholder="Notas de la tarea" widget="html"></field>
@@ -305,7 +323,8 @@
 									<field name="schedule_date" />
 									<field name="duration" />
 									<field name="user_id" />
-									<button name="action_view_ots" class="btn btn-link" type="object" string="Ver detalles">
+									<button name="action_view_ots" class="btn btn-link"
+										type="object" string="Ver detalles">
 									</button>
 								</tree>
 							</field>
@@ -320,7 +339,8 @@
 										<field name="comentario" string="Comentario de la imagen" />
 									</tree>
 								</field>
-								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
+								<field name="comentario_tecnico"
+									placeholder="Comentario de recepcion" />
 								<field name="firma_evaluacion" string="Firma" widget="signature" />
 								<field name="firmante" />
 								<field name="comentario_firma" />
@@ -336,7 +356,10 @@
 			</form>
 		</field>
 	</record>
-	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="tarea_list_action" />
-	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request" action="tarea_list_action" />
-	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title" action="reporte_tecnico_list_action" />
+	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos"
+		parent="maintenance.menu_m_request" action="tarea_list_action" />
+	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request"
+		action="tarea_list_action" />
+	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title"
+		action="reporte_tecnico_list_action" />
 </odoo>

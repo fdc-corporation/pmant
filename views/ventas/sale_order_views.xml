@@ -16,13 +16,15 @@
         <field name="arch" type="xml">
             <form string="Seleccionar Equipos">
                 <group>
-                    <field name="order_id" readonly="1"  />
-                    <field name="ubicacion"/>
-                    <field name="equipment_ids" domain="[('ubicacion', '=', ubicacion)]" widget="many2many_tags"/>
+                    <field name="order_id" readonly="1" />
+                    <field name="ubicacion" />
+                    <field name="equipment_ids" domain="[('ubicacion', '=', ubicacion)]"
+                        widget="many2many_tags" />
                 </group>
                 <footer>
-                    <button string="Agregar" type="object" name="action_add_equipment" class="btn-primary"/>
-                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button string="Agregar" type="object" name="action_add_equipment"
+                        class="btn-primary" />
+                    <button string="Cancelar" class="btn-secondary" special="cancel" />
                 </footer>
             </form>
         </field>
@@ -32,10 +34,13 @@
     <record id="view_sale_order_form_inherit_with_equipment" model="ir.ui.view">
         <field name="name">sale.order.form.inherit.with.equipment</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
+                <button name="%(action_open_equipment_selection_wizard)d" type="action"
+                    string="Agregar un Equipo" class="oe_highlight" icon="fa-plus" />
+                <button name="create_info_manual" type="object" string="Crear servicio"
+                    class="oe_highlight" />
             </xpath>
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="titulo_cotizacion"></field>
@@ -47,27 +52,23 @@
     </record>
 
 
-
-
-
-
     <record id="inherit_view_id_inherit_module_name" model="ir.ui.view">
         <field name="name">sale.order.view.form.inherit</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_confirm'][2]" position="after">
-                <field name="is_servicio" invisible="1"/>
+                <field name="is_servicio" invisible="1" />
                 <button name="action_open_wizard_sale"
-                        id="action_open_wizard_sale"
-                        string="Confirmar"
-                        type="object"
-                        invisible="state not in ['draft', 'sent'] or not is_servicio"/>
+                    id="action_open_wizard_sale"
+                    string="Confirmar"
+                    type="object"
+                    invisible="state not in ['draft', 'sent'] or not is_servicio" />
                 <button name="action_print_sale"
-                        id="action_print_sale"
-                        class="oe_stat_button"
-                        string="Generar PDF"
-                        type="object"/>
+                    id="action_print_sale"
+                    class="oe_stat_button"
+                    string="Generar PDF"
+                    type="object" />
             </xpath>
 
             <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
@@ -82,19 +83,19 @@
         <field name="name">wizard.sale.order.form</field>
         <field name="model">wizard.sale.order</field>
         <field name="arch" type="xml">
-        <form string="Confirmacion de venta">
+            <form string="Confirmacion de venta">
                 <sheet>
                     <div class="alert alert-warning">
-                        <p>
-                            ¿Estás seguro de confirmar? Tiene un producto <b>Servicio</b> pero no has anexado un equipo.
-                        </p>
+                        <p> ¿Estás seguro de confirmar? Tiene un producto <b>Servicio</b> pero no
+                            has anexado un equipo. </p>
                     </div>
                 </sheet>
                 <footer>
-                    <button name="confirm_sale" string="Confirmar de todas formas" type="object" class="btn-primary"/>
-                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button name="confirm_sale" string="Confirmar de todas formas" type="object"
+                        class="btn-primary" />
+                    <button string="Cancelar" class="btn-secondary" special="cancel" />
                 </footer>
-            </form>        
+            </form>
         </field>
     </record>
 

@@ -102,7 +102,7 @@ class Tarea(models.Model):
     )
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
     cantidad_ot = fields.Integer(string="Cantidad de OTs", compute="_get_cantidad_ot")
-
+    fecha_j = fields.Date(string="Fecha ejecutada")
 
     def search_sale_order(self):
         for res in self:

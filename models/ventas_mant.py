@@ -4,10 +4,40 @@ from odoo.exceptions import UserError
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    ots = fields.Many2one("tarea.mantenimiento", string="Tarea", domain="[('sale_order', '=', False)]")
+    ots = fields.One2many("tarea.mantenimiento", "sale_order", string="Tarea", domain="[('sale_order', '=', False)]")
     servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
     is_servicio = fields.Boolean(string="Es servicio", compute="verify_service")
     titulo_cotizacion = fields.Char(string="Título de la cotización")
+
+
+    def create_info_manual(self):
+        for order in self:
+            if order.ots:
+                continue  # Ya tiene tarea asignada
+
+            equipo_lines = order.order_line.filtered(lambda l: l.id_equipo)
+            if not equipo_lines:
+                continue
+
+            try:
+                group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
+                user = self.env['res.users'].search([('groups_id', 'in', group.id), ('active', '=', True)], limit=1) if group else False
+                format_html_nota = self.template_format_nota(order)
+                mantenimiento_vals = {
+                    "name": f"{order.name} - {order.titulo_cotizacion}",
+                    "cliente": order.partner_id.id,
+                    "ubicacion": order.partner_shipping_id.id,
+                    "create_user": user.id,
+                    "creado_por": user.id,
+                    "oc_id": order.oc_id.id if order.oc_id else False,
+                    "sale_order": order.id,
+                    "notas": format_html_nota,
+                }
+                mantenimiento = self.env["tarea.mantenimiento"].create(mantenimiento_vals)
+
+            except Exception as e:
+                raise UserError(f"Error al crear la solicitud de mantenimiento: {str(e)}")
+            
 
 
     def action_print_sale(self):
@@ -92,12 +122,13 @@ class SaleOrder(models.Model):
                 if lines_to_add:
                     mantenimiento.write({"planequipo": lines_to_add})
                     order.ots = mantenimiento
-
-                    # Actualizar estado de OC si aplica
-                    if order.oc_id:
-                        estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
-                        if estado:
-                            order.oc_id.state = estado.id
+                    model = self.env["sale.order"]
+                    if "oc_id" in model._fields:
+                        # Actualizar estado de OC si aplica
+                        if order.oc_id:
+                            estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
+                            if estado:
+                                order.oc_id.state = estado.id
 
             except Exception as e:
                 raise UserError(f"Error al crear la solicitud de mantenimiento: {str(e)}")
