@@ -12,12 +12,7 @@ class SaleOrder(models.Model):
 
     def create_info_manual(self):
         for order in self:
-            if order.ots:
-                continue  # Ya tiene tarea asignada
-
             equipo_lines = order.order_line.filtered(lambda l: l.id_equipo)
-            if not equipo_lines:
-                continue
 
             try:
                 group = self.env.ref('pmant.group_pmant_planner_tarea', raise_if_not_found=False)
