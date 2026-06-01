@@ -35,8 +35,8 @@ class PlanEquipo(models.Model):
     is_informe_file = fields.Boolean(string="Subir Informe Tecnico", default=False)
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
     informe_filename = fields.Char(string="Nombre del archivo")
-    decibel_equipo_ids = fields.One2many('decibel.equipo', 'planequipo_id', string="Decibel del equipo")
-    
+    # decibel_equipo_ids = fields.One2many('decibel.equipo', 'planequipo_id', string="Decibel del equipo")
+
 
     
 
