@@ -3,6 +3,7 @@ from odoo.http import request, route, Controller
 import smtplib
 from math import ceil
 from email.mime.multipart import MIMEMultipart
+from datetime import date, datetime
 from email.mime.text import MIMEText
 import logging
 import base64
