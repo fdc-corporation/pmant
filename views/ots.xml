@@ -38,7 +38,9 @@
 				<button name="action_fech_up" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" invisible="stage_id != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
 
 			</xpath>
-		
+			<xpath expr="//div[@class='oe_title']" position="before">
+                <widget name="web_ribbon" title="Requiere Repuestos" bg_color="text-bg-warning" invisible="not require_repuestos"/>
+			</xpath>
 			<xpath expr="//field[@name='maintenance_type']" position="after">
 				<field name="id" invisible="1" />
 				<!-- <field name="estado" invisible="1" /> -->
@@ -65,7 +67,6 @@
 			</xpath>
 			<xpath expr="//field[@name='priority']" position="after">
 				<field name="duration" ></field>
-
 			</xpath>
 			<xpath expr="//page" position="after">
 				<page string="Programación">
@@ -183,6 +184,7 @@
 		<field name="arch" type="xml">
 			<xpath expr="//t[@t-name='card']" position="replace">
 				<t t-name="card">
+	                <widget name="web_ribbon" title="Repuestos" bg_color="text-bg-warning" invisible="not require_repuestos"/>
 					<div>
 						<div class="titulo d-flex align-items-center gap-2">
 							<field class="fw-bold fs-5" name="name"/>
@@ -204,11 +206,6 @@
 						</div>
 						<div class="d-none">
 							<span class="d-none hidden" name="owner_user_id" t-if="record.owner_user_id.raw_value">Solicitado por: 
-								
-								
-								
-								
-								
 								<field name="owner_user_id"/>
 							</span>
 						</div>

@@ -36,9 +36,8 @@ class PlanEquipo(models.Model):
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
     informe_filename = fields.Char(string="Nombre del archivo")
     # decibel_equipo_ids = fields.One2many('decibel.equipo', 'planequipo_id', string="Decibel del equipo")
+    require_repuestos = fields.Boolean(string="Requiere repuestos", default=False)
 
-
-    
 
     def data_parametros(self):
         return [

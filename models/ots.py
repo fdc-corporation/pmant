@@ -65,7 +65,7 @@ class MaintenanceRequestOTS(models.Model):
         store=True,
     )
     fecha_acta = fields.Date(string="Fecha Acta de Conformidad")
-
+    require_repuestos = fields.Boolean(string="Tiene Repuestos", related="tarea.planequipo.require_repuestos", store=True)
     # --------------------
     # Computes
     # --------------------
@@ -164,6 +164,14 @@ class MaintenanceRequestOTS(models.Model):
         records = super().create(vals_list)
         # Evitar abrir UI: encolar envíos de correo en background si hay plantilla
         try:
+            for record in self:
+                if not record.tarea.tipo:
+                    raise ValidationError(_("El campo 'Tipo de Servicio' es obligatorio para programar la tarea."))
+                if record.tarea.planequipo:
+                    for plan in record.tarea.planequipo:
+                        if not plan.plan:
+                            raise ValidationError(_("El campo 'Plan de Tarea' es obligatorio para programar la tarea."))
+
             print("Creando/actualizando programación inicial para OTs...")
 
             records.action_programacion_inicial()

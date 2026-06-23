@@ -292,7 +292,20 @@
 						<page string="Detalles de Venta" name="detalle_venta">
 							<field name="notas" placeholder="Notas de la tarea" widget="html"></field>
 						</page>
-						<page name="firma" string="Datos del firmante">
+						<page string="Hoja de Recepcion" invisible="not is_evaluacion ">
+							<group>
+								<field name="create_user" />
+								<field name="fecha_entrada" />
+								<field name="adjuntos_evaluaciones">
+									<list editable="bottom">
+										<field name="adjuntoimage" string="Imagen de evaluacion" />
+										<field name="comentario" string="Comentario de la imagen" />
+									</list>
+								</field>
+								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
+							</group>
+						</page>
+						<page name="firma" string="Firma del cliente">
 							<group>
 								<field name="adjunto" string="Firma" widget="signature" />
 								<field name="namefirma" />
@@ -302,7 +315,14 @@
 								<field name="fecha_hoy" invisible="1" />
 							</group>
 						</page>
-						<page string="OTs" invisible="is_tecnico">
+						<page name="firma_tec" string="Firma del Tecnico">
+							<group>
+								<field name="firma_evaluacion" string="Firma" widget="signature" />
+								<field name="firmante" />
+								<field name="comentario_firma" />
+							</group>
+						</page>
+						<page string="OTs" invisible="1">
 							<field name="ots">
 								<list>
 									<field name="name" />
@@ -320,22 +340,7 @@
 							<field name="user_id" invisible="1"></field>
 							<field name="prioridad" invisible="1"></field>
 						</page>
-						<page string="Hoja de Recepcion" invisible="not is_evaluacion ">
-							<group>
-								<field name="create_user" />
-								<field name="fecha_entrada" />
-								<field name="adjuntos_evaluaciones">
-									<list editable="bottom">
-										<field name="adjuntoimage" string="Imagen de evaluacion" />
-										<field name="comentario" string="Comentario de la imagen" />
-									</list>
-								</field>
-								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
-								<field name="firma_evaluacion" string="Firma" widget="signature" />
-								<field name="firmante" />
-								<field name="comentario_firma" />
-							</group>
-						</page>
+						
 					</notebook>
 				</sheet>
 				<chatter/>

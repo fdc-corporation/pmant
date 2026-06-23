@@ -12,7 +12,7 @@
                    <attribute name="required">True</attribute>
 	        </xpath>
             <xpath expr="//page[@name='sales_purchases']" position="after">
-                <page name="equipos" string="Equipos">
+                <page name="equipos" string="Equipos" invisible="parent_id"> 
                      <field name="equipos" string="Equipos"/>
                 </page>
                 <!--

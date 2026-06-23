@@ -91,7 +91,6 @@ class Tarea(models.Model):
     count_ots = fields.Integer(string="Cantidad de OTs", compute="_compute_count_ots", store=False)
 
 
-
     # ----------------------------
     # Computed / Constraints
     # ----------------------------
@@ -381,6 +380,14 @@ class Tarea(models.Model):
             }
 
     def create_ot(self):
+        for record in self:
+            if not record.tipo:
+                raise ValidationError(_("El campo 'Tipo de Servicio' es obligatorio para programar la tarea."))
+            if record.planequipo:
+                for plan in record.planequipo:
+                    if not plan.plan:
+                        raise ValidationError(_("El campo 'Plan de Tarea' es obligatorio para programar la tarea."))
+
         self.stage_id = self.env['etapa.tarea.mantenimiento'].search([], order='sequence asc', limit=1).id
         return {
             "type": "ir.actions.act_window",

@@ -181,6 +181,9 @@
 													<br />
 													N° de Serie:
 													<span t-field="pe.equipo.serial_no" />
+													<br />
+													Modelo:
+													<span t-field="pe.equipo.model" />
 												</td>
 											</tr>
 										</tbody>
@@ -344,17 +347,27 @@
 											</t>
 										</t>
 										<div id="conclusiones">
-                                    
-                                  <h4 t-if="pe.nota_observaciones" style="font-size:12px;"><strong>Observaciones general</strong></h4>
-                                  <span t-if="pe.nota_observaciones" style="font-size:11px;" t-field="pe.nota_observaciones"/>
-                                  <hr t-if="pe.nota_observaciones"/>
-                                  <h4 t-if="pe.nota_mantenimiento" style="font-size:12px;"><strong>Conclusiones</strong></h4>
-                                  <span t-if="pe.nota_mantenimiento" style="font-size:11px;" t-field="pe.nota_mantenimiento"/>
-                                  <hr t-if="pe.nota_mantenimiento"/>
-                                  <h4 t-if="pe.nota_recomendaciones" style="font-size:12px;"><strong>Recomendaciones</strong></h4>
-                                  <span t-if="pe.nota_recomendaciones" style="font-size:11px;" t-field="pe.nota_recomendaciones"/>
-                                  
-                                </div>
+											<h4 t-if="pe.nota_observaciones" style="font-size:12px;">
+												<strong>
+													Observaciones general
+												</strong>
+											</h4>
+											<span t-if="pe.nota_observaciones" style="font-size:11px;" t-field="pe.nota_observaciones" />
+											<hr t-if="pe.nota_observaciones" />
+											<h4 t-if="pe.nota_mantenimiento" style="font-size:12px;">
+												<strong>
+													Conclusiones
+												</strong>
+											</h4>
+											<span t-if="pe.nota_mantenimiento" style="font-size:11px;" t-field="pe.nota_mantenimiento" />
+											<hr t-if="pe.nota_mantenimiento" />
+											<h4 t-if="pe.nota_recomendaciones" style="font-size:12px;">
+												<strong>
+													Recomendaciones
+												</strong>
+											</h4>
+											<span t-if="pe.nota_recomendaciones" style="font-size:11px;" t-field="pe.nota_recomendaciones" />
+										</div>
 									</div>
 								</div>
 							</div>

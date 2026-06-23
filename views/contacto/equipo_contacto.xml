@@ -13,15 +13,12 @@
             <xpath expr="//field[@name='website']" position="before">
                 <field name="email_jefe" />
             </xpath>
-            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='equipos']" position="attributes">
-                <attribute name="invisible">parent_id</attribute>
-            </xpath>
             <xpath expr="/form/sheet/group/group/div" position="after">
                 <field name="type" />
             </xpath>
             <!-- Inserta una nueva página en el notebook -->
             <xpath expr="//notebook" position="inside">
-                <page string="Equipos" invisible="is_tecnico">
+                <page string="Equipos Sede" invisible="not parent_id">
                     <field name="is_tecnico" invisible="true"></field>
                     <field name="equipos_ubicacion">
                         <list string="Equipos">
