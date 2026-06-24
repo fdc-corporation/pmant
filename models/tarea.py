@@ -103,6 +103,8 @@ class Tarea(models.Model):
 
     def _compute_count_ots(self):
         for rec in self:
+            rec.firma_evaluacion = rec.ots[0].user_id.employee_id.firma if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id else False
+            rec.firmante = rec.ots[0].user_id.employee_id.name if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id else False
             rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):
