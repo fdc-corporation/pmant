@@ -76,8 +76,21 @@ class Tarea(models.Model):
     fecha_hoy = fields.Char(string="Fecha Formateada", compute="_compute_fecha_formateada")
     is_evaluacion = fields.Boolean(string="Es Hoja de Recepcion")
     is_tecnico = fields.Boolean(compute='_compute_is_tecnico', string='Is Técnico', store=False)
-    firma_evaluacion = fields.Binary(attachment=True)
-    firmante = fields.Char(string="Nombre del firmante")
+    firma_evaluacion = fields.Binary(
+        string="Firma Evaluación",
+        attachment=True,
+        compute='_compute_firma_firmante',
+        store=True,
+        copy=False,
+        readonly=False,
+    )
+    firmante = fields.Char(
+        string="Nombre del firmante",
+        compute='_compute_firma_firmante',
+        store=True,
+        copy=False,
+        readonly=False,
+    )
     comentario_firma = fields.Text('Comentario del firmante')
     action_servicio = fields.Boolean(string="Is init servicio")
     active_servicio = fields.Boolean(string="Tiene Programacion?", compute="_compute_active_servicio")
@@ -101,34 +114,36 @@ class Tarea(models.Model):
                 self.sale_order = sale_order
                 res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
 
-    def _get_firma_safe(self, employee):
-        """
-        Retorna la firma en base64 válido o False.
-        Evita el error: Invalid base64-encoded string.
-        """
-        if not employee or not employee.firma:
-            return False
-        
-        import base64
-        try:
-            # Verificamos que sea base64 válido antes de asignar
-            firma = employee.firma
-            # Si es bytes lo convertimos a string
-            if isinstance(firma, bytes):
-                firma = firma.decode('utf-8')
-            # Validamos que sea decodificable
-            base64.b64decode(firma, validate=True)
-            return firma
-        except Exception:
-            return False
 
-    def _compute_count_ots(self):
+    @api.depends('ots', 'ots.user_id', 'ots.user_id.employee_id', 'ots.user_id.employee_id.firma')
+    def _compute_firma_firmante(self):
+        import base64
         for rec in self:
             employee = None
             if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id:
                 employee = rec.ots[0].user_id.employee_id
-                rec.firma_evaluacion = self._get_firma_safe(employee)
-                rec.firmante = employee.name if employee else False
+
+            rec.firmante = employee.name if employee else False
+
+            if not employee or not employee.firma:
+                rec.firma_evaluacion = False
+                continue
+
+            try:
+                firma = employee.firma
+                if isinstance(firma, bytes):
+                    firma = firma.decode('utf-8')
+                missing = len(firma) % 4
+                if missing:
+                    firma += '=' * (4 - missing)
+                base64.b64decode(firma, validate=True)
+                rec.firma_evaluacion = firma
+            except Exception:
+                rec.firma_evaluacion = False
+
+
+    def _compute_count_ots(self):
+        for rec in self:
             rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):
