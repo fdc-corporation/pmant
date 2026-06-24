@@ -317,7 +317,7 @@
 						</page>
 						<page name="firma_tec" string="Firma del Tecnico">
 							<group>
-								<field name="firma_evaluacion" string="Firma" widget="signature" />
+								<field name="firma_evaluacion" string="Firma" widget="image" />
 								<field name="firmante" />
 								<field name="comentario_firma" />
 							</group>
