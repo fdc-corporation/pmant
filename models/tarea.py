@@ -101,10 +101,34 @@ class Tarea(models.Model):
                 self.sale_order = sale_order
                 res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
 
+    def _get_firma_safe(self, employee):
+        """
+        Retorna la firma en base64 válido o False.
+        Evita el error: Invalid base64-encoded string.
+        """
+        if not employee or not employee.firma:
+            return False
+        
+        import base64
+        try:
+            # Verificamos que sea base64 válido antes de asignar
+            firma = employee.firma
+            # Si es bytes lo convertimos a string
+            if isinstance(firma, bytes):
+                firma = firma.decode('utf-8')
+            # Validamos que sea decodificable
+            base64.b64decode(firma, validate=True)
+            return firma
+        except Exception:
+            return False
+
     def _compute_count_ots(self):
         for rec in self:
-            rec.firma_evaluacion = rec.ots[0].user_id.employee_id.firma if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id else False
-            rec.firmante = rec.ots[0].user_id.employee_id.name if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id else False
+            employee = None
+            if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id:
+                employee = rec.ots[0].user_id.employee_id
+                rec.firma_evaluacion = self._get_firma_safe(employee)
+                rec.firmante = employee.name if employee else False
             rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):
