@@ -246,7 +246,7 @@ class OTS(models.Model):
     def _change_createui(self):
         for record in self:
             self._validacion_etapas()
-            if not record.tarea.planequipo.is_informe_file:
+            if any(plan.is_informe_file for plan in record.mapped("tarea.planequipo")):
                 if self.stage_id.sequence == 3:
                     self._fecha_estado()
                     # self.action_open_wizard()
