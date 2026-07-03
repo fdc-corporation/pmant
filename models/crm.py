@@ -25,6 +25,14 @@ class CrmLead(models.Model):
                         'id_equipo' : equipo.id
 
                     })
-                    
+                
+                return {
+                    "type": "ir.actions.act_window",
+                    "name": "Cotización",
+                    "view_mode": "form",
+                    "res_model": "sale.order",
+                    "res_id": cotizacion.id,
+                    "context": {"create": False},
+                }
             else :
                 raise UserError('Debe seleccionar un equipo para generar la cotización.')

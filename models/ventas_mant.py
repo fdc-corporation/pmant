@@ -11,8 +11,18 @@ class SaleOrder(models.Model):
     is_servicio = fields.Boolean(
         string="Es servicio", compute="_compute_verify_service")
     titulo_cotizacion = fields.Char(string="Título de la cotización")
+    state_servicio = fields.Char(string="Estado de servicio")
+    field_compute = fields.Boolean(string="Campo calculado", compute="_compute_fields")
 
 
+    def _compute_fields(self):
+        for record in self:
+            if record.ots:
+                record.state_servicio = record.ots.ots[0].stage_id.name 
+                record.field_compute = record.ots.ots[0].stage_id.name 
+            else:
+                record.state_servicio = False
+                record.field_compute = False
 
     def copy(self, default=None):
         default = dict(default or {})
