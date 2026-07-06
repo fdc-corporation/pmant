@@ -95,6 +95,7 @@
             </xpath>
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="titulo_cotizacion"></field>
+                <field name="field_compute" invisible="1"></field>
             </xpath>
             <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
                 <field name="id_equipo" column_invisible="1"></field>
