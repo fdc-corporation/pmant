@@ -109,11 +109,10 @@ class Tarea(models.Model):
     # ----------------------------
     def search_sale_order(self):
         for res in self:
-            if not res.sale_order:
-                sales = self.env["sale.order"].search([("ots", "=", res.id)])
-                sale_order = sales
-                for sale in sales:
-                    rec.notas = sale.template_format_nota(sale) if sale else ""
+            sales = self.env["sale.order"].search([("ots", "in", res.id)])
+            self.sale_order = sales
+            for sale in sales:
+                res.notas = sale.template_format_nota(sale) if sale else ""
 
 
     @api.depends('ots', 'ots.user_id', 'ots.user_id.employee_id', 'ots.user_id.employee_id.firma')
@@ -149,7 +148,8 @@ class Tarea(models.Model):
             rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):
-        self.cotizacion_cantidad = bool(self.sale_order)
+        sales = self.env["sale.order"].search([("ots", "in", self.id)])
+        self.cotizacion_cantidad = len(sales)
         self.search_sale_order()
 
 

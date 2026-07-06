@@ -88,7 +88,7 @@
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
-                <button string="Crear Servicio" name="create_mantenimiento" type="object" class="oe_highlight" icon="fa-wrench"/>
+                <button string="Crear Servicio" group="pmant.group_pmant_planner,pmant.group_pmant_admin" name="create_mantenimiento" type="object" class="oe_highlight" icon="fa-wrench"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
                 <attribute name="domain" >[('parent_id', '=', partner_id)]</attribute>

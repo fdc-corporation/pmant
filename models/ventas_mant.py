@@ -133,8 +133,7 @@ class SaleOrder(models.Model):
                     "cliente": order.partner_id.id,
                     "ubicacion": order.partner_shipping_id.id,
                     "create_user": user.id,
-                    # "oc_id": order.oc_id.id if order.oc_id else False,
-                    "sale_order": order.id,
+                    "sale_order": [(6, 0, [order.id])],
                     "notas": format_html_nota,
                 }
                 mantenimiento = self.env["tarea.mantenimiento"].create(
