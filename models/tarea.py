@@ -96,7 +96,7 @@ class Tarea(models.Model):
     active_servicio = fields.Boolean(string="Tiene Programacion?", compute="_compute_active_servicio")
     fecha_etapa = fields.Date(string="Fecha de movimiento de etapa")
     color = fields.Integer(string='Color')
-    sale_order = fields.Many2one("sale.order", string="Orden de venta")
+    sale_order = fields.Many2many("sale.order", string="Orden de venta")
     cotizacion_cantidad = fields.Integer(compute="_compute_total_cotizaciones", store=False)
     notas = fields.Html(string="Notas", sanitize_style=True, sanitize_tags=False)
     user_id = fields.Many2one('res.users', string='Responsable', related='ots.user_id', store=True)
@@ -110,9 +110,10 @@ class Tarea(models.Model):
     def search_sale_order(self):
         for res in self:
             if not res.sale_order:
-                sale_order = self.env["sale.order"].search([("ots", "=", res.id)], limit=1)
-                self.sale_order = sale_order
-                res.notas = sale_order.template_format_nota(sale_order) if sale_order else ""
+                sales = self.env["sale.order"].search([("ots", "=", res.id)])
+                sale_order = sales
+                for sale in sales:
+                    rec.notas = sale.template_format_nota(sale) if sale else ""
 
 
     @api.depends('ots', 'ots.user_id', 'ots.user_id.employee_id', 'ots.user_id.employee_id.firma')
@@ -144,6 +145,7 @@ class Tarea(models.Model):
 
     def _compute_count_ots(self):
         for rec in self:
+            
             rec.count_ots = len(rec.ots)
 
     def _compute_total_cotizaciones(self):

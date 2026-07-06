@@ -70,7 +70,16 @@
         </field>
     </record>
 
-
+    <record id="sale_order_states_list" model="ir.ui.view">
+        <field name="name">sale.order.view.list.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="state_servicio" widget="badge" />
+            </xpath>
+        </field>
+    </record> 
     <!-- Vista de orden de venta para añadir el botón -->
     <record id="view_sale_order_form_inherit_with_equipment" model="ir.ui.view">
         <field name="name">sale.order.form.inherit.with.equipment</field>
@@ -79,6 +88,7 @@
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
+                <button string="Crear Servicio" name="create_mantenimiento" type="object" class="oe_highlight" icon="fa-wrench"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
                 <attribute name="domain" >[('parent_id', '=', partner_id)]</attribute>
