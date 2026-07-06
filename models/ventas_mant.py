@@ -17,8 +17,8 @@ class SaleOrder(models.Model):
     def _compute_fields(self):
         for record in self:
             if record.ots:
-                record.state_servicio = record.ots.ots[0].stage_id.name 
-                record.field_compute = record.ots.ots[0].stage_id.name 
+                record.state_servicio = record.ots.ots[0].stage_id.name if record.ots.ots else False
+                record.field_compute = record.ots.ots[0].stage_id.name if record.ots.ots else False
             else:
                 record.state_servicio = False
                 record.field_compute = False
