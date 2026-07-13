@@ -111,50 +111,49 @@ class PlanEquipo(models.Model):
 
    
     def create_certificado_operatividad(self):
-        ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        statement_report_action = self.env.ref("pmant.action_reporte_cert_operatividad")
-        for statement in self:
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=statement.ids
-            )
+        return self.env.ref("pmant.action_reporte_cert_operatividad").report_action(self)
+        # ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
+        # statement_report_action = self.env.ref("pmant.action_reporte_cert_operatividad")
+        # for statement in self:
+        #     statement_report = statement_report_action.sudo()
+        #     content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
+        #         statement_report, res_ids=statement.ids
+        #     )
 
-            # Crear el adjunto con el PDF generado
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": "Certificado " + self.equipo.name,
-                    "type": "binary",
-                    "mimetype": "application/pdf",
-                    "raw": content,
-                    "res_model": "sign.template",  # Asociar al modelo sign.template
-                    "res_id": None,
-                }
-            )
+        #     attachment = self.env["ir.attachment"].create(
+        #         {
+        #             "name": "Certificado " + self.equipo.name,
+        #             "type": "binary",
+        #             "mimetype": "application/pdf",
+        #             "raw": content,
+        #             "res_model": "sign.template", 
+        #             "res_id": None,
+        #         }
+        #     )
 
-            vals_template = {
-                "name": "Certificado " + self.equipo.name,
-                "equipo_id": self.equipo.id,
-            }
+        #     vals_template = {
+        #         "name": "Certificado " + self.equipo.name,
+        #         "equipo_id": self.equipo.id,
+        #     }
 
-            vals_template.pop("attachment_count", None)
+        #     vals_template.pop("attachment_count", None)
 
-            sign_template = self.env["sign.template"].create(vals_template)
-            vals_sign_document = {
-                "name": f"Certificado {self.equipo.name}",
-                "attachment_id": attachment.id,
-                "template_id": sign_template.id,
-                # "equipo_id": self.equipo.id,
-            }
-            document_sign = self.env["sign.document"].create(vals_sign_document)
-            attachment.res_id = sign_template
+        #     sign_template = self.env["sign.template"].create(vals_template)
+        #     vals_sign_document = {
+        #         "name": f"Certificado {self.equipo.name}",
+        #         "attachment_id": attachment.id,
+        #         "template_id": sign_template.id,
+        #     }
+        #     document_sign = self.env["sign.document"].create(vals_sign_document)
+        #     attachment.res_id = sign_template
 
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Certificado " + self.equipo.name,
-            "res_model": "sign.template",
-            "view_mode": "kanban",  # Esto es para ver primero la lista (tree)
-            "target": "current",
-        }
+        # return {
+        #     "type": "ir.actions.act_window",
+        #     "name": "Certificado " + self.equipo.name,
+        #     "res_model": "sign.template",
+        #     "view_mode": "kanban", 
+        #     "target": "current",
+        # }
 
 
     def create_report_equipo (self) : 
