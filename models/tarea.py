@@ -122,9 +122,8 @@ class Tarea(models.Model):
             employee = None
             if rec.ots and rec.ots[0].user_id and rec.ots[0].user_id.employee_id:
                 employee = rec.ots[0].user_id.employee_id
-
-            rec.firmante = employee.name if employee else False
-
+            iniciales_firmante = ".".join([palabra[0].upper() for palabra in employee.name.split()]) + "." if employee and employee.name else ""
+            rec.firmante = iniciales_firmante
             if not employee or not employee.firma:
                 rec.firma_evaluacion = False
                 continue
