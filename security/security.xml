@@ -19,6 +19,13 @@
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="comment">Usuario planner de mantenimiento.</field>
     </record>
+    <record model="res.groups" id="group_pmant_supervisor">
+        <field name="name">Mantenimiento - Supervisor</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Usuario supervisor de mantenimiento.</field>
+    </record>
     <record model="res.groups" id="group_pmant_admin">
         <field name="name">Mantenimiento - Admin</field>
         <field name="sequence">20</field>
