@@ -12,6 +12,8 @@ class SaleOrder(models.Model):
     titulo_cotizacion = fields.Char(string="Título de la cotización")
     state_servicio = fields.Char(string="Estado de servicio")
     field_compute = fields.Boolean(string="Campo calculado", compute="_compute_fields")
+    ot_inspeccion = fields.Many2one("tarea.mantenimiento", string="Tarea de inspección")
+    inspecciones_cantidad = fields.Integer(compute="_total_tareas_inspeccion", store=True)
 
 
     def _compute_fields(self):
@@ -107,6 +109,60 @@ class SaleOrder(models.Model):
                     mantenimiento.planequipo.unlink()
                     mantenimiento.unlink()
             self.action_cancel()
+    def create_mantenimiento_inspeccion(self):
+        for order in self:
+            if order.ot_inspeccion:
+                continue  # Ya tiene tarea asignada
+
+            equipo_lines = order.order_line.filtered(lambda l: l.id_equipo)
+            if not equipo_lines:
+                continue
+
+            try:
+                group = self.env.ref(
+                    'pmant.group_pmant_planner', raise_if_not_found=False)
+                print("Group:", group)
+                print("Group:", group.name)
+                tipo_tarea = self.env['tipotarea.mantenimiento'].search([('is_inspeccion', '=', True)], limit=1)
+                user = self.env['res.users'].search(
+                    [('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                print("User:", user)
+
+                mantenimiento_vals = {
+                    "name": f"Servicios de Inspeccion {order.name}",
+                    "cliente": order.partner_id.id,
+                    "ubicacion": order.partner_shipping_id.id,
+                    "create_user": user.id,
+                    "sale_order": [(6, 0, [order.id])],
+                    "tipo" : tipo_tarea.id if tipo_tarea else False,
+                }
+                mantenimiento = self.env["tarea.mantenimiento"].create(
+                    mantenimiento_vals)
+                
+                lines_to_add = []
+                for line in equipo_lines:
+                    lines_to_add.append((0, 0, {
+                        "tarea": mantenimiento.id,
+                        "cliente": order.partner_id.id,
+                        "ubicacion": order.partner_shipping_id.id,
+                        "equipo": line.id_equipo.id,
+                    }))
+
+                if lines_to_add:
+                    mantenimiento.write({"planequipo": lines_to_add})
+                    mantenimiento.write({"create_user": user.id})
+                    order.ot_inspeccion = mantenimiento
+
+                    mensaje = f"Se creo una tarea tipo Inspeccion {mantenimiento.name}, revise el servicio y programelo"
+                    self.message_post(
+                        body=mensaje,
+                        message_type='comment',
+                        subtype_xmlid='mail.mt_comment',
+                        partner_ids=[user.partner_id.id],  # ← destinatario específico
+                    )
+            except Exception as e:
+                raise UserError(
+                    f"Error al crear la solicitud de Inspeccion: {str(e)}")
 
     def create_mantenimiento(self):
         for order in self:
@@ -214,10 +270,29 @@ class SaleOrder(models.Model):
             "context": {"create": False},
         }
 
+    def action_view_services_inspeccion(self):
+        self.ensure_one()
+        if not self.ot_inspeccion:
+            raise UserError(
+                "No hay tarea de inspección asociada a esta orden.")
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Tareas de Inspección",
+            "view_mode": "form",
+            "res_model": "tarea.mantenimiento",
+            "res_id": self.ot_inspeccion.id,
+            "context": {"create": False},
+        }
+
     @api.depends("ots", "state")
     def _total_tareas(self):
         for record in self:
             record.servicios_cantidad = bool(record.ots)
+
+    @api.depends("ot_inspeccion", "state")
+    def _total_tareas_inspeccion(self):
+        for record in self:
+            record.inspecciones_cantidad = bool(record.ot_inspeccion)
 
 
 class SaleOrderLine(models.Model):

@@ -10,8 +10,13 @@
                             icon="fa-wrench">
                             <field string="Servicios" name="servicios_cantidad" widget="statinfo"/>
                     </button>
+                    <button class="oe_stat_button" type="object" name="action_view_services_inspeccion"
+                            icon="fa-wrench">
+                            <field string="Inspecciones" name="inspecciones_cantidad" widget="statinfo"/>
+                    </button>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']"  position="after">
+                <field name="ot_inspeccion" string="Tarea de inspección" />
                 <field name="ots" string="Tarea" invisible="state == 'draft'"  />
             </xpath>
         </field>

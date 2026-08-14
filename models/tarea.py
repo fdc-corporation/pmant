@@ -31,7 +31,7 @@ class EtapaTarea(models.Model):
 class TipoTarea(models.Model):
     _name = 'tipotarea.mantenimiento'
     name = fields.Char(required=True, string='Nombre')
-
+    is_inspeccion = fields.Boolean(string="Es Inspección", default=False, help="Indica si este tipo de tarea es una inspección.")
 
 class Tarea(models.Model):
     _name = 'tarea.mantenimiento'
@@ -515,4 +515,125 @@ class Tarea(models.Model):
             "res_model": "maintenance.request",
             "res_id": self.ots[0].id,
             "context": {"create": False},
+        }
+
+
+
+    def ss_whatsapp_inbox_start_freeform(self, partner_id, account_id, body):
+        self._ensure_ss_whatsapp_inbox_access()
+
+        partner = self.env["res.partner"].browse(
+            int(partner_id)
+        ).exists()
+
+        if not partner:
+            raise UserError(_("Contact not found."))
+
+        body = (body or "").strip()
+
+        if not body:
+            raise UserError(_("Write a message."))
+
+        account = self.env["whatsapp.account"].browse(
+            int(account_id)
+        ).exists()
+
+        if not account:
+            raise UserError(_("WhatsApp account not found."))
+
+        if not account.is_apichat():
+            raise UserError(_("This action requires an ApiChat account."))
+
+        phone = self._ss_whatsapp_inbox_partner_phone(partner)
+
+        if not phone:
+            raise UserError(
+                _("The contact does not have a valid phone number.")
+            )
+
+        # Normalizar:
+        # +51 986 040 165 -> 51986040165
+        import re
+
+        number = re.sub(r"\D", "", phone)
+
+        if not number:
+            raise UserError(_("Invalid phone number."))
+
+        # ---------------------------------------------------------
+        # Crear / obtener canal Odoo
+        # ---------------------------------------------------------
+
+        formatted_number = partner._whatsapp_phone_format(
+            number=phone
+        )
+
+        channel = self._get_whatsapp_channel(
+            formatted_number,
+            account,
+            sender_name=partner.display_name,
+            create_if_not_found=True,
+        )
+
+        if (
+            self.env.user.partner_id
+            not in channel.channel_member_ids.partner_id
+        ):
+            channel.sudo().add_members(
+                partner_ids=self.env.user.partner_id.ids,
+                post_joined_message=False,
+            )
+
+        # ---------------------------------------------------------
+        # INICIO DE CONVERSACIÓN NUEVA POR APICHAT
+        # ---------------------------------------------------------
+
+        wa_api = WhatsAppApi(account)
+
+        provider_id = wa_api._send_apichat_new_conversation(
+            number=number,
+            text=body,
+        )
+
+        if not provider_id:
+            raise UserError(
+                _("ApiChat did not return a message ID.")
+            )
+
+        # ---------------------------------------------------------
+        # Registrar el mensaje en Odoo DESPUÉS del envío exitoso
+        # ---------------------------------------------------------
+
+        mail_message = self.env["mail.message"].create({
+            "model": "discuss.channel",
+            "res_id": channel.id,
+            "body": Markup("<p>%s</p>") % body,
+            "message_type": "whatsapp_message",
+            "author_id": self.env.user.partner_id.id,
+            "subtype_id": self.env[
+                "ir.model.data"
+            ]._xmlid_to_res_id("mail.mt_note"),
+        })
+
+        self.env["whatsapp.message"].sudo().create({
+            "mail_message_id": mail_message.id,
+            "mobile_number": number,
+            "message_type": "outbound",
+            "state": "sent",
+            "msg_uid": provider_id,
+            "free_text_json": "{}",
+            "wa_template_id": False,
+            "wa_account_id": account.id,
+        })
+
+        if channel.ss_whatsapp_inbox_status in (
+            "new",
+            "pending",
+            "awaiting_response",
+        ):
+            channel.ss_whatsapp_inbox_status = "in_progress"
+
+        return {
+            "channel_id": channel.id,
+            "data": channel.ss_whatsapp_inbox_open(),
         }
