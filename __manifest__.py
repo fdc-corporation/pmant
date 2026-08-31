@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 {
     "name": "pmant",
-    "summary": """
-            Modulo para Fdcorp""",
-    "description": """
-        Long description of module's purpose
-    """,
+    "summary": "Gestión integral de equipos y servicios técnicos para FDC",
+    "description": """Gestión de equipos, planes, tareas, órdenes de trabajo,
+programaciones, documentos, firmas y portal de clientes.""",
     "author": "Yostin Palacios Calle",
     "website": "http://fdc-corporation.com",
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
-    "category": "Uncategorized",
-    "version": "1.9",
+    "category": "Services/Maintenance",
+    "version": "19.0.2.23.0",
     # any module necessary for this one to work correctly
     "depends": [
         "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",
         "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign", "stock",
+        "website", "website_sale",
     ],
     # always loaded
     "data": [

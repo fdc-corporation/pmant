@@ -2,6 +2,8 @@
 <odoo>
 	<template id="evaluaciones_equipo" name="Historial de Evaluaciones del Equipo">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -92,12 +94,12 @@
 							<t t-set="item" t-value="0" />
 							<t t-foreach="tareas" t-as="plan">
 								<t t-set="item" t-value="item + 1" />
-								<div style="background: white;overflow: hidden;border-radius: 10px;box-shadow:0px 3px 14px 0px rgba(0, 0, 0, 0.21);height: max-content;" class="accordion" t-att-id="'accordionExample' + str(item)">
+								<div class="accordion pmant-evaluation-card" t-att-id="'accordionExample' + str(item)">
 									<div class="accordion-item">
 										<h2 class="accordion-header">
-											<button style="display:flex; flex-flow:row; gap:5px;" class="accordion-button" type="button" data-bs-toggle="collapse" t-att-data-bs-target="'#collapse' +  str(item)" aria-expanded="true" aria-controls="collapseOne">
-												<span t-esc="str(item) + &quot;.&quot;">
-												</span>
+											<button style="display:flex; flex-flow:row; gap:5px;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" t-att-data-bs-target="'#collapse' + str(item)" aria-expanded="false" t-att-aria-controls="'collapse' + str(item)">
+											<span class="pmant-evaluation-number" t-esc="str(item)"/>
+											<span class="pmant-action-icon small"><i class="fa fa-clipboard"/></span>
 												<t t-esc="equipo.name" />
 												-
 												<t t-esc="plan.name" />
@@ -131,26 +133,23 @@
 														Fotos de recepción
 													</strong>
 												</p>
-												<div stye="display:flex; gap:5px;">
-													<t t-foreach="plan.adjuntos_evaluaciones" t-as="adjunto">
-														<t t-if="len(plan.adjuntos_evaluaciones) > 0">
-															<img class="zoomable-image" t-att-src="'data:image/jpeg;base64,' + adjunto.adjuntoimage.decode('utf-8')" style="width:80px;height:80px;border: 1px solid #e2e2e2;" />
-															<!-- <p t-esc="adjunto.adjuntoimage" /> -->
-														</t>
-														<t t-else="">
-															<p>
-																Aun sin imagenes de recepcion
-															</p>
-														</t>
-													</t>
-												</div>
+																<div class="pmant-evaluation-photos">
+																	<t t-if="plan.adjuntos_evaluaciones">
+																		<t t-foreach="plan.adjuntos_evaluaciones" t-as="adjunto">
+																			<img class="zoomable-image" t-att-src="'data:image/jpeg;base64,' + adjunto.adjuntoimage.decode('utf-8')" style="width:80px;height:80px;border: 1px solid #e2e2e2;" />
+																		</t>
+																	</t>
+																		<t t-else="">
+																			<p>Sin imágenes de recepción</p>
+																		</t>
+																</div>
 												<hr>
 												</hr>
 												<p style="margin-top:8px;">
 													<strong>
 														Fecha de recepción:
 													</strong>
-													<t t-esc="plan.fecha_entrada" />
+													<t t-esc="plan.fecha_entrada.strftime('%d/%m/%Y') if plan.fecha_entrada else 'No registrada'" />
 												</p>
 											</div>
 										</div>

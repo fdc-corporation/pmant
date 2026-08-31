@@ -17,10 +17,6 @@ _logger = logging.getLogger(__name__)
 
 class MaintenanceRequestOTS(models.Model):
     _inherit = "maintenance.request"
-    _name = "maintenance.request"  # asegúrate de no duplicar este modelo
-
-    # 👇 Agregamos herencia de mail.thread y mail.activity.mixin
-    _inherit = ["maintenance.request", "mail.thread", "mail.activity.mixin"]
 
     # --------------------
     # Campos
@@ -89,8 +85,8 @@ class MaintenanceRequestOTS(models.Model):
 
     def get_cantidad_documentos(self):
         for rec in self:
-            rec.document_count = self.env["sign.request"].search_count(
-                [("state", "=", "signed"), ("ot_id", "=", rec.id)]
+            rec.document_count = self.env["sign.template"].search_count(
+                [("ot_id", "=", rec.id)]
             )
 
     @api.depends_context("uid")
@@ -111,11 +107,11 @@ class MaintenanceRequestOTS(models.Model):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": "Documentos Firmados",
-            "res_model": "sign.request",
+            "name": "Documentos de firma",
+            "res_model": "sign.template",
             "view_mode": "kanban,form",
             "target": "current",
-            "domain": [("state", "=", "signed"), ("ot_id", "=", self.id)],
+            "domain": [("ot_id", "=", self.id)],
             "context": {"default_ot_id": self.id},
         }
 
@@ -513,6 +509,8 @@ class MaintenanceRequestOTS(models.Model):
     # Reportes / Firma
     # --------------------
     def set_firma_cliente_mantenimiento(self):
+        self.ensure_one()
+        template_id = self.env["sign.template"]
         for rec in self:
             ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
             statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
@@ -532,8 +530,8 @@ class MaintenanceRequestOTS(models.Model):
             )
             vals_template = {
                 "name": f"OT {rec.name}",
-                "attachment_id": attachment.id,
                 "ot_id": rec.id,
+                "equipo_id": rec.tarea.planequipo.mapped("equipo")[:1].id,
             }
             vals_template.pop("attachment_count", None)
             template_id = self.env["sign.template"].create(vals_template)
@@ -541,18 +539,11 @@ class MaintenanceRequestOTS(models.Model):
                 "name": f"OT - {rec.name}",
                 "attachment_id": attachment.id,
                 "template_id": template_id.id,
-                "equipo_id": [0, 6, rec.tarea.planequipo.mapped("equipo.id")],
             }
-            document_sign = self.env["sign.document"].create(vals_sign_document)
-            attachment.res_id = template_firma
+            self.env["sign.document"].create(vals_sign_document)
+            attachment.write({"res_model": "sign.template", "res_id": template_id.id})
 
-        return {
-            "type": "ir.actions.act_window",
-            "name": f"OT {self.name}",
-            "res_model": "sign.template",
-            "view_mode": "kanban",
-            "target": "current",
-        }
+        return template_id.go_to_custom_template()
 
     def open_wizard_firma_empresa_acta(self):
         self.ensure_one()
@@ -568,6 +559,8 @@ class MaintenanceRequestOTS(models.Model):
         }
 
     def set_firma_empresa_acta(self):
+        self.ensure_one()
+        template_firma = self.env["sign.template"]
         for rec in self:
             ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
             statement_report_action = self.env.ref("pmant.action_reporte_acta")
@@ -587,8 +580,8 @@ class MaintenanceRequestOTS(models.Model):
             )
             vals_template = {
                 "name": f"Acta - {rec.name}",
-                # "attachment_id": attachment.id,
                 "ot_id": rec.id,
+                "equipo_id": rec.tarea.planequipo.mapped("equipo")[:1].id,
             }
             
             vals_template.pop("attachment_count", None)
@@ -598,15 +591,12 @@ class MaintenanceRequestOTS(models.Model):
                 "attachment_id": attachment.id,
                 "template_id": template_firma.id,
             }
-            document_sign = self.env["sign.document"].create(vals_sign_document)
-            attachment.res_id = template_firma
-        return {
-            "type": "ir.actions.act_window",
-            "name": f"Acta - {self.name}",
-            "res_model": "sign.template",
-            "view_mode": "kanban",
-            "target": "current",
-        }
+            self.env["sign.document"].create(vals_sign_document)
+            attachment.write({
+                "res_model": "sign.template",
+                "res_id": template_firma.id,
+            })
+        return template_firma.go_to_custom_template()
     def print_acta_conformidad(self):
         return self.env.ref("pmant.action_reporte_acta").report_action(self)
     # --------------------

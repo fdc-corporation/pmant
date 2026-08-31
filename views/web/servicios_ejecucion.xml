@@ -1,282 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="servicios_ejecucion" name="Mis servicios programadors">
-		<t t-call="website.layout">
-			<div class="main">
-				<t t-if="user.company_type == 'person'">
-					<div class="card-contacto-main">
-						<div class="card-contacto">
-							<div class="text-contacto">
-								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt=""/>
-								<span>
-									FDC CORPORATION E.I.R.L.
-								</span>
-							</div>
-							<div class="contactar">
-								<a href="/contactus" class="bg-primary">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
-										<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
-										</path>
-									</svg>
-									Contactar
-								</a>
-							</div>
-						</div>
-						<div class="info-empresa">
-							<div class="header-info">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-									<g id="icon-empresa">
-										<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35"/>
-										<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35"/>
-										<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35"/>
-									</g>
-								</svg>
-								<span>
-									<span t-esc="user.parent_id.name or ''">
-									</span>
-									/
-									<span t-esc="user.name"/>
-								</span>
-							</div>
-							<hr>
-							</hr>
-							<div class="body-text-info">
-								<span>
-									<strong>
-										Dirección :
-									</strong>
-									<t t-esc="user.street"/>
-								</span>
-								<span>
-									<strong>
-										RUC :
-									</strong>
-									<t t-esc="user.vat"/>
-								</span>
-								<span>
-									<strong>
-										Celular :
-									</strong>
-									<t t-esc="user.phone"/>
-								</span>
-								<span>
-									<strong>
-										Correo :
-									</strong>
-									<t t-esc="user.email"/>
-								</span>
-								<div class="condicion-estado">
-									<span>
-										<strong>
-											Condicion :
-										</strong>
-										<img src="/pmant/static/src/css/iconos/check 1.png" alt=""/>
-									</span>
-									<span>
-										<strong>
-											Activo :
-										</strong>
-										<img src="/pmant/static/src/css/iconos/check 1.png" alt=""/>
-									</span>
-								</div>
-								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
-								</span>
-								<!--
-								<div class="contenedor-button-info">
-								<a  t-att-href="'/my/' + str(equipo.ubicacion.id) + '/equipos'" class="bg-primary">Ver mis equipos</a>
-								<a href="" class="bg-primary">Reporte General</a>
-								</div>
-								-->
-							</div>
-						</div>
-					</div>
-				</t>
-				<t t-else="">
-					<div class="card-contacto-main">
-						<div class="card-contacto">
-							<div class="text-contacto">
-								<t t-if="dominio_web == 'equiposindustriales.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt=""/>
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-								<t t-if="dominio_web == 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/icon-ct.png" alt=""/>
-									<span>
-										Compresores de Tornillo S.A.C.
-									</span>
-								</t>
-								<t t-if="dominio_web != 'equiposindustriales.pe' and dominio_web != 'compresores.com.pe'">
-									<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt=""/>
-									<span>
-										FDC CORPORATION E.I.R.L.
-									</span>
-								</t>
-							</div>
-							<div class="contactar">
-								<a href="/contactus" class="bg-primary">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
-										<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
-										</path>
-									</svg>
-									Contactar
-								</a>
-							</div>
-						</div>
-						<div class="info-empresa">
-							<div class="header-info">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-									<g id="icon-empresa">
-										<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35"/>
-										<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35"/>
-										<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35"/>
-									</g>
-								</svg>
-								<span t-esc="user.name"/>
-							</div>
-							<hr>
-							</hr>
-							<div class="body-text-info">
-								<span>
-									<strong>
-										Dirección :
-									</strong>
-									<t t-esc="user.street"/>
-								</span>
-								<span>
-									<strong>
-										RUC :
-									</strong>
-									<t t-esc="user.vat"/>
-								</span>
-								<span>
-									<strong>
-										Celular :
-									</strong>
-									<t t-esc="user.phone"/>
-								</span>
-								<span>
-									<strong>
-										Correo :
-									</strong>
-									<t t-esc="user.email"/>
-								</span>
-								<div class="condicion-estado">
-									<span>
-										<strong>
-											Condición :
-										</strong>
-										<img src="/pmant/static/src/css/iconos/check 1.png" alt=""/>
-									</span>
-									<span>
-										<strong>
-											Activo :
-										</strong>
-										<img src="/pmant/static/src/css/iconos/check 1.png" alt=""/>
-									</span>
-								</div>
-								<span class="text-informativo">
-									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDCCORP para ver su historial de servicios.
-								</span>
-								<!--
-								<div class="contenedor-button-info">
-								<a  t-att-href="'/my/' + str(equipo.ubicacion.id) + '/equipos'" class="bg-primary">Ver mis equipos</a>
-								<a href="" class="bg-primary">Reporte General</a>
-								</div>
-								-->
-							</div>
-						</div>
-					</div>
-				</t>
-				<div class="main-card-equipos">
-					<div style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
-						<h3>
-							Servicios en Ejecución
-						</h3>
-					</div>
-					<div class="main-equipos">
-						<t t-if="len(equipo.planequipo) &gt; 0">
-							<t t-foreach="equipo.planequipo" t-as="plan">
-								<t t-if="plan.tarea.ots">
-									<t t-foreach="plan.tarea.ots" t-as="ot">
-										<t t-if="ot.stage_id.id in [1, 2]">
-											<div class="card-equipo">
-												<div class="head-card-mg" style="display:flex; gap:5px;align-items:start;">
-													<t t-if="">
-														<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % plan.equipo.id" alt="Imagen del equipo"/>
-													</t>
-													<t t-else="">
-														<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=qr_image' % plan.equipo.id" alt="Qr del equipo"/>
-													</t>
-													<div class="text-card-mantenimiento">
-														<strong t-esc="plan.equipo.name"/>
-														<span>
-															<span>
-																Plan de Mant. :
-															</span>
-															<span t-esc="plan.plan.name"/>
-														</span>
-														<span>
-															<span>
-																Fecha programada :
-															</span>
-															<span t-esc="ot.schedule_date.strftime('%d/%m/%Y') if ot.schedule_date else ''"/>
-														</span>
-														<span>
-															<span>
-																Etapa :
-															</span>
-															<span t-esc="plan.estado"/>
-														</span>
-													</div>
-												</div>
-												<a t-att-href="'/descargas/reporte/mantenimiento/%d' % (plan.id)" class="bg-primary">
-													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
-														<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-														<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-													</svg>
-												</a>
-											</div>
-										</t>
-									</t>
-								</t>
-							</t>
-						</t>
-						<t t-else="">
-							Aún no cuenta con Servicios registrados en el equipo. Contáctate con FDC CORP para registrar uno nuevo.
-						</t>
-					</div>
-					<t t-if="pager">
-						<t t-set="page_number" t-value="pager['page']['num']"/>
-						<t t-set="page_count" t-value="pager['page_count']"/>
-						<div class="text-center mt-4">
-							<ul class="pagination justify-content-center">
-								<li t-if="page_number &gt; 1" class="page-item">
-									<t t-set="prev_url" t-value="pager['pages'][page_number - 2]['url']"/>
-									<a t-att-href="prev_url" class="page-link">
-										Anterior
-									</a>
-								</li>
-								<t t-foreach="pager['pages']" t-as="p">
-									<li t-att-class="'page-item%s' % (' active' if p['num'] == page_number else '')">
-										<a t-att-href="p['url']" class="page-link">
-											<t t-esc="p['num']"/>
-										</a>
-									</li>
-								</t>
-								<li t-if="page_number &lt; page_count" class="page-item">
-									<t t-set="next_url" t-value="pager['pages'][page_number]['url']"/>
-									<a t-att-href="next_url" class="page-link">
-										Siguiente
-									</a>
-								</li>
-							</ul>
-						</div>
-					</t>
-				</div>
-			</div>
-		</t>
-	</template>
+    <template id="servicios_ejecucion" name="Servicios en ejecución">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+            <t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-active-services-page">
+                <header class="pmant-page-heading">
+                    <div><span class="pmant-eyebrow">OPERACIÓN EN CURSO</span><h1>Servicios en ejecución</h1><p>Consulte el avance y la programación de los mantenimientos activos.</p></div>
+                    <a href="/my/sedes/" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al panel</a>
+                </header>
+                <section class="pmant-active-summary" aria-label="Resumen de servicios activos">
+                    <article><span><i class="fa fa-wrench"/></span><div><small>Servicios activos</small><strong t-esc="active_service_count"/></div></article>
+                    <article><span><i class="fa fa-cogs"/></span><div><small>Equipos atendidos</small><strong t-esc="equipment_service_count"/></div></article>
+                    <article><span><i class="fa fa-calendar-check-o"/></span><div><small>Estado general</small><strong>En seguimiento</strong></div></article>
+                </section>
+                <section class="pmant-panel pmant-active-services-panel">
+                    <div class="pmant-panel-head pmant-active-toolbar">
+                        <div><span class="pmant-eyebrow">MANTENIMIENTOS</span><h2>Seguimiento de servicios</h2><p t-if="active_service_count"><t t-esc="active_service_count"/> servicio<t t-if="active_service_count != 1">s</t> actualmente en proceso.</p></div>
+                        <div class="pmant-active-tools">
+                            <div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
+                            <form action="/my/servicios/ejecucion" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar equipo, orden o etapa" t-att-value="search" aria-label="Buscar servicios"/></form>
+                        </div>
+                    </div>
+                    <div class="main-equipos pmant-active-service-list" t-if="active_services">
+                        <div class="pmant-active-table-head" aria-hidden="true"><span>Equipo</span><span>Orden / plan</span><span>Programación</span><span>Etapa</span><span>Acciones</span></div>
+                        <t t-foreach="active_services" t-as="item">
+                            <t t-set="equipment" t-value="item['equipment']"/><t t-set="plan" t-value="item['plan']"/><t t-set="work_order" t-value="item['work_order']"/>
+                            <article class="pmant-active-service-card">
+                                <div class="pmant-active-equipment"><span class="pmant-active-service-icon"><i class="fa fa-wrench"/></span><div><strong t-esc="equipment.name or 'Equipo sin nombre'"/><small><t t-esc="equipment.serial_no or 'Sin serie'"/> · <t t-esc="equipment.ubicacion.name if equipment.ubicacion else 'Sin ubicación'"/></small></div></div>
+                                <div class="pmant-active-order"><small>Orden / plan</small><strong t-esc="work_order.name or '-'"/><span t-esc="plan.plan.name if plan.plan else 'Sin plan asignado'"/></div>
+                                <div class="pmant-active-date"><small>Fecha programada</small><strong t-esc="work_order.schedule_date.strftime('%d/%m/%Y') if work_order.schedule_date else 'Por programar'"/></div>
+                                <div class="pmant-active-stage"><small>Etapa</small><span class="pmant-status"><i class="fa fa-circle"/> <t t-esc="work_order.stage_id.name or plan.estado or 'En proceso'"/></span></div>
+                                <div class="pmant-active-actions"><a t-att-href="'/my/equipos/%s/detalles' % equipment.id" class="pmant-icon-btn" title="Ver equipo" aria-label="Ver detalles del equipo"><i class="fa fa-eye"/></a><a t-att-href="'/descargas/reporte/mantenimiento/%s' % plan.id" class="pmant-btn pmant-btn-primary" title="Descargar reporte"><i class="fa fa-download"/> <span>Reporte</span></a></div>
+                            </article>
+                        </t>
+                    </div>
+                    <div class="pmant-empty" t-else=""><span><i class="fa fa-check-circle-o"/></span><h3>No hay servicios en ejecución</h3><p t-if="search">No encontramos resultados para “<t t-esc="search"/>”. Pruebe con otro término.</p><p t-else="">Cuando se programe o inicie un mantenimiento, podrá darle seguimiento desde aquí.</p></div>
+                    <t t-if="pager and pager['page_count'] &gt; 1"><t t-call="portal.pager"/></t>
+                </section>
+            </div>
+        </t>
+    </template>
 </odoo>

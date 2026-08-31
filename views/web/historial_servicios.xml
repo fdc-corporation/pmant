@@ -2,6 +2,8 @@
 <odoo>
 	<template id="historial_servicios" name="Historial del Equipo">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -86,6 +88,7 @@
 						<h3>
 							Historial de mantenimiento
 						</h3>
+						<div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
 						<div style="display:flex; gap:10px;">
 							<!-- Example single danger button -->
 							<div class="btn-group">
@@ -97,7 +100,7 @@
 									</button>
 									<ul class="dropdown-menu">
 										<li>
-											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/servicios/historial?filtro=asc'">
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=asc'">
 												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
 													<path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
 												</svg>
@@ -105,7 +108,7 @@
 											</a>
 										</li>
 										<li>
-											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/servicios/historial?filtro=desc'">
+											<a class="dropdown-item" t-att-href="'/my/equipo/' + str(equipo.id) + '/historial?filtro=desc'">
 												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
 													<path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" />
 												</svg>
@@ -123,32 +126,40 @@
 							</div>
 						</div>
 					</div>
-					<div class="main_historail_pmant">
+					<div class="main_historail_pmant pmant-history-cards">
+						<div class="pmant-maintenance-columns" aria-hidden="true">
+							<span>Tipo</span>
+							<span>Orden / mantenimiento</span>
+							<span>Tipo de mantenimiento</span>
+							<span>Fecha de ejecución</span>
+							<span>Etapa</span>
+							<span>Reporte</span>
+						</div>
 						<t t-if="len(historial) > 0">
 							<t t-foreach="historial" t-as="plan">
 								<t t-if="not plan['is_otro']">
 									<div class="card-mantenimiento">
 										<div class="head-card-mg">
-											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
+											<span class="pmant-record-icon"><i class="fa fa-wrench"/></span>
 											<div class="text-card-mantenimiento">
 												<strong t-esc="plan['record'].ots.name if plan['record'].ots else plan['record'].tarea.name" />
 												<span>
 													<span>
 														Tipo de Mant. :
 													</span>
-													<span t-esc="plan['record'].tarea.tipo.name" />
+												<span t-esc="plan['record'].tarea.tipo.name if plan['record'].tarea and plan['record'].tarea.tipo else '-'" />
 												</span>
 												<span>
 													<span>
 														Fecha de ejecución :
 													</span>
-													<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else ''" />
+												<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else '-'" />
 												</span>
 												<span>
 													<span>
 														Etapa :
 													</span>
-													<span t-esc="plan['record'].estado" />
+												<span t-esc="plan['record'].estado or '-'" />
 												</span>
 											</div>
 										</div>
@@ -157,26 +168,27 @@
 												<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
 												<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
 											</svg>
+											<span class="pmant-download-label">Descargar</span>
 										</a>
 									</div>
 								</t>
 								<t t-else="">
 									<div class="card-mantenimiento">
 										<div class="head-card-mg">
-											<img src="/pmant/static/src/css/iconos/mantenimiento.png" alt="Imagen de mantenimiento" />
+											<span class="pmant-record-icon"><i class="fa fa-wrench"/></span>
 											<div class="text-card-mantenimiento">
 												<strong t-esc="plan['record'].name" />
 												<span>
 													<span>
 														Tipo de Mant. :
 													</span>
-													<span t-esc="plan['record'].tipo.name" />
+												<span t-esc="plan['record'].tipo.name if plan['record'].tipo else '-'" />
 												</span>
 												<span>
 													<span>
 														Fecha de ejecución :
 													</span>
-													<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else ''" />
+												<span t-esc="plan['record'].fecha_ejec.strftime('%d/%m/%Y') if plan['record'].fecha_ejec else '-'" />
 												</span>
 												<span>
 													<span>
@@ -193,6 +205,7 @@
 												<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
 												<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
 											</svg>
+											<span class="pmant-download-label">Descargar</span>
 										</a>
 									</div>
 								</t>
@@ -200,6 +213,26 @@
 						</t>
 						<t t-else="">
 							Aún no cuenta con Servicios registrados en el equipo. Contáctate con Compresores de Tornillo S.A.C. para registrar uno nuevo.
+						</t>
+					</div>
+					<div class="pmant-history-table" t-if="len(historial) &gt; 0">
+						<div class="pmant-history-table-head" role="row">
+							<span>Tipo</span><span>Orden / mantenimiento</span><span>Tipo de mantenimiento</span><span>Fecha de ejecución</span><span>Etapa</span><span>Reporte</span>
+						</div>
+						<t t-foreach="historial" t-as="plan">
+							<t t-set="record" t-value="plan['record']"/>
+							<t t-set="record_name" t-value="record.name if plan['is_otro'] else (record.ots.name if record.ots else (record.tarea.name if record.tarea else 'Sin nombre'))"/>
+							<t t-set="maintenance_type" t-value="(record.tipo.name if record.tipo else '-') if plan['is_otro'] else (record.tarea.tipo.name if record.tarea and record.tarea.tipo else '-')"/>
+							<t t-set="stage_name" t-value="'Finalizado' if plan['is_otro'] else (record.estado or '-')"/>
+							<t t-set="report_url" t-value="('/descargas/reporte/mantenimiento/%s/otros' if plan['is_otro'] else '/descargas/reporte/mantenimiento/%s') % record.id"/>
+							<div class="pmant-history-table-row" role="row">
+								<span class="pmant-history-icon" data-label="Tipo"><i class="fa fa-wrench"/></span>
+								<strong data-label="Orden / mantenimiento" t-esc="record_name or 'Sin nombre'"/>
+								<span data-label="Tipo de mantenimiento" t-esc="maintenance_type or 'No registrado'"/>
+								<span data-label="Fecha de ejecución" t-esc="record.fecha_ejec.strftime('%d/%m/%Y') if record.fecha_ejec else '-'"/>
+								<span data-label="Etapa"><span class="pmant-history-stage" t-esc="stage_name"/></span>
+								<span data-label="Reporte"><a t-att-href="report_url" class="pmant-report-download" title="Descargar reporte" download="download"><i class="fa fa-file-pdf-o"/><span>Descargar</span></a></span>
+							</div>
 						</t>
 					</div>
 					<!-- Paginación -->

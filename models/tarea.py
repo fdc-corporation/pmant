@@ -49,7 +49,6 @@ class Tarea(models.Model):
     planequipo = fields.One2many('planequipo.mantenimiento', 'tarea', string='Equipo / Plan', required=True)
     clasi1 = fields.Char(string="Clasificacion 1")
     clasi2 = fields.Char(string="Clasificacion 2")
-    prioridad = fields.Selection(related="ots.priority")
     adjunto = fields.Binary(attachment=True)
     ots = fields.One2many('maintenance.request', 'tarea', string="ots")
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
@@ -153,16 +152,20 @@ class Tarea(models.Model):
 
 
     def action_view_cotizaciones(self):
+        self.ensure_one()
         if not self.sale_order:
             return {'type': 'ir.actions.act_window_close'}
-        return {
+        action = {
             "type": "ir.actions.act_window",
             "name": "Ventas",
-            "view_mode": "form",
+            "view_mode": "list,form",
             "res_model": "sale.order",
-            "res_id": self.sale_order.id,
+            "domain": [("id", "in", self.sale_order.ids)],
             "context": {"create": False},
         }
+        if len(self.sale_order) == 1:
+            action.update({"view_mode": "form", "res_id": self.sale_order.id})
+        return action
 
     def action_print_report(self):
         return self.env.ref("pmant.action_ot_mantenimiento").report_action(self)
@@ -260,7 +263,7 @@ class Tarea(models.Model):
 
     def _compute_fecha_entrada(self):
         for rec in self:
-            rec.fecha_entrada = fields.Date.today()
+            rec.fecha_entrada = fields.Date.to_date(rec.create_date) if rec.create_date else False
 
     def _fecha_ejecutada(self):
         """Marcar fecha ejecutada en planequipo solo cuando aplique"""

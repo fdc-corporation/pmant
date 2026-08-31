@@ -2,6 +2,8 @@
 <odoo>
 	<template id="solicitudes_servicio" name="Solicitudes de Servicios">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -86,8 +88,9 @@
 				<div class="main-card-equipos">
 					<div style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
 						<h3>
-							Mis solicitudes de servicio
+							Formulario de Servicios
 						</h3>
+						<div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
 						<div style="display:flex; gap:10px;">
 							<!-- Example single danger button -->
 							<div class="btn-group">
@@ -120,20 +123,21 @@
 						</div>
 					</div>
 					<div class="main-equipos">
+						<div class="pmant-request-columns" aria-hidden="true">
+							<span>Estado</span><span>Tipo de servicio</span><span>Fecha de servicio</span><span>Ubicación</span><span>Registrada</span><span>Detalle</span>
+						</div>
 						<t t-if="len(solicitudes) > 0">
 							<t t-foreach="solicitudes" t-as="solicitud">
-								<a class="card-equipo card-solicitud">
+								<article class="card-equipo card-solicitud pmant-request-card">
 									<t t-if="solicitud.estado == 'nuevo'">
-										<img src="/pmant/static/src/css/iconos/alerta.png" alt="Icon alerta mantenimiento" />
+										<span class="pmant-record-icon pending"><i class="fa fa-clock-o"/></span>
 									</t>
 									<t t-if="solicitud.estado == 'atendido'">
-										<img src="/pmant/static/src/css/iconos/atendido.png" alt="Icon solicitud atendida" />
+										<span class="pmant-record-icon done"><i class="fa fa-check"/></span>
 									</t>
-									<div class="text-card-equipo">
-										<strong>
-											Tipo de servicio:
-											<t t-esc="solicitud.tipo_servicio">
-											</t>
+									<div class="text-card-equipo pmant-request-content">
+										<strong class="pmant-request-type" data-label="Tipo de servicio">
+											<t t-esc="solicitud.tipo_servicio or '-'"/>
 											<t t-if="solicitud.estado == 'nuevo'">
 												<span class="status-alert">
 													Solicitado
@@ -145,27 +149,19 @@
 												</span>
 											</t>
 										</strong>
-										<hr>
-										</hr>
-                                            <span  >
-                                                 Fecha de servicio: <t t-esc="solicitud.fecha_servicio.strftime('%d/%m/%Y')"></t>
-                                            </span>
-										
-										<t t-if="solicitud.detalle_problema">
-												<strong style="font-size:12.5px;">
-													Detalles:
-												</strong>
-												<span t-esc="solicitud.detalle_problema" />
-										</t>
+										<span class="pmant-request-date" data-label="Fecha de servicio" t-esc="solicitud.fecha_servicio.strftime('%d/%m/%Y') if solicitud.fecha_servicio else '-'"/>
+										<span class="pmant-request-location" data-label="Ubicación" t-esc="solicitud.ubicacion_id.name or equipo.ubicacion.name or '-'"/>
+										<span class="pmant-request-created" data-label="Registrada" t-esc="solicitud.create_date.strftime('%d/%m/%Y %H:%M') if solicitud.create_date else '-'"/>
+										<span class="pmant-request-detail" data-label="Detalle" t-esc="solicitud.detalle_problema or '-'"/>
 									</div>
-								</a>
+								</article>
 							</t>
 						</t>
 						<t t-else="">
 							<div>
 								Si no encuentra algun problema en ver sus solicitudes de servicios llame a
-								<a href="tel:51908912551">
-									+51 908 912 551
+								<a href="https://wa.me/51908912551" target="_blank" rel="noopener">
+									WhatsApp de soporte
 								</a>
 								.
 							</div>
@@ -178,7 +174,7 @@
 								<!-- Página anterior -->
 								<li t-if="page &gt; 1" class="page-item">
 									<a t-att-href="'/my/equipo/%s/solicitudes/servicios?page=%s&amp;sort=%s' % (equipo.id, page - 1, sort)" class="page-link" aria-label="Previous">
-										<span class="page-link">
+										<span>
 											« Anterior
 										</span>
 									</a>
@@ -194,7 +190,7 @@
 								<!-- Página siguiente -->
 								<li t-if="page &lt; total_pages" class="page-item">
 									<a t-att-href="'/my/equipo/%s/solicitudes/servicios?page=%s&amp;sort=%s' % (equipo.id, page + 1, sort)" class="page-link" aria-label="Next">
-										<span class="page-link">
+										<span>
 											Siguiente »
 										</span>
 									</a>

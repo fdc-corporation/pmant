@@ -1,56 +1,44 @@
 /** @odoo-module **/
 
 $(document).ready(() => {
-  const boton = document.getElementById("submit_form_solicitud");
-  if (boton) {
-    boton.addEventListener("click", async function (e) {
-      e.preventDefault();
-      boton.disabled = true; // Deshabilitar el botón para evitar múltiples envíos
-      boton.textContent = "Enviando...";
-      const form = document.querySelector('form[action="/solicitud/mantenimiento/servicio"]');
-      const formData = new FormData(form);
+  const form = document.querySelector('form[action="/solicitud/mantenimiento/servicio"]');
+  if (!form) return;
 
-      // Validación simple: tipo de servicio y fecha
-      if (!formData.get("tipo_servicio") || !formData.get("fecha_servicio")) {
-        mostrarNotificacion("notificacion-error", "Por favor completa todos los campos obligatorios.");
-        boton.disabled = false;
-        boton.textContent = "Enviar Solicitud";
-        return;
-      }
+  const button = form.querySelector('[type="submit"]');
+  const notify = (id, message) => {
+    const element = document.getElementById(id);
+    if (!element) return;
+    element.textContent = message;
+    element.style.display = "block";
+    window.setTimeout(() => { element.style.display = "none"; }, 4000);
+  };
 
-      try {
-        const response = await fetch("/solicitud/mantenimiento/servicio", {
-          method: "POST",
-          body: formData,
-        });
-        console.log(response)
-        if (response.ok) {
-          mostrarNotificacion("notificacion-exito", "Solicitud enviada correctamente.");
-            boton.disabled = false;
-            boton.textContent = "Enviar Solicitud";
-        } else {
-          mostrarNotificacion("notificacion-error", "Error en el servidor.");
-          boton.disabled = false;
-          boton.textContent = "Enviar Solicitud";
-        }
-      } catch (error) {
-        console.error("notificacion-error:", error);
-        mostrarNotificacion("notificacion-error", "No se pudo enviar la solicitud.");
-        boton.disabled = false;
-        boton.textContent = "Enviar Solicitud";
-
-      }
-    });
-  }
-
-  function mostrarNotificacion(id, mensaje) {
-    const noti = document.getElementById(id);
-    if (noti) {
-      noti.textContent = mensaje;
-      noti.style.display = "block";
-      setTimeout(() => {
-        noti.style.display = "none";
-      }, 3000);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    if (button) {
+      button.disabled = true;
+      button.dataset.originalText = button.textContent;
+      button.textContent = "Enviando solicitud…";
     }
-  }
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        credentials: "same-origin",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.result?.success) throw new Error("Solicitud rechazada");
+      notify("notificacion-exito", "Solicitud enviada correctamente. Redirigiendo…");
+      window.setTimeout(() => window.location.assign(payload.result.redirect_url), 650);
+    } catch (error) {
+      notify("notificacion-error", "No se pudo enviar la solicitud. Revise los datos e inténtelo nuevamente.");
+      if (button) {
+        button.disabled = false;
+        button.textContent = button.dataset.originalText || "Enviar solicitud";
+      }
+    }
+  });
 });

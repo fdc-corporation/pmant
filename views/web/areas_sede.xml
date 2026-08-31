@@ -2,6 +2,8 @@
 <odoo>
 	<template id="areas_sede" name="Areas Registradas">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">

@@ -2,6 +2,8 @@
 <odoo>
 	<template id="equipos_central" name="Equipo Registrados">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -78,7 +80,7 @@
 							</span>
 							<!--
 							<div class="contenedor-button-info">
-							<a t-att-href="'/my/equipos/' + str(user_partner.id)" class="bg-primary">
+							<a t-att-href="'/my/' + str(user_partner.commercial_partner_id.id) + '/equipos/'" class="bg-primary">
 							Ver mis equipos
 							</a>
 							<a href="" class="bg-primary">
@@ -95,6 +97,7 @@
 							<h2>
 								Mis Equipos
 							</h2>
+							<div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards" title="Vista de tarjetas"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table" title="Vista de tabla"><i class="fa fa-list"/> Tabla</button></div>
 							<button href="" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
 								Solicitar registro
 							</button>
@@ -107,6 +110,7 @@
 						</form>
 					</div>
 					<div class="main-equipos">
+						<div class="pmant-table-head"><span>Equipo</span><span>Marca / modelo</span><span>Número de serie</span><span>Acciones</span></div>
 						<t t-if="len(equipos) > 0">
 							<t t-foreach="equipos" t-as="equipo">
 								<a t-att-href="'/my/equipos/' + str(equipo.id) + '/detalles'" class="card-equipo">

@@ -113,6 +113,11 @@ class Equipo(models.Model):
     certificados = fields.One2many(
         "sign.request", "equipo_id", domain=[("state", "=", "signed")], string="Certificados de operatividad"
     )
+    certificados_manuales = fields.One2many(
+        "pmant.certificado.operatividad",
+        "equipo_id",
+        string="Certificados PDF firmados",
+    )
     documentos = fields.Many2many(
         "documents.document", "equipo", string="Documentos")
     cotizacion_cantidad = fields.Integer(compute="_total_cotizaciones")
@@ -137,11 +142,15 @@ class Equipo(models.Model):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": "Certificados de Operatividad",
-            "res_model": "sign.request",
+            "name": "Documentos y certificados de firma",
+            "res_model": "sign.template",
             "view_mode": "kanban,form",
             "target": "current",  # O usa 'new' si deseas que se abra como ventana modal
-            "domain": [("state", "=", "signed"), ("equipo_id", "=", self.id)],
+            "domain": [
+                "|",
+                ("equipo_id", "=", self.id),
+                ("ot_id.tarea.planequipo.equipo", "=", self.id),
+            ],
             "context": {
                 "default_equipo_id": self.id,
             },
@@ -165,10 +174,14 @@ class Equipo(models.Model):
             equipo._generate_qr_code()
 
     def _get_certificados(self):
-        documentos = self.env["sign.request"].search_count(
-            [("equipo_id", "=", self.id), ("state", "=", "signed")]
-        )
-        self.cantidad_certificados = documentos
+        for equipment in self:
+            equipment.cantidad_certificados = self.env["sign.template"].search_count(
+                [
+                    "|",
+                    ("equipo_id", "=", equipment.id),
+                    ("ot_id.tarea.planequipo.equipo", "=", equipment.id),
+                ]
+            )
 
     def action_view_cotizaciones(self):
         for record in self:
@@ -334,7 +347,7 @@ class MasMantenimiento (models.Model):
     _name = "mantenimento.equipo.otros"
     _descriptiion = "Mas mantenimitnos externos"
 
-    name = fields.Char(string="Nombre", required="1")
+    name = fields.Char(string="Nombre", required=True)
     # planequipo = fields.Many2one("planequipo.mantenimiento", string="Plan de mantenimiento")
     fecha_ejec = fields.Date(string="Fecha ejecutada")
     file_adjunto = fields.Binary(string="Reporte Tecnico")

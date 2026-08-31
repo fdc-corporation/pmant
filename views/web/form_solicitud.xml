@@ -1,130 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="form_solicitud" name="Solicitar Servicio">
-		<t t-call="website.layout">
-			<div class="container my-5">
-				<h1 class="mb-4">
-					Solicita un mantenimiento para tu equipo
-				</h1>
-                <form action="/solicitud/mantenimiento" method="POST" enctype="multipart/form-data">
-					<div class="row">
-						<div class="mb-3 col-md-6">
-							<label for="nombre" class="form-label">
-								Nombre
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-							<input type="hidden" class="form-control" name="id_equipo" t-att-value="equipo.id" />
-							<!-- Puedes enviar el ID como parte del formulario si es necesario -->
-							<input type="text" class="form-control" t-att-value="usuario.name" name="nombre" required="required" />
-
-						</div>
-						<div class="mb-3 col-md-6">
-							<label for="correo" class="form-label">
-								Correo Electrónico
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<input type="email" class="form-control" t-att-value="usuario.email" name="correo" required="required" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="mb-3 col-md-6">
-							<label for="telefono" class="form-label">
-								Teléfono
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<input type="text" class="form-control" name="telefono" required="required" />
-						</div>
-						<div class="mb-3 col-md-6">
-							<label for="telefono" class="form-label">
-								RUC
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<input type="text" class="form-control" name="ruc"  t-att-value="usuario.vat" required="required" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="mb-3 col-md-6">
-							<label for="equipo" class="form-label">
-								Equipo
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<input type="text" class="form-control" t-att-value="equipo.name" readonly="readonly" name="equipo" required="required" />
-						</div>
-						<div class="mb-3 col-md-6">
-							<label for="marca" class="form-label">
-								Marca
-							</label>
-							<input type="text" class="form-control" t-att-value="equipo.marca" readonly="readonly" name="marca" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="mb-3 col-md-6">
-							<label for="modelo" class="form-label">
-								Modelo
-							</label>
-							<input type="text" class="form-control" t-att-value="equipo.model" readonly="readonly" name="modelo" />
-						</div>
-						<div class="mb-3 col-md-6">
-							<label for="serie" class="form-label">
-								N° Serie
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<input type="text" class="form-control" t-att-value="equipo.serial_no" readonly="readonly" name="serie" required="required" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="mb-3 col-md-6">
-							<label for="servicio" class="form-label">
-								Tipo de Servicio
-								<span class="text-danger">
-									(*)
-								</span>
-							</label>
-							<select class="form-select" name="servicio" aria-label="Default select example">
-								<option value="">
-									Select. Servicio
-								</option>
-								<option value="Preventivo">
-									Preventivo
-								</option>
-								<option value="Instalación">
-									Instalación
-								</option>
-								<option value="Mantenimiento">
-									Mantenimiento
-								</option>
-								<option value="Modificación">
-									Modificación
-								</option>
-							</select>
-						</div>
-						<div class="mb-3 col-md-6">
-							<div class="mb-3">
-								<label for="formFileMultiple" class="form-label">
-									Imágenes de referencia
-								</label>
-								<input class="form-control" name="imagenes" type="file" id="formFileMultiple" multiple="multiple" accept="image/*" />
-							</div>
-						</div>
-					</div>
-					<button type="submit" class="btn btn-primary">
-						Enviar Solicitud
-					</button>
-				</form>
-			</div>
-		</t>
-	</template>
+    <template id="form_solicitud" name="Solicitar Servicio">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+            <t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-form-page">
+                <header class="pmant-form-header"><span class="pmant-eyebrow">NUEVA SOLICITUD</span><h1>Solicitar mantenimiento</h1><p>Complete los datos para que el equipo técnico programe la atención.</p></header>
+                <form action="/solicitud/mantenimiento/servicio" method="post" enctype="multipart/form-data" class="pmant-form-card">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/><input type="hidden" name="id_equipo" t-att-value="equipo.id"/><input type="hidden" name="ubicacion_id" t-att-value="equipo.ubicacion.id"/>
+                    <section><h2><i class="fa fa-cog"/> Equipo</h2><div class="pmant-form-grid"><label>Equipo<input type="text" t-att-value="equipo.name" readonly="readonly"/></label><label>Marca<input type="text" t-att-value="equipo.marca or ''" readonly="readonly"/></label><label>Modelo<input type="text" t-att-value="equipo.model or ''" readonly="readonly"/></label><label>Número de serie<input type="text" t-att-value="equipo.serial_no or ''" readonly="readonly"/></label></div></section>
+                    <section><h2><i class="fa fa-wrench"/> Servicio solicitado</h2><div class="pmant-form-grid"><label>Tipo de servicio <span>*</span><select name="tipo_servicio" required="required"><option value="">Seleccione una opción</option><option value="Preventivo">Preventivo</option><option value="Correctivo">Correctivo</option><option value="Instalación">Instalación</option><option value="Evaluación">Evaluación</option></select></label><label>Fecha solicitada <span>*</span><input type="date" name="fecha_servicio" required="required"/></label><label class="pmant-form-wide">Descripción del problema <span>*</span><textarea name="razon" rows="5" required="required" placeholder="Describa síntomas, mensajes de error o comportamiento del equipo."/></label><label class="pmant-form-wide">Imagen de referencia<input type="file" name="formFileMultiple" accept="image/*"/><small>Adjunte una imagen clara si está disponible.</small></label></div></section>
+                    <footer class="pmant-form-actions"><a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="btn btn-secondary">Cancelar</a><button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"/> Enviar solicitud</button></footer>
+                </form>
+            </div>
+        </t>
+    </template>
 </odoo>

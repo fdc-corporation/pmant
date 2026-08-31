@@ -1,9 +1,9 @@
 <odoo>
     <template id="error_template" name="Error Template">
-        <div class="container mt-5">
-            <h1>Error</h1>
-            <p>We encountered an error while processing your request.</p>
-            <p t-if="error_message" t-esc="error_message"/>
-        </div>
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+            <t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-state-page"><section class="pmant-state-card"><span class="pmant-state-icon"><i class="fa fa-exclamation-triangle"/></span><h1>No pudimos completar la operación</h1><p t-esc="error or 'Revise la información e inténtelo nuevamente.'"/><a href="/my/sedes/" class="btn btn-primary">Volver al panel</a></section></div>
+        </t>
     </template>
 </odoo>

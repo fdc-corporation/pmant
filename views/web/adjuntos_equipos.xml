@@ -2,6 +2,8 @@
 <odoo>
 	<template id="adjuntos_equipo" name="Adjuntos del Equipo">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -88,35 +90,36 @@
 						</h3>
 					</div>
 					<div class="main-adjuntos">
-						<t t-if="len(equipo.adjunto) > 0">
-							<t t-foreach="equipo.adjunto" t-as="adjunto">
-								<t t-set="extension" t-value="adjunto.name.split('.')[-1].lower()" />
-								<div class="card-adjunto">
+						<t t-if="adjuntos">
+							<t t-foreach="adjuntos" t-as="adjunto">
+								<t t-set="extension" t-value="(adjunto.name or 'archivo').split('.')[-1].lower()" />
+								<div t-attf-class="card-adjunto pmant-attachment-card pmant-file-#{extension}">
 									<t t-if="extension == 'pdf'">
-										<img src="/pmant/static/src/img/pdf.webp" alt="PDF Icon" />
+										<span class="pmant-attachment-icon"><i class="fa fa-file-pdf-o"/></span>
 									</t>
 									<!-- Icono para imágenes -->
 									<t t-if="extension in ['jpg', 'jpeg', 'png', 'gif']">
-										<img style="padding: 10px;" src="/pmant/static/src/img/png.png" alt="Image Icon" />
+										<span class="pmant-attachment-icon"><i class="fa fa-file-image-o"/></span>
 									</t>
 									<!-- Icono para documentos de Word -->
 									<t t-if="extension in ['doc', 'docx']">
-										<img src="/pmant/static/src/img/docx.png" alt="Word Icon" />
+										<span class="pmant-attachment-icon"><i class="fa fa-file-word-o"/></span>
 									</t>
 									<!-- Icono para documentos de Excel -->
 									<t t-if="extension in ['xls', 'xlsx']">
-										<img src="/pmant/static/src/img/xlsx.png" alt="Excel Icon" />
+										<span class="pmant-attachment-icon"><i class="fa fa-file-excel-o"/></span>
 									</t>
 									<!-- Icono para otros tipos de archivos -->
 									<t t-if="extension not in ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx']">
-										<img src="/pmant/static/src/img/archivo.jpg" alt="File Icon" />
+										<span class="pmant-attachment-icon"><i class="fa fa-file-o"/></span>
 									</t>
-									<p t-esc="adjunto.name" />
-									<a t-att-href="'/descargas/adjuntos/equipo/' + str(adjunto.id)" class="bg-primary">
+									<div class="pmant-attachment-copy"><p t-esc="adjunto.name"/><small t-esc="extension.upper() + ' · Archivo adjunto'"/></div>
+									<a t-att-href="'/descargas/adjuntos/equipo/' + str(adjunto.id)" class="bg-primary pmant-attachment-download" download="download">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down" viewBox="0 0 16 16">
 											<path fill-rule="evenodd" d="M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708z" />
 											<path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383m.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
 										</svg>
+										<span>Descargar</span>
 									</a>
 								</div>
 							</t>

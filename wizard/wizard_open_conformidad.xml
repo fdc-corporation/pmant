@@ -23,10 +23,10 @@
                             class="btn-primary" 
                             data-hotkey="q"/>
                     <button name="action_generate_pdf_acta" 
-                            string="Generar PDF del Acta" 
+                            string="Guardar y descargar PDF" 
                             type="object" 
                             class="btn-primary" 
-                            data-hotkey="q"/>
+                            data-hotkey="p"/>
                     <button string="Cancelar" 
                             class="btn-secondary" 
                             special="cancel" 

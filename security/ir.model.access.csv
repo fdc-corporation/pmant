@@ -121,7 +121,7 @@ pmant_vendedor_acc_20,VENDEDOR_MANTENIMIENTO_EQUIPOS,model_maintenance_equipment
 ,,,,,,,
 ,,,,,,,
 access_wizard_equipment_selection,wizard.equipment.selection,model_wizard_equipment_selection,,1,1,1,1
-access_maintenance_equipment_portal_user,access.maintenance.equipment.portal.user,model_maintenance_equipment,base.group_portal,1,1,1,1
+access_maintenance_equipment_portal_user,access.maintenance.equipment.portal.user,model_maintenance_equipment,base.group_portal,1,0,0,0
 access_adjunto_evaluacion_user,access_adjunto_evaluacion_user,model_adjunto_evaluacion,base.group_user,1,1,1,1
 access_medicion_equipo_user,medicion.equipo user,model_medicion_equipo,base.group_user,1,1,1,1
 access_wizars_inconvenientes_user,wizars.inconvenientes user,model_wizars_inconvenientes,base.group_user,1,1,1,1
@@ -132,3 +132,4 @@ access_wizard_sale_order,wizard.sale.order,model_wizard_sale_order,base.group_us
 access_wizard_order_cancel,wizard.order.cancel,model_wizard_order_cancel,base.group_user,1,1,1,1
 access_wizardacta_confirmidad,ADMIN_WIZARD_ACTA,model_wizard_open_acta_confirmidad,base.group_user,1,1,1,1
 access_wizard_confirm_sale,ADMIN_WIZARD_CONFIRM,model_wizard_sale_order_confirm,base.group_user,1,1,1,1
+access_pmant_certificado_operatividad_user,Certificados de operatividad,model_pmant_certificado_operatividad,base.group_user,1,1,1,1

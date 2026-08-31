@@ -2,6 +2,8 @@
 <odoo>
 	<template id="cotizaciones_pmant" name="Cotizaciones del Equipo">
 		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
 			<div class="main">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
@@ -85,6 +87,7 @@
 						<h3>
 							Mis cotizaciones de servicio
 						</h3>
+						<div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
 						<form style="display: flex; gap: 5px;" t-att-action="'/my/equipo/%s/cotizaciones' % equipo.id" method="get" class="form-inline mb-3">
 							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar cotizaciones..." t-att-value="search or ''" />
 							<button type="submit" class="btn btn-primary">
@@ -92,39 +95,19 @@
 							</button>
 						</form>
 					</div>
-					<div class="main-sedes">
+					<div class="main-sedes pmant-quote-list">
 						<t t-if="len(cotizaciones) > 0">
+							<div class="pmant-quote-table-head" aria-hidden="true">
+								<span>Documento</span><span>Cotización / fecha</span><span>Término de pago</span><span>Dirección de entrega</span><span>Acción</span>
+							</div>
 							<t t-foreach="cotizaciones" t-as="coti">
 								<div t-att-href="'/my/orders/' + str(coti.id)" class="card-sede">
-									<img src="/pmant/static/src/css/iconos/bienes.png" style="width: 80px;height: 80px;" />
-									<div class="text-card-sede">
-										<strong t-esc="coti.name" />
-										<hr>
-										</hr>
-										<span>
-											<strong>
-												Término de pago:
-											</strong>
-											<span t-esc="coti.payment_term_id.name" />
-										</span>
-										<span>
-											<strong>
-												Direccion de entrega:
-											</strong>
-											<span t-esc="coti.partner_shipping_id.name" />
-										</span>
-										<span>
-											<strong>
-												Fecha de la orden:
-											</strong>
-											<span t-esc="coti.date_order" />
-										</span>
-									</div>
-									<a target="_blank" t-att-href="'/my/orders/' + str(coti.id) + '?access_token=' + str(coti.access_token)" class="bg-primary btn-desca">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
-											<path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z" />
-											<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
-										</svg>
+									<span class="pmant-record-icon"><i class="fa fa-file-text-o"/></span>
+									<div class="pmant-quote-identity"><small>Cotización</small><strong t-esc="coti.name or '-'"/><span><i class="fa fa-calendar-o"/> <t t-esc="coti.date_order.strftime('%d/%m/%Y %H:%M') if coti.date_order else 'No registrada'"/></span></div>
+									<div class="pmant-quote-payment"><small>Término de pago</small><strong t-esc="coti.payment_term_id.name or 'No definido'"/></div>
+									<div class="pmant-quote-shipping"><small>Dirección de entrega</small><strong t-esc="coti.partner_shipping_id.name or 'No definida'"/></div>
+									<a target="_blank" rel="noopener" t-att-href="'/my/orders/' + str(coti.id) + '?access_token=' + str(coti.access_token) + '&amp;report_type=pdf&amp;download=true'" class="bg-primary btn-desca" title="Descargar cotización en PDF" aria-label="Descargar cotización en PDF">
+										<i class="fa fa-download"/><span>Descargar PDF</span>
 									</a>
 								</div>
 							</t>
@@ -139,9 +122,9 @@
 							<ul class="pagination justify-content-center">
 								<!-- Enlace a la página anterior -->
 								<li t-if="pagina_actual > 1" class="page-item">
-									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones?page=' + str(pagina_actual + 1) + (('&amp;search=' + search) if search else '')" class="page-link" aria-label="Next">
+									<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones?page=' + str(pagina_actual - 1) + (('&amp;search=' + search) if search else '')" class="page-link" aria-label="Previous">
 										<span aria-hidden="true">
-											Siguiente »
+											« Anterior
 										</span>
 									</a>
 								</li>

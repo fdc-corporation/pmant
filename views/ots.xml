@@ -107,7 +107,7 @@
 				<div groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_button_box" name="button_box">
 						<button class="oe_stat_button" type="object" name="action_view_documentos"
 								icon="fa-file-text-o">
-								<field string="Documentos firmados" name="document_count" widget="statinfo"/>
+								<field string="Documentos de firma" name="document_count" widget="statinfo"/>
 						</button>
 				</div>
 			</xpath>

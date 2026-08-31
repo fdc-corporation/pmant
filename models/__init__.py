@@ -17,3 +17,4 @@ from . import evento
 from . import hoja_horas
 from . import res_partner
 from . import solicitudes
+from . import certificado

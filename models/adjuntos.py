@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 import mimetypes
 class Adjunto(models.Model):
     _name        = 'adjunto.mantenimiento'
@@ -67,11 +68,37 @@ class WizardOpenActaConfirmidad(models.TransientModel):
 
     def action_generate_acta(self):
         self.ensure_one()
+        if not self.ots_id:
+            raise UserError("No se encontró la orden de trabajo para generar el acta.")
         self.ots_id.fecha_acta = self.fecha_finalizado
-        self.ots_id.set_firma_empresa_acta()
+        return self.ots_id.set_firma_empresa_acta()
     
     def action_generate_pdf_acta(self):
         self.ensure_one()
+        if not self.ots_id:
+            raise UserError("No se encontró la orden de trabajo para generar el acta.")
         self.ots_id.fecha_acta = self.fecha_finalizado
-
-        return self.ots_id.print_acta_conformidad()
+        report_action = self.env.ref("pmant.action_reporte_acta").sudo()
+        pdf_content, _content_type = self.env["ir.actions.report"].sudo()._render_qweb_pdf(
+            report_action,
+            res_ids=self.ots_id.ids,
+        )
+        date_label = fields.Date.to_string(self.fecha_finalizado)
+        filename = f"Acta de Conformidad - {self.ots_id.name or self.ots_id.id} - {date_label}.pdf"
+        attachment_values = {
+            "name": filename,
+            "type": "binary",
+            "raw": pdf_content,
+            "mimetype": "application/pdf",
+            "res_model": "maintenance.request",
+            "res_id": self.ots_id.id,
+        }
+        equipment = self.ots_id.tarea.planequipo.mapped("equipo")[:1]
+        if equipment and "id_equipo" in self.env["ir.attachment"]._fields:
+            attachment_values["id_equipo"] = equipment.id
+        attachment = self.env["ir.attachment"].sudo().create(attachment_values)
+        return {
+            "type": "ir.actions.act_url",
+            "url": f"/web/content/{attachment.id}?download=true",
+            "target": "self",
+        }

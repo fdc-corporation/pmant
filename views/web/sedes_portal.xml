@@ -1,173 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="sedes_portal" name="Sedes Portal">
-		<t t-call="website.layout">
-			<div class="main">
-				<div class="card-contacto-main">
-					<div class="card-contacto">
-						<div class="text-contacto">
-							<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="" />
-							<span>
-								FDC CORPORATION E.I.R.L.
-							</span>
-						</div>
-						<div class="contactar">
-							<a href="/contactus" class="bg-primary">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
-									<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
-									</path>
-								</svg>
-								Contactar
-							</a>
-						</div>
-					</div>
-					<div class="info-empresa">
-						<div class="header-info">
-							<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<g id="icon-empresa">
-									<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35" />
-									<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35" />
-									<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
-								</g>
-							</svg>
-							<span t-esc="user_partner.name" />
-						</div>
-						<hr>
-						</hr>
-						<div class="body-text-info">
-							<span>
-								<strong>
-									Direccion :
-								</strong>
-								<t t-esc="user_partner.street" />
-							</span>
-							<span>
-								<strong>
-									RUC :
-								</strong>
-								<t t-esc="user_partner.vat" />
-							</span>
-							<span>
-								<strong>
-									Celular :
-								</strong>
-								<t t-esc="user_partner.phone" />
-							</span>
-							<span>
-								<strong>
-									Correo :
-								</strong>
-								<t t-esc="user_partner.email" />
-							</span>
-							<div class="condicion-estado">
-								<span>
-									<strong>
-										Condición :
-									</strong>
-									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
-								</span>
-								<span>
-									<strong>
-										Activo :
-									</strong>
-									<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
-								</span>
-							</div>
-							<span class="text-informativo">
-								Si aun no cuenta con el registro de alguna de sus sedes, solicita el
-								registro de la sede a FDCCORP para ver su historial de servicios
-							</span>
-							<div class="contenedor-button-info">
-								<a t-att-href="'/my/' + str(user_partner.id) + '/equipos'" class="bg-primary">
-									Ver mis equipos
-								</a>
-								<a href="" class="bg-primary">
-									Reporte General
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="main-card-sedes">
-					<div style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 15px;">
-						<h3>
-							Mis Sedes
-						</h3>
-						<form style=" display: flex; gap: 5px;" action="/my/sedes/" method="get" class="form-inline mb-3">
-							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar sedes..." value="" />
-							<button type="submit" class="btn btn-primary">
-								Buscar
-							</button>
-						</form>
-					</div>
-					<div class="main-sedes">
-						<t t-if="len(sedes) > 0">
-							<t t-foreach="sedes" t-as="sede">
-								<t t-if="len(sede.areas) > 0">
-									<a t-att-href="'/my/sede/' + str(sede.id) + '/areas'" class="card-sede">
-										<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % sede.id" alt="Sede Image" />
-										<div class="text-card-sede">
-											<strong t-esc="sede.name" />
-											<hr>
-											</hr>
-											<span t-esc="sede.street" />
-											<span t-esc="sede.email" />
-											<span t-esc="sede.phone" />
-										</div>
-									</a>
-								</t>
-								<t t-else="">
-									<a t-att-href="'/my/sede/' + str(sede.id) + '/equipos'" class="card-sede">
-										<img t-att-src="'/web/image?model=res.partner&amp;id=%s&amp;field=image_1920' % sede.id" alt="Sede Image" />
-										<div class="text-card-sede">
-											<strong t-esc="sede.name" />
-											<hr>
-											</hr>
-											<span t-esc="sede.street" />
-											<span t-esc="sede.email" />
-											<span t-esc="sede.phone" />
-										</div>
-									</a>
-								</t>
-							</t>
-						</t>
-						<t t-else="">
-							Lo sentimos.. al parecer no cuenta con sedes registrados a su cuenta de usuario.
-						</t>
-					</div>
-					<!-- Paginación -->
-					<div class="contenedor-paginacion">
-						<nav aria-label="Page navigation example">
-							<ul class="pagination justify-content-center">
-								<!-- Enlace a la página anterior -->
-								<li t-if="pagina_actual > 1" class="page-item">
-									<a t-att-href="'/my/sedes/page/' + str(pagina_actual - 1)" class="page-link" aria-label="Previous">
-										<span class="page-link">
-											« Anterior
-										</span>
-									</a>
-								</li>
-								<!-- Enlaces a las páginas -->
-								<t t-foreach="range(1, total_paginas + 1)" t-as="page">
-									<li t-attf-class="page-item #{'active' if page == pagina_actual else ''}">
-										<a t-att-href="'/my/sedes/page/' + str(page)" class="page-link">
-											<t t-esc="page" />
-										</a>
-									</li>
-								</t>
-								<!-- Enlace a la página siguiente -->
-								<li t-if="pagina_actual &lt; total_paginas" class="page-item">
-									<a t-att-href="'/my/sedes/page/' + str(pagina_actual + 1)" class="page-link" aria-label="Next">
-										<span class="page-link">
-											Siguiente »
-										</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-			</div>
-		</t>
-	</template>
+    <template id="portal_section_nav" name="Navegación del portal PMANT">
+        <t t-set="pmant_support_url" t-value="'https://wa.me/%s' % (request.env.company.partner_id.phone or '').replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')"/>
+        <aside class="pmant-sidebar pmant-page-rail">
+            <a class="pmant-brand" href="/my/sedes/" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
+            <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
+                <a href="/my/sedes/"><i class="fa fa-th-large"/><span>Panel de control</span></a>
+                <a t-att-href="'/my/%s/equipos/' % request.env.user.partner_id.commercial_partner_id.id"><i class="fa fa-cogs"/><span>Mis equipos</span></a>
+                <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/><span>Servicios activos</span></a>
+                <a href="/my/sedes/#sedes"><i class="fa fa-building-o"/><span>Sedes y áreas</span></a>
+                <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/><span>Soporte por WhatsApp</span></a>
+            </nav>
+            <div class="pmant-sidebar-footer">
+                <a class="pmant-shop-link" href="/shop"><i class="fa fa-shopping-bag"/><span>Ver nuestros productos</span></a>
+                <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(request.env.user.partner_id.name or 'U')[:1].upper()"/></span><span><strong t-esc="request.env.user.partner_id.name"/><small>Mi cuenta</small></span></a>
+            </div>
+        </aside>
+    </template>
+    <template id="sedes_portal" name="Panel de mantenimiento FDC">
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
+        <t t-set="pmant_support_url" t-value="'https://wa.me/%s' % (request.env.company.partner_id.phone or '').replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')"/>
+        <t t-call="website.layout">
+            <div id="wrap" class="pmant-dashboard">
+                <aside class="pmant-sidebar">
+                    <a class="pmant-brand" href="/my/sedes/" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
+                    <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
+                        <a class="active" href="/my/sedes/"><i class="fa fa-th-large"/> <span>Panel de control</span></a>
+                        <a t-att-href="'/my/%s/equipos/' % user_partner.id"><i class="fa fa-cogs"/> <span>Mis equipos</span></a>
+                        <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/> <span>Servicios activos</span></a>
+                        <a href="#sedes"><i class="fa fa-building-o"/> <span>Sedes y áreas</span></a>
+                        <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/> <span>Soporte por WhatsApp</span></a>
+                    </nav>
+                    <div class="pmant-sidebar-footer">
+                        <a class="pmant-shop-link" href="/shop"><i class="fa fa-shopping-bag"/> <span>Ver nuestros productos</span></a>
+                        <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(user_partner.name or 'U')[:1].upper()"/></span><span><strong t-esc="user_partner.name"/><small>Mi cuenta</small></span></a>
+                    </div>
+                </aside>
+                <main class="pmant-content">
+                    <header class="pmant-topbar">
+                        <button class="pmant-menu-toggle" type="button" aria-label="Abrir menú"><i class="fa fa-bars"/></button>
+                        <div><span class="pmant-eyebrow">PORTAL DE CLIENTES</span><h1>Hola, <t t-esc="user_partner.name or 'cliente'"/></h1><p>Controle sus equipos y servicios desde un solo lugar.</p></div>
+                        <div class="pmant-top-actions"><a t-att-href="pmant_support_url" target="_blank" rel="noopener" class="pmant-btn pmant-btn-ghost pmant-whatsapp-support"><i class="fa fa-whatsapp"/> Soporte</a><a href="/shop" class="pmant-btn pmant-btn-primary"><i class="fa fa-shopping-cart"/> Ver productos</a></div>
+                    </header>
+                    <section class="pmant-metrics" aria-label="Resumen">
+                        <a class="pmant-metric pmant-metric-primary" t-att-href="'/my/%s/equipos/' % user_partner.id"><span class="pmant-metric-icon"><i class="fa fa-cogs"/></span><span><small>Equipos registrados</small><strong t-esc="equipment_count"/><em>Ver inventario <i class="fa fa-arrow-right"/></em></span></a>
+                        <a class="pmant-metric pmant-metric-blue" href="/my/servicios/ejecucion"><span class="pmant-metric-icon"><i class="fa fa-wrench"/></span><span><small>Servicios activos</small><strong t-esc="active_service_count"/><em>Revisar servicios <i class="fa fa-arrow-right"/></em></span></a>
+                        <div class="pmant-metric pmant-metric-violet"><span class="pmant-metric-icon"><i class="fa fa-tasks"/></span><span><small>Tareas de mantenimiento</small><strong t-esc="task_count"/><em>Historial operativo</em></span></div>
+                        <div class="pmant-metric pmant-metric-amber"><span class="pmant-metric-icon"><i class="fa fa-commenting-o"/></span><span><small>Solicitudes enviadas</small><strong t-esc="request_count"/><em>Atención al cliente</em></span></div>
+                    </section>
+                    <section class="pmant-grid">
+                        <article class="pmant-panel pmant-panel-wide" id="sedes">
+                            <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ORGANIZACIÓN</span><h2>Mis sedes</h2><p>Seleccione una sede para consultar sus áreas y equipos.</p></div><form action="/my/sedes/" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar sede" t-att-value="search" aria-label="Buscar sede"/></form></div>
+                            <div class="pmant-location-grid" t-if="sedes">
+                                <t t-foreach="sedes" t-as="sede"><a class="pmant-location" t-att-href="'/my/sede/%s/%s/' % (sede.id, 'areas' if sede.areas else 'equipos')"><span class="pmant-location-icon"><i class="fa fa-building"/></span><span class="pmant-location-copy"><strong t-esc="sede.name"/><small t-esc="sede.street or 'Dirección no registrada'"/><small><i class="fa fa-cogs"/> <t t-esc="len(sede.equipos_ubicacion)"/> equipos</small></span><i class="fa fa-chevron-right pmant-location-arrow"/></a></t>
+                            </div>
+                            <div class="pmant-empty" t-else=""><span><i class="fa fa-building-o"/></span><h3>No encontramos sedes registradas</h3><p>Contacte con FDC para asociar una sede a su cuenta.</p><a href="/contactus" class="pmant-btn pmant-btn-primary">Solicitar ayuda</a></div>
+                            <nav class="pmant-pagination" t-if="total_paginas &gt; 1" aria-label="Paginación"><a t-if="pagina_actual &gt; 1" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual - 1, search)"><i class="fa fa-chevron-left"/> Anterior</a><span>Página <strong t-esc="pagina_actual"/> de <strong t-esc="total_paginas"/></span><a t-if="pagina_actual &lt; total_paginas" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual + 1, search)">Siguiente <i class="fa fa-chevron-right"/></a></nav>
+                        </article>
+                        <aside class="pmant-panel pmant-company-card">
+                            <div class="pmant-panel-head"><div><span class="pmant-eyebrow">MI EMPRESA</span><h2>Información de cuenta</h2></div></div>
+                            <div class="pmant-company-name"><span class="pmant-avatar large"><t t-esc="(user_partner.name or 'F')[:1].upper()"/></span><div><strong t-esc="user_partner.commercial_company_name or user_partner.name"/><small t-esc="user_partner.vat or 'RUC no registrado'"/></div></div>
+                            <dl class="pmant-company-data"><div><dt><i class="fa fa-map-marker"/> Dirección</dt><dd t-esc="user_partner.street or 'No registrada'"/></div><div><dt><i class="fa fa-envelope-o"/> Correo</dt><dd t-esc="user_partner.email or 'No registrado'"/></div><div><dt><i class="fa fa-phone"/> Teléfono</dt><dd t-esc="user_partner.phone or 'No registrado'"/></div></dl>
+                            <a href="/my/account" class="pmant-btn pmant-btn-secondary">Actualizar mis datos</a>
+                        </aside>
+                    </section>
+                    <section t-attf-class="pmant-maintenance-alert #{'has-overdue' if overdue_maintenance_count else ('has-warning' if due_soon_count else 'is-clear')}" aria-label="Estado de próximos mantenimientos">
+                        <div class="pmant-maintenance-alert-head">
+                            <span class="pmant-maintenance-alert-icon"><i t-attf-class="fa #{'fa-exclamation-triangle' if overdue_maintenance_count else ('fa-clock-o' if due_soon_count else 'fa-check-circle')}"/></span>
+                            <div>
+                                <span class="pmant-eyebrow">CONTROL PREVENTIVO</span>
+                                <h2 t-if="overdue_maintenance_count"><t t-esc="overdue_maintenance_count"/> equipo<t t-if="overdue_maintenance_count != 1">s</t> con mantenimiento vencido</h2>
+                                <h2 t-elif="due_soon_count"><t t-esc="due_soon_count"/> equipo<t t-if="due_soon_count != 1">s</t> próximo<t t-if="due_soon_count != 1">s</t> a mantenimiento</h2>
+                                <h2 t-else="">Sus equipos están al día</h2>
+                                <p t-if="maintenance_alerts">Revise las fechas y solicite atención directamente por WhatsApp.</p>
+                                <p t-else="">No hay mantenimientos vencidos ni programados para los próximos 30 días.</p>
+                            </div>
+                            <div class="pmant-alert-summary" t-if="maintenance_alerts">
+                                <span class="overdue" t-if="overdue_maintenance_count"><strong t-esc="overdue_maintenance_count"/> vencido<t t-if="overdue_maintenance_count != 1">s</t></span>
+                                <span class="soon" t-if="due_soon_count"><strong t-esc="due_soon_count"/> próximo<t t-if="due_soon_count != 1">s</t></span>
+                            </div>
+                        </div>
+                        <div class="pmant-maintenance-alert-list" t-if="maintenance_alerts">
+                            <t t-foreach="maintenance_alerts" t-as="item">
+                                <t t-set="plan" t-value="item['record']"/>
+                                <article t-attf-class="pmant-maintenance-alert-item #{item['status']}">
+                                    <span class="pmant-alert-equipment-icon"><i class="fa fa-cogs"/></span>
+                                    <div class="pmant-alert-equipment-copy">
+                                        <strong t-esc="plan.equipo.name or 'Equipo'"/>
+                                        <small><t t-esc="plan.equipo.serial_no or 'Sin serie'"/> · <t t-esc="plan.equipo.ubicacion.name if plan.equipo.ubicacion else 'Sin ubicación'"/></small>
+                                    </div>
+                                    <div class="pmant-alert-date">
+                                        <small>Próximo mantenimiento</small>
+                                        <strong t-esc="plan.fecha_ejecprox.strftime('%d/%m/%Y')"/>
+                                    </div>
+                                    <span t-attf-class="pmant-alert-status #{item['status']}">
+                                        <t t-if="item['status'] == 'overdue'">Vencido hace <t t-esc="abs(item['days_remaining'])"/> día<t t-if="abs(item['days_remaining']) != 1">s</t></t>
+                                        <t t-elif="item['status'] == 'today'">Vence hoy</t>
+                                        <t t-else="">Vence en <t t-esc="item['days_remaining']"/> día<t t-if="item['days_remaining'] != 1">s</t></t>
+                                    </span>
+                                    <a class="pmant-btn pmant-btn-primary pmant-alert-whatsapp" t-att-href="item['whatsapp_url']" target="_blank" rel="noopener noreferrer"><i class="fa fa-whatsapp"/> Solicitar mantenimiento</a>
+                                </article>
+                            </t>
+                        </div>
+                    </section>
+                    <section class="pmant-service-insights" aria-label="Planificación de servicios">
+                        <article class="pmant-panel pmant-upcoming-panel">
+                            <div class="pmant-panel-head">
+                                <div><span class="pmant-eyebrow">PLANIFICACIÓN</span><h2>Próximos servicios</h2><p>Mantenimientos con fecha próxima para sus equipos.</p></div>
+                                <span class="pmant-insight-head-icon"><i class="fa fa-calendar"/></span>
+                            </div>
+                            <div class="pmant-upcoming-list" t-if="upcoming_services">
+                                <t t-foreach="upcoming_services" t-as="item">
+                                    <t t-set="plan" t-value="item['record']"/>
+                                    <a class="pmant-upcoming-item" t-att-href="'/my/equipos/%s/detalles' % plan.equipo.id">
+                                        <span class="pmant-upcoming-date"><strong t-esc="plan.fecha_ejecprox.strftime('%d')"/><small t-esc="plan.fecha_ejecprox.strftime('%m/%Y')"/></span>
+                                        <span class="pmant-upcoming-copy">
+                                            <strong t-esc="plan.equipo.name or 'Equipo'"/>
+                                            <small t-esc="plan.plan.name if plan.plan else 'Mantenimiento programado'"/>
+                                        </span>
+                                        <span t-attf-class="pmant-due-badge #{'today' if item['days_remaining'] == 0 else ''}">
+                                            <t t-if="item['days_remaining'] == 0">Hoy</t>
+                                            <t t-elif="item['days_remaining'] == 1">Mañana</t>
+                                            <t t-else="">En <t t-esc="item['days_remaining']"/> días</t>
+                                        </span>
+                                        <i class="fa fa-chevron-right"/>
+                                    </a>
+                                </t>
+                            </div>
+                            <div class="pmant-empty compact" t-else=""><span><i class="fa fa-calendar-check-o"/></span><div><h3>Sin servicios próximos</h3><p>No existen mantenimientos pendientes con fecha programada.</p></div></div>
+                        </article>
+                        <article class="pmant-panel pmant-last-service-panel">
+                            <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ÚLTIMO SERVICIO</span><h2>Último mantenimiento</h2><p>La atención más reciente registrada.</p></div><span class="pmant-insight-head-icon"><i class="fa fa-history"/></span></div>
+                            <t t-if="last_service">
+                                <div class="pmant-last-service-date"><strong t-esc="last_service.fecha_ejec.strftime('%d')"/><span><b t-esc="last_service.fecha_ejec.strftime('%m/%Y')"/><small>Fecha de ejecución</small></span></div>
+                                <dl class="pmant-last-service-data">
+                                    <div><dt>Equipo</dt><dd t-esc="last_service.equipo.name or '-'"/></div>
+                                    <div><dt>Servicio</dt><dd t-esc="last_service.plan.name if last_service.plan else 'Mantenimiento'"/></div>
+                                    <div><dt>Ubicación</dt><dd t-esc="last_service.equipo.ubicacion.name if last_service.equipo.ubicacion else '-'"/></div>
+                                </dl>
+                                <a class="pmant-btn pmant-btn-secondary" t-att-href="'/my/equipo/%s/historial' % last_service.equipo.id">Ver historial <i class="fa fa-arrow-right"/></a>
+                            </t>
+                            <div class="pmant-empty compact" t-else=""><span><i class="fa fa-wrench"/></span><div><h3>Sin servicios realizados</h3><p>El último mantenimiento aparecerá cuando sea registrado.</p></div></div>
+                        </article>
+                    </section>
+                    <section class="pmant-panel pmant-recent">
+                        <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ACTIVIDAD</span><h2>Servicios recientes</h2></div><a href="/my/servicios/ejecucion">Ver todos <i class="fa fa-arrow-right"/></a></div>
+                        <div class="pmant-table-wrap" t-if="recent_services"><table><thead><tr><th>Orden</th><th>Equipo / tarea</th><th>Programación</th><th>Estado</th></tr></thead><tbody><tr t-foreach="recent_services" t-as="service"><td><strong t-esc="service.name"/></td><td t-esc="service.tarea.name"/><td t-esc="service.schedule_date or 'Por programar'"/><td><span class="pmant-status" t-esc="service.stage_id.name or 'Nuevo'"/></td></tr></tbody></table></div>
+                        <div class="pmant-empty compact" t-else=""><span><i class="fa fa-check-circle-o"/></span><div><h3>Sin actividad reciente</h3><p>Los próximos servicios aparecerán aquí.</p></div></div>
+                    </section>
+                </main>
+            </div>
+        </t>
+    </template>
 </odoo>

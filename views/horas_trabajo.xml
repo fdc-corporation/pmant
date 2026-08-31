@@ -35,7 +35,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Incidencias" group="pmant.group_pmant_admin,pmant.group_pmant_planner">
+                        <page string="Incidencias" groups="pmant.group_pmant_admin,pmant.group_pmant_planner">
                             <field name="tab_comentarios">
                                 <list>
                                     <field name="file_ref" widget="image" />

@@ -868,3 +868,1321 @@ notificacion-error_solicitud {
 }
 
 /*# sourceMappingURL=sedes_portal.css.map */
+
+/* Portal FDC: dashboard independiente */
+body:has(.pmant-dashboard) #top,
+body:has(.pmant-dashboard) footer,
+body:has(.pmant-dashboard) .o_footer_copyright {
+  display: none !important;
+}
+body:has(.pmant-dashboard) {
+  margin: 0;
+  background: #0d1720;
+}
+.pmant-dashboard {
+  --pmant-bg: #0d1720;
+  --pmant-surface: #14232d;
+  --pmant-surface-soft: #1b2d38;
+  --pmant-border: rgba(255,255,255,.09);
+  --pmant-text: #f5f8fa;
+  --pmant-muted: #9babb5;
+  --pmant-accent: #08c979;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  color: var(--pmant-text);
+  background: radial-gradient(circle at 85% 0%, rgba(8,201,121,.08), transparent 28%), var(--pmant-bg);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+.pmant-dashboard a { color: inherit; text-decoration: none; }
+.pmant-sidebar {
+  position: sticky; top: 0; height: 100vh; padding: 28px 20px;
+  display: flex; flex-direction: column; z-index: 20;
+  background: #182a35; border-right: 1px solid var(--pmant-border);
+}
+.pmant-brand, .pmant-user { display: flex; align-items: center; gap: 12px; }
+.pmant-brand { padding: 0 10px 28px; }
+.pmant-brand-mark, .pmant-avatar {
+  width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+  flex: 0 0 auto; color: #06170f; background: var(--pmant-accent); font-weight: 800;
+}
+.pmant-brand strong, .pmant-brand small, .pmant-user strong, .pmant-user small { display: block; }
+.pmant-brand strong { font-size: 18px; letter-spacing: .08em; }
+.pmant-brand small, .pmant-user small { color: var(--pmant-muted); font-size: 11px; }
+.pmant-nav { display: grid; gap: 7px; }
+.pmant-nav a, .pmant-shop-link {
+  min-height: 48px; display: flex; align-items: center; gap: 13px; padding: 0 14px;
+  border-radius: 12px; color: #c4d0d7; font-size: 14px; transition: .2s ease;
+}
+.pmant-nav a i, .pmant-shop-link i { width: 22px; font-size: 17px; text-align: center; }
+.pmant-nav a:hover, .pmant-nav a.active { color: #fff; background: rgba(8,201,121,.14); }
+.pmant-nav a.active i { color: var(--pmant-accent); }
+.pmant-sidebar-footer { margin-top: auto; display: grid; gap: 16px; }
+.pmant-shop-link { border: 1px solid rgba(8,201,121,.35); color: #baf6d9; }
+.pmant-shop-link:hover { background: var(--pmant-accent); color: #06170f; }
+.pmant-user { padding: 14px 8px 0; border-top: 1px solid var(--pmant-border); min-width: 0; }
+.pmant-user > span:last-child { min-width: 0; }
+.pmant-user strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.pmant-content { padding: 38px clamp(22px, 4vw, 62px) 60px; min-width: 0; }
+.pmant-topbar { display: flex; align-items: center; gap: 24px; margin-bottom: 30px; }
+.pmant-topbar > div:nth-child(2) { flex: 1; }
+.pmant-eyebrow { color: var(--pmant-accent); font-size: 11px; font-weight: 700; letter-spacing: .14em; }
+.pmant-topbar h1 { margin: 4px 0; color: #fff; font-size: clamp(26px, 3vw, 38px); font-weight: 650; }
+.pmant-topbar p, .pmant-panel-head p { margin: 0; color: var(--pmant-muted); }
+.pmant-top-actions { display: flex; gap: 10px; }
+.pmant-btn { min-height: 42px; padding: 0 17px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 11px; font-size: 13px; font-weight: 600; border: 1px solid transparent; }
+.pmant-btn-primary { color: #052016 !important; background: var(--pmant-accent); }
+.pmant-btn-ghost { border-color: var(--pmant-border); background: rgba(255,255,255,.03); }
+.pmant-btn-secondary { width: 100%; border-color: var(--pmant-border); background: var(--pmant-surface-soft); }
+.pmant-menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--pmant-border); border-radius: 10px; color: #fff; background: var(--pmant-surface); }
+.pmant-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
+.pmant-metric { min-height: 150px; padding: 22px; display: flex; gap: 16px; border: 1px solid var(--pmant-border); border-radius: 16px; background: linear-gradient(145deg, rgba(255,255,255,.035), transparent), var(--pmant-surface); box-shadow: 0 16px 40px rgba(0,0,0,.16); }
+a.pmant-metric:hover { transform: translateY(-2px); border-color: rgba(8,201,121,.35); }
+.pmant-metric-icon { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 14px; font-size: 20px; }
+.pmant-metric > span:last-child { display: flex; flex-direction: column; min-width: 0; }
+.pmant-metric small { color: var(--pmant-muted); font-size: 12px; }
+.pmant-metric strong { margin: 5px 0 6px; color: #fff; font-size: 32px; line-height: 1; }
+.pmant-metric em { margin-top: auto; color: #c6d3d9; font-size: 11px; font-style: normal; }
+.pmant-metric-green .pmant-metric-icon { color: #19e691; background: rgba(8,201,121,.14); }
+.pmant-metric-blue .pmant-metric-icon { color: #62b8ff; background: rgba(45,145,230,.15); }
+.pmant-metric-violet .pmant-metric-icon { color: #bb91ff; background: rgba(139,92,246,.15); }
+.pmant-metric-amber .pmant-metric-icon { color: #ffc566; background: rgba(245,158,11,.15); }
+.pmant-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, .8fr); gap: 18px; margin-bottom: 18px; }
+.pmant-panel { padding: 24px; border: 1px solid var(--pmant-border); border-radius: 16px; background: var(--pmant-surface); box-shadow: 0 16px 40px rgba(0,0,0,.13); }
+.pmant-panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 20px; }
+.pmant-panel-head h2 { margin: 3px 0 2px; color: #fff; font-size: 20px; }
+.pmant-panel-head > a { color: var(--pmant-accent); font-size: 12px; font-weight: 600; }
+.pmant-search { width: min(270px, 100%); min-height: 42px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border: 1px solid var(--pmant-border); border-radius: 11px; background: #0f1d25; }
+.pmant-search i { color: var(--pmant-muted); }
+.pmant-search input { width: 100%; color: #fff; background: transparent; border: 0; outline: 0; }
+.pmant-location-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pmant-location { min-height: 92px; padding: 15px; display: flex; align-items: center; gap: 13px; border: 1px solid var(--pmant-border); border-radius: 13px; background: rgba(255,255,255,.025); }
+.pmant-location:hover { border-color: rgba(8,201,121,.35); background: rgba(8,201,121,.05); }
+.pmant-location-icon { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 12px; color: var(--pmant-accent); background: rgba(8,201,121,.12); }
+.pmant-location-copy { min-width: 0; display: grid; gap: 3px; }
+.pmant-location-copy strong, .pmant-location-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-location-copy small { color: var(--pmant-muted); font-size: 11px; }
+.pmant-location-arrow { margin-left: auto; color: #61737e; }
+.pmant-company-name { display: flex; align-items: center; gap: 14px; margin: 5px 0 22px; }
+.pmant-avatar.large { width: 54px; height: 54px; font-size: 20px; }
+.pmant-company-name strong, .pmant-company-name small { display: block; }
+.pmant-company-name small { color: var(--pmant-muted); font-size: 11px; }
+.pmant-company-data { display: grid; gap: 12px; margin: 0 0 20px; }
+.pmant-company-data div { padding-bottom: 11px; border-bottom: 1px solid var(--pmant-border); }
+.pmant-company-data dt { color: var(--pmant-muted); font-size: 11px; font-weight: 500; }
+.pmant-company-data dd { margin: 4px 0 0; color: #e4eaee; font-size: 12px; word-break: break-word; }
+.pmant-table-wrap { overflow-x: auto; }
+.pmant-table-wrap table { width: 100%; border-collapse: collapse; }
+.pmant-table-wrap th { padding: 11px 14px; color: var(--pmant-muted); background: #0f1d25; font-size: 10px; letter-spacing: .08em; text-align: left; }
+.pmant-table-wrap td { padding: 14px; border-bottom: 1px solid var(--pmant-border); color: #d8e1e6; font-size: 12px; }
+.pmant-status { padding: 5px 9px; border-radius: 999px; color: #86edbd; background: rgba(8,201,121,.12); }
+.pmant-empty { min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--pmant-muted); }
+.pmant-empty > span { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 15px; color: var(--pmant-accent); background: rgba(8,201,121,.1); font-size: 22px; }
+.pmant-empty h3 { margin: 13px 0 4px; color: #fff; font-size: 16px; }
+.pmant-empty p { margin: 0 0 15px; font-size: 12px; }
+.pmant-empty.compact { min-height: 100px; flex-direction: row; gap: 14px; text-align: left; }
+.pmant-empty.compact h3 { margin-top: 0; }
+.pmant-pagination { margin-top: 18px; display: flex; justify-content: space-between; align-items: center; color: var(--pmant-muted); font-size: 12px; }
+.pmant-pagination a { color: var(--pmant-accent); }
+@media (max-width: 1180px) {
+  .pmant-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pmant-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .pmant-dashboard { grid-template-columns: 1fr; }
+  .pmant-sidebar { position: fixed; left: 0; width: 260px; transform: translateX(-105%); transition: transform .25s ease; box-shadow: 20px 0 50px rgba(0,0,0,.35); }
+  .pmant-dashboard.menu-open .pmant-sidebar { transform: translateX(0); }
+  .pmant-menu-toggle { display: grid; place-items: center; flex: 0 0 auto; }
+  .pmant-content { padding: 24px 16px 40px; }
+  .pmant-top-actions .pmant-btn-ghost { display: none; }
+}
+@media (max-width: 580px) {
+  .pmant-topbar { align-items: flex-start; flex-wrap: wrap; }
+  .pmant-top-actions { width: 100%; }
+  .pmant-top-actions .pmant-btn { width: 100%; }
+  .pmant-metrics, .pmant-location-grid { grid-template-columns: 1fr; }
+  .pmant-panel-head { flex-direction: column; }
+  .pmant-search { width: 100%; }
+  .pmant-table-wrap table { min-width: 620px; }
+}
+
+/* Shared PMANT portal workspace (equipment, locations and services). */
+.pmant-page-rail {
+  --rail-accent: #08c979;
+  position: fixed; inset: 0 auto 0 0; z-index: 1030; width: 224px;
+  display: flex; flex-direction: column; align-items: stretch; padding: 24px 16px 18px;
+  color: #dce7eb; background: #172a34; border-right: 1px solid rgba(255,255,255,.07);
+  box-shadow: 12px 0 35px rgba(0,0,0,.14);
+}
+.pmant-page-brand { display: flex; align-items: center; gap: 11px; color: #fff !important; font-size: 14px; }
+.pmant-page-brand span { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; color: #062218; background: var(--rail-accent); font-size: 19px; font-weight: 800; }
+.pmant-page-rail nav { width: 100%; display: grid; gap: 10px; margin-top: 42px; }
+.pmant-page-rail nav a, .pmant-page-shop { min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 9px 13px; border-radius: 11px; color: #9cb0b9 !important; font-size: 12px; text-align: left; transition: .2s ease; }
+.pmant-page-rail nav a i, .pmant-page-shop i { font-size: 18px; }
+.pmant-page-rail nav a:hover, .pmant-page-shop:hover { color: #fff !important; background: rgba(8,201,121,.13); }
+.pmant-page-shop { width: 100%; margin-top: auto; color: #78e8b4 !important; }
+.pmant-page-rail ~ .main { box-sizing: border-box; width: auto !important; max-width: none !important; min-height: 100vh; margin: 0 0 0 224px !important; padding: 30px clamp(20px, 4vw, 58px) 50px !important; display: grid !important; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); align-items: start; justify-content: normal !important; gap: 20px !important; color: #dce5e9; background: #101e26; }
+.pmant-page-rail ~ .main a { text-decoration: none; }
+.pmant-page-rail ~ .main .card-contacto-main,
+.pmant-page-rail ~ .main .main-card-equipos,
+.pmant-page-rail ~ .main .main-card-detalles-equipo,
+.pmant-page-rail ~ .main .contenedor-formulario {
+  max-width: 1500px; margin-right: auto; margin-left: auto; border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 16px !important; background: #21343e !important; box-shadow: 0 18px 45px rgba(0,0,0,.16) !important;
+}
+.pmant-page-rail ~ .main .card-contacto-main { width: 100% !important; margin-bottom: 18px; overflow: hidden; }
+.pmant-page-rail ~ .main .main-card-equipos { width: 100% !important; min-width: 0; padding: 24px !important; }
+.pmant-page-rail ~ .main .main-card-equipos > div:first-child h3 { margin: 0 0 18px; font-size: clamp(23px, 3vw, 34px); letter-spacing: -.03em; }
+.pmant-page-rail ~ .main .card-contacto { background: #172a34 !important; }
+.pmant-page-rail ~ .main .info-empresa,
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo { color: #dce5e9 !important; background: #21343e !important; }
+.pmant-page-rail ~ .main h1, .pmant-page-rail ~ .main h2, .pmant-page-rail ~ .main h3,
+.pmant-page-rail ~ .main h4, .pmant-page-rail ~ .main strong { color: #fff; }
+.pmant-page-rail ~ .main .main-equipos { gap: 16px; padding: 20px; }
+.pmant-page-rail ~ .main .card-equipo,
+.pmant-page-rail ~ .main .card-sede,
+.pmant-page-rail ~ .main .card-mantenimiento {
+  overflow: hidden; color: #dce5e9 !important; background: #182b35 !important;
+  border: 1px solid rgba(255,255,255,.08) !important; border-radius: 14px !important;
+  box-shadow: 0 12px 26px rgba(0,0,0,.13) !important; transition: transform .2s ease, border-color .2s ease;
+}
+.pmant-page-rail ~ .main .card-equipo:hover,
+.pmant-page-rail ~ .main .card-sede:hover,
+.pmant-page-rail ~ .main .card-mantenimiento:hover { transform: translateY(-3px); border-color: rgba(8,201,121,.42) !important; }
+.pmant-page-rail ~ .main .bg-primary,
+.pmant-page-rail ~ .main .btn-primary { color: #062218 !important; background: #08c979 !important; border-color: #08c979 !important; border-radius: 10px !important; font-weight: 700; }
+.pmant-page-rail ~ .main input, .pmant-page-rail ~ .main select, .pmant-page-rail ~ .main textarea {
+  color: #edf4f6 !important; background: #102029 !important; border: 1px solid rgba(255,255,255,.12) !important; border-radius: 10px !important;
+}
+.pmant-page-rail ~ .main input::placeholder, .pmant-page-rail ~ .main textarea::placeholder { color: #71868f; }
+.pmant-page-rail ~ .main .pagination .page-link { color: #d7e3e7; background: #172a34; border-color: rgba(255,255,255,.09); }
+.pmant-page-rail ~ .main .pagination .active .page-link { color: #062218; background: #08c979; border-color: #08c979; }
+.pmant-page-rail ~ .main hr { border-color: rgba(255,255,255,.1); }
+.pmant-page-loading::after { content: "Actualizando información…"; position: fixed; inset: 0; z-index: 1100; display: grid; place-items: center; color: #e8f3f0; background: rgba(7,19,25,.72); backdrop-filter: blur(3px); font-size: 14px; font-weight: 600; }
+@media (max-width: 1050px) {
+  .pmant-page-rail ~ .main { grid-template-columns: 1fr; }
+  .pmant-page-rail ~ .main .card-contacto-main { order: 2; }
+}
+@media (max-width: 720px) {
+  .pmant-page-rail { inset: auto 0 0 0; width: 100%; height: 70px; flex-direction: row; padding: 7px 10px; border-top: 1px solid rgba(255,255,255,.08); border-right: 0; }
+  .pmant-page-brand { display: none; }
+  .pmant-page-rail nav { grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0; }
+  .pmant-page-rail nav a, .pmant-page-shop { min-height: 54px; }
+  .pmant-page-shop { width: 62px; margin: 0 0 0 4px; }
+  .pmant-page-rail ~ .main { margin-left: 0 !important; padding: 18px 12px 88px !important; }
+}
+
+/* Servicios en ejecución */
+.pmant-active-services-page { display: flex; flex-direction: column; gap: 16px; }
+.pmant-page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.pmant-page-heading h1 { margin: 3px 0 5px; color: #fff; font-size: clamp(28px,3vw,40px); }
+.pmant-page-heading p { margin: 0; color: #9db7c5; }
+.pmant-active-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.pmant-active-summary article { display: flex; align-items: center; gap: 13px; padding: 16px; border: 1px solid #294552; border-radius: 14px; background: #172f3b; }
+.pmant-active-summary article > span,
+.pmant-active-service-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 46px; width: 46px; height: 46px; border-radius: 12px; color: #56b9ed; background: rgba(49,145,196,.16); font-size: 19px; }
+.pmant-active-summary article div { display: flex; min-width: 0; flex-direction: column; }
+.pmant-active-summary small { color: #8fabb9; }
+.pmant-active-summary strong { overflow: hidden; color: #fff; font-size: 22px; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-active-services-panel { padding: 20px; }
+.pmant-active-toolbar { align-items: center; gap: 18px; }
+.pmant-active-tools { display: flex; align-items: center; gap: 10px; }
+.pmant-active-tools .pmant-search { width: min(340px,32vw); }
+.pmant-active-service-list { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px !important; padding: 0 !important; background: transparent !important; }
+.pmant-active-table-head { display: none; }
+.pmant-active-service-card { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; padding: 16px; min-width: 0; border: 1px solid #294552; border-radius: 13px; background: #102630; transition: border-color .2s ease, transform .2s ease; }
+.pmant-active-service-card:hover { border-color: #3191c4; transform: translateY(-2px); }
+.pmant-active-equipment { display: flex; min-width: 0; align-items: center; gap: 12px; }
+.pmant-active-equipment > div,
+.pmant-active-order,
+.pmant-active-date,
+.pmant-active-stage { display: flex; min-width: 0; flex-direction: column; gap: 3px; }
+.pmant-active-equipment strong,
+.pmant-active-order strong,
+.pmant-active-date strong { overflow: hidden; color: #fff; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-active-equipment small,
+.pmant-active-order small,
+.pmant-active-date small,
+.pmant-active-stage small { color: #7fa2b4; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.pmant-active-equipment small,
+.pmant-active-order span { overflow: hidden; color: #9cb6c4; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-active-order,
+.pmant-active-date,
+.pmant-active-stage { padding-top: 11px; border-top: 1px solid #29414d; }
+.pmant-active-date { grid-column: 1; }
+.pmant-active-stage { grid-column: 2; grid-row: 2; }
+.pmant-active-stage .pmant-status { align-self: flex-start; color: #a7dcf8; background: rgba(49,145,196,.15); }
+.pmant-active-stage .fa { color: #3191c4; font-size: 8px; }
+.pmant-active-actions { display: flex; grid-column: 1 / -1; align-items: center; justify-content: flex-end; gap: 8px; }
+.pmant-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 39px; height: 39px; border: 1px solid #35505e; border-radius: 9px; color: #8fcfee; background: #18333f; }
+.pmant-icon-btn:hover { border-color: #3191c4; color: #fff; }
+.pmant-active-service-list.pmant-table-view { display: block !important; overflow-x: auto; border: 1px solid #294552; border-radius: 13px; }
+.pmant-active-service-list.pmant-table-view .pmant-active-table-head,
+.pmant-active-service-list.pmant-table-view .pmant-active-service-card { display: grid; grid-template-columns: minmax(230px,1.3fr) minmax(190px,1fr) minmax(145px,.65fr) minmax(150px,.7fr) minmax(170px,.7fr); align-items: center; min-width: 1050px; gap: 16px; }
+.pmant-active-service-list.pmant-table-view .pmant-active-table-head { padding: 12px 16px; color: #84b6d1; background: #0d202a; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.pmant-active-service-list.pmant-table-view .pmant-active-service-card { padding: 13px 16px; border: 0; border-top: 1px solid #29414d; border-radius: 0; }
+.pmant-active-service-list.pmant-table-view .pmant-active-service-card:hover { transform: none; }
+.pmant-active-service-list.pmant-table-view .pmant-active-order,
+.pmant-active-service-list.pmant-table-view .pmant-active-date,
+.pmant-active-service-list.pmant-table-view .pmant-active-stage { grid-column: auto; grid-row: auto; padding: 0; border: 0; }
+.pmant-active-service-list.pmant-table-view .pmant-active-actions { grid-column: auto; justify-content: flex-start; }
+@media (max-width: 1050px) {
+    .pmant-active-toolbar { align-items: flex-start; flex-direction: column; }
+    .pmant-active-tools { width: 100%; }
+    .pmant-active-tools .pmant-search { flex: 1; width: auto; }
+}
+@media (max-width: 780px) {
+    .pmant-page-heading { align-items: flex-start; flex-direction: column; }
+    .pmant-active-summary { grid-template-columns: 1fr; }
+    .pmant-active-service-list { grid-template-columns: 1fr; }
+    .pmant-active-tools { align-items: stretch; flex-direction: column; }
+    .pmant-active-tools .pmant-search { width: 100%; }
+}
+
+/* Cotizaciones: tarjetas y tabla con columnas reales */
+.pmant-quote-table-head { display: none; }
+.pmant-page-rail ~ .main .pmant-quote-list .card-sede {
+    grid-template-columns: 48px minmax(150px,.9fr) minmax(150px,.75fr) minmax(190px,1fr) auto !important;
+    align-items: center !important; min-height: 112px;
+}
+.pmant-quote-identity,
+.pmant-quote-payment,
+.pmant-quote-shipping { display: flex; min-width: 0; flex-direction: column; gap: 5px; }
+.pmant-quote-identity small,
+.pmant-quote-payment small,
+.pmant-quote-shipping small { color: #7fa4b7; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.pmant-quote-identity strong,
+.pmant-quote-payment strong,
+.pmant-quote-shipping strong { overflow: hidden; color: #f4f8fa; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-quote-identity span { color: #8ea9b7; font-size: 12px; }
+.pmant-page-rail ~ .main .pmant-quote-list .btn-desca { display: inline-flex; align-items: center; justify-content: center; gap: 7px; width: auto; min-width: 82px; height: 38px; padding: 0 12px !important; border-radius: 9px; color: #071923; font-weight: 700; text-decoration: none; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view { overflow-x: auto; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-table-head,
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede {
+    display: grid !important;
+    grid-template-columns: 56px minmax(220px,1fr) minmax(180px,.8fr) minmax(260px,1.15fr) 100px !important;
+    align-items: center; min-width: 930px; gap: 14px;
+}
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-table-head { padding: 12px 16px; color: #83b5cf; background: #0c202a; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede { min-height: 76px; padding: 12px 16px !important; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-identity small,
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-payment small,
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-shipping small { display: none; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .btn-desca { justify-self: start; align-self: center; }
+@media (max-width: 900px) {
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .card-sede { grid-template-columns: 48px minmax(0,1fr) auto !important; }
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-payment,
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-shipping { grid-column: 2; }
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .btn-desca { grid-column: 3; grid-row: 1; }
+}
+
+/* Checklist portal supplied by pmant_checklist. */
+.pmant-equipment-summary { overflow: hidden; margin-bottom: 20px; color: #dce5e9; background: #152832; border: 1px solid rgba(255,255,255,.09); border-radius: 16px; }
+.pmant-equipment-identity { padding: 24px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.pmant-equipment-identity h1 { margin: 3px 0; color: #fff; font-size: clamp(25px,3vw,36px); }
+.pmant-equipment-identity p, .pmant-section-toolbar p { margin: 0; color: #91a6b0; }
+.pmant-eyebrow { color: #08c979; font-size: 10px; font-weight: 800; letter-spacing: .14em; }
+.pmant-summary-grid { padding: 18px 24px 24px; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+.pmant-summary-grid > div { min-height: 76px; padding: 14px 16px; display: grid; align-content: center; gap: 5px; background: #182f3a; border: 1px solid rgba(255,255,255,.07); border-radius: 12px; }
+.pmant-summary-grid small { color: #83a0ad; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.pmant-summary-grid strong { color: #f4f8f9; font-size: 13px; }
+.pmant-section-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+.pmant-section-toolbar h2 { margin: 3px 0; color: #fff; font-size: clamp(23px,3vw,32px); }
+.pmant-checklist-accordion { margin-top: 20px; }
+.pmant-checklist-accordion .accordion-button { display: flex; gap: 13px; align-items: center; }
+.pmant-checklist-title { min-width: 0; display: grid; flex: 1; gap: 4px; }
+.pmant-checklist-title strong { color: #fff; }
+.pmant-checklist-title small { color: #91a6b0; font-size: 11px; }
+.pmant-count-badge, .pmant-status { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+.pmant-count-badge { color: #90ebbd; background: rgba(8,201,121,.1); }
+.pmant-status.success { color: #77e8ad; background: rgba(8,201,121,.13); }
+.pmant-status.danger { color: #ff9a9a; background: rgba(239,68,68,.14); }
+.pmant-data-table { width: 100%; color: #dce5e9; border-collapse: collapse; }
+.pmant-data-table th, .pmant-data-table td { padding: 13px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+.pmant-data-table th { color: #83a0ad; font-size: 10px; text-transform: uppercase; }
+.pmant-empty-state { min-height: 260px; display: grid; place-items: center; align-content: center; gap: 8px; text-align: center; }
+.pmant-empty-state h3 { margin: 0; color: #fff; }.pmant-empty-state p { color: #91a6b0; }
+.pmant-state-success { color: #73e7ad !important; background: rgba(8,201,121,.13) !important; }
+.pmant-state-actions { margin-top: 22px; display: flex; justify-content: center; gap: 10px; }
+.pmant-checklist-progress { display: flex; align-items: center; gap: 13px; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.pmant-checklist-progress > div { display: grid; gap: 3px; }.pmant-checklist-progress small { color: #91a6b0; }
+.pmant-question-list { display: grid; gap: 13px; }
+.pmant-question-card { margin: 0 !important; padding: 18px !important; background: #152832; border: 1px solid rgba(255,255,255,.08) !important; border-radius: 13px; }
+.pmant-question-head { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 15px; }
+.pmant-question-head label { color: #fff; font-size: 14px; }
+.pmant-question-number { width: 25px; height: 25px; display: grid; place-items: center; flex: 0 0 auto; color: #092319; background: #08c979; border-radius: 7px; font-size: 10px; font-weight: 800; }
+.pmant-answer-options { display: flex; gap: 9px; }.pmant-answer-options .btn { min-width: 90px; }
+.pmant-comment-area { margin-top: 15px; display: grid; gap: 10px; color: #aebdc4; }
+.pmant-checklist-form-page textarea { color: #fff !important; background: #102029 !important; border-color: rgba(255,255,255,.12) !important; }
+@media (max-width: 900px) { .pmant-summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 600px) { .pmant-summary-grid { grid-template-columns: 1fr; }.pmant-section-toolbar,.pmant-state-actions { align-items: stretch; flex-direction: column; }.pmant-count-badge { display:none; }.pmant-state-actions .btn { width:100%; } }
+
+/* Company-controlled portal palette and equipment forms. */
+.pmant-portal-page .btn-primary,
+.pmant-dashboard .pmant-btn-primary,
+.pmant-dashboard .pmant-brand-mark,
+.pmant-dashboard .pmant-avatar,
+.pmant-dashboard .pmant-pagination a,
+.pmant-page-rail .pmant-brand-mark,
+.pmant-page-rail .pmant-avatar,
+.pmant-page-rail ~ .main .bg-primary,
+.pmant-page-rail ~ .main .btn-primary {
+  color: #071d14 !important;
+  background: var(--pmant-primary, #08c979) !important;
+  border-color: var(--pmant-primary, #08c979) !important;
+}
+.pmant-dashboard .pmant-nav a.active,
+.pmant-dashboard .pmant-nav a:hover,
+.pmant-page-rail .pmant-nav a.active,
+.pmant-page-rail .pmant-nav a:hover { background: color-mix(in srgb, var(--pmant-primary, #08c979) 19%, transparent) !important; }
+.pmant-dashboard .pmant-eyebrow,
+.pmant-dashboard .pmant-nav i,
+.pmant-page-rail .pmant-nav i,
+.pmant-page-rail ~ .main .pmant-eyebrow,
+.pmant-page-rail ~ .main .pmant-action-icon,
+.pmant-page-rail ~ .main .pmant-record-icon,
+.pmant-form-page .pmant-record-icon,
+.pmant-form-page .pmant-eyebrow { color: var(--pmant-icon, #18dc8a) !important; }
+.pmant-page-rail ~ .main .pmant-action-icon,
+.pmant-page-rail ~ .main .pmant-record-icon,
+.pmant-form-page .pmant-record-icon { background: color-mix(in srgb, var(--pmant-icon, #18dc8a) 14%, transparent) !important; }
+.pmant-page-rail ~ .main .modal-content { overflow: hidden; color: #dce5e9 !important; background: #182c36 !important; border: 1px solid rgba(255,255,255,.11) !important; border-radius: 16px !important; }
+.pmant-page-rail ~ .main .modal-header { padding: 22px 24px 17px !important; background: #172a34 !important; border-bottom: 1px solid rgba(255,255,255,.08) !important; }
+.pmant-page-rail ~ .main .modal-title,
+.pmant-page-rail ~ .main .modal-title.text-primary { margin: 0 0 5px !important; color: #fff !important; font-size: 24px !important; }
+.pmant-page-rail ~ .main .modal-header p { margin: 0 !important; color: #91a6b0 !important; line-height: 1.5; }
+.pmant-page-rail ~ .main .modal form.form-control { color: #dce5e9 !important; background: transparent !important; }
+.pmant-page-rail ~ .main .modal-body { padding: 20px 24px !important; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; background: #182c36 !important; }
+.pmant-page-rail ~ .main .modal-body > .w-100 { display: grid; align-content: start; gap: 6px; }
+.pmant-page-rail ~ .main .modal-body > .w-100:has(textarea),
+.pmant-page-rail ~ .main .modal-body > .w-100:has(input[type="file"]) { grid-column: 1 / -1; }
+.pmant-page-rail ~ .main .modal-body label { color: #dce5e9 !important; font-size: 12px !important; font-weight: 600; }
+.pmant-page-rail ~ .main .modal-body .form-control,
+.pmant-page-rail ~ .main .modal-body .form-select,
+.pmant-page-rail ~ .main .modal-body select {
+  min-height: 44px; color: #f4f8f9 !important; background-color: #10232c !important;
+  border: 1px solid rgba(255,255,255,.12) !important; border-radius: 9px !important;
+}
+.pmant-page-rail ~ .main .modal-body .form-control:focus,
+.pmant-page-rail ~ .main .modal-body select:focus { border-color: var(--pmant-primary, #08c979) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--pmant-primary, #08c979) 18%, transparent) !important; }
+.pmant-page-rail ~ .main .modal-body input:disabled { color: #9fb0b8 !important; background: #132730 !important; opacity: 1; }
+.pmant-page-rail ~ .main .modal-body textarea { min-height: 110px; }
+.pmant-page-rail ~ .main .modal-footer { padding: 16px 24px 20px !important; gap: 9px; background: #172a34 !important; border-top: 1px solid rgba(255,255,255,.08) !important; }
+.pmant-page-rail ~ .main .modal-footer .btn { min-height: 41px; padding: 9px 18px !important; border-radius: 9px !important; }
+@media (max-width: 680px) { .pmant-page-rail ~ .main .modal-body { grid-template-columns: 1fr; }.pmant-page-rail ~ .main .modal-body > .w-100 { grid-column: auto !important; } }
+
+/* Final shared shell: same tokens and geometry as the main dashboard. */
+.pmant-page-rail {
+  --pmant-bg: #0d1b23; --pmant-surface: #182a35; --pmant-surface-soft: #21343e;
+  --pmant-border: rgba(255,255,255,.09); --pmant-text: #f5f8fa;
+  --pmant-muted: #9babb5; --pmant-accent: #08c979;
+  width: 260px !important; padding: 28px 20px !important; color: var(--pmant-text) !important;
+  background: #182a35 !important; font-family: "Poppins", "Segoe UI", sans-serif;
+}
+.pmant-page-rail a { color: inherit !important; text-decoration: none !important; }
+.pmant-page-rail .pmant-brand { display: flex !important; align-items: center; gap: 12px; padding: 0 10px 28px !important; }
+.pmant-page-rail .pmant-brand-mark, .pmant-page-rail .pmant-avatar { width: 42px !important; height: 42px !important; display: grid !important; place-items: center; flex: 0 0 42px; border-radius: 13px !important; color: #06170f !important; background: var(--pmant-accent) !important; font-weight: 800; }
+.pmant-page-rail .pmant-brand strong { color: #fff !important; font-size: 18px; letter-spacing: .08em; }
+.pmant-page-rail .pmant-brand small, .pmant-page-rail .pmant-user small { display: block; color: var(--pmant-muted) !important; font-size: 11px; }
+.pmant-page-rail .pmant-nav a { color: #c4d0d7 !important; }
+.pmant-page-rail .pmant-nav a:hover, .pmant-page-rail .pmant-nav a.active { color: #fff !important; background: rgba(8,201,121,.14) !important; }
+.pmant-page-rail .pmant-nav a.active i { color: var(--pmant-accent) !important; }
+.pmant-page-rail .pmant-shop-link { color: #baf6d9 !important; border: 1px solid rgba(8,201,121,.35) !important; }
+.pmant-page-rail .pmant-shop-link:hover { color: #06170f !important; background: var(--pmant-accent) !important; }
+.pmant-page-rail .pmant-user { color: #fff !important; }
+
+/* Client data is a compact summary instead of a permanent side column. */
+.pmant-page-rail ~ .main { grid-template-columns: minmax(0, 1fr) !important; align-content: start; background: radial-gradient(circle at 88% 0%, rgba(8,201,121,.055), transparent 25%), #0d1b23 !important; }
+.pmant-page-rail ~ .main .card-contacto-main { max-width: none !important; display: grid !important; grid-template-columns: minmax(230px, 300px) minmax(0, 1fr); align-items: stretch !important; gap: 0 !important; margin: 0 !important; }
+.pmant-page-rail ~ .main .card-contacto { padding: 20px !important; justify-content: center; border-right: 1px solid rgba(255,255,255,.08); }
+.pmant-page-rail ~ .main .card-contacto .contactar { margin-top: 12px; }
+.pmant-page-rail ~ .main .info-empresa { padding: 20px 24px !important; box-shadow: none !important; border-radius: 0 !important; }
+.pmant-page-rail ~ .main .info-empresa .header-info { align-items: center !important; }
+.pmant-page-rail ~ .main .info-empresa .header-info svg { width: 34px !important; height: 34px !important; }
+.pmant-page-rail ~ .main .info-empresa .body-text-info { display: grid !important; grid-template-columns: repeat(4, minmax(120px, 1fr)); align-items: start !important; gap: 14px 24px !important; }
+.pmant-page-rail ~ .main .info-empresa .body-text-info > span { min-width: 0; }
+.pmant-page-rail ~ .main .info-empresa .body-text-info .condicion-estado { width: auto !important; }
+.pmant-page-rail ~ .main .info-empresa .body-text-info .text-informativo { grid-column: 1 / -1; color: #91a6b0 !important; }
+.pmant-page-rail ~ .main .main-card-equipos,
+.pmant-page-rail ~ .main .main-card-detalles-equipo,
+.pmant-page-rail ~ .main .contenedor-formulario { max-width: none !important; margin: 0 !important; }
+.pmant-table-head { display: none; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view::before { display: none !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-table-head { display: grid; grid-template-columns: minmax(220px, 1.5fr) minmax(150px, 1fr) minmax(150px, 1fr) 80px; gap: 15px; padding: 13px 22px; color: #91a6b0; background: #102029; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo { grid-template-columns: 54px minmax(0, 1fr) 28px !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo::after { content: "\f054"; color: #657983; font: normal normal normal 12px/1 FontAwesome; }
+@media (max-width: 1050px) {
+  .pmant-page-rail ~ .main .info-empresa .body-text-info { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+}
+@media (max-width: 720px) {
+  .pmant-page-rail { width: 100% !important; padding: 7px 10px !important; }
+  .pmant-page-rail ~ .main .card-contacto-main { grid-template-columns: 1fr; }
+  .pmant-page-rail ~ .main .card-contacto { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .pmant-page-rail ~ .main .info-empresa .body-text-info { grid-template-columns: 1fr; }
+}
+
+/* Keep secondary pages visually identical to the dashboard navigation. */
+.pmant-page-rail { width: 260px; padding: 28px 20px; box-shadow: none; }
+.pmant-page-rail .pmant-brand { padding: 0 10px 28px; color: #fff !important; }
+.pmant-page-rail .pmant-nav { width: 100%; margin-top: 0; gap: 7px; }
+.pmant-page-rail .pmant-nav a { min-height: 48px; padding: 0 14px; color: #c4d0d7 !important; font-size: 14px; }
+.pmant-page-rail .pmant-nav a:hover { color: #fff !important; }
+.pmant-page-rail .pmant-sidebar-footer { width: 100%; }
+.pmant-page-rail ~ .main { margin-left: 260px !important; }
+.pmant-page-rail ~ .main .titulo-seccion { gap: 14px !important; }
+.pmant-page-rail ~ .main .main-equipos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); align-items: stretch; background: transparent !important; border-radius: 14px; }
+.pmant-page-rail ~ .main .main-equipos .card-equipo { min-height: 132px; padding: 16px !important; display: grid !important; grid-template-columns: 76px minmax(0, 1fr); align-items: center; gap: 15px; }
+.pmant-page-rail ~ .main .main-equipos .card-equipo > img { width: 76px !important; height: 76px !important; object-fit: contain; border-radius: 12px; background: #102029; }
+.pmant-page-rail ~ .main .text-card-equipo { min-width: 0; display: grid !important; gap: 5px; }
+.pmant-page-rail ~ .main .text-card-equipo strong,
+.pmant-page-rail ~ .main .text-card-equipo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-page-rail ~ .main .text-card-equipo strong { font-size: 15px; }
+.pmant-page-rail ~ .main .text-card-equipo span { color: #91a6b0; font-size: 12px; }
+.pmant-view-switch { display: inline-flex; padding: 4px; border: 1px solid rgba(255,255,255,.09); border-radius: 11px; background: #102029; }
+.pmant-view-switch button { min-height: 34px; padding: 0 12px; border: 0; border-radius: 8px; color: #91a6b0; background: transparent; font-size: 12px; }
+.pmant-view-switch button.active { color: #062218; background: #08c979; font-weight: 700; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view { display: block !important; overflow: hidden; padding: 0 !important; border: 1px solid rgba(255,255,255,.08); }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view::before { display: none !important; content: none; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo { min-height: 76px; grid-template-columns: 54px minmax(0, 1fr) 28px !important; border: 0 !important; border-bottom: 1px solid rgba(255,255,255,.07) !important; border-radius: 0 !important; box-shadow: none !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo:last-child { border-bottom: 0 !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo:hover { transform: none; background: rgba(8,201,121,.05) !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo > img { width: 48px !important; height: 48px !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .text-card-equipo { grid-template-columns: repeat(3, minmax(100px, 1fr)); align-items: center; grid-column: 2 / -1; }
+@media (max-width: 720px) {
+  .pmant-page-rail { width: 100%; padding: 7px 10px; transform: none !important; }
+  .pmant-page-rail .pmant-brand, .pmant-page-rail .pmant-sidebar-footer .pmant-user { display: none; }
+  .pmant-page-rail .pmant-nav { grid-template-columns: repeat(5, 1fr); }
+  .pmant-page-rail .pmant-nav a { min-height: 54px; padding: 4px; justify-content: center; gap: 2px; font-size: 9px; text-align: center; }
+  .pmant-page-rail .pmant-nav a i { display: block; }
+  .pmant-page-rail .pmant-sidebar-footer { width: 56px; margin: 0; }
+  .pmant-page-rail .pmant-shop-link { min-height: 54px; padding: 4px; justify-content: center; }
+  .pmant-page-rail .pmant-shop-link span { display: none; }
+  .pmant-page-rail ~ .main { margin-left: 0 !important; }
+  .pmant-page-rail ~ .main .main-equipos.pmant-table-view { overflow-x: auto; }
+  .pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo { min-width: 620px; }
+}
+
+/* Remaining portal views: histories, documents, evaluations and forms. */
+.pmant-page-rail ~ .main svg path { fill: currentColor !important; }
+.pmant-page-rail ~ .main .info-empresa svg,
+.pmant-page-rail ~ .main .header-info svg { color: #08c979 !important; }
+.pmant-page-rail ~ .main .card-mantenimiento img,
+.pmant-page-rail ~ .main .accordion img { filter: brightness(0) saturate(100%) invert(68%) sepia(85%) saturate(531%) hue-rotate(102deg) brightness(88%); }
+.pmant-page-rail ~ .main .card-equipo > img { padding: 7px; background-color: #dce6e9 !important; }
+.pmant-page-rail ~ .main .titulo-seccion { display: flex !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap; }
+.pmant-page-rail ~ .main .titulo-seccion form,
+.pmant-page-rail ~ .main form.form-inline { position: relative; min-width: min(100%, 310px); display: flex !important; gap: 8px !important; }
+.pmant-page-rail ~ .main .titulo-seccion form input[name="search"],
+.pmant-page-rail ~ .main .titulo-seccion form input[name="filtro"] { min-height: 42px; padding-left: 15px; flex: 1; }
+.pmant-page-rail ~ .main .titulo-seccion form button[type="submit"] { min-width: 92px; }
+.pmant-page-rail ~ .main .main-card-detalles-equipo { width: 100% !important; padding: 0 !important; overflow: hidden; }
+.pmant-page-rail ~ .main .detalle-equipo-header { padding: 22px 24px !important; color: #fff; background: #172a34 !important; border-bottom: 1px solid rgba(255,255,255,.08); }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo { padding: 22px 24px !important; }
+.pmant-page-rail ~ .main .propiedades-contenedor { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px !important; }
+.pmant-page-rail ~ .main .propiedad { min-height: 64px; margin: 0 !important; padding: 12px 14px; display: grid !important; gap: 4px !important; border: 1px solid rgba(255,255,255,.07); border-radius: 11px; background: #182b35; }
+.pmant-page-rail ~ .main .propiedad label { width: auto !important; color: #91a6b0; font-size: 11px; }
+.pmant-page-rail ~ .main .card-mantenimiento,
+.pmant-page-rail ~ .main .card-solicitud { min-height: 120px; padding: 18px !important; }
+.pmant-page-rail ~ .main .accordion-item { overflow: hidden; margin-bottom: 10px; color: #dce5e9; background: #182b35; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; }
+.pmant-page-rail ~ .main .accordion-button { color: #fff; background: #182b35; box-shadow: none; }
+.pmant-page-rail ~ .main .accordion-button:not(.collapsed) { color: #8cf0bf; background: rgba(8,201,121,.08); }
+.pmant-page-rail ~ .main .accordion-body { color: #c6d3d9; background: #13252e; }
+.pmant-page-rail ~ .main .dropdown-menu { color: #dce5e9; background: #172a34; border-color: rgba(255,255,255,.1); }
+.pmant-page-rail ~ .main .dropdown-item { color: #dce5e9; }
+.pmant-page-rail ~ .main .dropdown-item:hover { color: #fff; background: rgba(8,201,121,.12); }
+.pmant-portal-page .modal-content { color: #dce5e9; background: #182a35; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; }
+.pmant-portal-page .modal-header, .pmant-portal-page .modal-footer { border-color: rgba(255,255,255,.09); }
+.pmant-portal-page .modal-title, .pmant-portal-page .modal-content label { color: #fff; }
+.pmant-portal-page .btn-close { filter: invert(1); }
+.pmant-portal-page .modal-content input:disabled,
+.pmant-portal-page .modal-content input[readonly] { color: #aebdc4 !important; background: #14252e !important; opacity: 1; }
+.pmant-page-rail ~ .pmant-form-page,
+.pmant-page-rail ~ .pmant-state-page { width: auto !important; max-width: none !important; margin: 0 0 0 260px !important; padding: 42px clamp(20px, 6vw, 90px) 60px !important; display: grid !important; grid-template-columns: 1fr !important; color: #dce5e9; background: #0d1b23 !important; }
+.pmant-form-header { max-width: 920px; width: 100%; margin: 0 auto; }
+.pmant-form-header h1 { margin: 5px 0; color: #fff; font-size: clamp(28px, 4vw, 42px); }
+.pmant-form-header p { color: #91a6b0; }
+.pmant-form-card,
+.pmant-form-page > form { width: 100%; max-width: 920px; margin: 0 auto; padding: 28px !important; color: #dce5e9; background: #182a35 !important; border: 1px solid rgba(255,255,255,.09); border-radius: 16px !important; box-shadow: 0 18px 45px rgba(0,0,0,.16); }
+.pmant-form-card section + section { margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.08); }
+.pmant-form-card h2 { margin: 0 0 18px; color: #fff; font-size: 17px; }
+.pmant-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.pmant-form-grid label { display: grid; gap: 7px; color: #dce5e9; font-size: 12px; font-weight: 600; }
+.pmant-form-grid label > span { color: #ff8b8b; }
+.pmant-form-grid small { color: #91a6b0; font-weight: 400; }
+.pmant-form-wide { grid-column: 1 / -1; }
+.pmant-form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+.pmant-form-page > h2, .pmant-form-page > p { color: #fff !important; }
+.pmant-form-page textarea { width: 100% !important; color: #fff !important; background: #102029 !important; border-color: rgba(255,255,255,.12) !important; }
+.pmant-form-page input[type="radio"] { accent-color: #08c979; }
+.pmant-state-page { min-height: 100vh; place-items: center; }
+.pmant-state-card { max-width: 560px; padding: 42px; text-align: center; background: #182a35; border: 1px solid rgba(255,255,255,.09); border-radius: 18px; }
+.pmant-state-icon { width: 64px; height: 64px; margin: 0 auto 18px; display: grid; place-items: center; color: #ffbf69; background: rgba(245,158,11,.13); border-radius: 17px; font-size: 25px; }
+.pmant-state-card h1 { color: #fff; font-size: 25px; }
+.pmant-state-card p { color: #9babb5; }
+@media (max-width: 720px) {
+  .pmant-page-rail ~ .pmant-form-page, .pmant-page-rail ~ .pmant-state-page { margin-left: 0 !important; padding: 24px 14px 92px !important; }
+  .pmant-form-grid { grid-template-columns: 1fr; }
+  .pmant-form-wide { grid-column: auto; }
+  .pmant-form-actions { flex-direction: column-reverse; }
+  .pmant-form-actions .btn { width: 100%; }
+}
+
+/* Equipment detail workspace. */
+.pmant-page-rail ~ .main .main-detalles-equipos { width: 100%; min-width: 0; display: grid; gap: 18px; }
+.pmant-page-rail ~ .main .main-detalles-equipos > .main-card-detalles-equipo { border-color: rgba(255,255,255,.085) !important; background: #152832 !important; }
+.pmant-page-rail ~ .main .detalle-equipo-header { min-height: 150px; display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: center !important; gap: 24px; }
+.pmant-page-rail ~ .main .name-equipo { min-width: 0; }
+.pmant-page-rail ~ .main .name-equipo > label { color: #08c979; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.pmant-page-rail ~ .main .name-equipo h4 { margin: 4px 0 16px; font-size: clamp(25px, 3vw, 36px); letter-spacing: -.03em; }
+.pmant-page-rail ~ .main .name-equipo > div { display: flex !important; flex-wrap: wrap; gap: 10px !important; }
+.pmant-page-rail ~ .main .name-equipo .btn { width: auto !important; min-width: 180px; min-height: 42px; }
+.pmant-page-rail ~ .main .img-header-equipo { display: flex !important; align-items: center; gap: 10px; }
+.pmant-page-rail ~ .main .img-header-equipo img { width: 88px !important; height: 88px !important; padding: 7px; object-fit: contain; border: 1px solid rgba(255,255,255,.1); border-radius: 13px; background: #edf3f5; }
+.pmant-page-rail ~ .main .detalle-equipo-header > div:last-child { display: none !important; }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px !important; }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo > .propiedades-contenedor { display: contents !important; }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo .propiedad { min-height: 82px; padding: 15px 16px !important; align-content: center; }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo .propiedad label { color: #83a0ad; font-size: 10px !important; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+.pmant-page-rail ~ .main .descripcion-propieadades-equipo .propiedad span { color: #f1f6f8; font-size: 14px; font-weight: 600; }
+.pmant-card-section-head { padding: 21px 24px 0; display: flex; align-items: center; gap: 13px; }
+.pmant-card-section-head h3, .pmant-section-title h2 { margin: 0; color: #fff; font-size: 19px; }
+.pmant-card-section-head p, .pmant-section-title p { margin: 3px 0 0; color: #91a6b0; font-size: 12px; }
+.pmant-action-icon { width: 46px; height: 46px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 13px; color: #18dc8a; background: rgba(8,201,121,.13); font-size: 20px; }
+.pmant-action-icon.small { width: 42px; height: 42px; font-size: 17px; }
+.pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { padding: 24px !important; display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px !important; background: #152832; border: 1px solid rgba(255,255,255,.085); border-radius: 16px; }
+.pmant-page-rail ~ .main .pmant-section-title { grid-column: 1 / -1; margin-bottom: 5px; }
+.pmant-page-rail ~ .main .contenedor-enalces-mantenimiento > br { display: none; }
+.pmant-page-rail ~ .main .item-enlace { min-height: 108px; padding: 17px !important; display: flex !important; align-items: center; justify-content: flex-start !important; gap: 14px; color: #dce6ea !important; background: #182f3a !important; border: 1px solid rgba(255,255,255,.075) !important; border-radius: 13px !important; box-shadow: none !important; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.pmant-page-rail ~ .main .item-enlace:hover { transform: translateY(-2px); color: #fff !important; background: rgba(8,201,121,.075) !important; border-color: rgba(8,201,121,.36) !important; }
+.pmant-page-rail ~ .main .item-enlace > span:last-child { font-size: 13px; font-weight: 600; line-height: 1.4; }
+.pmant-page-rail ~ .main .item-enlace br { display: none; }
+.pmant-page-rail ~ .main .main-card-detalles-equipo > div:last-child:not(.descripcion-propieadades-equipo) { padding: 0 24px 22px !important; }
+@media (max-width: 1150px) {
+  .pmant-page-rail ~ .main .descripcion-propieadades-equipo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .pmant-page-rail ~ .main .detalle-equipo-header { grid-template-columns: 1fr; }
+  .pmant-page-rail ~ .main .img-header-equipo { grid-row: 1; }
+  .pmant-page-rail ~ .main .name-equipo .btn { width: 100% !important; }
+  .pmant-page-rail ~ .main .descripcion-propieadades-equipo,
+  .pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: 1fr; }
+}
+
+/* Ordered equipment actions and service records. */
+.pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+.pmant-page-rail ~ .main .item-enlace { width: 100% !important; min-width: 0; }
+.pmant-page-rail ~ .main .main-card-sedes { width: 100% !important; padding: 24px !important; color: #dce5e9 !important; background: #21343e !important; border: 1px solid rgba(255,255,255,.085); border-radius: 16px; box-shadow: 0 18px 45px rgba(0,0,0,.14); }
+.pmant-page-rail ~ .main .main-card-sedes > div:first-child,
+.pmant-page-rail ~ .main .main-card-equipos > div:first-child { display: flex !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap; gap: 12px !important; }
+.pmant-page-rail ~ .main .main-card-sedes h3,
+.pmant-page-rail ~ .main .main-card-equipos h3 { margin: 0; color: #fff; font-size: clamp(23px, 3vw, 34px); }
+.pmant-page-rail ~ .main .main_historail_pmant { margin-top: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; color: #dce5e9; background: transparent !important; }
+.pmant-page-rail ~ .main .main_historail_pmant .card-mantenimiento { min-height: 150px; padding: 18px !important; display: grid !important; grid-template-columns: minmax(0, 1fr) 42px; align-items: center; gap: 14px; }
+.pmant-page-rail ~ .main .head-card-mg { min-width: 0; display: flex !important; align-items: flex-start !important; gap: 14px !important; }
+.pmant-record-icon { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 auto; color: #11df88; background: rgba(8,201,121,.13); border-radius: 13px; font-size: 20px; }
+.pmant-record-icon.pending { color: #ffc563; background: rgba(245,158,11,.14); }
+.pmant-record-icon.done { color: #77e8ad; }
+.pmant-page-rail ~ .main .text-card-mantenimiento { min-width: 0; display: grid !important; gap: 6px; }
+.pmant-page-rail ~ .main .text-card-mantenimiento > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.pmant-page-rail ~ .main .text-card-mantenimiento > span { display: grid; grid-template-columns: 125px minmax(0, 1fr); color: #94a8b1; font-size: 11px; }
+.pmant-page-rail ~ .main .text-card-mantenimiento > span > span:last-child { color: #e5edf0; }
+.pmant-page-rail ~ .main .card-mantenimiento > a.bg-primary { width: 42px; height: 42px; padding: 0 !important; display: grid; place-items: center; border-radius: 11px !important; }
+.pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view { display: block; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 13px; }
+.pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view .card-mantenimiento { min-height: 92px; grid-template-columns: minmax(0, 1fr) 42px; border: 0 !important; border-bottom: 1px solid rgba(255,255,255,.07) !important; border-radius: 0 !important; box-shadow: none !important; }
+.pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view .card-mantenimiento:last-child { border-bottom: 0 !important; }
+.pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view .text-card-mantenimiento { grid-template-columns: minmax(180px, 1.3fr) repeat(3, minmax(130px, 1fr)); align-items: center; }
+.pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view .text-card-mantenimiento > span { display: block; }
+.pmant-page-rail ~ .main .main-equipos .card-solicitud { min-height: 150px; grid-template-columns: 54px minmax(0, 1fr) !important; align-items: start; }
+.pmant-page-rail ~ .main .card-solicitud .text-card-equipo { gap: 8px; }
+.pmant-page-rail ~ .main .card-solicitud .text-card-equipo strong { white-space: normal; }
+.pmant-page-rail ~ .main .card-solicitud .text-card-equipo span { white-space: normal; line-height: 1.45; }
+.pmant-page-rail ~ .main .status-alert, .pmant-page-rail ~ .main .status-atencion { display: inline-flex; margin-left: 7px; padding: 4px 8px; border-radius: 999px; font-size: 9px; text-transform: uppercase; }
+.pmant-page-rail ~ .main .status-alert { color: #ffc563; background: rgba(245,158,11,.13); }
+.pmant-page-rail ~ .main .status-atencion { color: #77e8ad; background: rgba(8,201,121,.13); }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-solicitud { min-height: 92px; }
+.pmant-portal-page .btn-secondary,
+.pmant-page-rail ~ .main .btn-secondary,
+.pmant-form-actions .btn-secondary { color: #e2e9ec !important; background: #52616a !important; border-color: #64747d !important; }
+.pmant-portal-page .btn-secondary:hover,
+.pmant-form-actions .btn-secondary:hover { color: #fff !important; background: #64747d !important; }
+@media (max-width: 1200px) {
+  .pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .pmant-page-rail ~ .main .main_historail_pmant { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view { overflow-x: auto; }
+  .pmant-page-rail ~ .main .main_historail_pmant.pmant-table-view .card-mantenimiento { min-width: 760px; }
+}
+@media (max-width: 520px) {
+  .pmant-page-rail ~ .main .contenedor-enalces-mantenimiento { grid-template-columns: 1fr !important; }
+}
+
+/* Evaluations, quotations and requests. */
+.pmant-page-rail ~ .main .main-sedes { width: 100%; margin-top: 20px; display: grid !important; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); align-items: start; gap: 14px !important; background: transparent !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card { width: 100% !important; overflow: hidden; background: #182b35 !important; border: 1px solid rgba(255,255,255,.08); border-radius: 14px !important; box-shadow: none !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-item { margin: 0; border: 0; border-radius: 0; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button { min-height: 76px; padding: 14px 18px; gap: 12px !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button::after { filter: invert(1); opacity: .65; }
+.pmant-evaluation-number { width: 27px; height: 27px; display: grid; place-items: center; flex: 0 0 auto; color: #0b2018; background: #08c979; border-radius: 8px; font-size: 11px; font-weight: 800; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-body { padding: 20px 22px; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-body > div:first-child { align-items: center; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-body a.bg-primary { min-width: 110px; min-height: 36px !important; }
+.pmant-evaluation-photos { display: flex; flex-wrap: wrap; gap: 9px; }
+.pmant-evaluation-photos .zoomable-image { width: 88px !important; height: 88px !important; object-fit: cover; border: 1px solid rgba(255,255,255,.1) !important; border-radius: 10px; }
+.pmant-page-rail ~ .main .pmant-quote-list { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.pmant-page-rail ~ .main .pmant-quote-list .card-sede { width: 100% !important; min-height: 160px; padding: 18px !important; display: grid !important; grid-template-columns: 52px minmax(0, 1fr) 40px; align-items: start; gap: 14px; }
+.pmant-page-rail ~ .main .pmant-quote-list .text-card-sede { min-width: 0; display: grid !important; gap: 7px; }
+.pmant-page-rail ~ .main .pmant-quote-list .text-card-sede > strong { color: #fff; font-size: 15px; }
+.pmant-page-rail ~ .main .pmant-quote-list .text-card-sede > span { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 5px; color: #91a6b0; font-size: 11px; }
+.pmant-page-rail ~ .main .pmant-quote-list .text-card-sede > span strong { color: #dfe8eb; font-size: 11px; }
+.pmant-page-rail ~ .main .pmant-quote-list .btn-desca { width: 40px; height: 40px; padding: 0 !important; display: grid; place-items: center; align-self: end; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view { display: block !important; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 13px; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede { min-height: 86px; grid-template-columns: 48px minmax(0, 1fr) 40px; border: 0 !important; border-bottom: 1px solid rgba(255,255,255,.07) !important; border-radius: 0 !important; box-shadow: none !important; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede:last-child { border-bottom: 0 !important; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .text-card-sede { grid-template-columns: minmax(100px,.7fr) repeat(3,minmax(150px,1fr)); align-items: center; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .text-card-sede > span { display: block; }
+.pmant-page-rail ~ .main .card-solicitud > .pmant-record-icon { margin-top: 2px; }
+.pmant-page-rail ~ .main .card-solicitud hr { width: 100%; margin: 2px 0; }
+@media (max-width: 720px) {
+  .pmant-page-rail ~ .main .main-sedes { grid-template-columns: 1fr !important; }
+  .pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view { overflow-x: auto; }
+  .pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede { min-width: 780px; }
+}
+
+/* Final modal/theme layer: modals are mounted outside .main by Bootstrap. */
+.pmant-portal-page .modal-content { overflow: hidden; color: #dce5e9 !important; background: #182c36 !important; border: 1px solid rgba(255,255,255,.11) !important; border-radius: 16px !important; }
+.pmant-portal-page .modal-header { padding: 22px 24px 17px !important; background: #172a34 !important; border-bottom: 1px solid rgba(255,255,255,.08) !important; }
+.pmant-portal-page .modal-title, .pmant-portal-page .modal-title.text-primary { margin: 0 0 5px !important; color: #fff !important; font-size: 24px !important; }
+.pmant-portal-page .modal-header p { margin: 0 !important; color: #91a6b0 !important; line-height: 1.5; }
+.pmant-portal-page .modal form.form-control { color: #dce5e9 !important; background: transparent !important; }
+.pmant-portal-page .modal-body { padding: 20px 24px !important; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; background: #182c36 !important; }
+.pmant-portal-page .modal-body > .w-100 { display: grid; align-content: start; gap: 6px; }
+.pmant-portal-page .modal-body > .w-100:has(textarea), .pmant-portal-page .modal-body > .w-100:has(input[type="file"]) { grid-column: 1 / -1; }
+.pmant-portal-page .modal-body label { color: #dce5e9 !important; font-size: 12px !important; font-weight: 600; }
+.pmant-portal-page .modal-body .form-control, .pmant-portal-page .modal-body .form-select, .pmant-portal-page .modal-body select { min-height: 44px; color: #f4f8f9 !important; background-color: #10232c !important; border: 1px solid rgba(255,255,255,.12) !important; border-radius: 9px !important; }
+.pmant-portal-page .modal-body .form-control:focus, .pmant-portal-page .modal-body select:focus { border-color: var(--pmant-primary, #08c979) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--pmant-primary, #08c979) 18%, transparent) !important; }
+.pmant-portal-page .modal-body input:disabled { color: #9fb0b8 !important; background: #132730 !important; opacity: 1; }
+.pmant-portal-page .modal-body textarea { min-height: 110px; }
+.pmant-portal-page .modal-footer { padding: 16px 24px 20px !important; gap: 9px; background: #172a34 !important; border-top: 1px solid rgba(255,255,255,.08) !important; }
+.pmant-portal-page .modal-footer .btn { min-height: 41px; padding: 9px 18px !important; border-radius: 9px !important; }
+.pmant-portal-page .btn-primary, .pmant-dashboard .pmant-btn-primary, .pmant-dashboard .pmant-brand-mark, .pmant-dashboard .pmant-avatar, .pmant-page-rail .pmant-brand-mark, .pmant-page-rail .pmant-avatar { color: #071d14 !important; background: var(--pmant-primary, #08c979) !important; border-color: var(--pmant-primary, #08c979) !important; }
+.pmant-portal-page .pmant-action-icon, .pmant-portal-page .pmant-record-icon, .pmant-portal-page .pmant-eyebrow, .pmant-dashboard .pmant-eyebrow { color: var(--pmant-icon, #18dc8a) !important; }
+@media (max-width: 680px) { .pmant-portal-page .modal-body { grid-template-columns: 1fr; }.pmant-portal-page .modal-body > .w-100 { grid-column: auto !important; } }
+
+/* Fixed PMANT corporate palette. */
+:root { --pmant-primary: #3191c4; --pmant-icon: #3191c4; }
+.pmant-dashboard, .pmant-page-rail { --pmant-accent: #3191c4 !important; --rail-accent: #3191c4 !important; }
+.pmant-dashboard { background: radial-gradient(circle at 85% 0%, rgba(49,145,196,.10), transparent 28%), var(--pmant-bg) !important; }
+.pmant-portal-page .btn-primary,
+.pmant-page-rail ~ .main .btn-primary,
+.pmant-page-rail ~ .main .bg-primary,
+.pmant-dashboard .pmant-btn-primary,
+.pmant-dashboard .pmant-brand-mark,
+.pmant-dashboard .pmant-avatar,
+.pmant-page-rail .pmant-brand-mark,
+.pmant-page-rail .pmant-avatar,
+.pmant-view-switch button.active,
+.pmant-question-number,
+.pmant-evaluation-number,
+.pmant-page-rail ~ .main .pagination .active .page-link {
+  color: #061924 !important; background: #3191c4 !important; border-color: #3191c4 !important;
+}
+.pmant-portal-page .pmant-action-icon,
+.pmant-portal-page .pmant-record-icon,
+.pmant-portal-page .pmant-eyebrow,
+.pmant-dashboard .pmant-eyebrow,
+.pmant-dashboard .pmant-nav i,
+.pmant-dashboard .pmant-location-icon,
+.pmant-dashboard .pmant-empty > span,
+.pmant-dashboard .pmant-panel-head > a,
+.pmant-dashboard .pmant-pagination a,
+.pmant-dashboard .pmant-metric-green .pmant-metric-icon,
+.pmant-dashboard .pmant-metric-primary .pmant-metric-icon,
+.pmant-page-rail .pmant-nav i,
+.pmant-page-rail ~ .main .header-info svg,
+.pmant-page-rail ~ .main .name-equipo > label { color: #3191c4 !important; }
+.pmant-portal-page .pmant-action-icon,
+.pmant-portal-page .pmant-record-icon,
+.pmant-dashboard .pmant-location-icon,
+.pmant-dashboard .pmant-empty > span,
+.pmant-dashboard .pmant-metric-green .pmant-metric-icon,
+.pmant-dashboard .pmant-metric-primary .pmant-metric-icon { background: rgba(49,145,196,.14) !important; }
+.pmant-dashboard .pmant-nav a.active,
+.pmant-dashboard .pmant-nav a:hover,
+.pmant-page-rail .pmant-nav a.active,
+.pmant-page-rail .pmant-nav a:hover { background: rgba(49,145,196,.18) !important; }
+.pmant-page-rail ~ .main .item-enlace:hover { background: rgba(49,145,196,.08) !important; border-color: rgba(49,145,196,.42) !important; }
+.pmant-status.success, .status-atencion, .pmant-state-success, .pmant-count-badge { color: #79c9f1 !important; background: rgba(49,145,196,.15) !important; }
+.pmant-portal-page input:focus, .pmant-portal-page select:focus, .pmant-portal-page textarea:focus { border-color: #3191c4 !important; box-shadow: 0 0 0 3px rgba(49,145,196,.18) !important; }
+.pmant-form-page input[type="radio"] { accent-color: #3191c4 !important; }
+
+/* Semantic maintenance history table. */
+.pmant-history-table { display: none; margin-top: 20px; overflow: hidden; color: #dce6ea; background: #152a34; border: 1px solid rgba(255,255,255,.09); border-radius: 14px; }
+.pmant-history-cards.pmant-table-view { display: none !important; }
+.pmant-history-cards.pmant-table-view + .pmant-history-table { display: block; }
+.pmant-history-table-head,
+.pmant-history-table-row { display: grid; grid-template-columns: 68px minmax(220px,1.5fr) minmax(160px,1fr) 150px 150px 130px; align-items: center; column-gap: 14px; }
+.pmant-history-table-head { min-height: 50px; padding: 0 18px; color: #91a6b0; background: #10232c; border-bottom: 1px solid rgba(255,255,255,.09); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.pmant-history-table-row { min-height: 82px; padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,.075); }
+.pmant-history-table-row:last-child { border-bottom: 0; }
+.pmant-history-table-row > strong { overflow: hidden; color: #fff; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-history-table-row > span { min-width: 0; color: #b7c6cc; font-size: 12px; }
+.pmant-history-icon { width: 42px; height: 42px; display: grid; place-items: center; color: #3191c4 !important; background: rgba(49,145,196,.15); border-radius: 11px; font-size: 17px !important; }
+.pmant-history-stage { display: inline-flex; padding: 5px 9px; color: #8dd0f2; background: rgba(49,145,196,.13); border-radius: 999px; font-size: 10px; font-weight: 700; }
+.pmant-report-download { min-height: 38px; padding: 0 11px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; color: #061924 !important; background: #3191c4; border: 1px solid #3191c4; border-radius: 9px; font-size: 11px; font-weight: 700; text-decoration: none !important; }
+.pmant-report-download:hover { color: #fff !important; background: #287da9; border-color: #287da9; }
+@media (max-width: 1150px) {
+  .pmant-history-table { overflow-x: auto; }
+  .pmant-history-table-head, .pmant-history-table-row { min-width: 1050px; }
+}
+@media (max-width: 680px) {
+  .pmant-history-table { overflow: visible; background: transparent; border: 0; }
+  .pmant-history-table-head { display: none; }
+  .pmant-history-table-row { min-height: 0; margin-bottom: 12px; padding: 16px; display: grid; grid-template-columns: 46px 1fr; gap: 11px 13px; background: #152a34; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; }
+  .pmant-history-table-row > *:not(.pmant-history-icon) { grid-column: 2; white-space: normal; }
+  .pmant-history-table-row > *:not(.pmant-history-icon)::before { content: attr(data-label); display: block; margin-bottom: 3px; color: #78919d; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+  .pmant-report-download { width: 100%; }
+}
+
+/* Definitive column layout for the visible maintenance list. */
+.pmant-maintenance-columns { display: none; }
+.pmant-history-cards.pmant-table-view { display: block !important; overflow-x: auto !important; }
+.pmant-history-cards.pmant-table-view + .pmant-history-table { display: none !important; }
+.pmant-history-cards.pmant-table-view .pmant-maintenance-columns,
+.pmant-history-cards.pmant-table-view .card-mantenimiento {
+  min-width: 1040px;
+  display: grid !important;
+  grid-template-columns: 58px minmax(220px,1.55fr) minmax(175px,1fr) 170px 150px 120px !important;
+  align-items: center !important;
+  column-gap: 16px !important;
+}
+.pmant-history-cards.pmant-table-view .pmant-maintenance-columns {
+  min-height: 50px; padding: 0 18px; color: #8fa5af; background: #10232c;
+  border-bottom: 1px solid rgba(255,255,255,.09); font-size: 10px; font-weight: 700;
+  letter-spacing: .055em; text-transform: uppercase;
+}
+.pmant-history-cards.pmant-table-view .card-mantenimiento {
+  width: 100% !important; min-height: 82px !important; margin: 0 !important; padding: 13px 18px !important;
+  background: #152a34 !important; border: 0 !important; border-bottom: 1px solid rgba(255,255,255,.075) !important;
+  border-radius: 0 !important; box-shadow: none !important;
+}
+.pmant-history-cards.pmant-table-view .card-mantenimiento:last-of-type { border-bottom: 0 !important; }
+.pmant-history-cards.pmant-table-view .head-card-mg,
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento { display: contents !important; }
+.pmant-history-cards.pmant-table-view .pmant-record-icon { grid-column: 1; width: 42px; height: 42px; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > strong {
+  grid-column: 2; min-width: 0; overflow: hidden; color: #fff; font-size: 13px;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span { display: block !important; min-width: 0; color: #d8e3e7; font-size: 12px; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span:nth-of-type(1) { grid-column: 3; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span:nth-of-type(2) { grid-column: 4; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span:nth-of-type(3) { grid-column: 5; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span > span:first-child { display: none !important; }
+.pmant-history-cards.pmant-table-view .text-card-mantenimiento > span > span:last-child { display: block !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-history-cards.pmant-table-view .card-mantenimiento > a.bg-primary {
+  grid-column: 6; width: 42px !important; height: 42px !important; justify-self: start; color: #061924 !important;
+  background: #3191c4 !important; border-radius: 10px !important;
+}
+.pmant-download-label { display: none; }
+.pmant-history-cards.pmant-table-view .card-mantenimiento > a.bg-primary { width: 104px !important; display: flex !important; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+.pmant-history-cards.pmant-table-view .pmant-download-label { display: inline; font-size: 10px; font-weight: 800; }
+
+/* Maintenance report action and visible pagination. */
+.pmant-history-cards.pmant-table-view .card-mantenimiento > a.bg-primary {
+  width: 108px !important; min-height: 38px !important; justify-self: center !important;
+  color: #fff !important; background: #3191c4 !important; border: 1px solid #55add9 !important;
+  border-radius: 10px !important; box-shadow: 0 6px 16px rgba(49,145,196,.18) !important;
+  transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.pmant-history-cards.pmant-table-view .card-mantenimiento > a.bg-primary:hover {
+  color: #fff !important; background: #287da9 !important; border-color: #69b9df !important;
+  transform: translateY(-1px); box-shadow: 0 8px 20px rgba(49,145,196,.26) !important;
+}
+.pmant-history-cards.pmant-table-view .card-mantenimiento > a.bg-primary svg { flex: 0 0 auto; }
+.pmant-page-rail ~ .main .main-card-sedes > .mt-4,
+.pmant-page-rail ~ .main .main-card-sedes > .mt-4 .text-muted { color: #b9c8ce !important; }
+.pmant-page-rail ~ .main .main-card-sedes > .mt-4 { min-height: 52px; margin-top: 18px !important; padding: 0 6px; }
+.pmant-page-rail ~ .main .main-card-sedes > .mt-4 .btn-outline-primary {
+  color: #8fd0f0 !important; background: rgba(49,145,196,.08) !important;
+  border-color: rgba(49,145,196,.48) !important; border-radius: 9px;
+}
+.pmant-page-rail ~ .main .main-card-sedes > .mt-4 .btn-outline-primary:hover { color: #fff !important; background: #3191c4 !important; }
+
+/* Equipment attachments. */
+.pmant-page-rail ~ .main .main-adjuntos {
+  margin-top: 18px; display: grid !important; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)) !important;
+  gap: 14px !important; align-items: stretch !important;
+}
+.pmant-page-rail ~ .main .pmant-attachment-card {
+  position: relative; width: 100% !important; min-height: 230px; margin: 0 !important; padding: 20px !important;
+  display: flex !important; flex-direction: column; align-items: flex-start !important; gap: 15px !important;
+  color: #dce6ea !important; background: #172c36 !important; border: 1px solid rgba(255,255,255,.085) !important;
+  border-radius: 14px !important; box-shadow: none !important;
+  transition: transform .18s ease, border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+.pmant-page-rail ~ .main .pmant-attachment-card:hover {
+  transform: translateY(-3px); background: #19323e !important; border-color: rgba(49,145,196,.62) !important;
+  box-shadow: 0 14px 30px rgba(0,0,0,.18), 0 0 0 1px rgba(49,145,196,.08) !important;
+}
+.pmant-attachment-icon {
+  width: 62px; height: 62px; display: grid; place-items: center; color: #3191c4;
+  background: rgba(49,145,196,.14); border: 1px solid rgba(49,145,196,.2); border-radius: 16px; font-size: 27px;
+}
+.pmant-file-pdf .pmant-attachment-icon { color: #ff8585; background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.18); }
+.pmant-file-doc .pmant-attachment-icon, .pmant-file-docx .pmant-attachment-icon { color: #74b9ff; background: rgba(59,130,246,.13); }
+.pmant-file-xls .pmant-attachment-icon, .pmant-file-xlsx .pmant-attachment-icon { color: #67dca0; background: rgba(16,185,129,.12); }
+.pmant-attachment-copy { min-width: 0; width: 100%; display: grid; gap: 5px; }
+.pmant-page-rail ~ .main .pmant-attachment-copy p {
+  min-height: 39px; margin: 0 !important; overflow: hidden; color: #fff !important; font-size: 13px !important;
+  font-weight: 700; line-height: 1.45; text-align: left !important; overflow-wrap: anywhere;
+}
+.pmant-attachment-copy small { color: #88a0aa; font-size: 10px; letter-spacing: .04em; }
+.pmant-page-rail ~ .main .pmant-attachment-download {
+  width: 100% !important; min-height: 41px !important; height: auto !important; margin-top: auto; padding: 9px 13px !important;
+  display: flex !important; align-items: center; justify-content: center; gap: 8px; color: #fff !important;
+  background: #3191c4 !important; border: 1px solid #55add9 !important; border-radius: 10px !important;
+  font-size: 11px; font-weight: 800; text-decoration: none !important;
+}
+.pmant-page-rail ~ .main .pmant-attachment-download:hover { color: #fff !important; background: #287da9 !important; }
+/* Remove the former green hover palette from all portal cards and links. */
+.pmant-dashboard a.pmant-metric:hover,
+.pmant-dashboard .pmant-location:hover,
+.pmant-page-rail ~ .main .card-sede:hover,
+.pmant-page-rail ~ .main .card-equipo:hover,
+.pmant-page-rail ~ .main .card-mantenimiento:hover,
+.pmant-page-rail ~ .main .item-enlace:hover {
+  border-color: rgba(49,145,196,.48) !important;
+}
+.pmant-dashboard .pmant-location:hover,
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .card-equipo:hover,
+.pmant-page-rail ~ .main .item-enlace:hover { background: rgba(49,145,196,.075) !important; }
+@media (max-width: 620px) { .pmant-page-rail ~ .main .main-adjuntos { grid-template-columns: 1fr !important; } }
+
+/* Evaluation accordion in the fixed blue PMANT palette. */
+.pmant-page-rail ~ .main .pmant-evaluation-card { border-color: rgba(49,145,196,.16) !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card:hover { border-color: rgba(49,145,196,.5) !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button,
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button.collapsed {
+  color: #dce8ed !important; background: #172c36 !important; border: 0 !important;
+}
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button:not(.collapsed) {
+  color: #8fd0f0 !important; background: rgba(49,145,196,.14) !important;
+}
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button:hover { color: #a9def7 !important; background: rgba(49,145,196,.11) !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button:focus { box-shadow: inset 0 0 0 1px rgba(49,145,196,.38) !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .accordion-button::after { filter: brightness(0) saturate(100%) invert(62%) sepia(51%) saturate(693%) hue-rotate(161deg) brightness(91%) contrast(88%) !important; }
+.pmant-page-rail ~ .main .pmant-evaluation-card .pmant-action-icon {
+  color: #3191c4 !important; background: rgba(49,145,196,.15) !important;
+}
+
+/* Service requests: readable cards and true table columns. */
+.pmant-page-rail ~ .main .main-equipos:has(.pmant-request-card) {
+  display: grid !important; grid-template-columns: repeat(auto-fill,minmax(330px,1fr)); gap: 14px !important;
+}
+.pmant-request-columns { display: none; }
+.pmant-page-rail ~ .main .pmant-request-card {
+  width: 100% !important; min-width: 0 !important; min-height: 220px !important; margin: 0 !important; padding: 18px !important;
+  display: grid !important; grid-template-columns: 48px minmax(0,1fr) !important; align-items: start !important; gap: 14px !important;
+  color: #dce6ea !important; background: #172c36 !important; border: 1px solid rgba(255,255,255,.085) !important;
+  border-radius: 14px !important; box-shadow: none !important;
+}
+.pmant-page-rail ~ .main .pmant-request-card:hover { border-color: rgba(49,145,196,.5) !important; transform: translateY(-2px); }
+.pmant-request-content { min-width: 0; display: grid !important; gap: 10px !important; }
+.pmant-request-type { min-width: 0; color: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+.pmant-request-type .status-alert, .pmant-request-type .status-atencion { margin: 5px 0 0 7px; vertical-align: middle; }
+.pmant-request-content > span { min-width: 0; color: #b7c6cc !important; line-height: 1.45; overflow-wrap: anywhere; }
+.pmant-request-content > span::before { content: attr(data-label) ": "; color: #78919d; font-size: 10px; font-weight: 700; }
+.pmant-request-detail { padding-top: 9px; border-top: 1px solid rgba(255,255,255,.07); }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view:has(.pmant-request-card) {
+  display: block !important; overflow-x: auto !important; border: 1px solid rgba(255,255,255,.09); border-radius: 14px;
+}
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-columns,
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-card {
+  min-width: 1120px; display: grid !important;
+  grid-template-columns: 58px minmax(210px,1.35fr) 150px minmax(180px,1fr) 175px minmax(220px,1.2fr) !important;
+  align-items: center !important; column-gap: 15px !important;
+}
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-columns {
+  min-height: 50px; padding: 0 18px; color: #8fa5af; background: #10232c; border-bottom: 1px solid rgba(255,255,255,.09);
+  font-size: 10px; font-weight: 700; letter-spacing: .055em; text-transform: uppercase;
+}
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-card {
+  min-height: 82px !important; padding: 13px 18px !important; background: #152a34 !important; border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.075) !important; border-radius: 0 !important;
+}
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-card:last-child { border-bottom: 0 !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-content { display: contents !important; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-card > .pmant-record-icon { grid-column: 1; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-type { grid-column: 2; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-date { grid-column: 3; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-location { grid-column: 4; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-created { grid-column: 5; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-detail { grid-column: 6; padding: 0; border: 0; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-content > span::before { display: none; }
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view .pmant-request-content > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* One pagination system for every PMANT portal endpoint. */
+.pmant-page-rail ~ .main .contenedor-paginacion,
+.pmant-page-rail ~ .main nav.mt-4 { width: 100%; margin: 22px 0 0 !important; display: flex; justify-content: center; }
+.pmant-page-rail ~ .main .pagination {
+  margin: 0 !important; padding: 5px !important; display: inline-flex; align-items: center; justify-content: center;
+  gap: 5px; color: #b9c8ce; background: #10232c; border: 1px solid rgba(255,255,255,.085); border-radius: 12px;
+}
+.pmant-page-rail ~ .main .pagination .page-item { margin: 0 !important; }
+.pmant-page-rail ~ .main .pagination .page-link {
+  min-width: 36px; min-height: 36px; padding: 7px 11px !important; display: inline-flex; align-items: center; justify-content: center;
+  color: #aebfc6 !important; background: transparent !important; border: 1px solid transparent !important;
+  border-radius: 8px !important; box-shadow: none !important; font-size: 11px; text-decoration: none !important;
+}
+.pmant-page-rail ~ .main .pagination .page-link:hover { color: #fff !important; background: rgba(49,145,196,.14) !important; border-color: rgba(49,145,196,.32) !important; }
+.pmant-page-rail ~ .main .pagination .page-item.active > .page-link {
+  color: #fff !important; background: #3191c4 !important; border-color: #3191c4 !important; font-weight: 800;
+}
+.pmant-page-rail ~ .main .pagination .page-item.disabled > .page-link { color: #5f747e !important; opacity: .65; pointer-events: none; }
+.pmant-dashboard .pmant-pagination { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.07); }
+.pmant-dashboard .pmant-pagination a { padding: 8px 12px; color: #a9def7; background: rgba(49,145,196,.1); border: 1px solid rgba(49,145,196,.3); border-radius: 9px; }
+.pmant-dashboard .pmant-pagination > span { color: #b9c8ce; }
+@media (max-width: 620px) {
+  .pmant-page-rail ~ .main .main-equipos:has(.pmant-request-card) { grid-template-columns: 1fr; }
+  .pmant-page-rail ~ .main .pagination { max-width: 100%; overflow-x: auto; justify-content: flex-start; }
+}
+
+/* Dashboard maintenance planning. */
+.pmant-service-insights { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(310px,.85fr); gap: 16px; }
+.pmant-service-insights .pmant-panel { min-width: 0; }
+.pmant-insight-head-icon { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; color: #3191c4; background: rgba(49,145,196,.14); border-radius: 12px; font-size: 18px; }
+.pmant-upcoming-list { margin-top: 18px; display: grid; gap: 9px; }
+.pmant-upcoming-item { min-height: 72px; padding: 11px 13px; display: grid; grid-template-columns: 48px minmax(0,1fr) auto 15px; align-items: center; gap: 12px; color: #dce6ea; background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.075); border-radius: 12px; }
+.pmant-upcoming-item:hover { color: #fff; background: rgba(49,145,196,.075); border-color: rgba(49,145,196,.4); }
+.pmant-upcoming-date { width: 48px; height: 48px; display: grid; place-items: center; align-content: center; color: #fff; background: #193646; border-radius: 11px; }
+.pmant-upcoming-date strong { font-size: 18px; line-height: 1; }.pmant-upcoming-date small { margin-top: 3px; color: #8db7cc; font-size: 9px; }
+.pmant-upcoming-copy { min-width: 0; display: grid; gap: 4px; }.pmant-upcoming-copy strong,.pmant-upcoming-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-upcoming-copy strong { color: #fff; font-size: 13px; }.pmant-upcoming-copy small { color: #91a6b0; font-size: 10px; }
+.pmant-due-badge { padding: 5px 9px; color: #8fd0f0; background: rgba(49,145,196,.14); border-radius: 999px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.pmant-due-badge.today { color: #ffd18a; background: rgba(245,158,11,.14); }
+.pmant-upcoming-item > .fa-chevron-right { color: #607b87; font-size: 10px; }
+.pmant-last-service-panel { display: flex; flex-direction: column; }
+.pmant-last-service-date { margin: 20px 0 17px; display: flex; align-items: center; gap: 13px; }
+.pmant-last-service-date > strong { width: 62px; height: 62px; display: grid; place-items: center; color: #071a24; background: #3191c4; border-radius: 15px; font-size: 27px; }
+.pmant-last-service-date > span { display: grid; gap: 3px; }.pmant-last-service-date b { color: #fff; font-size: 16px; }.pmant-last-service-date small { color: #91a6b0; font-size: 10px; }
+.pmant-last-service-data { margin: 0 0 18px; display: grid; gap: 10px; }
+.pmant-last-service-data > div { padding-bottom: 9px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.pmant-last-service-data dt { color: #78919d; font-size: 9px; font-weight: 700; text-transform: uppercase; }.pmant-last-service-data dd { margin: 3px 0 0; overflow: hidden; color: #e6eef1; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-last-service-panel > .pmant-btn { margin-top: auto; }
+@media (max-width: 980px) { .pmant-service-insights { grid-template-columns: 1fr; } }
+
+/* Ajustes finales: prioridad sobre los estilos heredados del portal */
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-page-heading {
+    display: grid !important; grid-template-columns: minmax(0,1fr) auto; align-items: center !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-page-heading .pmant-btn-secondary {
+    width: auto !important; min-width: 160px; padding: 10px 16px !important;
+    border: 1px solid #355463 !important; color: #d9e8ef !important; background: #142a35 !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-services-panel { overflow: visible; padding: 22px !important; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list {
+    display: grid !important; grid-template-columns: repeat(2,minmax(360px,1fr)) !important;
+    align-items: stretch !important; gap: 14px !important; padding: 0 !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-card {
+    width: 100% !important; min-width: 0 !important; min-height: 245px !important;
+    display: grid !important; grid-template-columns: minmax(0,1fr) minmax(145px,.58fr) !important;
+    grid-template-rows: auto auto 1fr auto; align-items: start !important; gap: 14px 18px !important;
+    padding: 20px !important; overflow: hidden; border: 1px solid #2b4b5a !important;
+    border-radius: 16px !important; background: linear-gradient(145deg,#16313d,#102630) !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-equipment { grid-column: 1 / -1; padding-bottom: 14px; border-bottom: 1px solid #2b4653; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-equipment strong { display: block; max-width: 100%; font-size: 17px; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-equipment small { display: block; margin-top: 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-order,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-date,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-stage { grid-column: auto; grid-row: auto; min-width: 0; padding: 0 !important; border: 0 !important; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-order strong,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-order span,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-date strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-actions { grid-column: 1 / -1; align-self: end; justify-content: flex-start; padding-top: 13px; border-top: 1px solid #2b4653; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-actions .pmant-btn-primary {
+    min-width: 130px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    color: #fff !important; background: #3191c4 !important; border: 1px solid #46a8da !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-actions .pmant-icon-btn { flex: 0 0 40px; }
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list.pmant-table-view {
+    display: block !important; overflow-x: auto !important; border: 1px solid #294552; border-radius: 13px;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list.pmant-table-view .pmant-active-table-head,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list.pmant-table-view .pmant-active-service-card {
+    display: grid !important; grid-template-columns: minmax(230px,1.3fr) minmax(190px,1fr) minmax(145px,.65fr) minmax(150px,.7fr) minmax(190px,.8fr) !important;
+    grid-template-rows: auto; align-items: center !important; min-width: 1080px !important; min-height: 76px !important; gap: 16px !important;
+}
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list.pmant-table-view .pmant-active-equipment,
+.pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list.pmant-table-view .pmant-active-actions { grid-column: auto; padding: 0; border: 0; }
+
+.pmant-page-rail ~ .main .pmant-quote-list .btn-desca {
+    width: auto !important; min-width: 138px !important; height: 42px !important; padding: 0 14px !important;
+    display: inline-flex !important; place-items: unset !important; align-items: center !important; justify-content: center !important;
+    gap: 8px; align-self: center !important; overflow: visible !important; border: 1px solid #4aaddf !important;
+    border-radius: 10px !important; color: #fff !important; background: #3191c4 !important; box-shadow: 0 7px 18px rgba(49,145,196,.2);
+    position: static !important; inset: auto !important; margin: 0 !important;
+    font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+.pmant-page-rail ~ .main .pmant-quote-list .btn-desca:hover { color: #fff !important; background: #287daa !important; transform: translateY(-1px); }
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .card-sede {
+    grid-template-columns: 48px minmax(0,1fr) !important; align-items: start !important;
+    grid-template-rows: auto auto minmax(52px,auto) auto !important;
+    min-height: 285px; padding: 18px !important; overflow: hidden !important;
+}
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-record-icon { grid-column: 1; grid-row: 1; }
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-identity { grid-column: 2; grid-row: 1; }
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-payment,
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-shipping { grid-column: 1 / -1; padding-top: 11px; border-top: 1px solid #2a4653; }
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-shipping strong { overflow: visible; text-overflow: clip; white-space: normal; line-height: 1.35; }
+.pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .btn-desca { grid-column: 1 / -1; grid-row: 4; width: 100% !important; align-self: end !important; justify-self: stretch; }
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .pmant-quote-table-head,
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view .card-sede {
+    grid-template-columns: 56px minmax(210px,1fr) minmax(170px,.8fr) minmax(240px,1.1fr) 155px !important;
+    min-width: 940px;
+}
+@media (max-width: 1050px) {
+    .pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-list { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 760px) {
+    .pmant-page-rail ~ .main.pmant-active-services-page .pmant-page-heading { grid-template-columns: 1fr !important; }
+    .pmant-page-rail ~ .main.pmant-active-services-page .pmant-active-service-card { grid-template-columns: 1fr !important; }
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .card-sede { grid-template-columns: 48px minmax(0,1fr) !important; }
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-payment,
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .pmant-quote-shipping,
+    .pmant-page-rail ~ .main .pmant-quote-list:not(.pmant-table-view) .btn-desca { grid-column: 2; grid-row: auto; justify-self: start; }
+}
+
+/* Dashboard: alertas preventivas de mantenimiento */
+.pmant-maintenance-alert {
+    margin-bottom: 16px;
+    padding: 18px 20px;
+    border: 1px solid #294556;
+    border-left: 4px solid #3191c4;
+    border-radius: 16px;
+    background: #142b36;
+}
+.pmant-maintenance-alert.has-overdue { border-left-color: #ef6262; }
+.pmant-maintenance-alert.has-warning { border-left-color: #e6ad4a; }
+.pmant-maintenance-alert-head { display: flex; align-items: center; gap: 14px; }
+.pmant-maintenance-alert-head > div:nth-child(2) { flex: 1; min-width: 0; }
+.pmant-maintenance-alert-head h2 { margin: 2px 0 3px; color: #fff; font-size: 20px; }
+.pmant-maintenance-alert-head p { margin: 0; color: #a9c0cd; }
+.pmant-maintenance-alert-icon,
+.pmant-alert-equipment-icon {
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    width: 46px; height: 46px; border-radius: 13px;
+    color: #68c6f4; background: rgba(49,145,196,.16);
+}
+.has-overdue .pmant-maintenance-alert-icon { color: #ff8585; background: rgba(239,98,98,.14); }
+.has-warning .pmant-maintenance-alert-icon { color: #f1bf68; background: rgba(230,173,74,.14); }
+.pmant-alert-summary { display: flex; gap: 8px; }
+.pmant-alert-summary span { padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+.pmant-alert-summary .overdue { color: #ffaaaa; background: rgba(239,98,98,.14); }
+.pmant-alert-summary .soon { color: #ffd182; background: rgba(230,173,74,.14); }
+.pmant-maintenance-alert-list { display: grid; gap: 8px; margin-top: 16px; }
+.pmant-maintenance-alert-item {
+    display: grid; grid-template-columns: 46px minmax(180px,1fr) minmax(145px,.45fr) auto auto;
+    align-items: center; gap: 13px; padding: 11px 12px;
+    border: 1px solid #294552; border-radius: 12px; background: #102530;
+}
+.pmant-alert-equipment-copy,
+.pmant-alert-date { display: flex; min-width: 0; flex-direction: column; gap: 3px; }
+.pmant-alert-equipment-copy strong,
+.pmant-alert-date strong { overflow: hidden; color: #fff; text-overflow: ellipsis; white-space: nowrap; }
+.pmant-alert-equipment-copy small,
+.pmant-alert-date small { color: #88a8ba; }
+.pmant-alert-status { padding: 6px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.pmant-alert-status.overdue { color: #ffaaaa; background: rgba(239,98,98,.15); }
+.pmant-alert-status.today { color: #ffd182; background: rgba(230,173,74,.16); }
+.pmant-alert-status.soon { color: #9edcff; background: rgba(49,145,196,.17); }
+.pmant-alert-whatsapp { min-height: 38px; padding: 8px 12px; white-space: nowrap; }
+@media (max-width: 1100px) {
+    .pmant-maintenance-alert-item { grid-template-columns: 46px 1fr auto; }
+    .pmant-alert-date { grid-column: 2; }
+    .pmant-alert-status { grid-column: 3; grid-row: 1; }
+    .pmant-alert-whatsapp { grid-column: 3; grid-row: 2; }
+}
+@media (max-width: 720px) {
+    .pmant-maintenance-alert-head { align-items: flex-start; flex-wrap: wrap; }
+    .pmant-alert-summary { width: 100%; }
+    .pmant-maintenance-alert-item { grid-template-columns: 42px minmax(0,1fr); }
+    .pmant-alert-date, .pmant-alert-status, .pmant-alert-whatsapp { grid-column: 2; grid-row: auto; justify-self: start; }
+    .pmant-alert-whatsapp { width: 100%; justify-content: center; }
+}
+@media (max-width: 560px) { .pmant-upcoming-item { grid-template-columns: 48px minmax(0,1fr) 14px; }.pmant-due-badge { grid-column: 2; justify-self: start; }.pmant-upcoming-item > .fa-chevron-right { grid-column: 3; grid-row: 1 / span 2; } }
+
+/* Checklist: continuidad del fondo y acordeón en la paleta PMANT */
+html:has(body.pmant-portal-page),
+body.pmant-portal-page,
+body.pmant-portal-page #wrapwrap,
+body.pmant-portal-page #wrap {
+    min-height: 100%;
+    background: #081a23 !important;
+}
+body.pmant-portal-page #wrapwrap { min-height: 100vh !important; }
+body.pmant-portal-page footer,
+body.pmant-portal-page .o_footer,
+body.pmant-portal-page .o_footer_copyright { display: none !important; }
+.pmant-page-rail ~ .pmant-checklist-form-page {
+    min-height: 100vh !important;
+    padding-bottom: 80px !important;
+    background: #081a23 !important;
+}
+.pmant-page-rail ~ .main.pmant-checklist-history { min-height: 100vh !important; }
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-item {
+    overflow: hidden; border-color: #294b5b !important; background: #102832 !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button,
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button.collapsed {
+    color: #edf7fb !important;
+    background: #15323e !important;
+    box-shadow: none !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button:not(.collapsed) {
+    color: #d9f2ff !important;
+    background: rgba(49,145,196,.18) !important;
+    box-shadow: inset 4px 0 0 #3191c4 !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button:hover {
+    color: #fff !important;
+    background: rgba(49,145,196,.14) !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button:focus {
+    box-shadow: inset 0 0 0 1px rgba(49,145,196,.5) !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-button::after {
+    filter: brightness(0) saturate(100%) invert(59%) sepia(55%) saturate(663%) hue-rotate(160deg) brightness(91%) contrast(87%) !important;
+}
+.pmant-page-rail ~ .main .pmant-checklist-accordion .accordion-body { color: #dce9ef; background: #102832 !important; }
+.pmant-page-rail ~ .main .pmant-checklist-accordion .pmant-count-badge,
+.pmant-page-rail ~ .main .pmant-checklist-accordion .pmant-status.success {
+    color: #bde8ff !important;
+    background: rgba(49,145,196,.2) !important;
+}
+
+/* Certificados de operatividad */
+.pmant-certificates-page { min-height: 100vh; padding: 26px 30px 70px; color: #edf7fb; background: #081a23; }
+.pmant-certificate-equipment {
+    display: grid; grid-template-columns: 58px minmax(220px,1fr) minmax(360px,.8fr);
+    align-items: center; gap: 18px; margin-bottom: 18px; padding: 20px 22px;
+}
+.pmant-certificate-equipment-icon,
+.pmant-certificate-icon,
+.pmant-upload-heading > span {
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #62c2f2; background: rgba(49,145,196,.16); border: 1px solid rgba(49,145,196,.2);
+}
+.pmant-certificate-equipment-icon { width: 54px; height: 54px; border-radius: 15px; font-size: 22px; }
+.pmant-certificate-equipment h2 { margin: 2px 0 4px; color: #fff; font-size: 22px; }
+.pmant-certificate-equipment p,
+.pmant-certificate-equipment small { margin: 0; color: #8eabba; }
+.pmant-certificate-equipment dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 0; }
+.pmant-certificate-equipment dl div,
+.pmant-certificate-card dl div { min-width: 0; }
+.pmant-certificate-equipment dt,
+.pmant-certificate-card dt { color: #79b9d9; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.pmant-certificate-equipment dd,
+.pmant-certificate-card dd { margin: 4px 0 0; overflow-wrap: anywhere; color: #fff; font-weight: 700; }
+.pmant-certificate-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(300px,.55fr); align-items: start; gap: 18px; }
+.pmant-certificate-list-panel,
+.pmant-certificate-upload-panel { padding: 22px; }
+.pmant-certificate-count {
+    display: inline-flex; min-width: 38px; height: 38px; align-items: center; justify-content: center;
+    border-radius: 11px; color: #061821; background: #3191c4; font-weight: 800;
+}
+.pmant-certificate-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap: 14px; margin-top: 20px; }
+.pmant-certificate-card {
+    display: flex; min-width: 0; min-height: 260px; flex-direction: column; gap: 15px; padding: 18px;
+    border: 1px solid #294956; border-radius: 15px; background: #102731;
+    transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.pmant-certificate-card:hover { border-color: #3191c4; box-shadow: 0 10px 25px rgba(0,0,0,.18); transform: translateY(-2px); }
+.pmant-certificate-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pmant-certificate-icon { width: 48px; height: 48px; flex: 0 0 48px; border-radius: 13px; font-size: 22px; }
+.pmant-certificate-badge { padding: 6px 9px; border-radius: 999px; color: #a8ddf8; background: rgba(49,145,196,.14); font-size: 11px; font-weight: 700; white-space: nowrap; }
+.pmant-certificate-copy { display: flex; min-width: 0; flex-direction: column; gap: 5px; }
+.pmant-certificate-copy strong { overflow-wrap: anywhere; color: #fff; font-size: 16px; }
+.pmant-certificate-copy small { overflow-wrap: anywhere; color: #91aab6; }
+.pmant-certificate-card dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: auto 0 0; padding-top: 14px; border-top: 1px solid #294552; }
+.pmant-certificate-card .pmant-btn { width: 100%; justify-content: center; }
+.pmant-upload-heading { display: flex; align-items: center; gap: 12px; }
+.pmant-upload-heading > span { width: 48px; height: 48px; flex: 0 0 48px; border-radius: 13px; font-size: 20px; }
+.pmant-upload-heading h2 { margin: 2px 0 0; color: #fff; font-size: 20px; }
+.pmant-certificate-upload-panel > p { margin: 16px 0 20px; color: #9cb3be; line-height: 1.55; }
+.pmant-certificate-form { display: grid; gap: 15px; }
+.pmant-certificate-form label { display: grid; gap: 7px; margin: 0; color: #dce9ef; font-size: 13px; font-weight: 700; }
+.pmant-certificate-form input {
+    width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #31515f; border-radius: 10px;
+    outline: 0; color: #edf7fb; background: #0b202a; color-scheme: dark;
+}
+.pmant-certificate-form input:focus { border-color: #3191c4; box-shadow: 0 0 0 3px rgba(49,145,196,.15); }
+.pmant-file-field { padding: 13px; border: 1px dashed #3b6577; border-radius: 12px; background: rgba(49,145,196,.05); }
+.pmant-file-field input { padding: 7px; }
+.pmant-file-field small { color: #88a8b8; font-weight: 400; }
+.pmant-certificate-form .pmant-btn { min-height: 44px; justify-content: center; }
+.pmant-form-message { display: flex; align-items: center; gap: 9px; margin: 0 0 18px; padding: 12px 15px; border-radius: 11px; font-weight: 700; }
+.pmant-form-message.success { color: #c4ebff; border: 1px solid rgba(49,145,196,.45); background: rgba(49,145,196,.16); }
+.pmant-form-message.error { color: #ffd1d1; border: 1px solid rgba(239,98,98,.42); background: rgba(239,98,98,.13); }
+@media (max-width: 1100px) { .pmant-certificate-layout { grid-template-columns: 1fr; }.pmant-certificate-upload-panel { max-width: none; } }
+@media (max-width: 760px) {
+    .pmant-certificates-page { padding: 20px 14px 60px; }
+    .pmant-certificate-equipment { grid-template-columns: 48px minmax(0,1fr); padding: 17px; }
+    .pmant-certificate-equipment dl { grid-column: 1 / -1; }
+    .pmant-certificate-grid { grid-template-columns: 1fr; }
+}
+
+/* Botones visibles y consistentes en certificados */
+.pmant-page-rail ~ .pmant-certificates-page .pmant-page-heading .pmant-btn-secondary,
+.pmant-page-rail ~ .pmant-certificates-page .pmant-certificate-card .pmant-btn-primary,
+.pmant-page-rail ~ .pmant-certificates-page .pmant-certificate-form .pmant-btn-primary {
+    border: 1px solid #3191c4 !important;
+    color: #fff !important;
+    background: #3191c4 !important;
+    box-shadow: 0 7px 18px rgba(49,145,196,.2) !important;
+}
+.pmant-page-rail ~ .pmant-certificates-page .pmant-page-heading .pmant-btn-secondary {
+    width: auto !important;
+    min-width: 170px;
+    justify-content: center;
+}
+.pmant-page-rail ~ .pmant-certificates-page .pmant-btn-primary i,
+.pmant-page-rail ~ .pmant-certificates-page .pmant-btn-secondary i { color: #fff !important; }
+.pmant-page-rail ~ .pmant-certificates-page .pmant-page-heading .pmant-btn-secondary:hover,
+.pmant-page-rail ~ .pmant-certificates-page .pmant-certificate-card .pmant-btn-primary:hover,
+.pmant-page-rail ~ .pmant-certificates-page .pmant-certificate-form .pmant-btn-primary:hover {
+    border-color: #55afe0 !important;
+    color: #fff !important;
+    background: #267eac !important;
+    transform: translateY(-1px);
+}
+@media (max-width: 760px) {
+    .pmant-page-rail ~ .pmant-certificates-page .pmant-page-heading .pmant-btn-secondary { width: 100% !important; }
+}
+
+/* Acceso a la tienda: azul PMANT con superficie translúcida */
+.pmant-page-rail .pmant-shop-link,
+.pmant-page-rail .pmant-page-shop,
+.pmant-sidebar .pmant-shop-link {
+    border-color: rgba(49,145,196,.48) !important;
+    color: #a9ddf7 !important;
+    background: rgba(49,145,196,.06) !important;
+}
+.pmant-page-rail .pmant-shop-link i,
+.pmant-page-rail .pmant-page-shop i,
+.pmant-sidebar .pmant-shop-link i { color: #55b6e8 !important; }
+.pmant-page-rail .pmant-shop-link:hover,
+.pmant-page-rail .pmant-page-shop:hover,
+.pmant-sidebar .pmant-shop-link:hover {
+    border-color: rgba(49,145,196,.82) !important;
+    color: #fff !important;
+    background: rgba(49,145,196,.18) !important;
+    box-shadow: 0 7px 18px rgba(49,145,196,.12);
+}
+.pmant-page-rail .pmant-shop-link:hover i,
+.pmant-page-rail .pmant-page-shop:hover i,
+.pmant-sidebar .pmant-shop-link:hover i { color: #7dcef4 !important; }

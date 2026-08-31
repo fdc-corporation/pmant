@@ -1,7 +1,9 @@
 <odoo>
     <template id="form_calificaciones" name="Formulario de Calificacion">
-        <t t-call="website.layout">
-            <div style="max-width: 700px; margin: 0 auto; padding: 30px 20px; background-color: #fff; border-radius: 8px;">
+		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-form-page">
                 <h2 style="text-align: center; font-size: 24px; color: #111827; font-weight: 600; margin-bottom: 16px;">
                     ¡Califica nuestro servicio!
                 </h2>
@@ -12,7 +14,8 @@
                     <strong><t t-out="object.name"/></strong>.
                 </p>
 
-                <form t-att-action="(base_url or '') + '/rate_service'" method="get" style="display: block;">
+                <form action="/rate_service" method="post" style="display: block;">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <!-- Preguntas -->
                     <t t-set="preguntas" t-value="[
                         {'id': 'p1', 'texto': '1. ¿Qué tan satisfecho(a) está con la calidad del servicio recibido?'},
@@ -26,7 +29,7 @@
                             <div style="display: flex; justify-content: center; gap: 10px; margin-top: 8px;">
                                 <t t-foreach="[1,2,3,4,5]" t-as="i">
                                     <label>
-                                        <input type="radio" t-att-name="preg['id']" t-att-value="i"  />
+                                        <input type="radio" t-att-name="preg['id']" t-att-value="i" required="required"/>
                                         <img t-att-src="'/pmant/static/src/img/rating_' + str(i) + '.png'"
                                              t-att-alt="'Calificación ' + str(i)"
                                              t-att-title="'Calificación ' + str(i)"

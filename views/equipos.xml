@@ -33,7 +33,7 @@
 				<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo"/>
 				</button>
 				<button class="oe_stat_button" type="object" name="action_view_certificados" icon="fa-file-text-o">
-					<field string="Certificados firmados" name="cantidad_certificados" widget="statinfo"/>
+					<field string="Documentos y certificados" name="cantidad_certificados" widget="statinfo"/>
 				</button>
 				<button class="oe_stat_button" type="object" name="action_view_prox_mant" icon="fa-file-text-o">
 					<field string="Proximos mantenimiento" name="count_recordatorios" widget="statinfo"/>
@@ -159,6 +159,17 @@
 								<field name="write_date" string="Fecha Generada"/>
 							</list> -->
 							 
+						</field>
+						<separator string="Certificados PDF firmados"/>
+						<field name="certificados_manuales" context="{'default_equipo_id': id}">
+							<list editable="bottom">
+								<field name="fecha_firma"/>
+								<field name="name"/>
+								<field name="nombre_archivo"/>
+								<field name="archivo_firmado" filename="nombre_archivo"/>
+								<field name="origen" readonly="1"/>
+								<field name="usuario_id" readonly="1"/>
+							</list>
 						</field>
 					</page>
 					<page string="QR Imagen">
