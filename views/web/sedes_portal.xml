@@ -6,14 +6,14 @@
             <a class="pmant-brand" href="/my/sedes" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
             <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
                 <a href="/my/sedes"><i class="fa fa-th-large"/><span>Panel de control</span></a>
-                <a t-att-href="'/my/%s/equipos/' % request.env.user.partner_id.commercial_partner_id.id"><i class="fa fa-cogs"/><span>Mis equipos</span></a>
+                <a t-att-href="'/my/%s/equipos' % request.env.user.sudo().partner_id.commercial_partner_id.id"><i class="fa fa-cogs"/><span>Mis equipos</span></a>
                 <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/><span>Servicios activos</span></a>
                 <a href="/my/sedes#sedes"><i class="fa fa-building-o"/><span>Sedes y áreas</span></a>
                 <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/><span>Soporte por WhatsApp</span></a>
             </nav>
             <div class="pmant-sidebar-footer">
                 <a class="pmant-shop-link" href="/shop"><i class="fa fa-shopping-bag"/><span>Ver nuestros productos</span></a>
-                <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(request.env.user.partner_id.name or 'U')[:1].upper()"/></span><span><strong t-esc="request.env.user.partner_id.name"/><small>Mi cuenta</small></span></a>
+                <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(request.env.user.sudo().partner_id.name or 'U')[:1].upper()"/></span><span><strong t-esc="request.env.user.sudo().partner_id.name"/><small>Mi cuenta</small></span></a>
             </div>
         </aside>
     </template>
@@ -27,7 +27,7 @@
                     <a class="pmant-brand" href="/my/sedes" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
                     <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
                         <a class="active" href="/my/sedes"><i class="fa fa-th-large"/> <span>Panel de control</span></a>
-                        <a t-att-href="'/my/%s/equipos/' % user_partner.id"><i class="fa fa-cogs"/> <span>Mis equipos</span></a>
+                        <a t-att-href="'/my/%s/equipos' % user_partner.id"><i class="fa fa-cogs"/> <span>Mis equipos</span></a>
                         <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/> <span>Servicios activos</span></a>
                         <a href="#sedes"><i class="fa fa-building-o"/> <span>Sedes y áreas</span></a>
                         <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/> <span>Soporte por WhatsApp</span></a>
@@ -44,7 +44,7 @@
                         <div class="pmant-top-actions"><a t-att-href="pmant_support_url" target="_blank" rel="noopener" class="pmant-btn pmant-btn-ghost pmant-whatsapp-support"><i class="fa fa-whatsapp"/> Soporte</a><a href="/shop" class="pmant-btn pmant-btn-primary"><i class="fa fa-shopping-cart"/> Ver productos</a></div>
                     </header>
                     <section class="pmant-metrics" aria-label="Resumen">
-                        <a class="pmant-metric pmant-metric-primary" t-att-href="'/my/%s/equipos/' % user_partner.id"><span class="pmant-metric-icon"><i class="fa fa-cogs"/></span><span><small>Equipos registrados</small><strong t-esc="equipment_count"/><em>Ver inventario <i class="fa fa-arrow-right"/></em></span></a>
+                        <a class="pmant-metric pmant-metric-primary" t-att-href="'/my/%s/equipos' % user_partner.id"><span class="pmant-metric-icon"><i class="fa fa-cogs"/></span><span><small>Equipos registrados</small><strong t-esc="equipment_count"/><em>Ver inventario <i class="fa fa-arrow-right"/></em></span></a>
                         <a class="pmant-metric pmant-metric-blue" href="/my/servicios/ejecucion"><span class="pmant-metric-icon"><i class="fa fa-wrench"/></span><span><small>Servicios activos</small><strong t-esc="active_service_count"/><em>Revisar servicios <i class="fa fa-arrow-right"/></em></span></a>
                         <div class="pmant-metric pmant-metric-violet"><span class="pmant-metric-icon"><i class="fa fa-tasks"/></span><span><small>Tareas de mantenimiento</small><strong t-esc="task_count"/><em>Historial operativo</em></span></div>
                         <div class="pmant-metric pmant-metric-amber"><span class="pmant-metric-icon"><i class="fa fa-commenting-o"/></span><span><small>Solicitudes enviadas</small><strong t-esc="request_count"/><em>Atención al cliente</em></span></div>
@@ -53,7 +53,7 @@
                         <article class="pmant-panel pmant-panel-wide" id="sedes">
                             <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ORGANIZACIÓN</span><h2>Mis sedes</h2><p>Seleccione una sede para consultar sus áreas y equipos.</p></div><form action="/my/sedes" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar sede" t-att-value="search" aria-label="Buscar sede"/></form></div>
                             <div class="pmant-location-grid" t-if="sedes">
-                                <t t-foreach="sedes" t-as="sede"><a class="pmant-location" t-att-href="'/my/sede/%s/%s/' % (sede.id, 'areas' if sede.areas else 'equipos')"><span class="pmant-location-icon"><i class="fa fa-building"/></span><span class="pmant-location-copy"><strong t-esc="sede.name"/><small t-esc="sede.street or 'Dirección no registrada'"/><small><i class="fa fa-cogs"/> <t t-esc="len(sede.equipos_ubicacion)"/> equipos</small></span><i class="fa fa-chevron-right pmant-location-arrow"/></a></t>
+                                <t t-foreach="sedes" t-as="sede"><a class="pmant-location" t-att-href="'/my/sede/%s/%s' % (sede.id, 'areas' if sede.areas else 'equipos')"><span class="pmant-location-icon"><i class="fa fa-building"/></span><span class="pmant-location-copy"><strong t-esc="sede.name"/><small t-esc="sede.street or 'Dirección no registrada'"/><small><i class="fa fa-cogs"/> <t t-esc="len(sede.equipos_ubicacion)"/> equipos</small></span><i class="fa fa-chevron-right pmant-location-arrow"/></a></t>
                             </div>
                             <div class="pmant-empty" t-else=""><span><i class="fa fa-building-o"/></span><h3>No encontramos sedes registradas</h3><p>Contacte con FDC para asociar una sede a su cuenta.</p><a href="/contactus" class="pmant-btn pmant-btn-primary">Solicitar ayuda</a></div>
                             <nav class="pmant-pagination" t-if="total_paginas &gt; 1" aria-label="Paginación"><a t-if="pagina_actual &gt; 1" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual - 1, search)"><i class="fa fa-chevron-left"/> Anterior</a><span>Página <strong t-esc="pagina_actual"/> de <strong t-esc="total_paginas"/></span><a t-if="pagina_actual &lt; total_paginas" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual + 1, search)">Siguiente <i class="fa fa-chevron-right"/></a></nav>

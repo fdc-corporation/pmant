@@ -10,7 +10,7 @@ programaciones, documentos, firmas y portal de clientes.""",
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
     "category": "Services/Maintenance",
-    "version": "19.0.2.23.0",
+    "version": "19.0.2.24.0",
     # any module necessary for this one to work correctly
     "depends": [
         "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",

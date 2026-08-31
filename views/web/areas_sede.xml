@@ -59,7 +59,7 @@
 								<strong>
 									Celular :
 								</strong>
-								<t t-esc="ubicacion.mobile" />
+								<t t-esc="ubicacion.phone or 'No registrado'" />
 							</span>
 							<span>
 								<strong>
@@ -102,7 +102,7 @@
 						<h3>
 							Mis Areas
 						</h3>
-						<form style="display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/areas/'" method="get" class="form-inline">
+						<form style="display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/areas'" method="get" class="form-inline">
 							<input type="text" name="filtro" class="form-control mr-2" placeholder="Buscar áreas..." t-att-value="filtro or ''" />
 							<button type="submit" class="btn btn-primary">
 								Buscar

@@ -14,26 +14,34 @@ _logger = logging.getLogger(__name__)
 class PortalPmant(Controller):
 
     @staticmethod
+    def _portal_partner():
+        """Contacto del usuario en un entorno seguro para renderizar el portal."""
+        return request.env.user.sudo().partner_id
+
+    @staticmethod
     def _commercial_partner():
-        return request.env.user.partner_id.commercial_partner_id
+        return PortalPmant._portal_partner().commercial_partner_id
 
     def _partner_is_allowed(self, partner):
+        partner = partner.sudo().exists()
         return bool(
             partner
-            and partner.commercial_partner_id == self._commercial_partner()
+            and partner.commercial_partner_id.id == self._commercial_partner().id
         )
 
     def _equipment_is_allowed(self, equipment):
+        equipment = equipment.sudo().exists()
         commercial_partner = self._commercial_partner()
         return bool(
             equipment
             and (
-                equipment.propietario.commercial_partner_id == commercial_partner
-                or equipment.ubicacion.commercial_partner_id == commercial_partner
+                equipment.propietario.commercial_partner_id.id == commercial_partner.id
+                or equipment.ubicacion.commercial_partner_id.id == commercial_partner.id
             )
         )
 
     def _task_is_allowed(self, task):
+        task = task.sudo().exists()
         return bool(
             task
             and (
@@ -49,7 +57,7 @@ class PortalPmant(Controller):
         website=True,
     )
     def sedes_portal(self, pagina=1, search=None):
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
         commercial_partner = user_partner.commercial_partner_id
         dominio_web = request.httprequest.host
         registros_por_pagina = 15
@@ -177,7 +185,7 @@ class PortalPmant(Controller):
     # Areas de las sedes
     @route(
         [
-            "/my/sede/<int:sede_id>/areas/",
+            "/my/sede/<int:sede_id>/areas",
             "/my/sede/<int:sede_id>/areas/page/<int:pagina>",
         ],
         type="http",
@@ -195,7 +203,7 @@ class PortalPmant(Controller):
         if filtro:
             domain.append(("name", "ilike", filtro))  # Filtrado por nombre del área
 
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
 
         # Calcular el total de áreas y el número total de páginas
         total_areas = request.env["res.partner"].sudo().search_count(domain)
@@ -211,7 +219,7 @@ class PortalPmant(Controller):
         areas = request.env["res.partner"].sudo().search(domain, limit=per_page, offset=offset, order="name")
         
         # Buscar la sede
-        sede = request.env["res.partner"].browse(sede_id)
+        sede = request.env["res.partner"].sudo().browse(sede_id)
 
         # Renderizar la plantilla con los datos
         return request.render(
@@ -231,7 +239,7 @@ class PortalPmant(Controller):
     # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
     @route(
         [
-            "/my/sede/<int:sede_id>/equipos/",
+            "/my/sede/<int:sede_id>/equipos",
             "/my/sede/<int:sede_id>/equipos/page/<int:pagina>",
         ],
         type="http",
@@ -244,7 +252,7 @@ class PortalPmant(Controller):
         # Número de registros por página
         per_page = 15
         domain = [("ubicacion", "=", sede_id)]
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
 
         # Aplicar filtro si existe
         if filtro:
@@ -288,7 +296,7 @@ class PortalPmant(Controller):
     # EQUIPOS POR SEDES - REGISTRADO A LA UBICACION
     @route(
         [
-            "/my/area/<int:sede_id>/equipos/",
+            "/my/area/<int:sede_id>/equipos",
             "/my/area/<int:sede_id>/equipos/page/<int:pagina>",
         ],
         type="http",
@@ -301,7 +309,7 @@ class PortalPmant(Controller):
         # Número de registros por página
         per_page = 15
         domain = [("area", "=", sede_id)]
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
 
         # Aplicar filtro si existe
         if filtro:
@@ -346,7 +354,7 @@ class PortalPmant(Controller):
 
     @route(
         [
-            "/my/<int:empresa_id>/equipos/",
+            "/my/<int:empresa_id>/equipos",
             "/my/<int:empresa_id>/equipos/page/<int:pagina>",
         ],
         type="http",
@@ -356,7 +364,7 @@ class PortalPmant(Controller):
     def equipos_portal(self, empresa_id, pagina=1, search=None):
         if not self._partner_is_allowed(request.env["res.partner"].sudo().browse(empresa_id)):
             return request.not_found()
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
         per_page = 15  # Número de registros por página
 
         # Definir el dominio base para la búsqueda
@@ -405,7 +413,7 @@ class PortalPmant(Controller):
 
     # SOLICITUD DE REGISTRO DE EQUIPO
     @route(
-        ["/solicitud/equipo/"], type="http", auth="user", methods=["POST"], website=True
+        ["/solicitud/equipo"], type="http", auth="user", methods=["POST"], website=True
     )
     def solicitud_registro_equipo(self, **kwargs):
         # Recuperar los valores enviados desde el formulario
@@ -416,7 +424,7 @@ class PortalPmant(Controller):
         numero_serie = kwargs.get("numero_serie")  # Número de serie
         fecha_registro = kwargs.get("fecha_registro")  # Fecha de registro
         imagen = kwargs.get("formFileMultiple")  # Archivo subido
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
 
         # Validar que todos los campos requeridos estén presentes
         if not (
@@ -446,10 +454,10 @@ class PortalPmant(Controller):
             "image": image_data,
         })
         if ubicacion_id:
-            return request.redirect(f"/my/sede/{int(ubicacion_id)}/equipos/")
+            return request.redirect(f"/my/sede/{int(ubicacion_id)}/equipos")
 
         # Redirigir a una página de éxito o mostrar un mensaje
-        return request.redirect(f"/my/{user_partner.id}/equipos/")
+        return request.redirect(f"/my/{user_partner.id}/equipos")
 
     # REGISTROS - DETALLES DEL EQUIPO
 
@@ -459,7 +467,7 @@ class PortalPmant(Controller):
     def detalle_equipo(self, equipo_id, filtro=None, pagina=1, **kw):
         if not self._equipment_is_allowed(request.env["maintenance.equipment"].sudo().browse(equipo_id)):
             return request.not_found()
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
         domain = request.httprequest.host
         numero = "51908912551"
@@ -604,7 +612,7 @@ class PortalPmant(Controller):
         if not self._equipment_is_allowed(request.env["maintenance.equipment"].sudo().browse(equipo_id)):
             return request.not_found()
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
-        user_partner = request.env.user.partner_id
+        user_partner = self._portal_partner()
 
         search_query = kwargs.get('search', '').strip()
         page = int(page)
@@ -648,7 +656,7 @@ class PortalPmant(Controller):
         website=True,
     )
     def get_servicio_ejecucion(self, page=1, **kw):
-        user = request.env.user.partner_id
+        user = self._portal_partner()
         commercial_partner = self._commercial_partner()
         equipments = request.env["maintenance.equipment"].sudo().search([
             "|",
@@ -1075,7 +1083,7 @@ class PortalPmant(Controller):
                             f"<p><strong>📩 Nueva solicitud de servicio creada</strong></p>"
                             f"<p>El equipo <strong>{equipo.name}</strong> tiene una nueva solicitud de tipo <strong>{tipo_servicio}</strong>.</p>"
                         ),
-                        'author_id': request.env.user.partner_id.id,
+                        'author_id': self._portal_partner().id,
                         'partner_ids': [(4, user.partner_id.id)],
                     })
 

@@ -80,7 +80,7 @@
 							</span>
 							<!--
 							<div class="contenedor-button-info">
-							<a t-att-href="'/my/' + str(user_partner.commercial_partner_id.id) + '/equipos/'" class="bg-primary">
+							<a t-att-href="'/my/' + str(user_partner.commercial_partner_id.id) + '/equipos'" class="bg-primary">
 							Ver mis equipos
 							</a>
 							<a href="" class="bg-primary">
@@ -102,7 +102,7 @@
 								Solicitar registro
 							</button>
 						</div>
-						<form style=" display: flex; gap: 5px;" t-att-action="'/my/' + str(empresa_id) + '/equipos/'" method="get" class="form-inline ">
+						<form style=" display: flex; gap: 5px;" t-att-action="'/my/' + str(empresa_id) + '/equipos'" method="get" class="form-inline ">
 							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar equipos..." value="" />
 							<button type="submit" class="btn btn-primary">
 								Buscar
