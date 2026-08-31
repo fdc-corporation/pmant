@@ -87,7 +87,7 @@ $(document).ready(() => {
       applyEquipmentView(window.localStorage.getItem("pmant-equipment-view") || "cards");
       const path = window.location.pathname;
       document.querySelectorAll(".pmant-page-rail .pmant-nav a").forEach((link) => link.classList.remove("active"));
-      let selector = 'a[href="/my/sedes/"]';
+      let selector = 'a[href="/my/sedes"]';
       if (path.includes("/servicios/")) selector = 'a[href="/my/servicios/ejecucion"]';
       else if (path.includes("/equipos/") || path.match(/\/my\/\d+\/equipos/)) selector = '.pmant-nav a:nth-child(2)';
       else if (path.includes("/sede/") || path.includes("/area/")) selector = '.pmant-nav a:nth-child(4)';

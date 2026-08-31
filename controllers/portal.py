@@ -43,7 +43,7 @@ class PortalPmant(Controller):
         )
 
     @route(
-        ["/my/sedes/", "/my/sedes/page/<int:pagina>"],
+        ["/my/sedes", "/my/sedes/page/<int:pagina>"],
         type="http",
         auth="user",
         website=True,
@@ -128,7 +128,7 @@ class PortalPmant(Controller):
         )[:6]
         company_phone = "".join(
             character
-            for character in (request.env.company.partner_id.phone or "")
+            for character in (request.env.company.sudo().partner_id.phone or "")
             if character.isdigit()
         )
         maintenance_alerts = []

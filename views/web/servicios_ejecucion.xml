@@ -7,7 +7,7 @@
             <div class="main pmant-active-services-page">
                 <header class="pmant-page-heading">
                     <div><span class="pmant-eyebrow">OPERACIÓN EN CURSO</span><h1>Servicios en ejecución</h1><p>Consulte el avance y la programación de los mantenimientos activos.</p></div>
-                    <a href="/my/sedes/" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al panel</a>
+                    <a href="/my/sedes" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al panel</a>
                 </header>
                 <section class="pmant-active-summary" aria-label="Resumen de servicios activos">
                     <article><span><i class="fa fa-wrench"/></span><div><small>Servicios activos</small><strong t-esc="active_service_count"/></div></article>
