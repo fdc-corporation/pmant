@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="documentos_form_inherit_view" model="ir.ui.view">
+        <field name="name">documents.documents.view.form.inherit</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="equipo" widget="many2many_tags" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

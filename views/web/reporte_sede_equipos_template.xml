@@ -1,0 +1,43 @@
+<odoo>
+    <!-- Definición del reporte -->
+    <report
+        id="report_reporte_sede_equipos"
+        model="maintenance.equipment"
+        string="Reporte de Sede - Equipos"
+        report_type="qweb-pdf"
+        name="pmant.report_reporte_sede_equipos_template"
+        file="pmant.report_reporte_sede_equipos_template"
+        print_report_name="'Reporte Sede Equipos - %s' % (object.ubicacion.name)"
+    />
+
+    <!-- Plantilla del reporte -->
+    <template id="report_reporte_sede_equipos_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <h2>Reporte de Sede - Equipos</h2>
+                    <p>Sede: <t t-esc="doc.ubicacion.name"/></p>
+
+                    <!-- Ejemplo de uso de env para obtener datos adicionales -->
+                    <p>Total de Equipos en la Sede:</p>
+                    <t t-set="total_equipos" t-value="env['maintenance.equipment'].search([('ubicacion', '=', doc.ubicacion.id)])"/>
+                    <!-- Listado de equipos -->
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Equipo</th>
+                                <th>Ubicacion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="total_equipos" t-as="equipo">
+                                <td><t t-esc="equipo.name"/></td>
+                                <td><t t-esc="equipo.ubicacion.name"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

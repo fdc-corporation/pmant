@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_wizard_mantenimeinto" model="ir.ui.view">
+        <field name="name">mantenimiento.wizard.form</field>
+        <field name="model">wizard.share</field>
+        <field name="arch" type="xml">
+            <form string="Compartir Ot">
+                <group>
+                    <field name="url" readonly="1" widget="CopyClipboardChar" options="{'string': 'Copy Link'}" />
+                </group>
+                <footer>
+                    <!-- <button string="Crear URL" type="object" name="action_share_url" class="btn-primary"/> -->
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Definir la tarea programada -->
+        <record id="ir_cron_compartir_ot" model="ir.cron">
+            <field name="name">Compartir Ot</field>
+            <field name="model_id" ref="model_maintenance_request"/> <!-- Referencia correcta al modelo -->
+            <field name="binding_model_id" ref="maintenance.model_maintenance_request"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">action = model.compartir_ot()</field> <!-- Corregimos el código del método -->
+        </record>
+        
+        
+    </data>
+</odoo>

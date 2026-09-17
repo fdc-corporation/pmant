@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="reporte_tarea_asignada" name="Reporte de Mantenimiento">
+		<t t-call="website.layout">
+			<div class="container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<div class="page" style="color:black !important;">
+							<h2 style="text-align: left;color:black !important;">
+								Reporte de Mantenimiento
+							</h2>
+							<table class="table table-sm o_main_table" style="width: 100%; font-size: 11px;">
+								<tbody>
+									<tr class="no-wrap">
+										<td class="col-6">
+											<strong>
+												Equipo:
+											</strong>
+											<span t-field="doc.equipo.name" />
+										</td>
+										<td class="col-6">
+											<strong>
+												Plan de Tarea:
+											</strong>
+											<span t-field="doc.plan.name" />
+										</td>
+									</tr>
+									<tr class="no-wrap">
+										<td class="col-6">
+											<strong>
+												Fecha Ejecutada:
+											</strong>
+											<span t-field="doc.fecha_ejec" />
+										</td>
+										<td class="col-6">
+											<strong>
+												Proximo Mantenimiento:
+											</strong>
+											<span t-field="doc.fecha_ejecprox" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+								<thead class="thead-light">
+									<tr class="no-wrap">
+										<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<font style="vertical-align: inherit;">
+												Procesos
+											</font>
+										</td>
+									</tr>
+									<tr class="no-wrap">
+										<th scope="col">
+											Grupo
+										</th>
+										<th scope="col">
+											Proceso
+										</th>
+										<th scope="col">
+											Resultado
+										</th>
+										<th scope="col">
+											Comentario
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<t t-foreach="doc.procesos" t-as="pr">
+										<tr class="no-wrap">
+											<td>
+												<span t-field="pr.proceso.grupo" />
+											</td>
+											<td>
+												<span t-field="pr.proceso" />
+											</td>
+											<td>
+												<center>
+													<t t-if="pr.estado.name == 'OK'">
+														<img src="https://fdc-corporation.com/public/assets/img/erp/1.png" style="width:16px;" />
+													</t>
+													<t t-if="pr.estado.name == 'NO'">
+														<img src="https://fdc-corporation.com/public/assets/img/erp/2.png" style="width:16px;" />
+													</t>
+													<t t-if="pr.estado.name == 'N/A'">
+														<img src="https://fdc-corporation.com/public/assets/img/erp/3.png" style="width:16px;" />
+													</t>
+												</center>
+												<!-- <span t-field="pr.estado"/> -->
+											</td>
+											<td>
+												<span t-field="pr.descripcion" />
+											</td>
+										</tr>
+									</t>
+								</tbody>
+							</table>
+							<br />
+							<div>
+								<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+									<tr class="no-wrap">
+										<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+											<font style="vertical-align: inherit;">
+												Detalles de Procesos
+											</font>
+										</td>
+									</tr>
+									<tr>
+										<th style="text-align:center;">
+											Comentarios
+										</th>
+										<th scope="col" style="text-align:center;">
+											Adjuntos
+										</th>
+									</tr>
+								</table>
+							</div>
+							<br />
+							<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+								<td style="background-color:  #F7F7F7;border:0px 0px 0px 0px !important;border-top:0px !important;">
+									<strong>
+										Proceso:
+									</strong>
+									<span t-field="pr.proceso" />
+								</td>
+								<td style=" background-color:  #F7F7F7;border-top:0px;">
+									<strong>
+										Descripcion:
+									</strong>
+									<span t-field="pr.descripcion" />
+								</td>
+								<t t-foreach="pr.adjuntos" t-as="ad" style="border:0px;border-bottom:0px;">
+									<tr class="no-wrap">
+										<td class="col-6">
+											<t t-if="ad.comentario != null">
+												<strong>
+													Comentario de la imagen:
+												</strong>
+												<span t-field="ad.comentario" />
+											</t>
+										</td>
+										<td class="col-6" style="margin:0px auto 0px auto;">
+											<t t-if="ad.adjunto != null">
+												<center>
+													<img t-attf-src="data:image/jpg;base64,{{ ad.adjunto }}" style="width:150px;height:150px;display:block;" />
+												</center>
+											</t>
+											<t t-else="">
+												<center>
+													<img t-attf-src="https://www.cams-it.com/wp-content/uploads/2015/05/default-placeholder-200x200.png" style="width:150px;height:150px;display:block;" />
+												</center>
+											</t>
+										</td>
+									</tr>
+								</t>
+							</table>
+						</div>
+					</t>
+				</t>
+			</div>
+		</t>
+	</template>
+</odoo>

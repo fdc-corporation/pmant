@@ -1,0 +1,49 @@
+<odoo>
+	
+
+	<record id="action_equipos_pmant" model="ir.actions.report">
+		<field name="name">Imprimir QR</field>
+		<field name="model">maintenance.equipment</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">pmant.report_equipo</field>
+		<field name="print_report_name">'QR - %s' % (object.name)</field>
+	</record>
+	
+
+	<template id="pmant.report_equipo">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">      
+				<div class="" style="width: 100%;margin:40px 0px 0px 0px;height: 100%;display: flex;align-items: center;flex-flow: row;stify-content: start;position: relative;">
+					<img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png" style="width:90px;position: absolute;right: 10px;bottom:15px;"/>
+					<div style="width: 100%;height: 100%;display: flex;align-items: start;flex-flow: row;stify-content: start;">
+						<img t-attf-src="data:image/jpg;base64,{{doc.qr_image}}" style="align:left; width:170px;"/>
+						<div>
+							<h5 style="margin:10px 0px 10px 0px;">
+								<strong>Equipo</strong>
+								<span t-field="doc.name"/>
+							</h5>
+							<h6 style="font-size:13px;" >
+								<strong>Ubicacion</strong>
+								<span t-field="doc.ubicacion"/>
+							</h6>
+							<h6 style="font-size:13px;" >
+								<strong>Marca</strong>
+								<span t-field="doc.marca"/>
+							</h6>
+							<h6 style="font-size:13px;" >
+								<strong>Modelo</strong>
+								<span t-field="doc.model"/>
+							</h6>
+							<h6 style="font-size:13px;" >
+								<strong>N° Serie</strong>
+								<span t-field="doc.serial_no"/>
+							</h6>
+						</div>
+					</div>
+				</div>
+			</t>
+		</t>
+	</t>
+	</template>
+</odoo>

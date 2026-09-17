@@ -1,0 +1,72 @@
+<odoo>
+  <record model="report.paperformat" id="paperformat_hori">
+        <field name="name">paperformat.hori</field>
+        <field name="default" eval="True"/>
+        <field name="format">A5</field>
+        <field name="page_width">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">0</field>
+        <field name="margin_right">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+  </record>
+  <record model="report.paperformat" id="paperformat_cus">
+        <field name="name">paperformat.cus</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_width">74</field>
+        <field name="page_height">210</field>
+        <field name="margin_top">2</field>
+        <field name="margin_right">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+  </record>
+  <report id="reporte_ticket"
+            model="certificado.wizard"
+            string="Ticket de Servicio"
+            report_type="qweb-pdf"
+            name="pmant.reporte_tick"
+            paperformat="paperformat_cus"
+	    menu="False"/>
+   <template id="reporte_tick">
+     <t t-call="web.html_container">
+          <table style="height:50px ; width: 700px;">
+            <tbody>
+               <tr>         
+                <td> 
+                     <img t-attf-src="data:image/jpg;base64,{{ logo_empresa }}" style="height:100px;"/>       
+                </td>
+                <td >
+                  <t t-if="web != null">
+                   <small><t t-esc="web"/></small><br/>
+                  </t>
+                  <t t-if="telefono != null">
+                   <small><t t-esc="telefono"/></small><br/>
+                  </t>
+                  <t t-if="correo_empresa != null">
+                   <small><t t-esc="correo_empresa"/></small><br/>
+                  </t>
+                </td>
+                <td rowspan="2"  style="margin-left: 20px; ">
+                  <img t-attf-src="data:image/jpg;base64,{{ qr }}" style="width:180px;height:180px; margin-left: 110px;"/>
+                  <p style="font-size: 9px;  margin-left: 110px;"> <t t-esc="smsqr"/></p>
+                </td>
+               </tr>
+               <tr>
+                <td colspan="3">
+                 <t t-raw="contenido"/>
+               </td>
+               </tr>
+            </tbody>
+         </table>
+     </t>
+   </template>
+
+</odoo>

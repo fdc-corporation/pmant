@@ -1,0 +1,324 @@
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    ots = fields.Many2one("tarea.mantenimiento", string="Tarea")
+    servicios_cantidad = fields.Integer(compute="_total_tareas", store=True)
+    is_servicio = fields.Boolean(
+        string="Es servicio", compute="_compute_verify_service")
+    titulo_cotizacion = fields.Char(string="Título de la cotización")
+    state_servicio = fields.Char(string="Estado de servicio")
+    field_compute = fields.Boolean(string="Campo calculado", compute="_compute_fields")
+    ot_inspeccion = fields.Many2one("tarea.mantenimiento", string="Tarea de inspección")
+    inspecciones_cantidad = fields.Integer(compute="_total_tareas_inspeccion", store=True)
+
+
+    def _compute_fields(self):
+        for record in self:
+            if record.ots:
+                record.state_servicio = record.ots.ots[0].stage_id.name if record.ots.ots else False
+                record.field_compute = record.ots.ots[0].stage_id.name if record.ots.ots else False
+            else:
+                record.state_servicio = False
+                record.field_compute = False
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        new_order_line = []
+
+        for line in self.order_line:
+            # Si la línea tiene id_equipo, no se copia
+            if line.id_equipo:
+                continue
+
+            values = line.copy_data()[0]
+            new_order_line.append((0, 0, values))
+
+        default.update({
+            "ots": False,
+            "order_line": new_order_line,
+        })
+
+        return super().copy(default)    
+    
+    
+    def action_print_sale(self):
+        return self.env.ref("sale.action_report_saleorder").report_action(self)
+
+    def action_open_wizard_sale(self):
+        return {
+            "name": "Confirmacion de venta",
+            "type": "ir.actions.act_window",
+            "res_model": "wizard.sale.order",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_order_id": self.id},
+        }
+
+    def action_print_report_mantenimiento(self):
+        self.ensure_one()
+        if not self.ots.ots:
+            raise UserError(
+                _("No hay órdenes de trabajo asociadas a esta tarea de mantenimiento."))
+
+        return self.env.ref("pmant.action_mantenimiento_ot").report_action(self.ots.ots)
+
+    @api.depends("order_line", "order_line.product_template_id", "order_line.id_equipo")
+    def _compute_verify_service(self):
+        for order in self:
+            if not order.order_line:
+                order.is_servicio = False
+                continue
+
+            # Si hay alguna línea con id_equipo, no es servicio
+            if any(line.id_equipo for line in order.order_line):
+                order.is_servicio = False
+            else:
+                # Si hay al menos un producto de tipo servicio, es servicio
+                order.is_servicio = any(
+                    line.product_template_id.type == "service"
+                    for line in order.order_line
+                )
+
+    def action_confirm(self):
+        res = super().action_confirm()
+        self.create_mantenimiento()
+        return res
+
+    def action_open_confirm_sale(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Confirmación de venta",
+            "view_mode": "form",
+            "res_model": "wizard.sale.order.confirm",
+            "target": "new",
+            "context": {"default_order_id": self.id},
+        }
+
+    def delete_mantenimiento(self):
+        for record in self:
+            tareas = self.env["tarea.mantenimiento"].search(
+                [("sale_order", "=", record.id)])
+            print("Tareas encontradas para eliminar:", tareas)
+            for mantenimiento in tareas:
+                if not mantenimiento.ots:
+                    mantenimiento.planequipo.unlink()
+                    mantenimiento.unlink()
+            self.action_cancel()
+    def create_mantenimiento_inspeccion(self):
+        for order in self:
+            if order.ot_inspeccion:
+                continue  # Ya tiene tarea asignada
+
+            equipo_lines = order.order_line.filtered(lambda l: l.id_equipo)
+            if not equipo_lines:
+                continue
+
+            try:
+                group = self.env.ref(
+                    'pmant.group_pmant_planner', raise_if_not_found=False)
+                print("Group:", group)
+                print("Group:", group.name)
+                tipo_tarea = self.env['tipotarea.mantenimiento'].search([('is_inspeccion', '=', True)], limit=1)
+                user = self.env['res.users'].search(
+                    [('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                print("User:", user)
+
+                mantenimiento_vals = {
+                    "name": f"Servicios de Inspeccion {order.name}",
+                    "cliente": order.partner_id.id,
+                    "ubicacion": order.partner_shipping_id.id,
+                    "create_user": user.id,
+                    "sale_order": [(6, 0, [order.id])],
+                    "tipo" : tipo_tarea.id if tipo_tarea else False,
+                }
+                mantenimiento = self.env["tarea.mantenimiento"].create(
+                    mantenimiento_vals)
+                
+                lines_to_add = []
+                for line in equipo_lines:
+                    lines_to_add.append((0, 0, {
+                        "tarea": mantenimiento.id,
+                        "cliente": order.partner_id.id,
+                        "ubicacion": order.partner_shipping_id.id,
+                        "equipo": line.id_equipo.id,
+                    }))
+
+                if lines_to_add:
+                    mantenimiento.write({"planequipo": lines_to_add})
+                    mantenimiento.write({"create_user": user.id})
+                    order.ot_inspeccion = mantenimiento
+
+                    mensaje = f"Se creo una tarea tipo Inspeccion {mantenimiento.name}, revise el servicio y programelo"
+                    self.message_post(
+                        body=mensaje,
+                        message_type='comment',
+                        subtype_xmlid='mail.mt_comment',
+                        partner_ids=[user.partner_id.id],  # ← destinatario específico
+                    )
+            except Exception as e:
+                raise UserError(
+                    f"Error al crear la solicitud de Inspeccion: {str(e)}")
+
+    def create_mantenimiento(self):
+        for order in self:
+            if order.ots:
+                continue  # Ya tiene tarea asignada
+
+            equipo_lines = order.order_line.filtered(lambda l: l.id_equipo)
+            if not equipo_lines:
+                continue
+
+            try:
+                group = self.env.ref(
+                    'pmant.group_pmant_planner', raise_if_not_found=False)
+                print("Group:", group)
+                print("Group:", group.name)
+
+                user = self.env['res.users'].search(
+                    [('group_ids', 'in', group.id), ('share', '=', False)], limit=1) if group else False
+                print("User:", user)
+                format_html_nota = self.template_format_nota(order)
+
+                mantenimiento_vals = {
+                    "name": f"{order.name} - {order.titulo_cotizacion or 'Servicios de mantenimiento'}",
+                    "cliente": order.partner_id.id,
+                    "ubicacion": order.partner_shipping_id.id,
+                    "create_user": user.id,
+                    "sale_order": [(6, 0, [order.id])],
+                    "notas": format_html_nota,
+                }
+                mantenimiento = self.env["tarea.mantenimiento"].create(
+                    mantenimiento_vals)
+                
+                lines_to_add = []
+                for line in equipo_lines:
+                    lines_to_add.append((0, 0, {
+                        "tarea": mantenimiento.id,
+                        "cliente": order.partner_id.id,
+                        "ubicacion": order.partner_shipping_id.id,
+                        "equipo": line.id_equipo.id,
+                    }))
+
+                if lines_to_add:
+                    mantenimiento.write({"planequipo": lines_to_add})
+                    mantenimiento.write({"create_user": user.id})
+                    order.ots = mantenimiento
+
+                    mensaje = f"Se creo una tarea de mantenimiento {mantenimiento.name}, revise el servicio y programelo"
+                    self.message_post(
+                        body=mensaje,
+                        message_type='comment',
+                        subtype_xmlid='mail.mt_comment',
+                        partner_ids=[user.partner_id.id],  # ← destinatario específico
+                    )
+                    # Actualizar estado de OC si aplica
+                    # if order.oc_id:
+                    #     estado = self.env.ref("oc_compras.estado_servicios", raise_if_not_found=False)
+                    #     if estado:
+                    #         order.oc_id.state = estado.id
+
+            except Exception as e:
+                raise UserError(
+                    f"Error al crear la solicitud de mantenimiento: {str(e)}")
+
+    def template_format_nota(self, order):
+        formato = ""
+        productos = []
+
+        for line in order.order_line:
+            if line.display_type == 'line_section':
+                # Si hay productos acumulados antes, los agregamos y reiniciamos
+                if productos:
+                    formato += "<ul>" + "".join(productos) + "</ul>"
+                    productos = []
+                formato += f"<h3 style='color:#2c3e50; margin-top:10px;'>{line.name}</h3>"
+
+            elif line.display_type == 'line_note':
+                if productos:
+                    formato += "<ul>" + "".join(productos) + "</ul>"
+                    productos = []
+                formato += f"<p style='color:#7f8c8d; font-style:italic; margin-left:10px;'>{line.name}</p>"
+
+            else:
+                productos.append(
+                    f"<li><b>Producto:</b> {line.name} "
+                    f"/ <b>Cantidad:</b> {line.product_uom_qty}</li>"
+                )
+
+        # Agregar los últimos productos si quedaron pendientes
+        if productos:
+            formato += "<ul>" + "".join(productos) + "</ul>"
+
+        return formato
+
+    def action_view_services(self):
+        self.ensure_one()
+        if not self.ots:
+            raise UserError(
+                "No hay tarea de mantenimiento asociada a esta orden.")
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Tareas de Mantenimiento",
+            "view_mode": "form",
+            "res_model": "tarea.mantenimiento",
+            "res_id": self.ots.id,
+            "context": {"create": False},
+        }
+
+    def action_view_services_inspeccion(self):
+        self.ensure_one()
+        if not self.ot_inspeccion:
+            raise UserError(
+                "No hay tarea de inspección asociada a esta orden.")
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Tareas de Inspección",
+            "view_mode": "form",
+            "res_model": "tarea.mantenimiento",
+            "res_id": self.ot_inspeccion.id,
+            "context": {"create": False},
+        }
+
+    @api.depends("ots", "state")
+    def _total_tareas(self):
+        for record in self:
+            record.servicios_cantidad = bool(record.ots)
+
+    @api.depends("ot_inspeccion", "state")
+    def _total_tareas_inspeccion(self):
+        for record in self:
+            record.inspecciones_cantidad = bool(record.ot_inspeccion)
+
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+    _description = "Lineas de la orden"
+
+    id_equipo = fields.Many2one("maintenance.equipment", string="Equipo")
+
+
+class WizardConfirmSaleOrder(models.TransientModel):
+    _name = "wizard.sale.order"
+    _description = "Wizard Sale Order"
+
+    sale_id = fields.Many2one("sale.order", string="Venta",
+                              default=lambda self: self.env.context.get("default_order_id"))
+
+    def confirm_sale(self):
+        self.sale_id.action_confirm()
+
+
+class WizardConfirmSaleOrderConfirm(models.TransientModel):
+    _name = "wizard.sale.order.confirm"
+    _description = "Confirmación de venta"
+
+    sale_id = fields.Many2one("sale.order", string="Venta",
+                              default=lambda self: self.env.context.get("default_order_id"))
+
+    def confirm_sale(self):
+        self.sale_id.action_confirm()

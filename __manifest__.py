@@ -1,0 +1,114 @@
+
+# -*- coding: utf-8 -*-
+{
+    "name": "pmant",
+    "summary": "Gestión integral de equipos y servicios técnicos para FDC",
+    "description": """Gestión de equipos, planes, tareas, órdenes de trabajo,
+programaciones, documentos, firmas y portal de clientes.""",
+    "author": "Yostin Palacios Calle",
+    "website": "http://fdc-corporation.com",
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
+    # for the full list
+    "category": "Services/Maintenance",
+    "version": "19.0.2.24.0",
+    # any module necessary for this one to work correctly
+    "depends": [
+        "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",
+        "maintenance","hr","contacts","hr_maintenance","web_digital_sign","calendar","sign", "stock",
+        "website", "website_sale",
+    ],
+    # always loaded
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "views/reportes/hoja_recepcion.xml",
+        "views/reportes/report_acta.xml",
+        "views/reportes/report_certificado_operatividad.xml",
+        "views/ots.xml",
+        "views/general.xml",
+        "views/herencia.xml",
+        "views/configuracion.xml",
+        'views/reportes/report_planequipo.xml',
+        "views/reporteticket.xml",
+        "views/planequipo_reporte.xml",
+        "views/horas_trabajo.xml",
+        "views/planequipo.xml",
+        "views/equipos.xml",
+        "views/rules_tecnico.xml",
+        "views/res_partner.xml",
+        "views/adjuntos.xml",
+        "views/planequipoproceso.xml",
+        "views/paramatros.xml",
+        "data/ir_module_category_data.xml",
+        "views/reporteweb.xml",
+        "views/documents/documneto_firmado.xml",
+        # VISTAS DEL PORTAL MANTENIMIENTO
+        "views/web/index_portal.xml",
+        "views/web/sedes_portal.xml",
+        "views/web/equipos_sede.xml",
+        "views/web/detalle_equipo.xml",
+        "views/web/tarea_asignada_web.xml",
+        "views/web/form_solicitud.xml",
+        "views/web/error_template.xml",
+        "views/web/reporte_sede_equipos_template.xml",
+        "views/web/equipos_central.xml",
+        "views/web/historial_mantenimiento.xml",
+        "views/web/adjuntos_equipos.xml",
+        "views/web/evaluciones_equipo.xml",
+        "views/web/certificados_equipo.xml",
+        "views/web/servicios_ejecucion.xml",
+        "views/web/cotizaciones_equipo.xml",
+        "views/web/index_servicios_ejecuccion.xml",
+        "views/web/pagijna_gracias_web.xml",
+        "views/web/form_calificacion.xml",
+        "views/web/areas_sede.xml",
+        "views/web/solicitudes_servicio.xml",
+        "views/web/historial_servicios.xml",
+        # CODIGO - VENTAS A PMANT SERVICIOS
+        "views/ventas/create_mantenimiento.xml",
+        "views/ventas/sale_order_views.xml",
+        # ARCHIVOS DE PRODUCTOS - TEMPLATE - EQUIPOS
+        "views/productos/product_template_views.xml",
+        # VISTA - CAMPOS PARA CRM
+        "views/crm/orden_trabajo.xml",
+        # REPORTES DE MODELOS
+        "views/reporteots.xml",
+        "views/reportetecnico.xml",
+        "views/reporteequipo.xml",
+        # PLANTILLAS DE CORREOS PMANT - PETICIONES DE MANTENIMIENTO
+        "views/email/email_empresa_ot.xml",
+        "views/email/email_sucursal_ot.xml",
+        "views/email/email_hoja_recepcion.xml",
+        "views/contacto/equipo_contacto.xml",
+        "views/email/service_finalizado.xml",
+        "views/email/calificacion_service.xml",
+        "views/email/email_empresa_ot_whatsapp.xml",
+        "views/email/email_reprogramacion_sucursal.xml",
+        # VISTAS DE MODELO DE EVENTO
+        "views/eventos/eventos-mant.xml",
+        "views/adjunto/it_attchment_inherit.xml",
+        # Vista en el modelo de DOCUMENTS
+        "views/documents/documentos_inherit.xml",
+        "views/code/compartir.xml",
+        "views/code/cron_programacion.xml",
+        "wizard/wizard-share.xml",
+        "wizard/wizard_inconvenientes.xml",
+        "views/etapas_tarea.xml",
+        "wizard/wizard_fecha_ejecutada.xml",
+        "wizard/wizard_open_conformidad.xml",
+    ],
+    "assets": {
+        "web.assets_frontend": [
+            "pmant/static/src/css/sedes_portal.css",
+           "pmant/static/src/js/data.js",
+           "pmant/static/src/js/equipos.js",
+        ],
+        "web.assets_backend": [
+            "pmant/static/src/xml/form_status_inidicator.xml",
+        ],
+    },
+    "installable": True,
+    "application": False,
+    "license": "LGPL-3",
+}

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record model="ir.actions.act_window" id="planequipo_list_action">
+		<field name="name">Tarea  Asignada</field>
+		<field name="res_model">planequipo.mantenimiento</field>
+		<!-- <field name="view_type">form</field> -->
+		<field name="view_mode">kanban,list,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">Crea tu primera Plan Equipo</p>
+		</field>
+	</record>
+	<record id="planequios_tree_view" model="ir.ui.view">
+		<field name="name">planequipo.tree</field>
+		<field name="model">planequipo.mantenimiento</field>
+		<field name="arch" type="xml">
+			<list string="PlanEquipo Tree">
+				<field name="equipo" />
+				<field name="plan" string="Plan de Mantenimiento"  />
+				<field name="estado" />
+				<field name="fecha_ejec" string="Fecha Ejecutada" />
+				<!-- <button name="%(pmant.action_plan_equipo)d" string="Reporte" type="action"/> -->
+			</list>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="PlanEquipov_form_view">
+		<field name="name">planequipo.form</field>
+		<field name="model">planequipo.mantenimiento</field>
+		<field name="arch" type="xml">
+			<form string="Tarea Form">
+				<sheet>
+					<group>
+
+						<!-- Campos de cabecera -->
+						<field name="id" invisible="1"/>
+						<field name="cliente"  readonly="1"/>
+						<field name="ubicacion" readonly="1"/>
+						<field name="tarea" invisible="1"/>
+						<field name="ots" invisible="1"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<!-- <field name="equipo" options="{'no_open': True}"/> -->
+						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="fecha_ejec" invisible="1" readonly="1"/>
+						<field name="fecha_ejec" invisible="1"/>
+						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
+						<field name="is_informe_file"/>
+						<field name="require_repuestos"/>
+					</group>
+					<notebook>
+						<page string="Informe tecnico" invisible="not is_informe_file" >
+							<group>
+								<field name="informe_filename" invisible="1" ></field>
+								<field name="fecha_ejec"></field>
+								<field name="informe_file" filename="informe_filename" ></field>
+							</group>
+						</page>
+						<!-- Procesos de mantenimiento -->
+						<page string="Procesos de Mantenimiento" invisible="is_admin or is_informe_file" >
+							<field name="procesos" nolabel="1" >
+								<list >
+									<field name="estado"/>
+									<field name="proceso"/>
+									<field name="descripcion"/>
+								</list>
+							</field>
+						</page>
+						<page string="Conclusiones" invisible="is_admin">
+							<group>
+								<field name="nota_observaciones" widget="html" invisible="is_admin" />
+								<field name="nota_mantenimiento" widget="html" invisible="is_admin" />
+								<field name="nota_recomendaciones" widget="html" invisible="is_admin" />
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="planequipo_kanban">
+		<field name="name">planequipo.mantenimiento.kanban</field>
+		<field name="model">planequipo.mantenimiento</field>
+		<field name="arch" type="xml">
+			<kanban default_group_by="equipo" sample="1">
+				<!-- Campos necesarios -->
+				<field name="plan"/>
+				<field name="equipo"/>
+				<field name="procesos"/>
+
+				<templates>
+
+					<!-- Menú (⋮) -->
+					<t t-name="menu">
+						<t t-if="widget.editable">
+							<a role="menuitem" type="open" class="dropdown-item">Editar</a>
+						</t>
+						<t t-if="widget.deletable">
+							<a role="menuitem" type="delete" class="dropdown-item">Eliminar</a>
+						</t>
+					</t>
+
+					<!-- Tarjeta -->
+					<t t-name="card">
+						<div class="oe_kanban_card p-2">
+
+							<!-- Título -->
+							<div class="titulo d-flex align-items-center gap-2 mb-1">
+								<i class="fa fa-tasks"/>
+								<strong>
+									<field name="plan"/>
+								</strong>
+							</div>
+
+							<!-- Equipo -->
+							<div class="d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-cogs" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.equipo.raw_value">
+									<field name="equipo"/>
+								</t>
+								<t t-else="">
+									<span>Sin equipo</span>
+								</t>
+							</div>
+
+							<!-- Procesos -->
+							<div class="d-flex align-items-center mb-1">
+								<span class="me-1">
+									<i class="fa fa-random" style="font-size:16px;"/>
+								</span>
+								<t t-if="record.procesos.raw_value">
+									<field name="procesos"/>
+								</t>
+								<t t-else="">
+									<span>Sin procesos</span>
+								</t>
+							</div>
+
+						</div>
+					</t>
+
+				</templates>
+			</kanban>
+
+		</field>
+	</record>
+	<menuitem id="planequipo_menuv" name="OTS asignadas" parent="maintenance.menu_maintenance_title" action="planequipo_list_action" />
+</odoo>

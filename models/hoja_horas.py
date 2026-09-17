@@ -1,0 +1,221 @@
+from odoo import models, fields, api, _
+from datetime import datetime, timedelta
+from odoo.exceptions import UserError
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+class Inconvenientes(models.Model):
+    _name = 'inconveniente.servicio'
+    _description = "Inconvenientes en los servicios"
+
+    programacion_id = fields.Many2one("programacion.mantenimiento", string="Hoja de horas")
+    ot_id = fields.Many2one("maintenance.request", string="OT")
+    file_ref = fields.Binary(string="Imagen de ref.", attachment=True)
+    comentario = fields.Text(string="Comentario del inconveniente")
+
+
+class HojaHoras(models.Model):
+    _name = "programacion.mantenimiento"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _description = "Hoja de horas de servicios técnicos"
+
+    fecha_date = fields.Datetime(string="Fecha programada", required=True)
+    ot_id = fields.Many2one("maintenance.request", string="OT", required=True)
+    duracion = fields.Float(string="Duración (H)", required=True)
+    event_calendario = fields.Many2one(
+        "calendar.event",  string="Evento calendario"
+    )
+    fecha_inicio = fields.Datetime(string="Fecha de inicio")
+    fecha_fin = fields.Datetime(string="Fecha de finalización")
+    horas_trabajado = fields.Float(string="Horas marcadas")
+    horas_active = fields.Boolean(string="Horas activas")
+    tecnicos = fields.Many2many("res.users", string="Técnicos", required=True)
+    tab_comentarios = fields.One2many("inconveniente.servicio", "programacion_id", string="Incidencias")
+    h_faltantes = fields.Float(string="Horas faltantes")
+    es_servicio_finalizado = fields.Boolean(string="Servicio finalizado?")
+    h_optimizado = fields.Float(string="Horas de trabajo optimizado")
+
+    def unlink(self):
+        for record in self:
+            if record.event_calendario:
+                record.event_calendario.unlink()
+        return super().unlink()
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._set_evento()
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if any(f in vals for f in ["fecha_date", "duracion", "tecnicos"]):
+            self._set_evento()
+        return res
+
+    # @api.depends("fecha_date", "duracion", "tecnicos")
+    def _set_evento(self):
+        """Crea o actualiza el evento en el calendario sin reenviar correos si no hay cambios reales."""
+        for record in self:
+            evento = False
+            try:
+                if not record.ot_id or not record.fecha_date or not record.duracion:
+                    _logger.info(f"⚠️ Faltan datos para crear evento en OT {record.ot_id.name if record.ot_id else 'Sin OT'}")
+                    record.event_calendario = False
+                    continue
+
+                # Obtener partners válidos
+                partner_ids = []
+                for user in record.tecnicos:
+                    if user.partner_id and user.partner_id.id:
+                        partner_ids.append(user.partner_id.id)
+
+                if record.ot_id.empresa and record.ot_id.empresa.id:
+                    partner_ids.append(record.ot_id.empresa.id)
+                if record.ot_id.ubicacion and record.ot_id.ubicacion.id:
+                    partner_ids.append(record.ot_id.ubicacion.id)
+
+                partner_ids = list(set(pid for pid in partner_ids if pid))
+                recordatorios = self.env["calendar.alarm"].search([("alarm_type", "=", "email")])
+                valores_evento = {
+                    "name": f"Servicio programado / {record.ot_id.name or 'Sin nombre'}",
+                    "start": record.fecha_date,
+                    "stop": record.fecha_date + timedelta(hours=record.duracion),
+                    "duration": record.duracion,
+                    "ots_id": record.ot_id.id,
+                    "programacion_id": record.id,
+                    "partner_ids": [(6, 0, partner_ids)],
+                    "alarm_ids": [(6, 0, recordatorios.ids)],
+                }
+
+                # Buscar evento existente
+                evento = record.event_calendario or self.env["calendar.event"].search(
+                    [("ots_id", "=", record.ot_id.id), ("programacion_id", "=", record.id)],
+                    limit=1,
+                )
+
+                if evento:
+                    # Solo actualiza si hay diferencias reales
+                    cambios = {}
+                    for campo, valor in valores_evento.items():
+                        if campo in evento._fields and evento[campo] != valor:
+                            cambios[campo] = valor
+                    if cambios:
+                        _logger.info(f"🔁 Actualizando evento {evento.id} con cambios: {list(cambios.keys())}")
+                        evento.with_context(no_mail_to_attendees=True).write(cambios)
+                    else:
+                        _logger.debug(f"✅ Sin cambios en evento {evento.id}, no se actualiza ni se reenvían correos.")
+                else:
+                    _logger.info(f"🆕 Creando nuevo evento para OT {record.ot_id.name}")
+                    evento = self.env["calendar.event"].with_context(no_mail_to_attendees=True).create(valores_evento)
+                    _logger.info(f"✅ logitud de programacion {len(record.ot_id.tab_horas)}")
+                    if evento and len(record.ot_id.tab_horas) > 1:
+                        _logger.info(f"📧 Enviando correo de reprogramación para OT {record.ot_id.name}") 
+                        self.send_report_reporgramacion_ot()
+
+            except Exception as e:
+                _logger.error(f"❌ Error al generar evento: {e}")
+
+            record.event_calendario = evento
+
+    def send_report_reporgramacion_ot(self):
+        for rec in self:
+            try:
+                template = self.env.ref(
+                    "pmant.email_template_reprogramacion_sucursal",
+                    raise_if_not_found=False,
+                ).sudo()
+
+                if not template:
+                    rec.ot_id.message_post(
+                        body="❌ No se encontró la plantilla de correo para reprogramación."
+                    )
+                    continue
+
+                destinatario = (
+                    rec.ot_id.ubicacion.email
+                    if rec.ot_id.ubicacion and rec.ot_id.ubicacion.email
+                    else ""
+                )
+                copia = (
+                    rec.ot_id.empresa.email
+                    if rec.ot_id.empresa and rec.ot_id.empresa.email
+                    else ""
+                )
+
+                # Usar email_values para forzar email_to / email_cc
+                mail_id = template.with_context(
+                    default_model="programacion.mantenimiento",
+                    default_res_id=rec.id,
+                    force_email=True,
+                ).send_mail(
+                    rec.id,
+                    force_send=True,
+                    email_values={
+                        "email_to": destinatario,
+                        "email_cc": copia,
+                    },
+                )
+
+                _logger.info("Email_to: %s", destinatario or "No tiene email")
+                _logger.info("Email_cc: %s", copia or "No tiene email")
+                _logger.info(
+                    "Correo de reprogramación (mail_id=%s) creado para OT %s",
+                    mail_id,
+                    rec.id,
+                )
+
+                # Depuración adicional: revisar el mail antes de enviarlo (opcional)
+                mail = self.env["mail.mail"].browse(mail_id)
+
+                # Si necesitas forzar cambios en el mail creado antes de enviarlo:
+                # if mail and (mail.email_to != destinatario or mail.email_cc != copia):
+                #     mail.sudo().write({'email_to': destinatario, 'email_cc': copia})
+                #     mail.sudo().send()  # o mail.sudo()._send() según versión
+
+            except Exception as e:
+                _logger.exception(
+                    "Error al enviar correo reprogramado para OT %s: %s", rec.id, e
+                )
+                rec.ot_id.message_post(
+                    body=f"❌ Error al enviar correo de reprogramación: {e}"
+                )
+
+    @api.depends("fecha_inicio", "fecha_fin")
+    def _compute_horas_trabajado(self):
+        for record in self:
+            if record.fecha_inicio and record.fecha_fin:
+                diferencia = record.fecha_fin - record.fecha_inicio
+                horas = diferencia.total_seconds() / 3600
+                record.horas_trabajado = round(horas, 2)
+                if record.es_servicio_finalizado:
+                    record.h_optimizado = record.duracion - record.horas_trabajado
+            else:
+                record.horas_trabajado = 0.0
+
+    def action_view_registro(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Programación",
+            "res_model": "programacion.mantenimiento",
+            "view_mode": "form",
+            "res_id": self.id,
+        }
+
+    def action_validacion_time(self):
+        for record in self:
+            if not record.horas_trabajado:
+                raise UserError(_("No puedes aceptar una incidencia sin horas trabajadas"))
+            if record.es_servicio_finalizado:
+                record.h_optimizado = record.duracion - record.horas_trabajado
+                record.h_faltantes = 0.00
+            else:
+                record.h_faltantes = record.duracion - record.horas_trabajado
+                record.h_optimizado = 0.00
+
+    def action_validacion_time_cancel(self):
+        for record in self:
+            record.h_optimizado = 0.00
+            record.h_faltantes = 0.00

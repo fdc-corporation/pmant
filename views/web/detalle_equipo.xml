@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="detalle_equipo" name="Detalles de Equipo">
+		<t t-call="website.layout">
+			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+			<t t-call="pmant.portal_section_nav"/>
+			<div class="main">
+				<t t-if="equipo.ubicacion">
+					<div class="card-contacto-main">
+						<div class="card-contacto">
+							<div class="text-contacto">
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="Icono FDC CORP" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+								</span>
+							</div>
+							<div class="contactar">
+								<a href="/contactus" class="bg-primary">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
+										<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
+										</path>
+									</svg>
+									Contactar
+								</a>
+							</div>
+						</div>
+						<div class="info-empresa">
+							<div class="header-info">
+								<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g id="icon-empresa">
+										<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35" />
+										<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35" />
+										<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
+									</g>
+								</svg>
+								<span>
+									<t t-if="equipo.ubicacion.parent_id">
+										<span t-esc="equipo.ubicacion.parent_id.name">
+										</span>
+										/
+									</t>
+									<span t-esc="equipo.ubicacion.name" />
+								</span>
+							</div>
+							<hr>
+							</hr>
+							<div class="body-text-info">
+								<span>
+									<strong>
+										Dirección :
+									</strong>
+									<t t-esc="equipo.ubicacion.street" />
+								</span>
+								<span>
+									<strong>
+										RUC :
+									</strong>
+									<t t-esc="equipo.ubicacion.vat" />
+								</span>
+								<span>
+									<strong>
+										Celular :
+									</strong>
+									<t t-esc="equipo.ubicacion.phone" />
+								</span>
+								<span>
+									<strong>
+										Correo :
+									</strong>
+									<t t-esc="equipo.ubicacion.email" />
+								</span>
+								<div class="condicion-estado">
+									<span>
+										<strong>
+											Condicion :
+										</strong>
+										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+									</span>
+									<span>
+										<strong>
+											Activo :
+										</strong>
+										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+									</span>
+								</div>
+								<span class="text-informativo">
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDC CORP para ver su historial de servicios.
+								</span>
+								<!--
+								<div class="contenedor-button-info">
+								<a  t-att-href="'/my/' + str(equipo.ubicacion.id) + '/equipos'" class="bg-primary">Ver mis equipos</a>
+								<a href="" class="bg-primary">Reporte General</a>
+								</div>
+								-->
+							</div>
+						</div>
+					</div>
+				</t>
+				<t t-else="">
+					<div class="card-contacto-main">
+						<div class="card-contacto">
+							<div class="text-contacto">
+								<img src="/pmant/static/src/css/iconos/ico_fdc.png" alt="Icono FDC CORP" />
+								<span>
+									FDC CORPORATION E.I.R.L.
+								</span>
+							</div>
+							<div class="contactar">
+								<a href="/contactus" class="bg-primary">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="customer-care">
+										<path d="M54,27.29v-.35a21.94,21.94,0,1,0-43.88.12v.2A7,7,0,0,0,5,34v2a7,7,0,0,0,7,7h1.05A13,13,0,0,0,26,55h6a5,5,0,0,0,5-5V49a1,1,0,0,0-1-1H28a1,1,0,0,0-1,1v4H26A11,11,0,0,1,15,42V28a1,1,0,0,0-1-1H12.12A19.94,19.94,0,1,1,52,26.94V27H50a1,1,0,0,0-1,1V42a1,1,0,0,0,1,1h2a7,7,0,0,0,7-7V34A7,7,0,0,0,54,27.29ZM29,50h6a3,3,0,0,1-3,3H29ZM13,41H12a5,5,0,0,1-5-5V34a5,5,0,0,1,5-5h1Zm44-5a5,5,0,0,1-5,5H51V29h1a5,5,0,0,1,5,5Z">
+										</path>
+									</svg>
+									Contactar
+								</a>
+							</div>
+						</div>
+						<div class="info-empresa">
+							<div class="header-info">
+								<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g id="icon-empresa">
+										<path id="Vector" d="M3.14966 14.8046H5.51187V17.4713H3.14966V14.8046ZM6.92918 14.8046H9.21265V17.4713H6.92918V14.8046ZM3.14966 19.0345H5.43313V21.7931H3.14966V19.0345ZM6.92918 19.0345H9.29139V21.7931H6.92918V19.0345ZM3.14966 23.4483H5.43313V26.1149H3.14966V23.4483ZM6.92918 23.4483H9.29139V26.1149H6.92918V23.4483ZM3.14966 27.5862H5.43313V30.3448H3.14966V27.5862ZM6.92918 27.5862H9.29139V30.3448H6.92918V27.5862ZM3.14966 32H5.43313V34.6667H3.14966V32ZM6.92918 32H9.29139V34.6667H6.92918V32Z" fill="#282D35" />
+										<path id="Vector_2" d="M40 10.5747H29.0551V0H10.9449V10.5747H0V40H40V10.5747ZM10.9449 38.3448H1.33858V12.2299H10.9449L10.9449 38.3448ZM22.8346 38.4368H17.1653V28.7816H22.8346V38.4368ZM15.8268 27.1264V38.4368H12.3622V1.56322H27.6378L27.5591 38.4368H24.252V27.1264H15.8268V27.1264ZM38.5827 38.3448H29.0551V12.2299H38.5827V38.3448Z" fill="#282D35" />
+										<path id="Vector_3" d="M30.7875 14.8046H33.071V17.4713H30.7875V14.8046ZM34.4883 14.8046H36.8505V17.4713H34.4883V14.8046ZM30.7088 19.0345H33.071V21.7931H30.7088V19.0345ZM34.567 19.0345H36.8505V21.7931H34.567V19.0345ZM30.7088 23.4483H33.071V26.115H30.7088V23.4483ZM34.567 23.4483H36.8505V26.115H34.567V23.4483ZM30.7088 27.5862H33.071V30.3448H30.7088V27.5862ZM34.567 27.5862H36.8505V30.3448H34.567V27.5862ZM30.7088 32H33.071V34.6667H30.7088V32ZM34.567 32H36.8505V34.6667H34.567V32ZM14.1733 12.9655H16.5355V15.6322H14.1733V12.9655ZM23.3072 12.9655H25.6694V15.6322H23.3072V12.9655ZM14.1733 17.1954H16.5355V19.954H14.1733V17.1954ZM23.3859 17.1954H25.6694V19.954H23.3859V17.1954ZM14.1733 21.6092H16.5355V24.2759H14.1733V21.6092ZM23.3859 21.6092H25.6694V24.2759H23.3859V21.6092ZM18.7403 12.8736H21.1025V15.6322H18.7403V12.8736ZM14.1733 8.64368H16.5355V11.3104H14.1733V8.64368ZM23.3072 8.64368H25.6694V11.3104H23.3072V8.64368ZM18.7403 8.64368H21.1025V11.3104H18.7403V8.64368ZM14.1733 4.32184H16.5355V6.98851H14.1733V4.32184ZM23.3072 4.32184H25.6694V6.98851H23.3072V4.32184ZM18.7403 4.32184H21.1025V6.98851H18.7403V4.32184ZM18.7403 17.1954H21.1025V19.8621H18.7403V17.1954ZM18.7403 21.5172H21.1025V24.2759H18.7403V21.5172Z" fill="#282D35" />
+									</g>
+								</svg>
+								<span t-esc="equipo.propietario.name" />
+							</div>
+							<hr>
+							</hr>
+							<div class="body-text-info">
+								<span>
+									<strong>
+										Dirección :
+									</strong>
+									<t t-esc="equipo.propietario.street" />
+								</span>
+								<span>
+									<strong>
+										RUC :
+									</strong>
+									<t t-esc="equipo.propietario.vat" />
+								</span>
+								<span>
+									<strong>
+										Celular :
+									</strong>
+									<t t-esc="equipo.propietario.phone" />
+								</span>
+								<span>
+									<strong>
+										Correo :
+									</strong>
+									<t t-esc="equipo.propietario.email" />
+								</span>
+								<div class="condicion-estado">
+									<span>
+										<strong>
+											Condición :
+										</strong>
+										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+									</span>
+									<span>
+										<strong>
+											Activo :
+										</strong>
+										<img src="/pmant/static/src/css/iconos/check 1.png" alt="" />
+									</span>
+								</div>
+								<span class="text-informativo">
+									Si aún no cuenta con el registro de alguna de sus sedes, solicita el registro de la sede a FDC CORP para ver su historial de servicios.
+								</span>
+								<!--
+								<div class="contenedor-button-info">
+								<a  t-att-href="'/my/' + str(equipo.ubicacion.id) + '/equipos'" class="bg-primary">Ver mis equipos</a>
+								<a href="" class="bg-primary">Reporte General</a>
+								</div>
+								-->
+							</div>
+						</div>
+					</div>
+				</t>
+				<div class="main-detalles-equipos">
+					<div class="main-card-detalles-equipo">
+						<div class="detalle-equipo-header">
+							<div class="name-equipo">
+								<label>
+									Nombre
+								</label>
+								<h4 t-esc="equipo.name">
+								</h4>
+								<div style="display:flex;gap: 10px; ali">
+									<button style="display: flex;gap: 8px;align-items: center;justify-content: center;" href="" type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+										<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+											<path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0" />
+										</svg>
+										Solicitar servicio
+									</button>
+									<a class="btn-whatssap btn btn-primary" t-att-href="whatsapp_url" style="text-decoration:none;width: 60%;display: flex;gap: 8px;align-items: center;justify-content: center;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+											<path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+										</svg>
+										Whatsapp
+									</a>
+								</div>
+							</div>
+							<div class="img-header-equipo">
+								<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=image' % equipo.id" alt="Imagen del equipo" />
+								<img t-att-src="'/web/image?model=maintenance.equipment&amp;id=%s&amp;field=qr_image' % equipo.id" alt="Qr del equipo" />
+							</div>
+							<div style="display:flex;gap: 10px;">
+								<button style="display: flex;gap: 8px;align-items: center;justify-content: center;" href="" type="button" class="btn btn-primary btn-mobile" data-bs-toggle="modal" data-bs-target="#Model_Solicitud">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+										<path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0" />
+									</svg>
+									Solicitar servicio
+								</button>
+								<a t-att-href="whatsapp_url" class="btn-whatssap btn btn-primary" style="text-decoration:none;width: 60%;display: flex;gap: 8px;align-items: center;justify-content: center;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+										<path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+									</svg>
+									Whatsapp
+								</a>
+							</div>
+						</div>
+						<div class="descripcion-propieadades-equipo">
+							<div class="propiedades-contenedor">
+								<div class="propiedad">
+									<label>
+										Propietario :
+									</label>
+									<span t-esc="equipo.propietario.name">
+									</span>
+								</div>
+								<div class="propiedad">
+									<label>
+										Ubicación :
+									</label>
+									<span t-esc="equipo.ubicacion.name">
+									</span>
+								</div>
+							</div>
+							<div class="propiedades-contenedor">
+								<div class="propiedad">
+									<label>
+										Categoría :
+									</label>
+									<span t-esc="equipo.category_id.name">
+									</span>
+								</div>
+								<div class="propiedad">
+									<label>
+										Fecha asignada :
+									</label>
+									<span t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else ''">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="main-card-detalles-equipo">
+						<div class="pmant-card-section-head"><span class="pmant-action-icon small"><i class="fa fa-tachometer"/></span><div><h3>Información técnica</h3><p>Datos operativos y programación del equipo.</p></div></div>
+						<div class="descripcion-propieadades-equipo">
+							<div class="propiedades-contenedor">
+								<div class="propiedad">
+									<label>
+										Horas de uso promedio diario :
+									</label>
+									<span t-esc="equipo.time_uso">
+									</span>
+								</div>
+								<div class="propiedad">
+									<label>
+										Próximo mantenimiento :
+									</label>
+									<span t-esc="equipo.fecha_prox.strftime('%d/%m/%Y') if equipo.fecha_prox else ''">
+									</span>
+								</div>
+							</div>
+							<div class="propiedades-contenedor">
+								<div class="propiedad">
+									<label>
+										Marca :
+									</label>
+									<span t-esc="equipo.marca">
+									</span>
+								</div>
+								<div class="propiedad">
+									<label>
+										Modelo :
+									</label>
+									<span t-esc="equipo.model">
+									</span>
+								</div>
+							</div>
+							<div class="propiedades-contenedor">
+								<div class="propiedad">
+									<label>
+										N° de serie :
+									</label>
+									<span t-esc="equipo.serial_no">
+									</span>
+								</div>
+								<div class="propiedad">
+									<label>
+										Fecha efectiva  :
+									</label>
+									<span t-esc="equipo.effective_date.strftime('%d/%m/%Y') if equipo.effective_date else 'No registrada'">
+									</span>
+								</div>
+							</div>
+						</div>
+						<div style="padding:10px;">
+							<a class="btn btn-primary" style="font-size:13px !important;" data-bs-toggle="modal" data-bs-target="#ModelEditInfo">
+								<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
+									<path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+									<path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+									<path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+								</svg>
+								Ingresar horas de trabajo
+							</a>
+						</div>
+					</div>
+					<div class="contenedor-enalces-mantenimiento">
+						<div class="pmant-section-title"><span class="pmant-eyebrow">GESTIÓN DEL EQUIPO</span><h2>Información y documentos</h2><p>Consulte el historial, solicitudes y archivos asociados.</p></div>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/historial'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-history"/></span>
+							<span>
+								Historial de
+								<br>
+								</br>
+								mantenimientos
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/adjuntos'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-paperclip"/></span>
+							<span>
+								Adjuntos del equipo
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/evaluaciones'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-clipboard"/></span>
+							<span>
+								Evaluaciones del equipo
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/certificados'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-certificate"/></span>
+							<span>
+								Certificados de
+								<br>
+								</br>
+								operatividad
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/solicitudes/servicios'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-comments-o"/></span>
+							<span>
+								Formulario de Servicios
+							</span>
+						</a>
+						<a t-att-href="'/my/equipo/' + str(equipo.id) + '/cotizaciones'" class="item-enlace">
+							<span class="pmant-action-icon"><i class="fa fa-file-text-o"/></span>
+							<span>
+								Cotizaciones del
+								<br>
+								</br>
+								equipo
+							</span>
+						</a>
+						<br>
+						</br>
+					</div>
+				</div>
+			</div>
+			<!-- MODEL PARA EDITAR INFORMACION POR PARTE DEL CLIENTE -->
+			<div class="modal" id="ModelEditInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="max-width: 500px !important;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<div>
+								<h3 class="modal-title text-primary" id="exampleModalLabel">
+									Horas de trabajo
+								</h3>
+								<p style="font-size:12px;">
+									Esta informacion sera manejada por FDC CORP para poder realizar reportes, dashboard que optimize el analisis de su equipo.
+								</p>
+							</div>
+							<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+						</div>
+						<form id="form-medicion-equipo" class="form-control border-0 p-0">
+							<input type="hidden" name="equipo_id" id="equipo_id" t-att-value="equipo.id" />
+							<div class="modal-body">
+								<div class="w-100">
+									<label for="uso_promedio">
+										Hora de uso promedio diario
+									</label>
+									<input type="number" name="uso_promedio" id="uso_promedio" class="form-control" min="0" step="0.1" placeholder="Ej. 8 horas" />
+								</div>
+								<div class="w-100">
+									<label for="temperatura">
+										Temperatura del elemento
+									</label>
+									<input type="number" name="temperatura" id="temperatura" class="form-control" step="0.1" placeholder="Ej. 75 °C" />
+								</div>
+								<div class="w-100">
+									<label for="presion">
+										Presión actual
+									</label>
+									<input type="number" name="presion" id="presion" class="form-control" min="0" step="0.1" placeholder="Ej. 7 bar" />
+								</div>
+								<div class="w-100">
+									<label for="tem_ambiente">
+										Temperatura del ambiente
+									</label>
+									<input type="number" name="tem_ambiente" id="tem_ambiente" class="form-control" step="0.1" placeholder="Ej. 24 °C" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" id="enviar_medicion" class="btn btn-primary">
+									Enviar
+								</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Cerrar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="notificacion-exito" class="notificacion-exito" style="display: none;">
+				Medición guardada de manera exitosa.
+			</div>
+			<div id="notificacion-error" class="notificacion-error" style="display: none;">
+				Ocurrió un error al guardar la medición.
+			</div>
+			<!--
+			<div id="notificacion-exito_solicitud" class="alert alert-success" style="display:none;">
+			✅ Solicitud enviada correctamente.
+			</div>
+			
+			<div id="notificacion-error_solicitud" class="alert alert-danger" style="display:none;">
+			❌ Ocurrió un error al enviar la solicitud. Intenta nuevamente.
+			</div>
+			-->
+			<!-- Modal -->
+			<div class="modal fade" id="Model_Solicitud" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="max-width: 750px !important;height: auto !important;">
+					<div class="modal-content">
+						<form action="/solicitud/mantenimiento/servicio" method="POST" enctype="multipart/form-data">
+							<div class="modal-header">
+								<div>
+									<h3 class="modal-title text-primary" id="exampleModalLabel">
+										Formulario de Servicios
+									</h3>
+									<p style="font-size:16px;">
+										Este formulario es netamente usado para solicitar servicios de emergencias y/o programar servicios del equipo
+									</p>
+								</div>
+								<!--
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								</button>
+								-->
+							</div>
+							<div class="modal-body">
+								<input type="hidden" class="form-control" name="csrf_token" t-att-value="request.csrf_token()" />
+								<input type="hidden" class="form-control" name="id_equipo" t-att-value="equipo.id" />
+								<input type="hidden" class="form-control" name="ubicacion_id" t-att-value="equipo.ubicacion.id" />
+								<div class="w-100">
+									<label for="ubicacion" style="font-size: 16px;margin-bottom: 0px;">
+										Ubicación del equipo
+									</label>
+									<input type="text" class="form-control" name="ubicacion" t-att-value="equipo.ubicacion.name" disabled="disabled" placeholder="Ubicacion del Equipo" />
+								</div>
+								<div class="w-100">
+									<label for="tipo_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Tipo de servicio
+									</label>
+									<select name="tipo_servicio" required="required" class="form-control">
+										<option value="">
+											Seleccionar tipo de Servicio
+										</option>
+										<!--
+										<option value="">
+										Select. Servicio
+										</option>
+										-->
+										<option value="Preventivo">
+											Preventivo
+										</option>
+										<option value="Instalación">
+											Instalación
+										</option>
+										<option value="Mantenimiento">
+											Mantenimiento
+										</option>
+										<option value="Modificación">
+											Modificación
+										</option>
+									</select>
+								</div>
+								<div class="w-100">
+									<label for="nombre_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Nombre del equipo
+									</label>
+									<input type="text" name="nombre_equipo" class="form-control" t-att-value="equipo.name" disabled="disabled" placeholder="Nombre del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="marca_equipo" style="font-size: 16px;margin-bottom: 0px;">
+										Marca
+									</label>
+									<input type="text" name="marca_equipo" class="form-control" t-att-value="equipo.marca" disabled="disabled" placeholder="Marca del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="modelo" style="font-size: 16px;margin-bottom: 0px;">
+										Modelo
+									</label>
+									<input type="text" name="modelo" class="form-control" t-att-value="equipo.model" disabled="disabled" placeholder="Modelo del equipo" />
+								</div>
+								<div class="w-100">
+									<label for="numero_serie" style="font-size: 16px;margin-bottom: 0px;">
+										Número de serie
+									</label>
+									<input type="text" name="numero_serie" class="form-control" t-att-value="equipo.serial_no" disabled="disabled" placeholder="N° de serie" />
+								</div>
+								<div class="w-100">
+									<label for="fecha_servicio" style="font-size: 16px;margin-bottom: 0px;">
+										Fecha para el servicio
+									</label>
+									<input type="date" required="required" name="fecha_servicio" class="form-control" placeholder="Fecha de Servicio" />
+								</div>
+								<div class="w-100">
+									<label for="razon" style="font-size: 16px;margin-bottom: 0px;">
+										Detalles del problema
+									</label>
+									<textarea required="required" class="form-control" name="razon" rows="4">
+									</textarea>
+								</div>
+								<div class="w-100">
+									<label for="formFileMultiple" style="font-size: 16px;margin-bottom: 0px;">
+										Imagen referente
+									</label>
+									<input class="form-control" type="file" name="formFileMultiple" id="formFileMultiple" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" id="submit_form_solicitud" class="btn btn-primary">
+									Enviar Solicitud
+								</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Cerrar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+</odoo>

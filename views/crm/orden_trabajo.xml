@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="form_crm_servicio" model="ir.ui.view">
+        <field name="name">form.crm.servicio.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="orden_trabajo" readonly="1" string="Orden de Trabajo"/>
+                
+            </xpath>
+            <xpath expr="//field[@name='orden_trabajo']" position="after">
+                <field name="equipo_tarea" widget="many2many_tags" string="Equipo Tarea"/>
+            </xpath>
+            <xpath expr="//field[@name='equipo_tarea']" position="after">
+                <field name="ubicacion" string="Ubicación"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button string="Nueva Cotizacion" invisible="not orden_trabajo" name="btn_cotizacion" type="object" class="oe_highlight"  ></button>
+            </xpath>
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+                <attribute name="invisible">type == "lead" or ( probability == 0 and not active ) or orden_trabajo</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_wizard_mantenimiento_form" model="ir.ui.view">
+    <field name="name">wiizard.mantenimiento.form</field>
+    <field name="model">wiizard.mantenimiento</field>
+    <field name="arch" type="xml">
+      <form string="Agregar Mantenimiento">
+        <group>
+          <field name="name"/>
+          <field name="planequipo"/>
+          <field name="fecha_eject"/>
+          <field name="tipo"/>
+          <field name="equipo_id"/>
+          <field name="file_name" invisible="1"/>
+          <field name="file_adjunto" filename="file_name"/>
+        </group>
+        <footer>
+          <button name="action_confirm" type="object" string="Confirmar" class="btn-primary"/>
+          <button string="Cancelar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_open_wizard_mantenimiento" model="ir.actions.act_window">
+    <field name="name">Agregar Mantenimiento</field>
+    <field name="res_model">wiizard.mantenimiento</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_wizard_mantenimiento_form"/>
+    <field name="target">new</field>
+  </record>
+</odoo>

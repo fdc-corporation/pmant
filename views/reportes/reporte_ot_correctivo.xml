@@ -1,0 +1,360 @@
+<odoo>
+	<report id="reporte_ot_correctivo" model="ot.correctivo" string="Reporte Correctivo" report_type="qweb-pdf" name="pmant.reporte_mantenimiento_correctivo" print_report_name="'Reporte (' +  str(object.sequence) + ') _' + object.ubicacion.parent_id.name  + ','+ object.ubicacion.name" />
+	<template id="reporte_mantenimiento_correctivo">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page" style="margin:-40px 0px 0px 0px;">
+						<h2 style="text-align: left; color:black;">
+							Reporte Mantenimiento Correctivo
+						</h2>
+						<table class="table " style="width: 100%; font-size: 11px;">
+							<tr class="no-wrap">
+								<td colspan="2" style="border-top-left-radius: 7px;border-top-right-radius: 7px;text-align: center; font-size: 13px; border: 0px;border-bottom:4.5px solid #3191C5;">
+									Orden de Trabajo
+								</td>
+							</tr>
+							<!-- Informacion del documento -->
+							<tr class="no-wrap">
+								<td class="col-6">
+									<strong>
+										N° de Orden:
+									</strong>
+									<span t-field="doc.sequence" />
+									-
+									<span t-field="doc.name" />
+								</td>
+								<td class="col-6">
+									<strong>
+										Tipo de servicio:
+									</strong>
+									<span>
+										Correctivo
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-6">
+									<strong>
+										OT proveniente:
+									</strong>
+									<span t-field="doc.ot_manteniiento" />
+								</td>
+								<td class="col-6">
+								</td>
+							</tr>
+							<tr class="no-wrap">
+								<td class="col-6">
+									<strong>
+										Fecha Programada:
+									</strong>
+									<span t-field="doc.f_solicitud" />
+								</td>
+								<td class="col-6">
+									<strong>
+										Fecha Ejecutada:
+									</strong>
+									<span t-field="doc.fecha_cierre" />
+								</td>
+							</tr>
+							<!-- DATOS DEL CLIENTE -->
+							<tr class="no-wrap">
+								<td class="col-6">
+									<strong>
+										Detalles del cliente
+									</strong>
+									<br />
+									Cliente:
+									<span t-field="doc.ubicacion" />
+									<br />
+									Teléfono:
+									<span t-field="doc.ubicacion.phone" />
+									<br />
+									Email:
+									<span t-field="doc.ubicacion.email" />
+								</td>
+								<td class="col-6">
+									<strong>
+										Dirección:
+									</strong>
+									<span t-field="doc.ubicacion.street" />
+									<span t-field="doc.ubicacion.street2" />
+									<br />
+									<span t-field="doc.ubicacion.l10n_pe_district" />
+									-
+									<span t-field="doc.ubicacion.city_id" />
+									-
+									<span t-field="doc.ubicacion.state_id" />
+									-
+									<span t-field="doc.ubicacion.country_id" />
+								</td>
+							</tr>
+							<!-- DETALLER DE LA COMPAÑIA -->
+							<tr class="no-wrap" style="margin-bottom: 0px;">
+								<td class="col-6" style="border-bottom-left-radius: 7px;">
+									<strong>
+										Detalles de la compañía
+									</strong>
+									<br />
+									Compañía:
+									<span t-field="doc.compania" />
+									<br />
+									Responsable:
+									<span t-field="doc.tecnico" />
+									<!-- <br/>Supervisor: -->
+									<!-- <span t-field="doc.supervisor_id"/> -->
+								</td>
+								<td class="col-6" style="border-bottom-right-radius: 7px;">
+									<strong>
+										Detalles del Equipo de Mantenimiento
+									</strong>
+									<br />
+									Responsable:
+									<span t-field="doc.equipo" />
+									<br />
+									Técnico:
+									<span t-field="doc.tecnico" />
+								</td>
+							</tr>
+						</table>
+						<div>
+							<div>
+								<table class="table " style="border-collapse: collapse;width: 100%;border-spacing: 0; font-size: 11px; ">
+									<thead style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+										<tr class="no-wrap" style="border-collapse: collapse;border-top-left-radius: 7px;border-top-right-radius: 7px;">
+											<td colspan="3" style="border-top-left-radius: 7px;border-top-right-radius: 7px;">
+												<strong>
+													Activos
+												</strong>
+											</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="no-wrap" style="">
+											<td colspan="2">
+												Plan de Tarea :
+												<span t-field="doc.plan_trabajo" />
+											</td>
+											<td rowspan="2">
+												<center>
+													<img t-attf-src="data:image/jpg;base64,{{ doc.maquina.qr_image }}" style="width:80px; height:80px; display:block;" />
+													<span>
+														Historial del Equipo
+													</span>
+												</center>
+											</td>
+										</tr>
+										<!-- DETALLES DE LA MAQUINA (ACTIVOS) -->
+										<tr class="no-wrap">
+											<td style="    border-bottom-left-radius: 5px;">
+												<strong>
+													Detalles de la máquina
+												</strong>
+												<br />
+												Máquina:
+												<span t-field="doc.maquina" />
+												-
+												<span t-field="doc.maquina.marca" />
+												<br />
+												Propietario:
+												<span t-field="doc.maquina.propietario" />
+												<br />
+												Ubicacion:
+												<span t-field="doc.maquina.ubicacion" />
+											</td>
+											<td>
+												Marca de la máquina:
+												<span t-field="doc.maquina.marca" />
+												<br />
+												MFG Year:
+												<span t-field="doc.maquina.effective_date" />
+												<br />
+												N° de Serie:
+												<span t-field="doc.maquina.serial_no" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<br />
+								<div>
+									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<tr class="no-wrap">
+											<td scope="col" colspan="4" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+												Procesos
+											</td>
+										</tr>
+										<tr class="no-wrap">
+											<th scope="col">
+												Grupo
+											</th>
+											<th scope="col">
+												Proceso
+											</th>
+											<th scope="col">
+												Resultado
+											</th>
+											<th scope="col">
+												Comentario
+											</th>
+										</tr>
+										<t t-foreach="doc.proceso_ids" t-as="pr">
+											<tr class="no-wrap">
+												<td>
+													<span t-field="pr.proceso" />
+												</td>
+												<td>
+													<span t-field="pr.nombre" />
+												</td>
+												<td>
+													<center>
+														<t t-if="pr.check_estado == True">
+															<img src="https://fdc-corporation.com/public/assets/img/erp/1.png" style="width:16px;" />
+														</t>
+														<t t-if="pr.check_estado == False">
+															<img src="https://fdc-corporation.com/public/assets/img/erp/2.png" style="width:16px;" />
+														</t>
+													</center>
+													<!-- <span t-field="pr.estado"/> -->
+												</td>
+												<td>
+													<span t-field="pr.descripcion" />
+												</td>
+											</tr>
+										</t>
+									</table>
+								</div>
+								<br />
+								<div>
+									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<tr class="no-wrap">
+											<td scope="col" colspan="2" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+												<font style="vertical-align: inherit;">
+													Panel Fotografico
+												</font>
+											</td>
+										</tr>
+										<tr>
+											<th style="text-align:center;">
+												Comentarios
+											</th>
+											<th scope="col" style="text-align:center;">
+												Adjuntos
+											</th>
+										</tr>
+									</table>
+									<br />
+									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<tr class="no-wrap" style=" background-color:  #F7F7F7;">
+											<t t-foreach="doc.adjuntos_oc" t-as="ad" style="border:0px;border-bottom:0px;">
+												<tr class="no-wrap">
+													<td class="col-6">
+														<strong>
+															Comentario de la imagen:
+														</strong>
+														<span t-field="ad.name" />
+													</td>
+													<td class="col-6" style="margin:0px auto 0px auto;">
+														<t t-if="ad.adjuntoimage != null">
+															<center>
+																<img t-attf-src="data:image/jpg;base64,{{ ad.adjuntoimage }}" style="width:150px;height:150px;display:block;" />
+															</center>
+														</t>
+														<t t-else="">
+															<center>
+																<img t-attf-src="https://www.cams-it.com/wp-content/uploads/2015/05/default-placeholder-200x200.png" style="width:150px;height:150px;display:block;" />
+															</center>
+														</t>
+													</td>
+												</tr>
+											</t>
+										</tr>
+									</table>
+									<br />
+								</div>
+								<br />
+								<div>
+									<table class="table table-sm o_main_table " style="width: 100%; font-size: 11px;">
+										<tr class="no-wrap" style="text-align: center;border-collapse: collapse; font-size: 13px; border: 0px;color:white;background-color:  #22629D;">
+											<td scope="col" colspan="5" style="text-align: center; font-size: 13px; border: 0px;border-bottom:3.5px solid #3191C5;">
+												Conusmible del Servicio
+											</td>
+										</tr>
+										<tr class="no-wrap">
+											<th scope="col">
+												N°
+											</th>
+											<th scope="col" style="text-align: left;">
+												Nombre
+											</th>
+											<th scope="col">
+												Img Ref.
+											</th>
+											<th scope="col" style="text-align: left;">
+												Descripcion
+											</th>
+											<th scope="col">
+												Cantidad
+											</th>
+										</tr>
+										<t t-set="item" t-value="0" />
+										<t t-foreach="doc.consumibles_data" t-as="cns">
+											<t t-set="item" t-value="item + 1" />
+											<tr class="no-wrap">
+												<td>
+													<center>
+														<span t-out="item" />
+													</center>
+												</td>
+												<td>
+													<span t-field="cns.producto_id.name" />
+												</td>
+												<td>
+													<t t-if="cns.img_ref">
+														<center>
+															<img t-attf-src="data:image/jpg;base64,{{cns.img_ref}}" style="width: 50px; height: 50px;" />
+														</center>
+													</t>
+													<t t-else="">
+													</t>
+												</td>
+												<td>
+													<span t-field="cns.descripcion" />
+												</td>
+												<td>
+													<center>
+														<span t-field="cns.cantidad" />
+													</center>
+												</td>
+											</tr>
+										</t>
+									</table>
+								</div>
+								<div>
+									<div style="width:250px;font-size=12px;float:center;">
+										<span style="font-size:12px;">
+											Firma digital del tecnico
+										</span>
+										<div class="" style="width:100%;border:3px dashed grey; font-size=12px;">
+											<t t-if="not doc.firma">
+												<img t-attf-src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" style=" height:100px; margin:0px 0px 0px 0px;" />
+											</t>
+											<t t-else="">
+												<img t-attf-src="data:image/jpg;base64,{{ doc.firma }}" class="card-img-top" style="height:100px; margin:0px 0px 0px 0px;" />
+											</t>
+										</div>
+										<p style="margin:0px; 0px -5px 0px;font-size:12px;">
+											<strong style="font-size:12px;">
+												Firmado por:
+											</strong>
+											<t t-esc="doc.namefirma" />
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

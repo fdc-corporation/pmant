@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Acción para abrir el asistente -->
+    <record id="action_open_equipment_selection_wizard" model="ir.actions.act_window">
+        <field name="name">Seleccionar Equipos</field>
+        <field name="res_model">wizard.equipment.selection</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_order_id': active_id}</field>
+    </record>
+
+    <record id="action_open_order_cancel_wizard" model="ir.actions.act_window">
+        <field name="name">Cancelar Orden de Venta</field>
+        <field name="res_model">wizard.order.cancel</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_sale_id': active_id}</field>
+    </record>
+
+    <!-- Vista del asistente para seleccionar equipo -->
+    <record id="view_equipment_selection_wizard" model="ir.ui.view">
+        <field name="name">wizard.equipment.selection.form</field>
+        <field name="model">wizard.equipment.selection</field>
+        <field name="arch" type="xml">
+            <form string="Seleccionar Equipos">
+                <group>
+                    <field name="order_id" readonly="1"  />
+                    <field name="ubicacion"/>
+                    <field name="equipment_ids" domain="[('ubicacion', '=', ubicacion)]" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button string="Agregar" type="object" name="action_add_equipment" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- WIZARD DE CANCELACION DE ORDEN DE VENTA -->
+    <record id="view_wizard_order_cancel" model="ir.ui.view">
+        <field name="name">wizard.order.cancel.form</field>
+        <field name="model">wizard.order.cancel</field>
+        <field name="arch" type="xml">
+            <form string="Cancelar Orden de Venta">
+                <sheet>
+                    <field name="sale_id" invisible="1"></field>
+                    <div class="alert alert-warning">
+                        <p>
+                            ¿Estás seguro de cancelar la orden de venta? tienes un OT que se eliminara cuando se cancele la orden de venta.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_cancel_all" string="Cancelar y eliminar OT" type="object" class="btn-primary"/>
+                    <button name="action_cancel" string="Cancelar y no eliminar OT" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="inherit_sale_order_search" model="ir.ui.view">
+        <field name="name">sale.order.view.search.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search[1]/field[@name='name']" position="after">
+                <field name="partner_shipping_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_states_list" model="ir.ui.view">
+        <field name="name">sale.order.view.list.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="state_servicio" widget="badge" />
+            </xpath>
+        </field>
+    </record> 
+    <!-- Vista de orden de venta para añadir el botón -->
+    <record id="view_sale_order_form_inherit_with_equipment" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.with.equipment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_open_equipment_selection_wizard)d" type="action" string="Agregar un Equipo" class="oe_highlight" icon="fa-plus"/>
+                <button string="Crear Servicio" groups="pmant.group_pmant_planner,pmant.group_pmant_admin" name="create_mantenimiento" type="object" class="oe_highlight" icon="fa-wrench"/>
+                <button string="Crear Inspeccion" groups="pmant.group_pmant_planner,pmant.group_pmant_admin" name="create_mantenimiento_inspeccion" type="object" class="oe_highlight" icon="fa-wrench"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="domain" >[('parent_id', '=', partner_id)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="titulo_cotizacion"></field>
+                <field name="field_compute" invisible="1"></field>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
+                <field name="id_equipo" column_invisible="1"></field>
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="before">
+                <button name="%(action_open_order_cancel_wizard)d" invisible="state not in ['draft', 'sent', 'sale'] or not id or locked or not ots" type="action" string="Cancelar"  />
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'sent', 'sale'] or not id or locked or ots</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+
+
+
+
+    <record id="inherit_view_id_inherit_module_name" model="ir.ui.view">
+        <field name="name">sale.order.view.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_confirm'][2]" position="after">
+                <field name="is_servicio" invisible="1"/>
+                <button name="action_open_confirm_sale"
+                        id="action_open_confirm_sale"
+                        string="Confirmar"
+                        type="object"
+                        invisible="state not in ['draft', 'sent'] or is_servicio"/>
+                <button name="action_open_wizard_sale"
+                        id="action_open_wizard_sale"
+                        string="Confirmar"
+                        type="object"
+                        invisible="state not in ['draft', 'sent'] or not is_servicio"/>
+                <button name="action_print_sale"
+                        id="action_print_sale"
+                        class="oe_stat_button"
+                        string="Generar PDF"
+                        type="object"/>
+                <button name="action_print_report_mantenimiento"
+                        id="action_print_report_mantenimiento"
+                        class="oe_stat_button"
+                        string="Generar Informe Tecnico"
+                        type="object"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                <!-- <attribute name="invisible">state not in ["draft", "sent"] or is_servicio</attribute> -->
+                <attribute name="invisible">1</attribute>
+                
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Vista del wizard -->
+    <record id="view_wizard_sale_order_form" model="ir.ui.view">
+        <field name="name">wizard.sale.order.form</field>
+        <field name="model">wizard.sale.order</field>
+        <field name="arch" type="xml">
+        <form string="Confirmacion de venta">
+                <sheet>
+                    <div class="alert alert-warning">
+                        <p>
+                            ¿Estás seguro de confirmar? Tiene un producto <b>Servicio</b> pero no has anexado un equipo y asegure de que la direccion de entrega sea la correcta.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="confirm_sale" groups="pmant.group_pmant_admin" string="Confirmar de todas formas" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>        
+        </field>
+    </record>
+
+    <record id="view_wizard_sale_order_confirm_form" model="ir.ui.view">
+        <field name="name">wizard.sale.order.form</field>
+        <field name="model">wizard.sale.order.confirm</field>
+        <field name="arch" type="xml">
+        <form string="Confirmacion de venta">
+                <sheet>
+                    <div class="alert alert-warning">
+                        <p>
+                            ¿Estás seguro de confirmar? Revise que la dirección de entrega sea la correcta.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="confirm_sale" string="Confirmar de todas formas" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>        
+        </field>
+    </record>
+
+</odoo>

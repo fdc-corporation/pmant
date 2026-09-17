@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="contacto_herencia" model="ir.ui.view">
+        <field name="name">contactov.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='zip']" position="attributes">
+                   <attribute name="invisible">True</attribute>
+	        </xpath>
+	        <xpath expr="//field[@name='name']" position="attributes">
+                   <attribute name="required">True</attribute>
+	        </xpath>
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page name="equipos" string="Equipos" invisible="parent_id"> 
+                     <field name="equipos" string="Equipos"/>
+                </page>
+                <!--
+                <page name="usuario_odoo" string="Usuario Odoo ERP">
+
+                    <field name="user_ids"   />
+                </page>
+                -->
+
+            </xpath>
+       </field>
+   </record>
+
+</odoo>

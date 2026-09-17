@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="servicios_ejecucion" name="Servicios en ejecución">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+            <t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-active-services-page">
+                <header class="pmant-page-heading">
+                    <div><span class="pmant-eyebrow">OPERACIÓN EN CURSO</span><h1>Servicios en ejecución</h1><p>Consulte el avance y la programación de los mantenimientos activos.</p></div>
+                    <a href="/my/sedes" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al panel</a>
+                </header>
+                <section class="pmant-active-summary" aria-label="Resumen de servicios activos">
+                    <article><span><i class="fa fa-wrench"/></span><div><small>Servicios activos</small><strong t-esc="active_service_count"/></div></article>
+                    <article><span><i class="fa fa-cogs"/></span><div><small>Equipos atendidos</small><strong t-esc="equipment_service_count"/></div></article>
+                    <article><span><i class="fa fa-calendar-check-o"/></span><div><small>Estado general</small><strong>En seguimiento</strong></div></article>
+                </section>
+                <section class="pmant-panel pmant-active-services-panel">
+                    <div class="pmant-panel-head pmant-active-toolbar">
+                        <div><span class="pmant-eyebrow">MANTENIMIENTOS</span><h2>Seguimiento de servicios</h2><p t-if="active_service_count"><t t-esc="active_service_count"/> servicio<t t-if="active_service_count != 1">s</t> actualmente en proceso.</p></div>
+                        <div class="pmant-active-tools">
+                            <div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
+                            <form action="/my/servicios/ejecucion" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar equipo, orden o etapa" t-att-value="search" aria-label="Buscar servicios"/></form>
+                        </div>
+                    </div>
+                    <div class="main-equipos pmant-active-service-list" t-if="active_services">
+                        <div class="pmant-active-table-head" aria-hidden="true"><span>Equipo</span><span>Orden / plan</span><span>Programación</span><span>Etapa</span><span>Acciones</span></div>
+                        <t t-foreach="active_services" t-as="item">
+                            <t t-set="equipment" t-value="item['equipment']"/><t t-set="plan" t-value="item['plan']"/><t t-set="work_order" t-value="item['work_order']"/>
+                            <article class="pmant-active-service-card">
+                                <div class="pmant-active-equipment"><span class="pmant-active-service-icon"><i class="fa fa-wrench"/></span><div><strong t-esc="equipment.name or 'Equipo sin nombre'"/><small><t t-esc="equipment.serial_no or 'Sin serie'"/> · <t t-esc="equipment.ubicacion.name if equipment.ubicacion else 'Sin ubicación'"/></small></div></div>
+                                <div class="pmant-active-order"><small>Orden / plan</small><strong t-esc="work_order.name or '-'"/><span t-esc="plan.plan.name if plan.plan else 'Sin plan asignado'"/></div>
+                                <div class="pmant-active-date"><small>Fecha programada</small><strong t-esc="work_order.schedule_date.strftime('%d/%m/%Y') if work_order.schedule_date else 'Por programar'"/></div>
+                                <div class="pmant-active-stage"><small>Etapa</small><span class="pmant-status"><i class="fa fa-circle"/> <t t-esc="work_order.stage_id.name or plan.estado or 'En proceso'"/></span></div>
+                                <div class="pmant-active-actions"><a t-att-href="'/my/equipos/%s/detalles' % equipment.id" class="pmant-icon-btn" title="Ver equipo" aria-label="Ver detalles del equipo"><i class="fa fa-eye"/></a><a t-att-href="'/descargas/reporte/mantenimiento/%s' % plan.id" class="pmant-btn pmant-btn-primary" title="Descargar reporte"><i class="fa fa-download"/> <span>Reporte</span></a></div>
+                            </article>
+                        </t>
+                    </div>
+                    <div class="pmant-empty" t-else=""><span><i class="fa fa-check-circle-o"/></span><h3>No hay servicios en ejecución</h3><p t-if="search">No encontramos resultados para “<t t-esc="search"/>”. Pruebe con otro término.</p><p t-else="">Cuando se programe o inicie un mantenimiento, podrá darle seguimiento desde aquí.</p></div>
+                    <t t-if="pager and pager['page_count'] &gt; 1"><t t-call="portal.pager"/></t>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

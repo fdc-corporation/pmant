@@ -1,0 +1,100 @@
+<odoo>
+<!-- Acción exclusiva para técnicos: entra ya filtrado -->
+<record id="action_model_tecnico" model="ir.actions.act_window">
+    <field name="name">Mis Registros</field>
+    <field name="res_model">crm.lead</field> <!-- ⬇️ tu modelo -->
+    <field name="view_mode">tree,form,kanban,calendar,pivot,graph</field>
+    <!-- Dominio en el action (aplicado siempre que usen este menú) -->
+    <field name="domain">[('user_id', '=', uid)]</field>
+    <!-- Activa el filtro "my_records" automáticamente -->
+    <field name="context">{'search_default_my_records': 1}</field>
+</record>
+
+<!-- Menú solo para el grupo técnico -->
+<!-- <record id="menu_model_tecnico" model="ir.ui.menu">
+    <field name="name">Mis Registros</field>
+    <field name="parent_id" ref="crm.crm_menu_root"/>
+    <field name="action" ref="action_model_tecnico"/>
+    <field name="groups_id" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+</record> -->
+
+
+
+   <!--REGLAS PARA PLAN EQUIPO, GRUPO TECNICO  -->
+   <record id="only_otsid_can_ver" model="ir.rule">
+            <field name="name">Only OTS can modify ver</field>
+            <field name="model_id" ref="model_planequipo_mantenimiento"/>
+            <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+                 ['&amp;',('tarea.ots','!=',False),('tarea.ots.user_id','!=',False),('tarea.ots.user_id','=',user.id)]
+            </field>
+    </record>
+
+     <record id="only_ot_mantenimiento_ver" model="ir.rule">
+        <field name="name">Ver las OT de mantenimiento</field>
+        <field name="model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="domain_force">['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="only_otsid_can_vere2" model="ir.rule">
+            <field name="name">Only OTS can modify ver</field>
+            <field name="model_id" ref="model_planequipo_mantenimiento"/>
+            <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+            ['&amp;',('tarea.create_uid','=',user.id),'|',('tarea.ots','=',False),('tarea.ots.user_id','=',user.id)]
+            </field>
+    </record>
+
+    <!--REGLAS PARA TAREA, GRUPO  TECNCICO  -->
+    <record id="only_tareaid" model="ir.rule">
+            <field name="name">Only OTS TAREA  ver</field>
+            <field name="model_id" ref="model_tarea_mantenimiento"/>
+            <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+            ['&amp;',('ots','!=',False),('ots.user_id','!=',False),('ots.user_id','=',user.id)]
+            </field>
+    </record>
+    <record id="tecnico_tareaid" model="ir.rule">
+            <field name="name">Only OTS TAREA  ver</field>
+            <field name="model_id" ref="model_tarea_mantenimiento"/>
+            <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+            ['&amp;',('create_uid','=',user.id),'|',('ots','=',False),('ots.user_id','=',user.id)]
+            </field>
+    </record>
+
+
+    <record id="readsequipoid" model="ir.rule">
+            <field name="name">Read all equipament</field>
+            <field name="model_id" ref="model_maintenance_equipment"/>
+            <field name="groups" eval="[(4, ref('pmant.group_pmant_tecnico'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+                [(1, '=', 1)]
+            </field>
+    </record>
+</odoo>

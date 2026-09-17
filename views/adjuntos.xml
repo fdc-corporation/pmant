@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="planequipoproce_list_view">
+            <field name="name">planequipoproceso.list</field>
+            <field name="model">adjunto.mantenimiento</field>
+            <field name="arch" type="xml">
+                <list string="PlanEquipo list" >
+                    <field name="name"/>
+                    <field name="adjunto" widget="binary" filename="filename"/>
+                </list>
+            </field>
+    </record>
+
+    <record model="ir.ui.view" id="planequipoproce_form_view">
+            <field name="name">planequipoproceso.list</field>
+            <field name="model">adjunto.mantenimiento</field>
+            <field name="arch" type="xml">
+                <form string="Tarea Form">
+                    <sheet>
+                         <group>
+                             <field name="name" string="Nombre Adjunto"/>
+                             <field name="adjunto"  filename="name"/>
+                        </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+     <record model="ir.ui.view" id="adj__list_view">
+            <field name="name">image.list</field>
+            <field name="model">adjuntoimage.mantenimiento</field>
+            <field name="arch" type="xml">
+                <list string="PlanEquipo list" >
+                    <field name="name"/>
+                    <field name="adjunto" widget="binary" filename="filename"/>
+                </list>
+            </field>
+    </record>
+
+    <record model="ir.ui.view" id="images_form_view">
+            <field name="name">images.form</field>
+            <field name="model">adjuntoimage.mantenimiento</field>
+            <field name="arch" type="xml">
+                <form string="Tarea Form">
+                    <sheet>
+                         <group>
+                            <field name="comentario"/>
+                            <field name="name" string="Nombre Adjunto" invisible="1"/>
+                            <field name="adjunto" widget="image"  filename="name"/>
+                        </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+
+
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+    
+        .main-email-hoja {
+            max-width: 800px;
+            padding: 15px;
+            margin: 10px auto;
+            background-color: white;
+            /* border: 1px solid #a9a9a9;
+            box-shadow: -3px 3px 10px #00000014; */
+            border-radius: 5px;
+        }
+    
+        .header-title {
+            width: 100%;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+    
+        .header-title div p {
+            margin: 0px;
+            margin-bottom: 2px;
+            font-size: 13px;
+            text-align: right;
+        }
+    
+        .text-primary {
+            color: #3191C5;
+            text-align: center;
+            margin: 0px;
+        }
+    
+        .descripcion-correo p,
+        .descripcion-correo p ul li {
+            font-size: 14px;
+        }
+    
+        .btn-enlace {
+            font-size: 14px;
+            padding: 4px 7px;
+            background-color: #3191C5;
+            color: white;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+    <div class="main-email-hoja">
+        <div class="header-title">
+            <img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png" width="100px" />
+            <div>
+                <p>
+                    <t t-out="object.fecha_hoy" />
+                </p>
+    
+                <p>RUC:204305223</p>
+                <p>Av. Separadora Industrial 2103</p>
+            </div>
+        </div>
+        <hr>
+        <br>
+        <h3 class="text-primary">Hola
+            <t t-out="object.cliente.name" /> se le adjunto la informacion sobre su Hoja de recepcion del equipo(s)
+    
+        </h3>
+        <br>
+        <div class="descripcion-correo">
+            <p>Apreciable <t t-out="object.cliente.name"></t>
+            </p>
+            <p>Le notificamos que su equipo ya cuenta con su hoja de recepcion</p>
+            <p> Con la fecha de ingreso: <t t-out="object.fecha_entrada"></t>
+            </p>
+            <p>Equipos del servicio: <br>
+            <ul>
+                <t t-foreach="object.planequipo" t-as="equipo">
+                    <li>
+                        <t t-out="equipo.equipo.name"></t> / <t t-out="equipo.equipo.serial_no"></t>
+                    </li>
+                </t>
+            </ul>
+            </p>
+            <p>Ya puede utilizar el siguiente enlace para ver su historial de su equipo </p>
+            <a href="https://equiposindustriales.pe/my/sedes" class="btn-enlace">Ver mis equipos</a>
+        </div>
+    
+    </div>
+    
+    
+    
+    <table border="0" cellpadding="0" cellspacing="0"
+        style="padding:16px 0 0 0;box-sizing:border-box;caption-side:bottom;padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"
+        width="100%">
+        <tbody
+            style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+            <tr
+                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                <td align="center"
+                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="590"
+                        style="box-sizing: border-box; caption-side: bottom; padding: 16px; background-color: #ffffff; color: #454748; border-collapse: separate; font-family: Verdana, Arial, sans-serif;">
+                        <tbody
+                            style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+    
+                            <tr
+                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td align="center"
+                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                        style="box-sizing: border-box; caption-side: bottom; min-width: 590px; background-color: white; padding: 0px 8px; border-collapse: separate; color: #454748; font-family: Verdana, Arial, sans-serif;">
+                                        <tbody
+                                            style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                            <tr
+                                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td valign="middle"
+                                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                    <span style="font-size: 10px;">Hola</span><br>
+                                                    <span style="font-size: 20px; font-weight: bold;">
+                                                        <t t-out="object.cliente.name or ''">Marc Demo</t>
+                                                    </span>
+                                                </td>
+                                                <td valign="middle" align="right"
+                                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                    <img src="https://fdc-corporation.com/public/assets/img/logo-empresa.png"
+                                                        style="box-sizing:border-box;vertical-align:middle;padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         width="80">
+                                                </td>
+                                            </tr>
+                                            <tr
+                                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td colspan="2"
+                                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;text-align:center;">
+                                                    <hr width="100%"
+                                                        style="border-style:none;border-left-width:medium;border-bottom-width:medium;border-right-width:medium;border-top-width:medium;box-sizing: border-box; height: 1px; opacity: 0.25; color: #454748; background-color: #cccccc; border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px;">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+    
+                            <tr
+                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td align="center"
+                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                        style="box-sizing: border-box; caption-side: bottom; min-width: 590px; background-color: white; padding: 0px 8px; border-collapse: separate; color: #454748; font-family: Verdana, Arial, sans-serif;">
+                                        <tbody
+                                            style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                            <tr
+                                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td valign="top"
+                                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;font-size: 13px;">
+                                                    <div>
+                                                        Apreciable <t t-out="object.cliente.name or ''">Marc Demo</t>,<br><br>
+                                                        ¡Su <strong>Hoja de recepción</strong> se registró con exito!<br>
+                                                        Técnico responsable <strong
+                                                            style="box-sizing:border-box;font-weight:700;">
+                                                            <t t-out="object.create_user.name or ''">mark.brown23@ejemplo.com</t>
+                                                        </strong><br>
+                                                        Puede utilizar el siguiente enlace para verificar su historial en su cuenta:
+                                                        <div style="margin: 16px 0px 16px 0px;">
+                                                            <a t-attf-href="/my/sedes"
+                                                                style="box-sizing:border-box;cursor:pointer;background-color: #1ea8e7; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                                Ir mis servicios
+                                                            </a>
+                                                        </div>
+                                                        Gracias,<br>
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr
+                                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td
+                                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;text-align:center;">
+                                                    <hr width="100%"
+                                                        style="border-style:none;border-left-width:medium;border-bottom-width:medium;border-right-width:medium;border-top-width:medium;box-sizing: border-box; height: 1px; opacity: 0.25; color: #454748; background-color: #cccccc; border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px;">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+    
+            <tr
+                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                <td align="center"
+                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="590"
+                        style="box-sizing: border-box; caption-side: bottom; min-width: 590px; background-color: #f1f1f1; color: #454748; padding: 8px; border-collapse: separate; font-family: Verdana, Arial, sans-serif;">
+                        <tbody
+                            style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                            <tr
+                                style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td
+                                    style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;text-align: center; font-size: 13px;">
+                                    Con la tecnología de&nbsp;FDC CORP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>    
+
+
+</body>
+</html>

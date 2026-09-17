@@ -1,0 +1,218 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+main {
+  width: 90vw;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-flow: column nowrap;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  gap: 15px;
+}
+@media screen and (min-width: 1000px) {
+  main {
+    flex-flow: row;
+    gap: 30px;
+  }
+}
+main .card-contacto-main {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: baseline;
+  gap: 15px;
+}
+main .card-contacto-main .card-contacto {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  gap: 5px;
+}
+main .card-contacto-main .card-contacto .text-contacto {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 12px;
+}
+main .card-contacto-main .card-contacto .text-contacto img {
+  width: 35px;
+  height: 35px;
+}
+main .card-contacto-main .card-contacto .text-contacto span {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+main .card-contacto-main .card-contacto .contactar {
+  width: 100%;
+}
+main .card-contacto-main .card-contacto .contactar a {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 5px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  font-size: 14px;
+}
+main .card-contacto-main .card-contacto .contactar a svg {
+  color: white !important;
+  filter: invert(100%);
+  width: 20px;
+}
+main .card-contacto-main .info-empresa {
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  align-self: stretch;
+  border-radius: 5px;
+  background: #fff;
+  overflow: hidden;
+}
+main .card-contacto-main .info-empresa hr {
+  background: #e2e2e2;
+  width: 100%;
+}
+main .card-contacto-main .info-empresa .header-info {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+}
+main .card-contacto-main .info-empresa .header-info svg {
+  width: 40px;
+  height: 40px;
+}
+main .card-contacto-main .info-empresa .body-text-info {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  font-size: 14px;
+  width: 100%;
+  height: auto;
+}
+main .card-contacto-main .info-empresa .body-text-info span strong {
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+main .card-contacto-main .info-empresa .body-text-info .condicion-estado {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+main .card-contacto-main .info-empresa .body-text-info .condicion-estado span {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+main .card-contacto-main .info-empresa .body-text-info .text-informativo {
+  color: #666 !important;
+  font-family: Poppins;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+main .card-contacto-main .info-empresa .body-text-info .contenedor-button-info {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+main .card-contacto-main .info-empresa .body-text-info .contenedor-button-info a {
+  width: 45%;
+  max-width: 220px;
+  height: 30px;
+  color: white;
+  font-size: 13px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main .main-card-sedes, main .main-card-equipos {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 15px;
+}
+main .main-card-sedes .main-sedes, main .main-card-sedes .main-equipos, main .main-card-equipos .main-sedes, main .main-card-equipos .main-equipos {
+  width: 100%;
+  height: max-content;
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+main .main-card-sedes .card-sede, main .main-card-sedes .card-equipo, main .main-card-equipos .card-sede, main .main-card-equipos .card-equipo {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 5px;
+  width: 100%;
+  height: auto;
+  position: relative;
+  padding: 5px;
+  justify-content: start;
+  align-items: flex-start;
+  background-color: white;
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.21);
+  border-radius: 4px;
+  text-decoration: none;
+  color: black;
+}
+main .main-card-sedes .card-sede img, main .main-card-sedes .card-equipo img, main .main-card-equipos .card-sede img, main .main-card-equipos .card-equipo img {
+  width: 100px;
+  height: 100px;
+}
+main .main-card-sedes .card-sede .text-card-sede, main .main-card-sedes .card-sede .text-card-equipo, main .main-card-sedes .card-equipo .text-card-sede, main .main-card-sedes .card-equipo .text-card-equipo, main .main-card-equipos .card-sede .text-card-sede, main .main-card-equipos .card-sede .text-card-equipo, main .main-card-equipos .card-equipo .text-card-sede, main .main-card-equipos .card-equipo .text-card-equipo {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  justify-content: start;
+  gap: 1px;
+}
+main .main-card-sedes .card-sede .text-card-sede span, main .main-card-sedes .card-sede .text-card-equipo span, main .main-card-sedes .card-equipo .text-card-sede span, main .main-card-sedes .card-equipo .text-card-equipo span, main .main-card-equipos .card-sede .text-card-sede span, main .main-card-equipos .card-sede .text-card-equipo span, main .main-card-equipos .card-equipo .text-card-sede span, main .main-card-equipos .card-equipo .text-card-equipo span {
+  font-size: 13px;
+}
+main .main-card-sedes .card-sede .text-card-sede span:first-child, main .main-card-sedes .card-sede .text-card-equipo span:first-child, main .main-card-sedes .card-equipo .text-card-sede span:first-child, main .main-card-sedes .card-equipo .text-card-equipo span:first-child, main .main-card-equipos .card-sede .text-card-sede span:first-child, main .main-card-equipos .card-sede .text-card-equipo span:first-child, main .main-card-equipos .card-equipo .text-card-sede span:first-child, main .main-card-equipos .card-equipo .text-card-equipo span:first-child {
+  font-size: 15px;
+}
+main .main-card-sedes .contenedor-paginacion, main .main-card-equipos .contenedor-paginacion {
+  display: flex;
+  justify-content: end;
+}
+
+/*# sourceMappingURL=style.css.map */

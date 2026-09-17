@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="certificados_equipo" name="Certificados de operatividad del equipo">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
+            <t t-call="pmant.portal_section_nav"/>
+            <div class="main pmant-certificates-page">
+                <header class="pmant-page-heading">
+                    <div><span class="pmant-eyebrow">DOCUMENTACIÓN DEL EQUIPO</span><h1>Certificados de operatividad</h1><p>Consulte los certificados electrónicos y registre documentos firmados en PDF.</p></div>
+                    <a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al equipo</a>
+                </header>
+
+                <section class="pmant-certificate-equipment pmant-panel">
+                    <span class="pmant-certificate-equipment-icon"><i class="fa fa-cogs"/></span>
+                    <div><small>Equipo</small><h2 t-esc="equipo.name or 'Equipo sin nombre'"/><p><t t-esc="equipo.serial_no or 'Sin serie'"/> · <t t-esc="equipo.ubicacion.name if equipo.ubicacion else 'Sin ubicación'"/></p></div>
+                    <dl><div><dt>Propietario</dt><dd t-esc="equipo.propietario.name or '-'"/></div><div><dt>Fecha asignada</dt><dd t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else '-'"/></div></dl>
+                </section>
+
+                <div t-if="upload_status == 'success'" class="pmant-form-message success"><i class="fa fa-check-circle"/> El certificado firmado se registró correctamente en el equipo.</div>
+                <div t-if="upload_status == 'missing'" class="pmant-form-message error"><i class="fa fa-exclamation-circle"/> Seleccione un archivo PDF.</div>
+                <div t-if="upload_status == 'type'" class="pmant-form-message error"><i class="fa fa-exclamation-circle"/> El archivo debe ser un PDF válido.</div>
+                <div t-if="upload_status == 'size'" class="pmant-form-message error"><i class="fa fa-exclamation-circle"/> El PDF supera el límite de 10 MB.</div>
+
+                <section class="pmant-certificate-layout">
+                    <article class="pmant-panel pmant-certificate-list-panel">
+                        <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ARCHIVO DOCUMENTAL</span><h2>Certificados registrados</h2><p>Documentos firmados asociados a este equipo.</p></div><span class="pmant-certificate-count"><t t-esc="len(equipo.certificados) + len(certificados_manuales)"/></span></div>
+                        <div class="pmant-certificate-grid" t-if="equipo.certificados or certificados_manuales">
+                            <t t-foreach="certificados_manuales" t-as="certificate">
+                                <article class="pmant-certificate-card manual">
+                                    <div class="pmant-certificate-card-head"><span class="pmant-certificate-icon"><i class="fa fa-file-pdf-o"/></span><span class="pmant-certificate-badge"><i class="fa fa-upload"/> PDF firmado</span></div>
+                                    <div class="pmant-certificate-copy"><strong t-esc="certificate.name"/><small t-esc="certificate.nombre_archivo"/></div>
+                                    <dl><div><dt>Fecha</dt><dd t-esc="certificate.fecha_firma.strftime('%d/%m/%Y') if certificate.fecha_firma else '-'"/></div><div><dt>Registrado por</dt><dd t-esc="certificate.usuario_id.name or '-'"/></div></dl>
+                                    <a t-att-href="'/descargas/certificado/manual/%s' % certificate.id" class="pmant-btn pmant-btn-primary"><i class="fa fa-download"/> Descargar PDF</a>
+                                </article>
+                            </t>
+                            <t t-foreach="equipo.certificados" t-as="certificate">
+                                <article class="pmant-certificate-card electronic">
+                                    <div class="pmant-certificate-card-head"><span class="pmant-certificate-icon"><i class="fa fa-certificate"/></span><span class="pmant-certificate-badge"><i class="fa fa-pencil"/> Firma electrónica</span></div>
+                                    <div class="pmant-certificate-copy"><strong t-esc="certificate.reference or certificate.template_id.name or 'Certificado electrónico'"/><small>Documento firmado mediante Odoo Sign</small></div>
+                                    <dl><div><dt>Fecha</dt><dd t-esc="certificate.write_date.strftime('%d/%m/%Y') if certificate.write_date else '-'"/></div><div><dt>Estado</dt><dd>Firmado</dd></div></dl>
+                                    <a t-att-href="'/descargas/certificado/equipo/%s' % certificate.id" class="pmant-btn pmant-btn-primary"><i class="fa fa-download"/> Descargar firmado</a>
+                                </article>
+                            </t>
+                        </div>
+                        <div class="pmant-empty compact" t-else=""><span><i class="fa fa-certificate"/></span><div><h3>Aún no hay certificados</h3><p>Utilice el formulario para registrar el primer certificado firmado.</p></div></div>
+                    </article>
+
+                    <aside class="pmant-panel pmant-certificate-upload-panel">
+                        <div class="pmant-upload-heading"><span><i class="fa fa-cloud-upload"/></span><div><span class="pmant-eyebrow">REGISTRO MANUAL</span><h2>Subir certificado firmado</h2></div></div>
+                        <p>Adjunte el PDF que fue firmado fuera de Odoo. Quedará registrado permanentemente en este equipo.</p>
+                        <form t-att-action="'/my/equipo/%s/certificados/subir' % equipo.id" method="post" enctype="multipart/form-data" class="pmant-certificate-form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <label><span>Nombre del certificado</span><input type="text" name="nombre_certificado" maxlength="120" required="required" placeholder="Ej. Certificado anual 2026"/></label>
+                            <label><span>Fecha del certificado</span><input type="date" name="fecha_firma" required="required"/></label>
+                            <label class="pmant-file-field"><span>PDF firmado</span><input type="file" name="certificado_pdf" accept="application/pdf,.pdf" required="required"/><small><i class="fa fa-info-circle"/> Solo PDF, máximo 10 MB.</small></label>
+                            <button type="submit" class="pmant-btn pmant-btn-primary"><i class="fa fa-upload"/> Registrar certificado</button>
+                        </form>
+                    </aside>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>
