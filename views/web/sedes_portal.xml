@@ -2,13 +2,16 @@
 <odoo>
     <template id="portal_section_nav" name="Navegación del portal PMANT">
         <t t-set="pmant_support_url" t-value="'https://wa.me/%s' % (request.env.company.sudo().partner_id.phone or '').replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')"/>
-        <aside class="pmant-sidebar pmant-page-rail">
+        <t t-set="pmant_portal_path" t-value="request.httprequest.path"/>
+        <button class="pmant-rail-toggle" type="button" aria-controls="pmant-portal-navigation" aria-expanded="false" aria-label="Abrir menú"><i class="fa fa-bars"/><span>Menú</span></button>
+        <aside id="pmant-portal-navigation" class="pmant-sidebar pmant-page-rail" aria-label="Menú del portal">
+            <button class="pmant-rail-close" type="button" aria-label="Cerrar menú"><i class="fa fa-times"/></button>
             <a class="pmant-brand" href="/my/sedes" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
             <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
-                <a href="/my/sedes"><i class="fa fa-th-large"/><span>Panel de control</span></a>
-                <a t-att-href="'/my/%s/equipos' % request.env.user.sudo().partner_id.commercial_partner_id.id"><i class="fa fa-cogs"/><span>Mis equipos</span></a>
-                <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/><span>Servicios activos</span></a>
-                <a href="/my/sedes#sedes"><i class="fa fa-building-o"/><span>Sedes y áreas</span></a>
+                <a href="/my/sedes" t-att-class="'active' if '/my/sedes' in pmant_portal_path else ''"><i class="fa fa-th-large"/><span>Panel de control</span></a>
+                <a t-att-href="'/my/%s/equipos' % request.env.user.sudo().partner_id.commercial_partner_id.id" t-att-class="'active' if '/equipos' in pmant_portal_path or '/equipo/' in pmant_portal_path else ''"><i class="fa fa-cogs"/><span>Mis equipos</span></a>
+                <a href="/my/servicios/ejecucion" t-att-class="'active' if '/my/servicios/ejecucion' in pmant_portal_path else ''"><i class="fa fa-wrench"/><span>Servicios activos</span></a>
+                <a href="/my/sedes#sedes" t-att-class="'active' if '/my/sede/' in pmant_portal_path or '/my/area/' in pmant_portal_path else ''"><i class="fa fa-building-o"/><span>Sedes y áreas</span></a>
                 <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/><span>Soporte por WhatsApp</span></a>
             </nav>
             <div class="pmant-sidebar-footer">
@@ -16,6 +19,7 @@
                 <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(request.env.user.sudo().partner_id.name or 'U')[:1].upper()"/></span><span><strong t-esc="request.env.user.sudo().partner_id.name"/><small>Mi cuenta</small></span></a>
             </div>
         </aside>
+        <button class="pmant-rail-backdrop" type="button" tabindex="-1" aria-label="Cerrar menú"/>
     </template>
     <template id="sedes_portal" name="Panel de mantenimiento FDC">
         <t t-set="no_header" t-value="True"/>
@@ -23,23 +27,9 @@
         <t t-set="pmant_support_url" t-value="'https://wa.me/%s' % (request.env.company.sudo().partner_id.phone or '').replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')"/>
         <t t-call="website.layout">
             <div id="wrap" class="pmant-dashboard">
-                <aside class="pmant-sidebar">
-                    <a class="pmant-brand" href="/my/sedes" aria-label="Panel FDC"><span class="pmant-brand-mark">F</span><span><strong>FDC</strong><small>Service Hub</small></span></a>
-                    <nav class="pmant-nav" aria-label="Navegación de mantenimiento">
-                        <a class="active" href="/my/sedes"><i class="fa fa-th-large"/> <span>Panel de control</span></a>
-                        <a t-att-href="'/my/%s/equipos' % user_partner.id"><i class="fa fa-cogs"/> <span>Mis equipos</span></a>
-                        <a href="/my/servicios/ejecucion"><i class="fa fa-wrench"/> <span>Servicios activos</span></a>
-                        <a href="#sedes"><i class="fa fa-building-o"/> <span>Sedes y áreas</span></a>
-                        <a class="pmant-whatsapp-support" t-att-href="pmant_support_url" target="_blank" rel="noopener"><i class="fa fa-whatsapp"/> <span>Soporte por WhatsApp</span></a>
-                    </nav>
-                    <div class="pmant-sidebar-footer">
-                        <a class="pmant-shop-link" href="/shop"><i class="fa fa-shopping-bag"/> <span>Ver nuestros productos</span></a>
-                        <a class="pmant-user" href="/my/account"><span class="pmant-avatar"><t t-esc="(user_partner.name or 'U')[:1].upper()"/></span><span><strong t-esc="user_partner.name"/><small>Mi cuenta</small></span></a>
-                    </div>
-                </aside>
+                <t t-call="pmant.portal_section_nav"/>
                 <main class="pmant-content">
                     <header class="pmant-topbar">
-                        <button class="pmant-menu-toggle" type="button" aria-label="Abrir menú"><i class="fa fa-bars"/></button>
                         <div><span class="pmant-eyebrow">PORTAL DE CLIENTES</span><h1>Hola, <t t-esc="user_partner.name or 'cliente'"/></h1><p>Controle sus equipos y servicios desde un solo lugar.</p></div>
                         <div class="pmant-top-actions"><a t-att-href="pmant_support_url" target="_blank" rel="noopener" class="pmant-btn pmant-btn-ghost pmant-whatsapp-support"><i class="fa fa-whatsapp"/> Soporte</a><a href="/shop" class="pmant-btn pmant-btn-primary"><i class="fa fa-shopping-cart"/> Ver productos</a></div>
                     </header>
@@ -144,7 +134,7 @@
                             <div class="pmant-empty compact" t-else=""><span><i class="fa fa-wrench"/></span><div><h3>Sin servicios realizados</h3><p>El último mantenimiento aparecerá cuando sea registrado.</p></div></div>
                         </article>
                     </section>
-                    <section class="pmant-panel pmant-recent">
+                    <section class="pmant-panel pmant-recent" style="margin-top: 18px;">
                         <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ACTIVIDAD</span><h2>Servicios recientes</h2></div><a href="/my/servicios/ejecucion">Ver todos <i class="fa fa-arrow-right"/></a></div>
                         <div class="pmant-table-wrap" t-if="recent_services"><table><thead><tr><th>Orden</th><th>Equipo / tarea</th><th>Programación</th><th>Estado</th></tr></thead><tbody><tr t-foreach="recent_services" t-as="service"><td><strong t-esc="service.name"/></td><td t-esc="service.tarea.name"/><td t-esc="service.schedule_date or 'Por programar'"/><td><span class="pmant-status" t-esc="service.stage_id.name or 'Nuevo'"/></td></tr></tbody></table></div>
                         <div class="pmant-empty compact" t-else=""><span><i class="fa fa-check-circle-o"/></span><div><h3>Sin actividad reciente</h3><p>Los próximos servicios aparecerán aquí.</p></div></div>

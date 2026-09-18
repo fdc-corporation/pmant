@@ -1,12 +1,28 @@
 /** @odoo-module **/
 
 $(document).ready(() => {
-  const dashboard = document.querySelector(".pmant-dashboard");
-  const menuToggle = document.querySelector(".pmant-menu-toggle");
-  if (dashboard && menuToggle) {
-    menuToggle.addEventListener("click", () => dashboard.classList.toggle("menu-open"));
-    dashboard.querySelectorAll(".pmant-nav a").forEach((link) => {
-      link.addEventListener("click", () => dashboard.classList.remove("menu-open"));
+  const rail = document.querySelector(".pmant-page-rail");
+  const railToggle = document.querySelector(".pmant-rail-toggle");
+  const railBackdrop = document.querySelector(".pmant-rail-backdrop");
+  if (rail && railToggle) {
+    const setMenuOpen = (open) => {
+      document.body.classList.toggle("pmant-rail-open", open);
+      railToggle.setAttribute("aria-expanded", String(open));
+      rail.inert = window.innerWidth <= 1024 && !open;
+      if (open) rail.querySelector(".pmant-rail-close")?.focus();
+      else if (rail.contains(document.activeElement)) railToggle.focus();
+    };
+    rail.inert = window.innerWidth <= 1024;
+    railToggle.addEventListener("click", () => setMenuOpen(!document.body.classList.contains("pmant-rail-open")));
+    rail.querySelector(".pmant-rail-close")?.addEventListener("click", () => setMenuOpen(false));
+    railBackdrop?.addEventListener("click", () => setMenuOpen(false));
+    rail.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenuOpen(false)));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && document.body.classList.contains("pmant-rail-open")) setMenuOpen(false);
+    });
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) setMenuOpen(false);
+      else rail.inert = !document.body.classList.contains("pmant-rail-open");
     });
   }
 
@@ -89,7 +105,7 @@ $(document).ready(() => {
       document.querySelectorAll(".pmant-page-rail .pmant-nav a").forEach((link) => link.classList.remove("active"));
       let selector = 'a[href="/my/sedes"]';
       if (path.includes("/servicios/")) selector = 'a[href="/my/servicios/ejecucion"]';
-      else if (path.includes("/equipos/") || path.match(/\/my\/\d+\/equipos/)) selector = '.pmant-nav a:nth-child(2)';
+      else if (path.includes("/equipos/") || path.includes("/equipo/") || path.match(/\/my\/\d+\/equipos(?:\/|$)/)) selector = '.pmant-nav a:nth-child(2)';
       else if (path.includes("/sede/") || path.includes("/area/")) selector = '.pmant-nav a:nth-child(4)';
       document.querySelector(`.pmant-page-rail ${selector}`)?.classList.add("active");
     };

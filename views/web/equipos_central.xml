@@ -4,7 +4,7 @@
 		<t t-call="website.layout">
 			<t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/><t t-set="body_classname" t-value="'pmant-portal-page'"/>
 			<t t-call="pmant.portal_section_nav"/>
-			<div class="main">
+			<div class="main pmant-equipment-index">
 				<div class="card-contacto-main">
 					<div class="card-contacto">
 						<div class="text-contacto">
@@ -93,7 +93,7 @@
 				</div>
 				<div class="main-card-equipos">
 					<div class="titulo-seccion" style="display:flex;flex-flow: row wrap;justify-content: space-between;gap: 0px;align-items: center;">
-						<div style="display:flex;gap 10px;align-items: center;flex-flow: row nowrap;gap: 10px;">
+						<div class="pmant-equipment-toolbar" style="display:flex;align-items: center;flex-flow: row nowrap;gap: 10px;">
 							<h2>
 								Mis Equipos
 							</h2>

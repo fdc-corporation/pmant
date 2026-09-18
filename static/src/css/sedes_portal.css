@@ -2186,3 +2186,225 @@ body.pmant-portal-page .o_footer_copyright { display: none !important; }
 .pmant-page-rail .pmant-shop-link:hover i,
 .pmant-page-rail .pmant-page-shop:hover i,
 .pmant-sidebar .pmant-shop-link:hover i { color: #7dcef4 !important; }
+
+/* Un solo layout del portal para dashboard y vistas internas. */
+.pmant-dashboard .pmant-content { grid-column: 2; }
+.pmant-rail-toggle, .pmant-rail-close, .pmant-rail-backdrop { display: none; }
+.pmant-page-rail ~ .main,
+.pmant-dashboard .pmant-content { min-width: 0; }
+.pmant-page-rail ~ .main > *,
+.pmant-dashboard .pmant-content > * { min-width: 0; max-width: 100%; }
+.pmant-page-rail ~ .main .main-card-sedes,
+.pmant-page-rail ~ .main .main-card-equipos,
+.pmant-page-rail ~ .main .main-card-detalles-equipo,
+.pmant-page-rail ~ .main .main-detalles-equipos,
+.pmant-page-rail ~ .main .main-equipos,
+.pmant-page-rail ~ .main .main-sedes,
+.pmant-page-rail ~ .main .main_historail_pmant { min-width: 0; max-width: 100%; }
+.pmant-page-rail ~ .main img,
+.pmant-dashboard .pmant-content img { max-width: 100%; height: auto; }
+.pmant-page-rail ~ .main .pmant-card,
+.pmant-page-rail ~ .main .pmant-panel,
+.pmant-page-rail ~ .main .card-equipo,
+.pmant-page-rail ~ .main .card-sede,
+.pmant-dashboard .pmant-panel { overflow-wrap: anywhere; }
+.pmant-page-rail ~ .main .pmant-table-wrap,
+.pmant-page-rail ~ .main .pmant-history-table,
+.pmant-page-rail ~ .main .pmant-quote-list.pmant-table-view,
+.pmant-page-rail ~ .main .main-equipos.pmant-table-view,
+.pmant-page-rail ~ .main .pmant-active-service-list.pmant-table-view { max-width: 100%; overflow-x: auto; }
+
+@media (max-width: 1024px) {
+  body.pmant-rail-open { overflow: hidden; }
+  .pmant-dashboard { display: block; }
+  .pmant-dashboard .pmant-content { width: 100%; padding-top: 76px; }
+  .pmant-rail-toggle {
+    display: inline-flex; position: fixed; top: 12px; left: 14px; z-index: 1062;
+    min-width: 90px; height: 44px; align-items: center; justify-content: center; gap: 9px;
+    padding: 0 14px; border: 1px solid rgba(49,145,196,.5); border-radius: 11px;
+    color: #fff; background: rgba(19,45,57,.97); box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    font-size: 13px; font-weight: 700;
+  }
+  .pmant-rail-toggle i { color: #73c7f0; font-size: 17px; }
+  .pmant-rail-toggle:hover, .pmant-rail-toggle:focus-visible { border-color: #3191c4; outline: 2px solid transparent; background: #214152; }
+  .pmant-page-rail {
+    display: flex !important; position: fixed !important; inset: 0 auto 0 0 !important;
+    z-index: 1064 !important; width: min(320px, 86vw) !important; height: 100dvh !important;
+    flex-direction: column !important; align-items: stretch !important;
+    padding: 22px 18px 18px !important; overflow-x: hidden; overflow-y: auto;
+    border-top: 0 !important; border-right: 1px solid rgba(49,145,196,.2) !important;
+    transform: translateX(-105%) !important; transition: transform .25s ease !important;
+  }
+  body.pmant-rail-open .pmant-page-rail { transform: translateX(0) !important; box-shadow: 20px 0 50px rgba(0,0,0,.45); }
+  .pmant-rail-close {
+    display: grid; position: absolute; top: 20px; right: 16px; width: 38px; height: 38px;
+    place-items: center; border: 1px solid rgba(255,255,255,.14); border-radius: 10px;
+    color: #e5f3f9; background: #1d3948;
+  }
+  .pmant-page-rail .pmant-brand { display: flex !important; padding: 0 48px 22px 6px !important; }
+  .pmant-page-rail .pmant-nav {
+    display: grid !important; width: 100% !important; grid-template-columns: 1fr !important;
+    gap: 7px !important; margin: 12px 0 24px !important;
+  }
+  .pmant-page-rail .pmant-nav a {
+    display: flex !important; width: 100% !important; min-height: 48px !important;
+    justify-content: flex-start !important; gap: 13px !important; padding: 0 14px !important;
+    font-size: 14px !important; text-align: left !important;
+  }
+  .pmant-page-rail .pmant-nav a i { display: inline-block !important; width: 22px; text-align: center; }
+  .pmant-page-rail .pmant-nav a span, .pmant-page-rail .pmant-shop-link span { display: inline !important; }
+  .pmant-page-rail .pmant-sidebar-footer { display: grid !important; width: 100% !important; gap: 14px; margin: auto 0 0 !important; }
+  .pmant-page-rail .pmant-shop-link { display: flex !important; width: 100% !important; min-height: 48px; justify-content: flex-start !important; gap: 13px; padding: 0 14px; }
+  .pmant-page-rail .pmant-user { display: flex !important; }
+  .pmant-rail-backdrop {
+    display: block; position: fixed; inset: 0; z-index: 1063; width: 100%; height: 100%;
+    border: 0; background: rgba(2,12,17,.68); opacity: 0; pointer-events: none;
+    transition: opacity .25s ease;
+  }
+  body.pmant-rail-open .pmant-rail-backdrop { opacity: 1; pointer-events: auto; }
+  .pmant-page-rail ~ .main {
+    width: 100% !important; min-height: 100vh; margin: 0 !important;
+    padding: 76px clamp(14px,3vw,28px) 48px !important;
+    grid-template-columns: minmax(0,1fr) !important;
+  }
+  .pmant-page-rail ~ .main .card-contacto-main { order: 0; }
+  .pmant-page-rail ~ .main .main-card-equipos,
+  .pmant-page-rail ~ .main .main-card-sedes { width: 100% !important; }
+  .pmant-page-rail ~ .main .card-contacto-main { width: 100% !important; }
+}
+@media (max-width: 700px) {
+  .pmant-page-rail ~ .main .card-contacto-main { display: block !important; }
+  .pmant-page-rail ~ .main .card-contacto,
+  .pmant-page-rail ~ .main .info-empresa { width: 100% !important; max-width: none !important; }
+  .pmant-page-rail ~ .main .titulo-seccion,
+  .pmant-page-rail ~ .main .pmant-page-heading { align-items: stretch !important; flex-direction: column !important; }
+  .pmant-page-rail ~ .main .titulo-seccion form,
+  .pmant-page-rail ~ .main form.form-inline,
+  .pmant-page-rail ~ .main .pmant-search { width: 100% !important; min-width: 0 !important; }
+  .pmant-page-rail ~ .main .pmant-panel-head,
+  .pmant-dashboard .pmant-panel-head { flex-direction: column; align-items: stretch; }
+  .pmant-page-rail ~ .main .pmant-panel-head > *,
+  .pmant-dashboard .pmant-panel-head > * { min-width: 0; max-width: 100%; }
+  .pmant-page-rail ~ .main .main-equipos:not(.pmant-table-view),
+  .pmant-page-rail ~ .main .main-sedes:not(.pmant-table-view),
+  .pmant-page-rail ~ .main .pmant-certificate-grid,
+  .pmant-dashboard .pmant-metrics,
+  .pmant-dashboard .pmant-location-grid { grid-template-columns: minmax(0,1fr) !important; }
+  .pmant-page-rail ~ .main .main-card-equipos,
+  .pmant-page-rail ~ .main .main-card-sedes,
+  .pmant-page-rail ~ .main .pmant-panel { padding: 16px !important; }
+  .pmant-page-rail ~ .main .card-equipo,
+  .pmant-page-rail ~ .main .card-sede { max-width: 100%; }
+  .pmant-page-rail ~ .main .modal-dialog { width: calc(100% - 20px) !important; max-width: none !important; margin: 10px !important; }
+  .pmant-portal-page .modal-body { grid-template-columns: minmax(0,1fr) !important; }
+  .pmant-dashboard .pmant-topbar { flex-wrap: wrap; }
+  .pmant-dashboard .pmant-topbar > div:nth-child(2) { flex-basis: 100%; }
+  .pmant-dashboard .pmant-top-actions { width: 100%; flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .pmant-rail-toggle { top: 9px; left: 10px; min-width: 44px; width: 44px; padding: 0; }
+  .pmant-rail-toggle span { display: none; }
+  .pmant-dashboard .pmant-content { padding: 68px 12px 36px; }
+  .pmant-page-rail ~ .main { padding: 68px 10px 36px !important; }
+  .pmant-page-rail ~ .main .pmant-view-switch { max-width: 100%; }
+  .pmant-page-rail ~ .main .pmant-view-switch button { min-width: 0; }
+  .pmant-page-rail ~ .main .pagination { max-width: 100%; overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pmant-page-rail, .pmant-rail-backdrop { transition: none !important; }
+}
+
+/* Inventario central: evita la columna fantasma de los estilos heredados. */
+.pmant-page-rail ~ .main.pmant-equipment-index {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.pmant-page-rail ~ .pmant-equipment-index > .card-contacto-main,
+.pmant-page-rail ~ .pmant-equipment-index > .main-card-equipos {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  justify-self: stretch;
+}
+.pmant-page-rail ~ .pmant-equipment-index .titulo-seccion > * { min-width: 0; }
+.pmant-page-rail ~ .pmant-equipment-index .main-equipos:not(.pmant-table-view) {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)) !important;
+}
+@media (max-width: 1200px) {
+  .pmant-page-rail ~ .main.pmant-equipment-index {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index > .card-contacto-main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .card-contacto,
+  .pmant-page-rail ~ .pmant-equipment-index .info-empresa {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .pmant-equipment-toolbar {
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion form {
+    flex: 1 1 280px;
+    max-width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion h3 { margin: 0 !important; }
+  .pmant-page-rail ~ .pmant-equipment-index .pmant-equipment-toolbar {
+    align-items: stretch !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .pmant-equipment-toolbar h2 {
+    width: 100%;
+    margin: 0 !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .pmant-equipment-toolbar .pmant-view-switch,
+  .pmant-page-rail ~ .pmant-equipment-index .pmant-equipment-toolbar > .btn {
+    max-width: 100%;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion form {
+    display: flex !important;
+    width: 100% !important;
+    flex: 0 1 auto;
+    min-width: 0 !important;
+    gap: 8px !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion form input {
+    width: 0 !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .titulo-seccion form button {
+    width: auto !important;
+    min-width: 84px !important;
+    max-width: none !important;
+    flex: 0 0 auto;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .main-equipos:not(.pmant-table-view) {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 8px 0 !important;
+  }
+  .pmant-page-rail ~ .pmant-equipment-index .main-equipos:not(.pmant-table-view) .card-equipo {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
