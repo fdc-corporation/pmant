@@ -46,7 +46,7 @@
                          <group>
                             <field name="comentario"/>
                             <field name="name" string="Nombre Adjunto" invisible="1"/>
-                            <field name="adjunto" widget="image"  filename="name"/>
+                            <field name="adjunto" widget="pmant_image_annotation" filename="name"/>
                         </group>
                 </sheet>
                 </form>

@@ -11,7 +11,7 @@ programaciones, documentos, firmas y portal de clientes.""",
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
     "category": "Services/Maintenance",
-    "version": "19.0.2.26.0",
+    "version": "19.0.2.27.0",
     # any module necessary for this one to work correctly
     "depends": [
         "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",
@@ -106,6 +106,9 @@ programaciones, documentos, firmas y portal de clientes.""",
         ],
         "web.assets_backend": [
             "pmant/static/src/xml/form_status_inidicator.xml",
+            "pmant/static/src/js/image_annotation_field.js",
+            "pmant/static/src/xml/image_annotation_field.xml",
+            "pmant/static/src/scss/image_annotation_field.scss",
         ],
     },
     "installable": True,

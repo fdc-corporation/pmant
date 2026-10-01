@@ -36,6 +36,13 @@ class PlanEquipo(models.Model):
     informe_filename = fields.Char(string="Nombre del archivo")
     # decibel_equipo_ids = fields.One2many('decibel.equipo', 'planequipo_id', string="Decibel del equipo")
     require_repuestos = fields.Boolean(string="Requiere repuestos", default=False)
+    voltaje_ids = fields.One2many("voltaje.linea","planequipo_id", string="Lecturas de Voltaje")
+    amperaje_ids = fields.One2many('amperaje.linea',"planequipo_id", string="Lecturas de Amperaje")
+    parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
+
+
+
+
 
 
     def data_parametros(self):
@@ -57,18 +64,27 @@ class PlanEquipo(models.Model):
 
 
 
-    def _default_nota_mantenimiento(self):
-        return """
-        
-        """
 
     @api.model
     def create(self, vals):
-        # Usa valores predeterminados del contexto si no están definidos explícitamente
-        self.cliente =  self.env.context.get('default_cliente') or None
-        self.ubicacion =  self.env.context.get('default_ubicacion') or None
-        self.tarea = self.env.context.get('default_tarea') or None
-        return super(PlanEquipo, self).create(vals)
+        vals.setdefault('cliente', self.env.context.get('default_cliente'))
+        vals.setdefault('ubicacion', self.env.context.get('default_ubicacion'))
+        vals.setdefault('tarea', self.env.context.get('default_tarea'))
+
+        parametro_commands = []
+        if not vals.get('parametro_ids'):
+            for data in self.data_parametros():
+                parametro_commands.append((
+                    0, 0,
+                    {
+                        'paremetro_c': data['paremetro_id'],   # (mantengo tu nombre de campo)
+                        'medida_c': data['unidad_medida'],
+                    }
+                ))
+            vals['parametro_ids'] = parametro_commands
+
+        record = super(PlanEquipo, self).create(vals)
+        return record
 
     @api.depends('fecha_ejec')
     def _generate_tecnico(self):
@@ -157,3 +173,58 @@ class PlanEquipo(models.Model):
 
     def create_report_equipo (self) : 
         return self.env.ref('pmant.action_report_equipo').report_action(self)
+
+
+
+
+class VoltajeLinea(models.Model):
+    _name = "voltaje.linea"
+
+    l1_l2 = fields.Float("L1/L2")
+    l2_l3 = fields.Float("L2/L3")
+    l1_l3 = fields.Float("L1/L3")
+    l1_gnd = fields.Float("L1/GND")
+    l2_gnd = fields.Float("L2/GND")
+    l3_gnd = fields.Float("L3/GND")
+    supply = fields.Float("Supply")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
+
+class AmperajeLinea(models.Model):
+    _name = 'amperaje.linea'
+    _description = 'Medición de amperaje por línea y fase'
+
+    linea = fields.Char(string='Línea')
+
+    carga_linea = fields.Float("Carga Línea")
+    descarga_linea = fields.Float("Descarga Línea")
+
+    fase = fields.Char("Fase")
+    carga_fase = fields.Char("Carga Fase")
+    descarga_fase = fields.Char("Descarga Fase")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")
+
+
+class ModeluParametro(models.Model):
+    _name = "parametro.modulo"
+    _description = "Parametros de modulo"
+
+    name = fields.Char(string="Nombre")
+class UnidadMedidaModulo(models.Model):
+    _name = 'unidad.medida.modulo'
+    _description = 'Unidad de Medida del Parámetro'
+
+    name = fields.Char(string="Unidad", required=True)
+
+
+
+class ParametrosOperacion (models.Model):
+    _name = 'paremetros.operacion'
+    _descripcion = "Parámetros de operación del compresor"
+
+    paremetro_c = fields.Char( string="Párametros del modulo")
+    paremetro_id = fields.Many2one("parametro.modulo", string="Párametros del modulo")
+    valor_trabajo = fields.Char(string="Valores de trabajo")
+    valor_parada = fields.Char(string="Valores de parada")
+    unidad_medida = fields.Many2one("unidad.medida.modulo", string="Unidad de medida")
+    medida_c = fields.Char(string="Unidad de medida")
+    planequipo_id = fields.Many2one('planequipo.mantenimiento', string="Plan equipo")

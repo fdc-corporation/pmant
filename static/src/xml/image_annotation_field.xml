@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pmant.AnnotatableImageField">
+        <div class="o_pmant_annotatable_image d-inline-flex flex-column align-items-start gap-2">
+            <t t-call="web.ImageField"/>
+            <button t-if="!props.readonly and props.record.data[props.name] and state.isValid"
+                    type="button" class="btn btn-primary btn-sm" t-on-click="openEditor">
+                <i class="fa fa-paint-brush me-1"/> Editar imagen
+            </button>
+        </div>
+    </t>
+
+    <t t-name="pmant.ImageAnnotationDialog">
+        <Dialog title.translate="Editar imagen" size="'xl'" footer="false" contentClass="'o_pmant_image_editor_dialog'">
+            <div class="o_pmant_image_toolbar d-flex flex-wrap align-items-center gap-2 mb-3">
+                <div class="btn-group" role="group" aria-label="Herramientas de dibujo">
+                    <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'pencil' ? 'active' : '')" t-on-click="() => this.setTool('pencil')" title="Lápiz">
+                        <i class="fa fa-pencil"/> <span class="d-none d-md-inline">Lápiz</span>
+                    </button>
+                    <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'arrow' ? 'active' : '')" t-on-click="() => this.setTool('arrow')" title="Flecha">
+                        <i class="fa fa-long-arrow-right"/> <span class="d-none d-md-inline">Flecha</span>
+                    </button>
+                    <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'circle' ? 'active' : '')" t-on-click="() => this.setTool('circle')" title="Círculo">
+                        <i class="fa fa-circle-o"/> <span class="d-none d-md-inline">Círculo</span>
+                    </button>
+                </div>
+                <label class="d-flex align-items-center gap-1 mb-0">Color
+                    <input type="color" class="form-control form-control-color" t-model="state.color" title="Color del trazo"/>
+                </label>
+                <label class="d-flex align-items-center gap-1 mb-0">Grosor
+                    <input type="range" min="1" max="20" step="1" t-model="state.width" title="Grosor del trazo"/>
+                    <span class="text-muted" t-esc="state.width"/>
+                </label>
+                <button type="button" class="btn btn-outline-secondary" t-on-click="undo" t-att-disabled="!state.historyCount">
+                    <i class="fa fa-undo"/> Deshacer
+                </button>
+                <button type="button" class="btn btn-outline-danger" t-on-click="clearAnnotations">
+                    <i class="fa fa-eraser"/> Limpiar trazos
+                </button>
+            </div>
+            <div class="o_pmant_image_canvas_wrap">
+                <div t-if="state.loading" class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"/> Cargando imagen…</div>
+                <div t-elif="state.loadError" class="alert alert-danger mb-0">No se pudo cargar la imagen para editarla.</div>
+                <canvas t-ref="canvas" t-att-class="state.loading or state.loadError ? 'd-none' : ''"
+                        t-on-pointerdown="pointerDown" t-on-pointermove="pointerMove"
+                        t-on-pointerup="pointerUp" t-on-pointercancel="pointerUp"/>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="btn btn-secondary" t-on-click="props.close">Cancelar</button>
+                <button type="button" class="btn btn-primary" t-on-click="save" t-att-disabled="state.loading or state.loadError">
+                    <i class="fa fa-save me-1"/> Aplicar cambios
+                </button>
+            </div>
+        </Dialog>
+    </t>
+</templates>
