@@ -63,16 +63,6 @@
 								</list>
 							</field>
 						</page>
-						<!-- Procesos de mantenimiento -->
-						<page string="Procesos de Mantenimiento" invisible="is_admin or is_informe_file" >
-							<field name="procesos" nolabel="1" >
-								<tree >
-									<field name="estado"/>
-									<field name="proceso"/>
-									<field name="descripcion"/>
-								</tree>
-							</field>
-						</page>
 						<!-- Voltaje -->
 						<page string="Voltaje de Alimentación" invisible="is_admin or is_informe_file" >
 							<field name="voltaje_ids" nolabel="1" >
