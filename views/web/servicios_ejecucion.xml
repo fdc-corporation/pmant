@@ -19,9 +19,10 @@
                         <div><span class="pmant-eyebrow">MANTENIMIENTOS</span><h2>Seguimiento de servicios</h2><p t-if="active_service_count"><t t-esc="active_service_count"/> servicio<t t-if="active_service_count != 1">s</t> actualmente en proceso.</p></div>
                         <div class="pmant-active-tools">
                             <div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
-                            <form action="/my/servicios/ejecucion" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar equipo, orden o etapa" t-att-value="search" aria-label="Buscar servicios"/></form>
+                            <form action="/my/servicios/ejecucion" method="get" class="pmant-search pmant-live-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar equipo, orden o etapa" t-att-value="search" aria-label="Buscar servicios" autocomplete="off"/></form>
                         </div>
                     </div>
+                    <div data-pmant-search-results="" aria-live="polite">
                     <div class="main-equipos pmant-active-service-list" t-if="active_services">
                         <div class="pmant-active-table-head" aria-hidden="true"><span>Equipo</span><span>Orden / plan</span><span>Programación</span><span>Etapa</span><span>Acciones</span></div>
                         <t t-foreach="active_services" t-as="item">
@@ -37,6 +38,7 @@
                     </div>
                     <div class="pmant-empty" t-else=""><span><i class="fa fa-check-circle-o"/></span><h3>No hay servicios en ejecución</h3><p t-if="search">No encontramos resultados para “<t t-esc="search"/>”. Pruebe con otro término.</p><p t-else="">Cuando se programe o inicie un mantenimiento, podrá darle seguimiento desde aquí.</p></div>
                     <t t-if="pager and pager['page_count'] &gt; 1"><t t-call="portal.pager"/></t>
+                    </div>
                 </section>
             </div>
         </t>

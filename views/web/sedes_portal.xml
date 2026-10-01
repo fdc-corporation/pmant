@@ -41,12 +41,14 @@
                     </section>
                     <section class="pmant-grid">
                         <article class="pmant-panel pmant-panel-wide" id="sedes">
-                            <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ORGANIZACIÓN</span><h2>Mis sedes</h2><p>Seleccione una sede para consultar sus áreas y equipos.</p></div><form action="/my/sedes" method="get" class="pmant-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar sede" t-att-value="search" aria-label="Buscar sede"/></form></div>
+                            <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ORGANIZACIÓN</span><h2>Mis sedes</h2><p>Seleccione una sede para consultar sus áreas y equipos.</p></div><form action="/my/sedes" method="get" class="pmant-search pmant-live-search"><i class="fa fa-search"/><input type="search" name="search" placeholder="Buscar sede" t-att-value="search" aria-label="Buscar sede" autocomplete="off"/></form></div>
+                            <div data-pmant-search-results="" aria-live="polite">
                             <div class="pmant-location-grid" t-if="sedes">
                                 <t t-foreach="sedes" t-as="sede"><a class="pmant-location" t-att-href="'/my/sede/%s/%s' % (sede.id, 'areas' if sede.areas else 'equipos')"><span class="pmant-location-icon"><i class="fa fa-building"/></span><span class="pmant-location-copy"><strong t-esc="sede.name"/><small t-esc="sede.street or 'Dirección no registrada'"/><small><i class="fa fa-cogs"/> <t t-esc="len(sede.equipos_ubicacion)"/> equipos</small></span><i class="fa fa-chevron-right pmant-location-arrow"/></a></t>
                             </div>
                             <div class="pmant-empty" t-else=""><span><i class="fa fa-building-o"/></span><h3>No encontramos sedes registradas</h3><p>Contacte con FDC para asociar una sede a su cuenta.</p><a href="/contactus" class="pmant-btn pmant-btn-primary">Solicitar ayuda</a></div>
                             <nav class="pmant-pagination" t-if="total_paginas &gt; 1" aria-label="Paginación"><a t-if="pagina_actual &gt; 1" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual - 1, search)"><i class="fa fa-chevron-left"/> Anterior</a><span>Página <strong t-esc="pagina_actual"/> de <strong t-esc="total_paginas"/></span><a t-if="pagina_actual &lt; total_paginas" t-att-href="'/my/sedes/page/%s?search=%s' % (pagina_actual + 1, search)">Siguiente <i class="fa fa-chevron-right"/></a></nav>
+                            </div>
                         </article>
                         <aside class="pmant-panel pmant-company-card">
                             <div class="pmant-panel-head"><div><span class="pmant-eyebrow">MI EMPRESA</span><h2>Información de cuenta</h2></div></div>

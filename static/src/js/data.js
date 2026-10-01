@@ -89,6 +89,8 @@ $(document).ready(() => {
   const portalMain = document.querySelector(".pmant-page-rail ~ .main");
   if (portalMain) {
     let searchTimer;
+    let searchController;
+    let searchRequestId = 0;
     const applyEquipmentView = (mode) => {
       const tableMode = mode === "table";
       document.querySelectorAll(".pmant-page-rail ~ .main .main-equipos, .pmant-page-rail ~ .main .main_historail_pmant, .pmant-page-rail ~ .main .pmant-quote-list").forEach((container) => {
@@ -145,6 +147,52 @@ $(document).ready(() => {
       }
     };
 
+    const ajaxSearch = async (url, form, pushState = false) => {
+      const currentResults = form.closest(".main-card-equipos, .pmant-panel")
+        ?.querySelector("[data-pmant-search-results]");
+      if (!currentResults) {
+        ajaxNavigate(url, pushState);
+        return;
+      }
+
+      searchController?.abort();
+      searchController = new AbortController();
+      const requestId = ++searchRequestId;
+      currentResults.classList.add("pmant-search-loading");
+      currentResults.setAttribute("aria-busy", "true");
+
+      try {
+        const response = await fetch(url, {
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+          credentials: "same-origin",
+          signal: searchController.signal,
+        });
+        if (!response.ok || response.redirected) throw new Error(`HTTP ${response.status}`);
+
+        const html = await response.text();
+        if (requestId !== searchRequestId) return;
+        const nextDocument = new DOMParser().parseFromString(html, "text/html");
+        const nextResults = nextDocument.querySelector("[data-pmant-search-results]");
+        if (!nextResults) throw new Error("No se encontró el bloque de resultados");
+
+        currentResults.replaceWith(nextResults);
+        if (pushState) window.history.pushState({ pmantSearch: true }, "", url);
+        else window.history.replaceState({ pmantSearch: true }, "", url);
+        applyEquipmentView(window.localStorage.getItem("pmant-equipment-view") || "cards");
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        console.warn("No se pudo actualizar la búsqueda del portal.", error);
+        currentResults.classList.remove("pmant-search-loading");
+        currentResults.removeAttribute("aria-busy");
+      }
+    };
+
+    const searchUrl = (form) => {
+      const url = new URL(form.action || window.location.href, window.location.href);
+      url.search = new URLSearchParams(new FormData(form)).toString();
+      return url.href;
+    };
+
     document.addEventListener("click", (event) => {
       const viewButton = event.target.closest("[data-pmant-view]");
       if (viewButton) {
@@ -166,33 +214,39 @@ $(document).ready(() => {
       const form = event.target;
       if (!(form instanceof HTMLFormElement) || form.method.toLowerCase() !== "get" || !form.closest(".pmant-page-rail ~ .main")) return;
       event.preventDefault();
-      const url = new URL(form.action || window.location.href, window.location.href);
-      url.search = new URLSearchParams(new FormData(form)).toString();
-      ajaxNavigate(url.href);
+      if (form.classList.contains("pmant-live-search")) {
+        ajaxSearch(searchUrl(form), form, true);
+      } else {
+        ajaxNavigate(searchUrl(form));
+      }
     });
 
     document.addEventListener("input", (event) => {
       const input = event.target;
       const form = input.closest?.("form");
-      if (!form || form.method.toLowerCase() !== "get" || !["search", "filtro"].includes(input.name)) return;
+      if (!form || !form.classList.contains("pmant-live-search") || form.method.toLowerCase() !== "get" || !["search", "filtro"].includes(input.name)) return;
       window.clearTimeout(searchTimer);
       searchTimer = window.setTimeout(() => {
-        const url = new URL(form.action || window.location.href, window.location.href);
-        url.search = new URLSearchParams(new FormData(form)).toString();
-        ajaxNavigate(url.href);
+        ajaxSearch(searchUrl(form), form);
       }, 320);
     });
 
-    window.addEventListener("popstate", () => window.location.reload());
-  }
+    document.addEventListener("click", (event) => {
+      const pageLink = event.target.closest("[data-pmant-search-results] .pagination a, [data-pmant-search-results] .pmant-pagination a");
+      if (!pageLink || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const scope = pageLink.closest(".main-card-equipos, .pmant-panel");
+      const form = scope?.querySelector("form.pmant-live-search");
+      if (!form) return;
+      event.preventDefault();
+      const url = new URL(pageLink.href, window.location.href);
+      const params = new URLSearchParams(new FormData(form));
+      for (const [key, value] of params) {
+        if (value) url.searchParams.set(key, value);
+      }
+      ajaxSearch(url.href, form, true);
+    }, true);
 
-  const dashboardSearch = document.querySelector(".pmant-dashboard .pmant-search input");
-  if (dashboardSearch) {
-    let dashboardSearchTimer;
-    dashboardSearch.addEventListener("input", () => {
-      window.clearTimeout(dashboardSearchTimer);
-      dashboardSearchTimer = window.setTimeout(() => dashboardSearch.form.requestSubmit(), 350);
-    });
+    window.addEventListener("popstate", () => window.location.reload());
   }
 
   function syncWhatsAppLinks() {

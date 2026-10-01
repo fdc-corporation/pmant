@@ -102,13 +102,14 @@
 						<h3>
 							Mis Areas
 						</h3>
-						<form style="display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/areas'" method="get" class="form-inline">
+						<form style="display: flex; gap: 5px;" t-att-action="'/my/sede/' + str(ubicacion.id) + '/areas'" method="get" class="form-inline pmant-live-search">
 							<input type="text" name="filtro" class="form-control mr-2" placeholder="Buscar áreas..." t-att-value="filtro or ''" />
 							<button type="submit" class="btn btn-primary">
 								Buscar
 							</button>
 						</form>
 					</div>
+					<div data-pmant-search-results="" aria-live="polite">
 					<!-- Mostrar áreas -->
 					<div class="main-equipos">
 						<t t-if="len(areas) > 0">
@@ -159,6 +160,7 @@
 								</li>
 							</ul>
 						</nav>
+					</div>
 					</div>
 				</div>
 			</div>

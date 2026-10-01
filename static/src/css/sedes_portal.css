@@ -2408,3 +2408,8 @@ body.pmant-portal-page .o_footer_copyright { display: none !important; }
     min-width: 0 !important;
   }
 }
+.pmant-search-loading {
+  opacity: .55;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}

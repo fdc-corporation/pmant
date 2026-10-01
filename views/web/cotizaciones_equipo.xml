@@ -88,13 +88,14 @@
 							Mis cotizaciones de servicio
 						</h3>
 						<div class="pmant-view-switch" role="group" aria-label="Cambiar vista"><button type="button" class="active" data-pmant-view="cards"><i class="fa fa-th-large"/> Tarjetas</button><button type="button" data-pmant-view="table"><i class="fa fa-list"/> Tabla</button></div>
-						<form style="display: flex; gap: 5px;" t-att-action="'/my/equipo/%s/cotizaciones' % equipo.id" method="get" class="form-inline mb-3">
+						<form style="display: flex; gap: 5px;" t-att-action="'/my/equipo/%s/cotizaciones' % equipo.id" method="get" class="form-inline mb-3 pmant-live-search">
 							<input type="text" name="search" class="form-control mr-2" placeholder="Buscar cotizaciones..." t-att-value="search or ''" />
 							<button type="submit" class="btn btn-primary">
 								Buscar
 							</button>
 						</form>
 					</div>
+					<div data-pmant-search-results="" aria-live="polite">
 					<div class="main-sedes pmant-quote-list">
 						<t t-if="len(cotizaciones) > 0">
 							<div class="pmant-quote-table-head" aria-hidden="true">
@@ -146,6 +147,7 @@
 								</li>
 							</ul>
 						</nav>
+					</div>
 					</div>
 				</div>
 			</div>
