@@ -466,7 +466,7 @@ class PortalPmant(Controller):
     )
     def detalle_equipo(self, equipo_id, filtro=None, pagina=1, **kw):
         if not self._equipment_is_allowed(request.env["maintenance.equipment"].sudo().browse(equipo_id)):
-            return request.not_found()
+            return request.redirect(f"/web/login?redirect=/my/equipos/{equipo_id}/detalles")
         user_partner = self._portal_partner()
         equipo = request.env["maintenance.equipment"].sudo().browse(equipo_id)
         domain = request.httprequest.host
