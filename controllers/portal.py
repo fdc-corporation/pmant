@@ -14,6 +14,15 @@ _logger = logging.getLogger(__name__)
 class PortalPmant(Controller):
 
     @staticmethod
+    def _is_internal_user():
+        """Los usuarios backend pueden consultar cualquier registro del portal."""
+        return bool(
+            request.env.user
+            and not request.env.user._is_public()
+            and request.env.user.has_group("base.group_user")
+        )
+
+    @staticmethod
     def _portal_partner():
         """Contacto del usuario en un entorno seguro para renderizar el portal."""
         return request.env.user.sudo().partner_id
@@ -24,6 +33,8 @@ class PortalPmant(Controller):
 
     def _partner_is_allowed(self, partner):
         partner = partner.sudo().exists()
+        if self._is_internal_user():
+            return bool(partner)
         return bool(
             partner
             and partner.commercial_partner_id.id == self._commercial_partner().id
@@ -31,6 +42,8 @@ class PortalPmant(Controller):
 
     def _equipment_is_allowed(self, equipment):
         equipment = equipment.sudo().exists()
+        if self._is_internal_user():
+            return bool(equipment)
         commercial_partner = self._commercial_partner()
         return bool(
             equipment
@@ -42,6 +55,8 @@ class PortalPmant(Controller):
 
     def _task_is_allowed(self, task):
         task = task.sudo().exists()
+        if self._is_internal_user():
+            return bool(task)
         return bool(
             task
             and (
@@ -62,7 +77,9 @@ class PortalPmant(Controller):
         dominio_web = request.httprequest.host
         registros_por_pagina = 15
 
-        if user_partner == commercial_partner:
+        if self._is_internal_user():
+            dominio = [("is_area", "=", False)]
+        elif user_partner == commercial_partner:
             dominio = [("parent_id", "=", commercial_partner.id), ("is_area", "=", False)]
         elif user_partner.is_area and user_partner.id_sede:
             dominio = [("id", "=", user_partner.id_sede.id)]
@@ -82,14 +99,14 @@ class PortalPmant(Controller):
             order="name",
         )
 
-        equipment_domain = [
+        equipment_domain = [] if self._is_internal_user() else [
             "|",
             ("propietario", "child_of", commercial_partner.id),
             ("ubicacion", "child_of", commercial_partner.id),
         ]
         equipment_model = request.env["maintenance.equipment"].sudo()
         equipment_ids = equipment_model.search(equipment_domain).ids
-        task_domain = [
+        task_domain = [] if self._is_internal_user() else [
             "|",
             ("cliente", "=", commercial_partner.id),
             ("ubicacion", "child_of", commercial_partner.id),
@@ -622,6 +639,8 @@ class PortalPmant(Controller):
 
         # Construcción del dominio
         domain = [("order_line.name", "=", name_domain)]
+        if not self._is_internal_user():
+            domain.append(("partner_id", "child_of", self._commercial_partner().id))
         if search_query:
             domain += [("name", "ilike", search_query)]
 
@@ -658,11 +677,12 @@ class PortalPmant(Controller):
     def get_servicio_ejecucion(self, page=1, **kw):
         user = self._portal_partner()
         commercial_partner = self._commercial_partner()
-        equipments = request.env["maintenance.equipment"].sudo().search([
+        equipment_domain = [] if self._is_internal_user() else [
             "|",
             ("propietario", "child_of", commercial_partner.id),
             ("ubicacion", "child_of", commercial_partner.id),
-        ])
+        ]
+        equipments = request.env["maintenance.equipment"].sudo().search(equipment_domain)
         search = (kw.get("search") or "").strip().lower()
         active_services = []
         for equipment in equipments:
@@ -1257,7 +1277,7 @@ class PortalPmant(Controller):
 
         return request.redirect("/gracias")
 
-    @route("/gracias", type="http", auth="public", website=True)
+    @route("/gracias", type="http", auth="user", website=True)
     def page_gracias(self, **kwargs):
 
         return request.render("pmant.page_gracias_form")
