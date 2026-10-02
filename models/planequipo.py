@@ -117,26 +117,36 @@ class PlanEquipo(models.Model):
 
 
 
-    @api.model
-    def create(self, vals):
-        vals.setdefault('cliente', self.env.context.get('default_cliente'))
-        vals.setdefault('ubicacion', self.env.context.get('default_ubicacion'))
-        vals.setdefault('tarea', self.env.context.get('default_tarea'))
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Crea correctamente una o varias líneas desde el one2many de tarea.
 
-        parametro_commands = []
-        if not vals.get('parametro_ids'):
-            for data in self.data_parametros():
-                parametro_commands.append((
-                    0, 0,
-                    {
-                        'paremetro_c': data['paremetro_id'],   # (mantengo tu nombre de campo)
+        En Odoo 19 ``create`` recibe una lista de diccionarios cuando el cliente
+        guarda varias líneas a la vez. Cada línea necesita sus propios comandos
+        de parámetros para evitar compartir estructuras mutables.
+        """
+        default_cliente = self.env.context.get('default_cliente')
+        default_ubicacion = self.env.context.get('default_ubicacion')
+        default_tarea = self.env.context.get('default_tarea')
+
+        for vals in vals_list:
+            if default_cliente:
+                vals.setdefault('cliente', default_cliente)
+            if default_ubicacion:
+                vals.setdefault('ubicacion', default_ubicacion)
+            if default_tarea:
+                vals.setdefault('tarea', default_tarea)
+
+            if not vals.get('parametro_ids'):
+                vals['parametro_ids'] = [
+                    (0, 0, {
+                        'paremetro_c': data['paremetro_id'],
                         'medida_c': data['unidad_medida'],
-                    }
-                ))
-            vals['parametro_ids'] = parametro_commands
+                    })
+                    for data in self.data_parametros()
+                ]
 
-        record = super(PlanEquipo, self).create(vals)
-        return record
+        return super().create(vals_list)
 
     @api.depends('fecha_ejec')
     def _generate_tecnico(self):
