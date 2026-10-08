@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#173d46"/>
+    <title>PMANT · Trabajo sin conexión</title>
+    <link rel="manifest" href="/pmant/static/offline/manifest.webmanifest"/>
+    <link rel="icon" href="/pmant/static/offline/icon.svg" type="image/svg+xml"/>
+    <link rel="stylesheet" href="/pmant/static/offline/app.css"/>
+    <script type="module" src="/pmant/static/offline/app.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand"><div class="brand-orbit"><img src="/pmant/static/src/img/img_empresa.png" alt=""/></div><div><strong>PMANT</strong><span>Órdenes de trabajo offline</span></div></div>
+        <div class="header-center" aria-hidden="true"><i></i><span>SISTEMA DE CAMPO</span><i></i></div>
+        <div class="header-actions"><a class="back-odoo" href="/odoo/maintenance-requests">Volver a PMANT</a><button id="lock" class="header-action" hidden>Bloquear</button></div>
+    </header>
+    <main>
+        <p id="connection" role="status">Comprobando conexión con PMANT…</p>
+        <p id="message" role="status" aria-live="polite"></p>
+        <section id="access"><span class="eyebrow">Función integrada de PMANT</span><h1>Prepare este dispositivo para trabajar en campo</h1><p class="access-intro">No necesita instalar ni vincular otro módulo. Esta pantalla usa directamente su usuario y sus órdenes de PMANT.</p>
+            <ol class="setup-steps"><li><strong>Ingrese a PMANT</strong><span>Use el mismo usuario Técnico o Supervisor de siempre.</span></li><li><strong>Proteja este dispositivo</strong><span>Cree una clave corta solo la primera vez.</span></li><li><strong>Descargue sus órdenes</strong><span>Después podrá trabajar incluso cuando no tenga señal.</span></li></ol>
+            <a id="login-link" class="primary-link" href="/web/login?redirect=/pmant/offline">Ingresar con mi usuario de PMANT</a>
+            <form id="unlock"><label>Usuario de PMANT<select id="profiles" required></select></label><label>Clave de protección de este dispositivo<input id="pin" type="password" minlength="6" required autocomplete="off"/></label>
+                <p id="pin-help">Cree una clave de al menos 6 caracteres. No es su contraseña de PMANT; protege los informes si pierde el dispositivo.</p><button type="submit">Preparar y abrir mis órdenes</button></form>
+        </section>
+        <section id="workspace" hidden>
+            <section class="workspace-head tech-panel">
+                <div><span class="eyebrow">Cuenta activa</span><strong id="user"></strong></div>
+                <div class="toolbar"><button id="download">Descargar órdenes</button><button id="sync">Sincronizar</button><button id="export" class="secondary">Exportar respaldo</button></div>
+            </section>
+            <p id="storage-note">Todo está vinculado con PMANT. Descargue sus órdenes antes de salir; los cambios se guardarán aquí y se enviarán a PMANT cuando vuelva la conexión.</p>
+            <p id="last-save" role="status"></p>
+            <section class="order-browser tech-panel" aria-labelledby="orders-title">
+                <div class="order-heading"><div><span class="eyebrow">Trabajo asignado</span><h1 id="orders-title">Mis órdenes</h1></div><strong id="order-count" aria-live="polite"></strong></div>
+                <label class="search-box" for="order-search"><span aria-hidden="true">⌕</span><input id="order-search" type="search" placeholder="Buscar por orden, sede, equipo o estado" autocomplete="off"/><button id="clear-search" type="button" aria-label="Limpiar búsqueda" hidden>×</button></label>
+            </section>
+            <div id="work-area" class="work-area">
+                <aside class="orders-column" aria-label="Lista de órdenes"><div id="orders"></div></aside>
+                <section id="editor" hidden></section>
+            </div>
+        </section>
+    </main>
+    <dialog id="review"><h2>Revisión de cambios</h2><p>Su borrador se conserva. Compare las versiones antes de decidir.</p><div class="comparison"><section><h3>Dispositivo</h3><pre id="local-version"></pre></section><section><h3>PMANT</h3><pre id="server-version"></pre></section></div><button id="keep-draft">Conservar borrador</button><button id="restore-server">Archivar borrador y usar versión de PMANT</button></dialog>
+    <noscript>Active JavaScript para utilizar el trabajo sin conexión.</noscript>
+</body>
+</html>
+
+

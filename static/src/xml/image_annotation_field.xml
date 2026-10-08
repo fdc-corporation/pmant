@@ -23,6 +23,12 @@
                     <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'circle' ? 'active' : '')" t-on-click="() => this.setTool('circle')" title="Círculo">
                         <i class="fa fa-circle-o"/> <span class="d-none d-md-inline">Círculo</span>
                     </button>
+                    <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'square' ? 'active' : '')" t-on-click="() => this.setTool('square')" title="Cuadrado">
+                        <i class="fa fa-square-o"/> <span class="d-none d-md-inline">Cuadrado</span>
+                    </button>
+                    <button type="button" t-att-class="'btn btn-outline-primary ' + (state.tool === 'rectangle' ? 'active' : '')" t-on-click="() => this.setTool('rectangle')" title="Rectángulo">
+                        <span class="o_pmant_rectangle_icon" aria-hidden="true"/> <span class="d-none d-md-inline">Rectángulo</span>
+                    </button>
                 </div>
                 <label class="d-flex align-items-center gap-1 mb-0">Color
                     <input type="color" class="form-control form-control-color" t-model="state.color" title="Color del trazo"/>

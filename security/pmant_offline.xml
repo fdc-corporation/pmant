@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_pmant_session_company" model="ir.rule">
+        <field name="name">Tramos PMANT por compañía</field>
+        <field name="model_id" ref="model_pmant_work_session"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_pmant_session_technician" model="ir.rule">
+        <field name="name">Técnico: sus tramos de trabajo</field>
+        <field name="model_id" ref="model_pmant_work_session"/>
+        <field name="groups" eval="[(4, ref('group_pmant_tecnico'))]"/>
+        <field name="domain_force">['|', ('technician_id', '=', user.id), ('sheet_id.ot_id.user_id', '=', user.id)]</field>
+    </record>
+    <record id="rule_pmant_session_management" model="ir.rule">
+        <field name="name">Gestión: tramos de trabajo de su compañía</field>
+        <field name="model_id" ref="model_pmant_work_session"/>
+        <field name="groups" eval="[(4, ref('group_pmant_admin')), (4, ref('group_pmant_planner')), (4, ref('group_pmant_supervisor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

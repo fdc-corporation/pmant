@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_offline_technician" model="ir.actions.act_url">
+        <field name="name">Mis órdenes en campo</field>
+        <field name="url">/pmant/offline</field>
+        <field name="target">self</field>
+    </record>
+    <menuitem id="menu_offline_technician" name="Mis órdenes en campo"
+              parent="maintenance.menu_m_request" action="action_offline_technician"
+              groups="pmant.group_pmant_tecnico,pmant.group_pmant_supervisor" sequence="15"/>
+    <record id="work_order_offline_form" model="ir.ui.view">
+        <field name="name">maintenance.request.offline.pmant</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="pmant.ots_add"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_print_report']" position="after">
+                <button name="%(action_offline_technician)d" type="action"
+                        string="Abrir trabajo en campo"
+                        groups="pmant.group_pmant_tecnico,pmant.group_pmant_supervisor"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="task_service_timer_form" model="ir.ui.view">
+        <field name="name">tarea.mantenimiento.service.timer.pmant</field>
+        <field name="model">tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.Tareav_form_view"/>
+        <field name="arch" type="xml">
+            <field name="action_servicio" position="after">
+                <field name="kd_time_state" invisible="1"/>
+                <field name="kd_elapsed_seconds" invisible="1"/>
+                <field name="kd_active_since" invisible="1"/>
+            </field>
+            <button name="init_servicio" position="after">
+                <button string="Pausar servicio" name="action_pause_service" type="object"
+                        invisible="kd_time_state != 'running'"/>
+                <button string="Reanudar servicio" name="action_resume_service" type="object"
+                        class="oe_highlight" invisible="kd_time_state != 'paused'"/>
+                <field name="service_elapsed_hours" widget="pmant_service_timer" nolabel="1" readonly="1"/>
+            </button>
+        </field>
+    </record>
+</odoo>

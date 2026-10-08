@@ -99,6 +99,10 @@ export class ImageAnnotationDialog extends Component {
             this.context.beginPath();
             this.context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
             this.context.stroke();
+        } else if (this.state.tool === "rectangle") {
+            this.drawRectangle(this.startPoint, current);
+        } else if (this.state.tool === "square") {
+            this.drawSquare(this.startPoint, current);
         } else if (this.state.tool === "arrow") {
             this.drawArrow(this.startPoint, current);
         }
@@ -138,6 +142,21 @@ export class ImageAnnotationDialog extends Component {
         );
         this.context.closePath();
         this.context.fill();
+    }
+
+    drawRectangle(start, end) {
+        this.context.beginPath();
+        this.context.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
+    }
+
+    drawSquare(start, end) {
+        const deltaX = end.x - start.x;
+        const deltaY = end.y - start.y;
+        const side = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+        const width = side * (deltaX < 0 ? -1 : 1);
+        const height = side * (deltaY < 0 ? -1 : 1);
+        this.context.beginPath();
+        this.context.strokeRect(start.x, start.y, width, height);
     }
 
     undo() {

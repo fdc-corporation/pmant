@@ -140,3 +140,10 @@ access_amperaje_linea_user,Amperaje Linea User Access,model_amperaje_linea,base.
 access_unidad_medida_modulo_user,Unidad Medida Modulo User Access,model_unidad_medida_modulo,base.group_user,1,1,1,1
 access_parametro_modulo_user,Parametro Modulo User Access,model_parametro_modulo,base.group_user,1,1,1,1
 access_paremetros_operacion_user,Parametros Operacion User Access,model_paremetros_operacion,base.group_user,1,1,1,1
+access_pmant_notification_user,Notificaciones internas PMANT,model_pmant_notification,base.group_user,1,0,0,0
+access_pmant_notification_admin,Administrador: notificaciones PMANT,model_pmant_notification,pmant.group_pmant_admin,1,1,1,1
+access_pmant_session_technician,Tramos Técnico,model_pmant_work_session,pmant.group_pmant_tecnico,1,0,0,0
+access_pmant_session_supervisor,Tramos Supervisor,model_pmant_work_session,pmant.group_pmant_supervisor,1,0,0,0
+access_pmant_session_planner,Tramos Planner,model_pmant_work_session,pmant.group_pmant_planner,1,0,0,0
+access_pmant_session_admin,Tramos Administrador,model_pmant_work_session,pmant.group_pmant_admin,1,0,0,0
+access_pmant_receipt_admin,Recepciones offline Administrador,model_pmant_sync_receipt,pmant.group_pmant_admin,1,0,0,0

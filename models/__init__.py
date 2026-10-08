@@ -18,3 +18,5 @@ from . import hoja_horas
 from . import res_partner
 from . import solicitudes
 from . import certificado
+from . import offline
+from . import notifications

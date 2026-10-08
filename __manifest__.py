@@ -11,7 +11,7 @@ programaciones, documentos, firmas y portal de clientes.""",
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
     "category": "Services/Maintenance",
-    "version": "19.0.2.29.0",
+    "version": "19.0.2.31.0",
     # any module necessary for this one to work correctly
     "depends": [
         "base","hr_attendance","hr_payroll","sale","web","documents","product","crm","portal","mail",
@@ -22,11 +22,13 @@ programaciones, documentos, firmas y portal de clientes.""",
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
+        "security/pmant_offline.xml",
         "views/reportes/hoja_recepcion.xml",
         "views/reportes/report_acta.xml",
         "views/reportes/report_certificado_operatividad.xml",
         "views/ots.xml",
         "views/general.xml",
+        "views/offline.xml",
         "views/herencia.xml",
         "views/configuracion.xml",
         'views/reportes/report_planequipo.xml',
@@ -106,6 +108,9 @@ programaciones, documentos, firmas y portal de clientes.""",
         ],
         "web.assets_backend": [
             "pmant/static/src/xml/form_status_inidicator.xml",
+            "pmant/static/src/js/service_timer.js",
+            "pmant/static/src/xml/service_timer.xml",
+            "pmant/static/src/js/pmant_notifier.js",
             "pmant/static/src/js/image_annotation_field.js",
             "pmant/static/src/xml/image_annotation_field.xml",
             "pmant/static/src/scss/image_annotation_field.scss",

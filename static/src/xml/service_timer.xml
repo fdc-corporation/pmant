@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="pmant.ServiceTimer">
+        <span class="font-monospace fs-5 fw-bold" t-esc="displayValue"/>
+    </t>
+</templates>
+
+

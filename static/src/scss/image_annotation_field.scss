@@ -3,6 +3,16 @@
 }
 
 .o_pmant_image_editor_dialog {
+    .o_pmant_rectangle_icon {
+        display: inline-block;
+        width: 1.15rem;
+        height: 0.7rem;
+        margin-right: 0.2rem;
+        border: 2px solid currentColor;
+        border-radius: 0.1rem;
+        vertical-align: -0.05rem;
+    }
+
     .o_pmant_image_canvas_wrap {
         max-height: 65vh;
         overflow: auto;
