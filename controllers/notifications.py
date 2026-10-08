@@ -12,7 +12,8 @@ class KdPmantNotificationController(Controller):
         notifications = request.env["pmant.notification"].with_user(request.env.ref("base.user_root")).search([
             ("user_id", "=", request.env.user.id),
             ("seen", "=", False),
-        ], order="id asc", limit=50)
+            ("scheduled_at", "<=", fields.Datetime.now()),
+        ], order="scheduled_at asc, id asc", limit=50)
         return [{
             "id": notification.id,
             "title": notification.title,
@@ -31,7 +32,12 @@ class KdPmantNotificationController(Controller):
             ("user_id", "=", request.env.user.id),
             ("seen", "=", False),
         ])
-        notifications.write({"seen": True, "seen_at": fields.Datetime.now()})
+        now = fields.Datetime.now()
+        notifications.write({
+            "seen": True,
+            "seen_at": now,
+            "is_sent": True,
+            "sent_at": now,
+        })
         return True
-
 

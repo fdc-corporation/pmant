@@ -14,6 +14,9 @@ class KdPmantNotification(models.Model):
         string="Tipo", default="info", required=True,
     )
     sticky = fields.Boolean(string="Persistente", default=False)
+    scheduled_at = fields.Datetime(string="Programada para", default=fields.Datetime.now, required=True, index=True)
+    is_sent = fields.Boolean(string="Enviada", default=False, index=True)
+    sent_at = fields.Datetime(string="Fecha de envío", readonly=True)
     user_id = fields.Many2one("res.users", string="Destinatario", required=True, index=True, ondelete="cascade")
     company_id = fields.Many2one("res.company", string="Compañía", required=True, default=lambda self: self.env.company, index=True)
     res_model = fields.Char(string="Modelo relacionado", index=True)

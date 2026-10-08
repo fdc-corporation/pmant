@@ -101,6 +101,5 @@ const pmantNotifierService = {
     },
 };
 
-registry.category("services").add("pmant_notifier", pmantNotifierService);
-
+registry.category("services").add("pmant_core_notifier", pmantNotifierService);
 
