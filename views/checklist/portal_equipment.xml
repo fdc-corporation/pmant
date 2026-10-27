@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="detalles_equipo_inerit" name="Detalles equipo CheckList" inherit_id="pmant.detalle_equipo">
+        <xpath expr="//div[@class='contenedor-enalces-mantenimiento']" position="inside">
+            <a t-att-href="'/my/equipo/' + str(equipo.id) + '/checklist/historial'" class="item-enlace">
+				<span class="pmant-action-icon"><i class="fa fa-check-square-o"/></span>
+				<span>
+					Checklist del equipo
+                </span>
+			</a>
+        </xpath>
+    </template>
+
+</odoo>
+
+

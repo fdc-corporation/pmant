@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_pmant_checklist_group" model="ir.sequence">
+        <field name="name">Grupo de Checklists</field>
+        <field name="code">pmant.checklist.group</field>
+        <field name="prefix">GRP-</field>
+        <field name="padding">4</field>
+    </record>
+    <record id="view_tree_group" model="ir.ui.view">
+        <field name="name">pmant.checklist.group.treew</field>
+        <field name="model">pmant.checklist.group</field>
+        <field name="arch" type="xml">
+            <list string="Grupo de respuestas">
+                <field name="name" />
+                <field name="equipo_id" />
+                <field name="create_date" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_form_checklist_group" model="ir.ui.view">
+        <field name="name">pmant.checklist.group.form</field>
+        <field name="model">pmant.checklist.group</field>
+        <field name="arch" type="xml">
+            <form string="Grupo CheckList">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="respuestas_ids" />
+                        <field name="equipo_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_form_pmant_checklist_respuesta" model="ir.ui.view">
+        <field name="name">pmant.checklist.respuesta.form</field>
+        <field name="model">pmant.checklist.respuesta</field>
+        <field name="arch" type="xml">
+            <form string="Respuesta del Checklist">
+                <sheet>
+                    <group>
+                        <field name="question_id"/>
+                        <field name="respuesta_texto" />
+                        <field name="respuesta_si_no" />
+                        <field name="equipo_id" readonly="1"/>
+                        <field name="group_id" readonly="1"/>
+                        <field name="is_comentario" />
+                        <field name="comentario" invisible="not is_comentario"/>
+                        <field name="usuario_responsable" readonly="1"/>
+                        <field name="fecha_respuesta" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<record id="vierw_tree_respuesras" model="ir.ui.view">
+        <field name="name">pmant.checklist.respuesta.tree</field>
+        <field name="model">pmant.checklist.respuesta</field>
+        <field name="arch" type="xml">
+            <list string="Respuesta del Checklist">
+                <field name="question_id"/>
+                <field name="respuesta_texto" />
+                <field name="respuesta_si_no" />
+                <field name="group_id" />
+                <field name="usuario_responsable" readonly="1"/>
+                <field name="fecha_respuesta" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_form_pmant_checklist" model="ir.ui.view">
+        <field name="name">pmant.checklist.form</field>
+        <field name="model">pmant.checklist</field>
+        <field name="arch" type="xml">
+            <form string="Checklist de Mantenimiento">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="creado_por" readonly="1"/>
+                        <field name="fecha_creacion" readonly="1"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Preguntas del Checklist">
+                            <field name="line_questions">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="tipo_respuesta"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
+
+

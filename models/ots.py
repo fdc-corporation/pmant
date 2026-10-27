@@ -18,6 +18,23 @@ _logger = logging.getLogger(__name__)
 class MaintenanceRequestOTS(models.Model):
     _inherit = "maintenance.request"
 
+    @api.model
+    def pmant_remove_sign_integration(self):
+        """Retira vistas históricas de Odoo Sign al actualizar instalaciones existentes."""
+        xmlids = self.env["ir.model.data"].sudo().search([
+            ("module", "=", "pmant"),
+            ("name", "in", [
+                "sign_template_inherit_form",
+                "sign_send_request_inherit_form",
+                "sign_requestrequest_inherit_form",
+            ]),
+        ])
+        for xmlid in xmlids:
+            if xmlid.model == "ir.ui.view":
+                self.env["ir.ui.view"].sudo().browse(xmlid.res_id).exists().unlink()
+            xmlid.unlink()
+        return True
+
     # --------------------
     # Campos
     # --------------------
@@ -29,6 +46,21 @@ class MaintenanceRequestOTS(models.Model):
     factura_sunat = fields.Char(string="Factura Sunat")
     selec_sunat = fields.Boolean(string="Factura Sunat?")
     oportunidad = fields.Many2one("crm.lead", string="Oportunidad")
+    pmant_commercial_user_ids = fields.Many2many(
+        "res.users", "pmant_work_order_commercial_user_rel", "request_id", "user_id",
+        string="Vendedores de origen", compute="_compute_pmant_commercial_users",
+        store=True, readonly=True,
+    )
+    pmant_followup_seller_id = fields.Many2one(
+        "res.users", string="Vendedor de seguimiento", tracking=True,
+        domain="[('share', '=', False)]",
+    )
+    pmant_spare_review_notified = fields.Boolean(
+        string="Oportunidad de repuestos notificada", copy=False, readonly=True,
+    )
+    pmant_can_create_opportunity = fields.Boolean(
+        string="Puede crear oportunidad", compute="_compute_pmant_can_create_opportunity",
+    )
     partner_id = fields.Many2one("res.partner", related="tarea.cliente", store=True)
     fecha_ejec = fields.Date(string="Fecha Ejecutada")
     subodinados = fields.Many2many("res.users", string="Subordinados")
@@ -44,9 +76,6 @@ class MaintenanceRequestOTS(models.Model):
     rating_p2 = fields.Integer(string="Tiempo de respuesta")
     rating_p3 = fields.Integer(string="Probabilidad de recomendación")
     rating_comment = fields.Text(string="Comentarios del cliente")
-    document_count = fields.Integer(
-        string="Documentos firmados", compute="get_cantidad_documentos"
-    )
     cantidad_inconvenientes = fields.Integer(
         string="Incidencias", compute="_get_cantidad_incidencias"
     )
@@ -61,10 +90,66 @@ class MaintenanceRequestOTS(models.Model):
         store=True,
     )
     fecha_acta = fields.Date(string="Fecha Acta de Conformidad")
-    require_repuestos = fields.Boolean(string="Tiene Repuestos", related="tarea.planequipo.require_repuestos", store=True)
+    require_repuestos = fields.Boolean(
+        string="Tiene Repuestos",
+        compute="_compute_require_repuestos",
+        store=True,
+    )
+    pmant_kanban_reference = fields.Char(string="Referencia OT", compute="_compute_pmant_kanban_reference")
+    pmant_service_type_id = fields.Many2one(
+        "tipotarea.mantenimiento", string="Tipo de servicio",
+        related="tarea.tipo", store=True, readonly=True,
+    )
+    pmant_service_in_progress = fields.Boolean(
+        string="Servicio en ejecución", related="tarea.action_servicio", readonly=True,
+    )
     # --------------------
     # Computes
     # --------------------
+    @api.depends("tarea.planequipo.require_repuestos")
+    def _compute_require_repuestos(self):
+        for record in self:
+            record.require_repuestos = any(
+                record.tarea.planequipo.mapped("require_repuestos")
+            ) if record.tarea else False
+
+    @api.depends("tarea.sale_order", "tarea.sale_order.user_id")
+    def _compute_pmant_commercial_users(self):
+        for record in self:
+            record.pmant_commercial_user_ids = record.tarea.sale_order.mapped("user_id").filtered(
+                lambda user: user.active and not user.share
+            ) if record.tarea else False
+
+    @api.depends("stage_id.pmant_code", "require_repuestos", "oportunidad", "tarea.pmant_spare_line_ids.requested_qty")
+    def _compute_pmant_can_create_opportunity(self):
+        for record in self:
+            record.pmant_can_create_opportunity = bool(
+                record.stage_id.pmant_code in ("review", "billing_hes", "done")
+                and record.require_repuestos
+                and not record.oportunidad
+                and any(line.requested_qty > 0 for line in record.tarea.pmant_spare_line_ids)
+            )
+
+    def _pmant_can_manage_opportunity(self):
+        self.ensure_one()
+        user = self.env.user
+        manager = user.has_group("pmant.group_pmant_planner") or user.has_group("pmant.group_pmant_admin")
+        seller = user.has_group("pmant.group_pmant_vendedor") and user in (
+            self.pmant_commercial_user_ids | self.pmant_followup_seller_id
+        )
+        return manager or seller
+
+    @api.constrains("pmant_followup_seller_id")
+    def _check_pmant_followup_seller(self):
+        for record in self.filtered("pmant_followup_seller_id"):
+            if not record.pmant_followup_seller_id.has_group("pmant.group_pmant_vendedor"):
+                raise ValidationError(_("El vendedor de seguimiento debe pertenecer al grupo Mantenimiento - Vendedor."))
+
+    @api.depends("name")
+    def _compute_pmant_kanban_reference(self):
+        for request in self:
+            request.pmant_kanban_reference = (request.name or _("Sin referencia")).split(" - ", 1)[0]
+
     @api.depends("schedule_date", "schedule_end")
     def _compute_horas_duracion(self):
         for rec in self:
@@ -83,12 +168,6 @@ class MaintenanceRequestOTS(models.Model):
             else:
                 rec.duration = 0.0
 
-    def get_cantidad_documentos(self):
-        for rec in self:
-            rec.document_count = self.env["sign.template"].search_count(
-                [("ot_id", "=", rec.id)]
-            )
-
     @api.depends_context("uid")
     def _compute_is_tecnico(self):
         for rec in self:
@@ -103,18 +182,6 @@ class MaintenanceRequestOTS(models.Model):
     # --------------------
     # Actions / UI
     # --------------------
-    def action_view_documentos(self):
-        self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Documentos de firma",
-            "res_model": "sign.template",
-            "view_mode": "kanban,form",
-            "target": "current",
-            "domain": [("ot_id", "=", self.id)],
-            "context": {"default_ot_id": self.id},
-        }
-
     def action_open_wizard(self):
         self.ensure_one()
         return {
@@ -144,7 +211,7 @@ class MaintenanceRequestOTS(models.Model):
     def action_view_ots(self):
         self.ensure_one()
         return {
-            "name": "Solicitud de Mantenimiento",
+            "name": "Orden de trabajo",
             "type": "ir.actions.act_window",
             "res_id": self.id,
             "view_mode": "form",
@@ -200,7 +267,7 @@ class MaintenanceRequestOTS(models.Model):
         if "stage_id" in vals:
             for rec in self:
                 try:
-                    if rec.stage_id and rec.stage_id.sequence == 3:
+                    if rec.stage_id and rec.stage_id.pmant_code == "review":
                         # Etapa en ejecución
                         planequipo = rec.tarea.planequipo if rec.tarea else None
                         if planequipo and not any(planequipo.mapped("is_informe_file")):
@@ -223,10 +290,6 @@ class MaintenanceRequestOTS(models.Model):
                                 )
                                 if rec.tarea:
                                     rec.tarea._evento_calendario_proximo_servicio()
-
-                    if rec.stage_id and rec.stage_id.sequence == 4:
-                        # Notificar grupos de facturacion
-                        rec.notify_users_facturacion()
 
                 except Exception as e:
                     _logger.exception(
@@ -289,22 +352,8 @@ class MaintenanceRequestOTS(models.Model):
                     rec.message_post(body=_("Error al actualizar programación: %s") % e)
 
     def notify_users_facturacion(self):
-        group_xml_id = "pmant.group_pmant_user_notifi_fac"
-        try:
-            group = self.env.ref(group_xml_id, raise_if_not_found=False)
-        except Exception:
-            group = None
-        if not group:
-            _logger.debug(
-                "Grupo de notificación de facturación no encontrado: %s", group_xml_id
-            )
-            return
-        for user in group.user_ids:
-            for rec in self:
-                rec.message_post(
-                    body=f"{rec.name}: La tarea ha pasado a la etapa {rec.stage_id.name}, lista para facturar.",
-                    partner_ids=[user.partner_id.id] if user.partner_id else [],
-                )
+        """Compatibilidad para integraciones que aún llaman el método anterior."""
+        return self._notify_billing_users()
 
     def send_reporte_final(self):
         """Enviar correos finales (servicio finalizado + calificación) y registrar en chatter."""
@@ -506,46 +555,9 @@ class MaintenanceRequestOTS(models.Model):
             self.message_post(body=f"Error al enviar el correo: {str(e)}")
 
     # --------------------
-    # Reportes / Firma
+    # Reportes / Acta PDF
     # --------------------
-    def set_firma_cliente_mantenimiento(self):
-        self.ensure_one()
-        template_id = self.env["sign.template"]
-        for rec in self:
-            ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-            statement_report_action = self.env.ref("pmant.action_mantenimiento_ot")
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=rec.ids
-            )
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": f"OT {rec.name}",
-                    "type": "binary",
-                    "mimetype": "application/pdf",
-                    "raw": content,
-                    "res_model": "sign.template",
-                    "res_id": None,
-                }
-            )
-            vals_template = {
-                "name": f"OT {rec.name}",
-                "ot_id": rec.id,
-                "equipo_id": rec.tarea.planequipo.mapped("equipo")[:1].id,
-            }
-            vals_template.pop("attachment_count", None)
-            template_id = self.env["sign.template"].create(vals_template)
-            vals_sign_document = {
-                "name": f"OT - {rec.name}",
-                "attachment_id": attachment.id,
-                "template_id": template_id.id,
-            }
-            self.env["sign.document"].create(vals_sign_document)
-            attachment.write({"res_model": "sign.template", "res_id": template_id.id})
-
-        return template_id.go_to_custom_template()
-
-    def open_wizard_firma_empresa_acta(self):
+    def open_wizard_acta_pdf(self):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
@@ -558,45 +570,6 @@ class MaintenanceRequestOTS(models.Model):
             },
         }
 
-    def set_firma_empresa_acta(self):
-        self.ensure_one()
-        template_firma = self.env["sign.template"]
-        for rec in self:
-            ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-            statement_report_action = self.env.ref("pmant.action_reporte_acta")
-            statement_report = statement_report_action.sudo()
-            content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-                statement_report, res_ids=rec.ids
-            )
-            attachment = self.env["ir.attachment"].create(
-                {
-                    "name": f"Acta - {rec.name}",
-                    "type": "binary",
-                    "raw": content,
-                    "mimetype": "application/pdf",
-                    "res_model": "sign.template",
-                    "res_id": None,
-                }
-            )
-            vals_template = {
-                "name": f"Acta - {rec.name}",
-                "ot_id": rec.id,
-                "equipo_id": rec.tarea.planequipo.mapped("equipo")[:1].id,
-            }
-            
-            vals_template.pop("attachment_count", None)
-            template_firma = self.env["sign.template"].create(vals_template)
-            vals_sign_document = {
-                "name": f"Acta - {rec.name}",
-                "attachment_id": attachment.id,
-                "template_id": template_firma.id,
-            }
-            self.env["sign.document"].create(vals_sign_document)
-            attachment.write({
-                "res_model": "sign.template",
-                "res_id": template_firma.id,
-            })
-        return template_firma.go_to_custom_template()
     def print_acta_conformidad(self):
         return self.env.ref("pmant.action_reporte_acta").report_action(self)
     # --------------------
@@ -676,22 +649,47 @@ class MaintenanceRequestOTS(models.Model):
     # CRM / Oportunidad
     # --------------------
     def crm_oportunidad_create(self):
-        for rec in self:
-            equipos = rec.tarea.planequipo.mapped("equipo.id") if rec.tarea else []
-            valores = {
-                "name": rec.name,
-                "user_id": (
-                    rec.employee_id.user_id.id
-                    if rec.employee_id and rec.employee_id.user_id
-                    else False
-                ),
-                "partner_id": rec.empresa.id if rec.empresa else False,
-                "ubicacion": rec.ubicacion.id if rec.ubicacion else False,
-                "orden_trabajo": rec.id,
-                "equipo_tarea": [(6, 0, equipos)],
+        self.ensure_one()
+        if not self._pmant_can_manage_opportunity():
+            raise UserError(_("No tiene autorización para crear una oportunidad desde esta OT."))
+        if not self.stage_id or self.stage_id.pmant_code not in ("review", "billing_hes", "done"):
+            raise UserError(_("La oportunidad solo puede crearse cuando la OT está en Revisión o una etapa posterior."))
+        if not self.require_repuestos or not self.tarea.pmant_spare_line_ids:
+            raise UserError(_("La OT no tiene repuestos declarados para crear una oportunidad."))
+        if self.oportunidad:
+            return {
+                "type": "ir.actions.act_window", "name": _("Oportunidad"),
+                "res_model": "crm.lead", "view_mode": "form", "res_id": self.oportunidad.id,
             }
-            lead = self.env["crm.lead"].create(valores)
-            rec.oportunidad = lead.id
+        seller = self.env.user if self.env.user.has_group("pmant.group_pmant_vendedor") else (
+            self.pmant_followup_seller_id or self.pmant_commercial_user_ids[:1]
+        )
+        lead = self.env["crm.lead"].sudo().create({
+            "name": _("Repuestos de servicio - %s") % self.display_name,
+            "user_id": seller.id if seller else False,
+            "partner_id": self.empresa.id if self.empresa else False,
+            "ubicacion": self.ubicacion.id if self.ubicacion else False,
+            "orden_trabajo": self.id,
+            "equipo_tarea": [(6, 0, self.tarea.planequipo.mapped("equipo").ids)],
+        })
+        for spare in self.tarea.pmant_spare_line_ids.filtered(lambda line: line.requested_qty > 0):
+            self.env["pmant.crm.spare.line"].sudo().create({
+                "lead_id": lead.id,
+                "work_order_id": self.id,
+                "spare_line_id": spare.id,
+                "equipment_id": spare.plan_equipment_id.equipo.id,
+                "product_id": spare.product_id.id,
+                "quantity": spare.requested_qty,
+                "uom_id": spare.uom_id.id,
+                "note": spare.note,
+            })
+        self.sudo().write({"oportunidad": lead.id})
+        self.sudo().message_post(body=_("Se creó la oportunidad comercial %s para el seguimiento de repuestos.") % lead.display_name)
+        return {
+            "type": "ir.actions.act_window", "name": _("Oportunidad"),
+            "res_model": "crm.lead", "view_mode": "form", "res_id": lead.id,
+            "context": {"create": False},
+        }
 
     # --------------------
     # Validaciones por etapa
@@ -701,9 +699,9 @@ class MaintenanceRequestOTS(models.Model):
             rec._validacion_etapas()
             planequipo = rec.tarea.planequipo if rec.tarea else None
             if not (planequipo and any(planequipo.mapped("is_informe_file"))):
-                if rec.stage_id and rec.stage_id.sequence == 3:
+                if rec.stage_id and rec.stage_id.pmant_code == "review":
                     rec._fecha_estado()
-            if rec.stage_id and rec.stage_id.sequence == 3:
+            if rec.stage_id and rec.stage_id.pmant_code == "review":
                 rec.send_reporte_final()
 
     def _fecha_estado(self):
@@ -721,7 +719,7 @@ class MaintenanceRequestOTS(models.Model):
 
     def _validacion_etapas(self):
         for rec in self:
-            if rec.stage_id and rec.stage_id.sequence == 5:
+            if rec.stage_id and rec.stage_id.pmant_code == "done":
                 if not rec.selec_sunat and not rec.factura:
                     raise UserError(_("Debe registrar la factura"))
                 if rec.selec_sunat and not rec.factura_sunat:

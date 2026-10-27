@@ -6,7 +6,7 @@
             <t t-call="pmant.portal_section_nav"/>
             <div class="main pmant-certificates-page">
                 <header class="pmant-page-heading">
-                    <div><span class="pmant-eyebrow">DOCUMENTACIÓN DEL EQUIPO</span><h1>Certificados de operatividad</h1><p>Consulte los certificados electrónicos y registre documentos firmados en PDF.</p></div>
+                    <div><span class="pmant-eyebrow">DOCUMENTACIÓN DEL EQUIPO</span><h1>Certificados de operatividad</h1><p>Consulte y registre certificados en formato PDF.</p></div>
                     <a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="pmant-btn pmant-btn-secondary"><i class="fa fa-arrow-left"/> Volver al equipo</a>
                 </header>
 
@@ -23,22 +23,14 @@
 
                 <section class="pmant-certificate-layout">
                     <article class="pmant-panel pmant-certificate-list-panel">
-                        <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ARCHIVO DOCUMENTAL</span><h2>Certificados registrados</h2><p>Documentos firmados asociados a este equipo.</p></div><span class="pmant-certificate-count"><t t-esc="len(equipo.certificados) + len(certificados_manuales)"/></span></div>
-                        <div class="pmant-certificate-grid" t-if="equipo.certificados or certificados_manuales">
+                        <div class="pmant-panel-head"><div><span class="pmant-eyebrow">ARCHIVO DOCUMENTAL</span><h2>Certificados registrados</h2><p>Documentos PDF asociados a este equipo.</p></div><span class="pmant-certificate-count"><t t-esc="len(certificados_manuales)"/></span></div>
+                        <div class="pmant-certificate-grid" t-if="certificados_manuales">
                             <t t-foreach="certificados_manuales" t-as="certificate">
                                 <article class="pmant-certificate-card manual">
                                     <div class="pmant-certificate-card-head"><span class="pmant-certificate-icon"><i class="fa fa-file-pdf-o"/></span><span class="pmant-certificate-badge"><i class="fa fa-upload"/> PDF firmado</span></div>
                                     <div class="pmant-certificate-copy"><strong t-esc="certificate.name"/><small t-esc="certificate.nombre_archivo"/></div>
                                     <dl><div><dt>Fecha</dt><dd t-esc="certificate.fecha_firma.strftime('%d/%m/%Y') if certificate.fecha_firma else '-'"/></div><div><dt>Registrado por</dt><dd t-esc="certificate.usuario_id.name or '-'"/></div></dl>
                                     <a t-att-href="'/descargas/certificado/manual/%s' % certificate.id" class="pmant-btn pmant-btn-primary"><i class="fa fa-download"/> Descargar PDF</a>
-                                </article>
-                            </t>
-                            <t t-foreach="equipo.certificados" t-as="certificate">
-                                <article class="pmant-certificate-card electronic">
-                                    <div class="pmant-certificate-card-head"><span class="pmant-certificate-icon"><i class="fa fa-certificate"/></span><span class="pmant-certificate-badge"><i class="fa fa-pencil"/> Firma electrónica</span></div>
-                                    <div class="pmant-certificate-copy"><strong t-esc="certificate.reference or certificate.template_id.name or 'Certificado electrónico'"/><small>Documento firmado mediante Odoo Sign</small></div>
-                                    <dl><div><dt>Fecha</dt><dd t-esc="certificate.write_date.strftime('%d/%m/%Y') if certificate.write_date else '-'"/></div><div><dt>Estado</dt><dd>Firmado</dd></div></dl>
-                                    <a t-att-href="'/descargas/certificado/equipo/%s' % certificate.id" class="pmant-btn pmant-btn-primary"><i class="fa fa-download"/> Descargar firmado</a>
                                 </article>
                             </t>
                         </div>

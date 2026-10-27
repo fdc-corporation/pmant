@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- La implementación anterior se conserva en Python para compatibilidad
+         con datos históricos, pero su vista se reemplaza por este flujo. -->
+    <record id="inherit_form_tarea_mantenimiento_stock_move" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="action_spare_products" model="ir.actions.act_window">
+        <field name="name">Catálogo de repuestos</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("is_repuesto", "=", True)]</field>
+        <field name="context">{"default_is_repuesto": True}</field>
+    </record>
+
+    <record id="action_spare_movements" model="ir.actions.act_window">
+        <field name="name">Movimientos de repuestos</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("is_pmant_spare", "=", True)]</field>
+        <field name="context">{"create": False}</field>
+    </record>
+
+    <record id="task_spare_form" model="ir.ui.view">
+        <field name="name">tarea.pmant.spare.form</field>
+        <field name="model">tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.Tareav_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='create_ot']" position="after">
+                <button name="action_pmant_request_spares" string="Solicitar repuestos" type="object"
+                        groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor,pmant.group_pmant_admin"
+                        invisible="not pmant_can_request_spares"/>
+                <button name="action_pmant_confirm_spares" string="Confirmar repuestos" type="object"
+                        class="oe_highlight"
+                        groups="pmant.group_pmant_planner,pmant.group_pmant_supervisor,pmant.group_pmant_admin"
+                        invisible="pmant_spares_pending_count == 0"/>
+                <button name="action_pmant_consume_spares" string="Confirmar consumo" type="object"
+                        class="oe_highlight"
+                        groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor,pmant.group_pmant_admin"
+                        invisible="not pmant_pending_consumption"/>
+                <button name="action_pmant_return_spares" string="Devolver excedentes" type="object"
+                        groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor,pmant.group_pmant_admin"
+                        invisible="not pmant_pending_return or pmant_pending_consumption"/>
+                <field name="pmant_can_request_spares" invisible="1"/>
+                <field name="pmant_spares_pending_count" invisible="1"/>
+                <field name="pmant_pending_consumption" invisible="1"/>
+                <field name="pmant_pending_return" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_pmant_view_spare_movements" type="object" class="oe_stat_button" icon="fa-cubes"
+                        invisible="pmant_spare_picking_count == 0">
+                    <field name="pmant_spare_picking_count" widget="statinfo" string="Repuestos"/>
+                </button>
+                <button name="action_pmant_view_consume_movements" type="object" class="oe_stat_button" icon="fa-trash"
+                        invisible="pmant_consume_picking_count == 0">
+                    <field name="pmant_consume_picking_count" widget="statinfo" string="Consumos"/>
+                </button>
+                <button name="action_pmant_view_return_movements" type="object" class="oe_stat_button" icon="fa-undo"
+                        invisible="pmant_return_picking_count == 0">
+                    <field name="pmant_return_picking_count" widget="statinfo" string="Devoluciones"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="work_order_spare_form" model="ir.ui.view">
+        <field name="name">maintenance.request.pmant.spare.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="pmant.ots_add"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='reset_equipment_request']" position="after">
+                <field name="pmant_spares_pending_count" invisible="1"/>
+                <button name="action_pmant_confirm_spares" type="object" string="Confirmar repuestos"
+                        class="oe_highlight"
+                        groups="pmant.group_pmant_planner,pmant.group_pmant_supervisor,pmant.group_pmant_admin"
+                        invisible="pmant_spares_pending_count == 0"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="plan_equipment_spare_form" model="ir.ui.view">
+        <field name="name">planequipo.pmant.spare.form</field>
+        <field name="model">planequipo.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.PlanEquipov_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Repuestos" name="pmant_spares">
+                    <field name="pmant_spares_requested" invisible="1"/>
+                    <field name="pmant_spares_pending" invisible="1"/>
+                    <div class="alert alert-info" role="status" invisible="not pmant_spares_pending">Solicitud enviada y pendiente de confirmación.</div>
+                    <div class="alert alert-success" role="status" invisible="not pmant_spares_requested">Solicitud confirmada. Inventario debe validar la entrega antes de registrar el consumo.</div>
+                    <field name="pmant_spare_line_ids" nolabel="1"
+                           groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor"
+                           invisible="pmant_spares_requested or pmant_spares_pending">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="requested_qty"/>
+                            <field name="uom_id" readonly="1"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                    <field name="pmant_spare_line_ids" nolabel="1"
+                           groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor"
+                           invisible="not (pmant_spares_requested or pmant_spares_pending)">
+                        <list editable="bottom" create="false" delete="false">
+                            <field name="product_id" readonly="1"/>
+                            <field name="requested_qty" readonly="1"/>
+                            <field name="delivered_qty" readonly="1"/>
+                            <field name="consumed_qty"/>
+                            <field name="returned_qty" readonly="1"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                    <field name="pmant_spare_line_ids" nolabel="1"
+                           groups="pmant.group_pmant_planner,pmant.group_pmant_supervisor,pmant.group_pmant_admin">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="requested_qty"/>
+                            <field name="delivered_qty" readonly="1"/>
+                            <field name="consumed_qty"/>
+                            <field name="returned_qty" readonly="1"/>
+                            <field name="scrapped_qty" readonly="1"/>
+                            <field name="uom_id" readonly="1"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="picking_spare_form" model="ir.ui.view">
+        <field name="name">stock.picking.pmant.spare.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="is_pmant_spare" invisible="1"/>
+                <field name="pmant_movement_type" invisible="not is_pmant_spare" readonly="1"/>
+                <field name="pmant_task_id" invisible="not is_pmant_spare" readonly="1"/>
+                <field name="pmant_plan_id" invisible="not is_pmant_spare" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pmant_spare_plan_wizard_view" model="ir.ui.view">
+        <field name="name">pmant.spare.plan.wizard.form</field>
+        <field name="model">pmant.spare.plan.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Solicitar repuestos por equipo">
+                <group>
+                    <field name="task_id" invisible="1"/>
+                    <field name="plan_equipment_id"/>
+                </group>
+                <footer>
+                    <button string="Solicitar" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_spares" name="Repuestos" parent="maintenance.menu_maintenance_title" sequence="65"
+              groups="pmant.group_pmant_tecnico,pmant.group_pmant_proveedor,pmant.group_pmant_planner,pmant.group_pmant_supervisor,pmant.group_pmant_admin"/>
+    <menuitem id="menu_spare_products" name="Catálogo" parent="menu_spares" action="action_spare_products" sequence="10"/>
+    <menuitem id="menu_spare_movements" name="Movimientos" parent="menu_spares" action="action_spare_movements" sequence="20"
+              groups="pmant.group_pmant_planner,pmant.group_pmant_supervisor,pmant.group_pmant_admin"/>
+</odoo>

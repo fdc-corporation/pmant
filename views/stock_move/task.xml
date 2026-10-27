@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+
+    <record id="inherit_form_tarea_mantenimiento_stock_move" model="ir.ui.view">
+        <field name="name">tarea.mantenimiento.view.form.inherit</field>
+        <field name="model">tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.Tareav_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='create_ot']" position="after">
+                <!-- <field name="grupo_id" invisible="1"/> -->
+                <field name="is_confirm_repuestos" invisible="1"></field>
+                <field name="is_solicitado"  invisible="1"/>
+                <field name="is_tecnico"  invisible="1"/>
+                <field name="vissible_devolucion"  invisible="1"/>
+                <field name="vissible_desecho"  invisible="1"/>
+                <field name="confirm_devolucion"  invisible="1"/>
+                <field name="confirm_desecho"  invisible="1"/>
+                <button string="Solicitar repuestos" groups="pmant.group_pmant_planner,pmant.group_pmant_admin,pmant.group_pmant_tecnico" invisible="is_solicitado"  name="action_solicitar_repuestos" type="object"/>
+                <button string="Confirmar repuestos" invisible="is_confirm_repuestos" groups="pmant.group_pmant_planner,pmant.group_pmant_admin" name="action_create_mov" type="object"/>
+                <button string="Confirmar consumo de repuestos" invisible="not confirm_desecho" groups="pmant.group_pmant_planner,pmant.group_pmant_admin" name="action_consumir_repuestos" type="object"/>
+                <button string="Devolver repuestos" invisible="not confirm_devolucion" groups="pmant.group_pmant_planner,pmant.group_pmant_admin" name="action_devolucion_repuesto" type="object"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button invisible="not vissible_devolucion" name="action_view_devoluciones" type="object" class="oe_stat_button" icon="fa-rotate-right">
+                    <field name="len_mov_devoluciones" string="Devolucion de repuestos" widget="statinfo"/>
+                </button>
+                <button invisible="not vissible_desecho" name="action_view_desecho_repuestos" type="object" class="oe_stat_button" icon="fa-trash">
+                    <field name="len_mov_desechos" string="Desechos" widget="statinfo"/>
+                </button>
+                <button invisible="not is_confirm_repuestos" name="action_view_repuestos" type="object" class="oe_stat_button" icon="fa-truck">
+                    <field name="len_req_repuestos" string="Repuestos" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='detalle_venta']" position="after">
+                <page name="req_repuestos" string="Requerimientos de repuestos">
+                    <field name="requerimientos_ids" readonly="is_solicitado and is_tecnico" >
+                        <list editable="bottom">
+                            <field name="product_id" width="20%"/>
+                            <field name="nota" width="30%"/>
+                            <field name="cantidad" width="20%"/>
+                            <field name="cant_consumido" column_invisible="not parent.is_confirm_repuestos" invisible="not parent.is_confirm_repuestos" width="20%"/>
+                            <button name="action_wizard_repuesto_consumido" width="10%" string="Consumir" type="object" column_invisible="not parent.is_confirm_repuestos" invisible="not parent.is_confirm_repuestos" />
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="maintenance.request" name="pmant_remove_sign_integration"/>
+</odoo>

@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="orden_trabajo" readonly="1" string="Orden de Trabajo"/>
-                
+
             </xpath>
             <xpath expr="//field[@name='orden_trabajo']" position="after">
                 <field name="equipo_tarea" widget="many2many_tags" string="Equipo Tarea"/>
@@ -17,6 +17,20 @@
             </xpath>
             <xpath expr="//header" position="inside">
                 <button string="Nueva Cotizacion" invisible="not orden_trabajo" name="btn_cotizacion" type="object" class="oe_highlight"  ></button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Repuestos de servicio" name="pmant_service_spares" invisible="not pmant_service_spare_line_ids">
+                    <field name="pmant_service_spare_line_ids" readonly="1" nolabel="1">
+                        <list create="false" delete="false" edit="false">
+                            <field name="equipment_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"/>
+                            <field name="note"/>
+                            <field name="work_order_id"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
             <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
                 <attribute name="invisible">type == "lead" or ( probability == 0 and not active ) or orden_trabajo</attribute>

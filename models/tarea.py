@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date, timedelta, time
+import unicodedata
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 import logging
@@ -27,11 +28,101 @@ class EtapaTarea(models.Model):
     color_error = fields.Integer(string="Color error")
     color_warning = fields.Integer(string="Color warning")
 
+    @api.model
+    def pmant_setup_default_task_stages(self):
+        """Crea o normaliza las etapas operativas sin duplicar registros."""
+        stage_definitions = (
+            ("Nuevo", 10),
+            ("En coordinación con cliente", 20),
+            ("SSOMA", 30),
+            ("Coordinación con tercero", 40),
+            ("Importación", 50),
+            ("Programación de servicio con cliente", 60),
+            ("Finalizado", 70),
+        )
+        for name, sequence in stage_definitions:
+            stage = self.search([("name", "=ilike", name)], limit=1)
+            if stage:
+                if stage.name != name or stage.sequence != sequence:
+                    stage.write({"name": name, "sequence": sequence})
+            else:
+                self.create({"name": name, "sequence": sequence})
+        legacy_programmed = self.search([("name", "=ilike", "Programado")])
+        for stage in legacy_programmed:
+            if not self.env['tarea.mantenimiento'].search_count(
+                [('stage_id', '=', stage.id)]
+            ):
+                stage.unlink()
+        return True
+
 
 class TipoTarea(models.Model):
     _name = 'tipotarea.mantenimiento'
+    _description = 'Tipo de servicio de mantenimiento'
+
     name = fields.Char(required=True, string='Nombre')
-    is_inspeccion = fields.Boolean(string="Es Inspección", default=False, help="Indica si este tipo de tarea es una inspección.")
+    service_kind = fields.Selection([
+        ('inspection', 'Inspección'),
+        ('preventive', 'Mantenimiento preventivo'),
+        ('corrective', 'Mantenimiento correctivo'),
+        ('evaluation', 'Evaluación'),
+        ('other', 'Otro'),
+    ], string='Clasificación', default='other', required=True)
+    is_inspeccion = fields.Boolean(
+        string="Es Inspección",
+        default=False,
+        help="Se activa automáticamente cuando la clasificación es Inspección.",
+    )
+
+    @api.onchange('service_kind')
+    def _onchange_service_kind(self):
+        for record in self:
+            record.is_inspeccion = record.service_kind == 'inspection'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for values in vals_list:
+            if 'service_kind' in values:
+                values['is_inspeccion'] = values['service_kind'] == 'inspection'
+        return super().create(vals_list)
+
+    def write(self, values):
+        if 'service_kind' in values:
+            values['is_inspeccion'] = values['service_kind'] == 'inspection'
+        return super().write(values)
+
+    @api.model
+    def pmant_setup_service_kinds(self):
+        """Clasifica registros existentes y garantiza los tipos operativos base."""
+        definitions = (
+            ('Inspección', 'inspection'),
+            ('Mantenimiento preventivo', 'preventive'),
+            ('Mantenimiento correctivo', 'corrective'),
+            ('Evaluación', 'evaluation'),
+        )
+        keywords = {
+            'inspection': ('inspeccion',),
+            'preventive': ('preventiv',),
+            'corrective': ('correctiv',),
+            'evaluation': ('evaluacion',),
+        }
+        for task_type in self.search([]):
+            normalized_name = unicodedata.normalize('NFKD', task_type.name or '')
+            normalized_name = ''.join(
+                character for character in normalized_name
+                if not unicodedata.combining(character)
+            ).lower()
+            detected_kind = 'inspection' if task_type.is_inspeccion else next((
+                kind for kind, terms in keywords.items()
+                if any(term in normalized_name for term in terms)
+            ), False)
+            if detected_kind and task_type.service_kind != detected_kind:
+                task_type.write({'service_kind': detected_kind})
+
+        for name, kind in definitions:
+            if not self.search([('service_kind', '=', kind)], limit=1):
+                self.create({'name': name, 'service_kind': kind})
+        return True
 
 class Tarea(models.Model):
     _name = 'tarea.mantenimiento'
@@ -54,7 +145,7 @@ class Tarea(models.Model):
     procesos = fields.One2many('planequipoproceso.mantenimiento', 'tarea', string="Estado de Procesos")
     stage_id = fields.Many2one('etapa.tarea.mantenimiento', string="Etapa", store=True, tracking=True,
                                ondelete='set null', group_expand='_read_group_stage_ids',
-                               default=lambda self: self.env["etapa.tarea.mantenimiento"].search([], limit=1).id)
+                               default=lambda self: self._default_task_stage())
     kanban_state = fields.Selection([
         ('inportante', 'Importante'),
         ('realizado', 'Realizado'),
@@ -106,6 +197,14 @@ class Tarea(models.Model):
     # ----------------------------
     # Computed / Constraints
     # ----------------------------
+    @api.model
+    def _default_task_stage(self):
+        return self.env['etapa.tarea.mantenimiento'].search(
+            [('name', '=ilike', 'Nuevo')], order='sequence, id', limit=1
+        ).id or self.env['etapa.tarea.mantenimiento'].search(
+            [], order='sequence, id', limit=1
+        ).id
+
     def search_sale_order(self):
         for res in self:
             sales = self.env["sale.order"].search([("ots", "in", res.id)])
@@ -386,45 +485,8 @@ class Tarea(models.Model):
                     _logger.exception("❌ Error creando/actualizando evento calendario para tarea %s: %s", rec.id, e)
                     rec.message_post(body=_("⚠️ Error al crear evento de calendario: %s") % e)
 
-    # ----------------------------
-    # Email / Reporte / Firma
-    # ----------------------------
-    def action_send_email_recepcion(self):
-        template = self.env.ref('pmant.email_template_hoja_recepcion', raise_if_not_found=False)
-        statement_report_action = self.env.ref('pmant.action_reporte_recepcion', raise_if_not_found=False)
-        ir_actions_report = self.env['ir.actions.report'].sudo()
-
-        if not template or not statement_report_action:
-            raise UserError(_("No se encuentra la plantilla o el reporte configurado."))
-
-        # Abrir composer con contexto para el usuario (mantener comportamiento actual)
-        for record in self:
-            try:
-                content, _ = ir_actions_report._render_qweb_pdf(statement_report_action, [record.id])
-            except Exception as e:
-                _logger.exception("Error generando PDF para hoja de recepción %s: %s", record.id, e)
-                raise UserError(_("No se pudo generar el PDF: %s") % e)
-
-            ctx = {
-                'default_model': 'tarea.mantenimiento',
-                'default_res_ids': [record.id],
-                'default_use_template': True,
-                'default_template_id': template.id,
-                'default_composition_mode': 'comment',
-                'force_email': True,
-            }
-
-            return {
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'mail.compose.message',
-                'views': [(False, 'form')],
-                'view_id': False,
-                'target': 'new',
-                'context': ctx,
-            }
-
     def create_ot(self):
+        self.ensure_one()
         for record in self:
             if not record.tipo:
                 raise ValidationError(_("El campo 'Tipo de Servicio' es obligatorio para programar la tarea."))
@@ -433,15 +495,27 @@ class Tarea(models.Model):
                     if not plan.plan:
                         raise ValidationError(_("El campo 'Plan de Tarea' es obligatorio para programar la tarea."))
 
-        self.stage_id = self.env['etapa.tarea.mantenimiento'].search([], order='sequence asc', limit=1).id
+        final_stage = self.env['etapa.tarea.mantenimiento'].search(
+            [('name', '=ilike', 'Finalizado')], order='sequence, id', limit=1
+        )
+        if not final_stage:
+            self.env['etapa.tarea.mantenimiento'].pmant_setup_default_task_stages()
+            final_stage = self.env['etapa.tarea.mantenimiento'].search(
+                [('name', '=ilike', 'Finalizado')], order='sequence, id', limit=1
+            )
+        if not final_stage:
+            raise UserError(_("No se pudo encontrar o crear la etapa 'Finalizado'."))
+        self.stage_id = final_stage.id
         return {
             "type": "ir.actions.act_window",
-            "name": "Crear Solicitud de Mantenimiento",
+            "name": "Crear Orden de trabajo",
             "res_model": "maintenance.request",
             "view_mode": "form",
             "target": "current",
             "context": {
-                "default_name": self.name,
+                # No mostrar el nombre TAR de la tarea como nombre provisional
+                # de la OT. La secuencia OT se asigna exclusivamente al guardar.
+                "default_name": _("Nuevo"),
                 "default_tarea": self.id,
                 "default_empresa": self.cliente.id if self.cliente else False,
                 "default_ubicacion": self.ubicacion.id if self.ubicacion else False,
@@ -458,8 +532,8 @@ class Tarea(models.Model):
                 hoja = self.env["programacion.mantenimiento"].search([("ot_id", "=", record.ots[0].id), ("fecha_inicio", "=", False)], limit=1)
                 if hoja:
                     hoja.fecha_inicio = datetime.now()
-                # Cambiar etapa OT (buscar stage por sequence)
-                stage = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1)
+                # Cambiar la OT a la etapa operativa estable "En progreso".
+                stage = self.env["maintenance.stage"].search([("pmant_code", "=", "in_progress")], limit=1)
                 if stage and record.ots:
                     record.ots[0].stage_id = stage.id
 

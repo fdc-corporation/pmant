@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_mantenimiento_categorias" model="ir.ui.view">
+        <field name="name">maintenance.equipment.category.view.form.inherit</field>
+        <field name="model">maintenance.equipment.category</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_category_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='technician_user_id']" position="after">
+                <field name="product_id"></field>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

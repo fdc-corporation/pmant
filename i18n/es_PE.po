@@ -1,0 +1,52 @@
+# Translation of PMANT menu structure.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: es_PE\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_m_dashboard
+msgid "Tablero"
+msgstr "Tablero"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_m_request
+msgid "Mantenimiento"
+msgstr "Mantenimiento"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_m_request_form
+msgid "Órdenes de trabajo"
+msgstr "Órdenes de trabajo"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_equipment_form
+msgid "Equipos"
+msgstr "Equipos"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_m_reports
+msgid "Reportes"
+msgstr "Reportes"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_configuration
+msgid "Configuración"
+msgstr "Configuración"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_teams
+msgid "Áreas de trabajo"
+msgstr "Áreas de trabajo"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_cat
+msgid "Categorías de equipos"
+msgstr "Categorías de equipos"
+
+#. module: pmant
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_stage_configuration
+msgid "Etapas de órdenes de trabajo"
+msgstr "Etapas de órdenes de trabajo"

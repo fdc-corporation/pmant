@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_from_mant_inherit" model="ir.ui.view">
+        <field name="name">tarea.mantenimiento.inherit</field>
+        <field name="model">tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.Tareav_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ubicacion']" position="after">
+                <field name="fecha_planeada" />
+                <field name="recordatorios_ids" widget="many2many_tags" options="{'no_create': True}" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

@@ -4,7 +4,6 @@ from . import  herencia
 from . import plan
 from . import planequipo
 from .  import proceso
-from . import plantilla
 from . import tarea
 from . import ots
 from . import adjuntos
@@ -20,3 +19,17 @@ from . import solicitudes
 from . import certificado
 from . import offline
 from . import notifications
+from . import checklist
+from . import checklist_equipment
+from . import alert_maintenance
+from . import alert_crm
+from . import stock_task
+from . import stock_locations
+from . import stock_requirements
+from . import stock_sale
+from . import stock_work_order
+from . import reception
+from . import standard_names
+from . import provider_access
+from . import spare_parts
+from . import work_order_conformity

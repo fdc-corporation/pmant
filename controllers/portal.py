@@ -986,33 +986,6 @@ class PortalPmant(Controller):
             ("Content-Disposition", f'attachment; filename="{filename}"'),
         ])
 
-    # RUTA PARA LOS ADJUNTOS DEL EQUIPO
-    @route(
-        ["/descargas/certificado/equipo/<int:id_adjunto>"],
-        type="http",
-        methods=["GET"],
-        auth="user",
-        website=True,
-    )
-    def descarga_certificado_equipo(self, id_adjunto):
-        sign_request = request.env["sign.request"].sudo().browse(id_adjunto)
-        if not sign_request.exists() or not self._equipment_is_allowed(sign_request.equipo_id):
-            return request.not_found()
-        attachment = request.env["ir.attachment"].sudo().search([("name", "ilike", "Certificado"),("res_model", "=", "sign.request"),("res_id", "=", id_adjunto)], limit=1)
-        if not attachment or not attachment.datas:
-            return request.not_found()
-        file_content_decoded = base64.b64decode(attachment.datas)
-
-        # Generar encabezado manualmente
-        filename = urllib.parse.quote(attachment.name or "archivo.bin")
-        headers = [
-            ("Content-Type", attachment.mimetype),
-            ("Content-Disposition", f'attachment; filename="{filename}"'),
-        ]
-        return request.make_response(file_content_decoded, headers=headers)
-
-
-
     @route('/solicitud/mantenimiento/servicio', type='http', auth='user', methods=['POST'], csrf=True)
     def recibir_solicitud_servicio(self, **post):
         is_ajax = request.httprequest.headers.get("X-Requested-With") == "XMLHttpRequest"

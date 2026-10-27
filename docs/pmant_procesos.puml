@@ -1,0 +1,128 @@
+@startuml PMANT_Casos_de_Uso
+left to right direction
+actor Cliente
+actor Vendedor
+actor Planner
+actor Administrador
+actor Supervisor
+actor Tecnico
+actor Proveedor
+actor Inventario
+actor "Facturacion / HES" as Facturacion
+rectangle PMANT {
+ usecase "Consultar equipos e historial" as UC1
+ usecase "Crear solicitud de servicio" as UC2
+ usecase "Crear y completar tarea" as UC3
+ usecase "Recibir equipo e ingresarlo a stock" as UC4
+ usecase "Crear y programar OT" as UC5
+ usecase "Ejecutar y documentar servicio" as UC6
+ usecase "Gestionar repuestos" as UC7
+ usecase "Cargar conformidad y fotos" as UC8
+ usecase "Revisar y finalizar OT" as UC9
+ usecase "Calificar servicio" as UC10
+ usecase "Procesar facturacion / HES" as UC11
+}
+Cliente --> UC1
+Cliente --> UC2
+Cliente --> UC8
+Cliente --> UC10
+Vendedor --> UC3
+Planner --> UC3
+Planner --> UC4
+Planner --> UC5
+Planner --> UC7
+Planner --> UC9
+Administrador --> UC3
+Administrador --> UC4
+Administrador --> UC5
+Administrador --> UC7
+Administrador --> UC9
+Supervisor --> UC5
+Supervisor --> UC7
+Tecnico --> UC6
+Tecnico --> UC7
+Proveedor --> UC6
+Proveedor --> UC7
+Inventario --> UC4
+Inventario --> UC7
+Facturacion --> UC11
+UC2 ..> UC3
+UC3 ..> UC5 : tipo + plan por equipo
+UC5 ..> UC6
+UC6 ..> UC8
+UC8 ..> UC9
+UC9 ..> UC11
+@enduml
+
+@startuml PMANT_Proceso_Principal
+|Cliente / Vendedor|
+start
+:Solicitud, venta o requerimiento interno;
+|Planner / Administrador|
+:Crear/revisar tarea;
+:Completar cliente, sede, tipo, equipos y planes;
+:Crear OT y programar;
+|Sistema|
+:Finalizar tarea;
+:Crear calendario y enviar correo inicial;
+|Tecnico / Proveedor|
+:Iniciar y documentar servicio;
+if (Repuestos?) then (Si)
+ :Solicitar repuestos;
+ |Planner / Supervisor / Administrador|
+ :Confirmar solicitud;
+ |Inventario|
+ :Validar entrega;
+ |Tecnico / Proveedor|
+ :Registrar consumo y sobrante;
+endif
+:Finalizar ejecucion;
+|Sistema|
+:OT a Revision;
+:Enviar correo final y calificacion;
+|Cliente|
+:Nombre de conformidad + al menos una foto;
+|Sistema|
+:Generar PDF y avisar al Planner;
+|Planner / Administrador|
+:Revisar y finalizar o derivar a HES;
+|Sistema|
+:Notificar Facturacion;
+stop
+@enduml
+
+@startuml PMANT_Estados_OT
+[*] --> Nueva_solicitud
+Nueva_solicitud --> En_progreso : Iniciar
+En_progreso --> En_progreso : Pausar / reanudar / inconveniente
+En_progreso --> Revision : Finalizar ejecucion
+Revision --> Por_facturar_HES
+Revision --> Finalizado : Acta PDF obligatoria
+Por_facturar_HES --> Finalizado : Acta PDF obligatoria
+Nueva_solicitud --> Sin_referencia
+En_progreso --> Sin_referencia
+Finalizado --> [*]
+@enduml
+
+@startuml PMANT_Comunicaciones
+actor Cliente
+participant PMANT
+participant Correo
+participant "Notificacion interna" as Aviso
+participant Planner
+participant Tecnico
+participant Facturacion
+PMANT -> Correo : Programacion / reprogramacion
+Correo -> Cliente : OT, fecha, sede, responsable y enlaces
+PMANT -> Aviso : Asignacion / cambio de estado
+Aviso -> Tecnico : Popup
+PMANT -> Aviso : Solicitud / entrega / consumo de repuestos
+Aviso -> Planner : Seguimiento
+PMANT -> Correo : OT en Revision
+Correo -> Cliente : Reporte final + calificacion
+Cliente -> PMANT : Nombre + fotos de conformidad
+PMANT -> Aviso : Acta lista + actividad
+Aviso -> Planner : Revisar acta
+PMANT -> Aviso : Por facturar - HES
+Aviso -> Facturacion : Procesar
+@enduml

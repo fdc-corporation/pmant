@@ -1,0 +1,104 @@
+.o_notification_manager .o_notification.pmant-notification {
+    width: calc(100vw - 24px);
+    max-width: 430px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 14px !important;
+    background: var(--o-view-background-color, #fff);
+    box-shadow: 0 12px 32px rgba(16, 24, 40, 0.2) !important;
+
+    .o_notification_bar {
+        width: 7px;
+        flex: 0 0 7px;
+        border-radius: 14px 0 0 14px !important;
+    }
+
+    > div {
+        min-height: 94px;
+        padding: 16px 45px 14px 20px !important;
+        border: 1px solid rgba(148, 163, 184, 0.28) !important;
+        border-left: 0 !important;
+        border-radius: 0 14px 14px 0 !important;
+    }
+
+    .o_notification_body {
+        align-items: stretch !important;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .o_notification_content {
+        color: var(--o-main-text-color, #1f2937);
+        font-size: 14px;
+        line-height: 1.5;
+
+        &::before {
+            display: inline-flex;
+            width: 30px;
+            height: 30px;
+            margin: 0 9px 6px 0;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            background: rgba(2, 132, 199, 0.12);
+            color: #0284c7;
+            font-family: FontAwesome;
+            font-size: 15px;
+            content: "\f0f3";
+            vertical-align: middle;
+        }
+    }
+
+    .o_notification_buttons {
+        width: 100% !important;
+        display: flex;
+        justify-content: flex-end !important;
+
+        .btn {
+            padding: 4px 9px;
+            border: 1px solid rgba(2, 132, 199, 0.24);
+            border-radius: 7px;
+            background: rgba(2, 132, 199, 0.1);
+            color: #0369a1;
+            font-size: 12px;
+            line-height: 1.35;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: rgba(2, 132, 199, 0.18);
+        }
+    }
+
+    .o_notification_close {
+        margin: 10px 25px 0 0 !important;
+        opacity: 0.55;
+    }
+}
+
+.o_notification_manager .pmant-notification--success .o_notification_content::before {
+    background: rgba(22, 163, 74, 0.12);
+    color: #15803d;
+    content: "\f00c";
+}
+
+.o_notification_manager .pmant-notification--warning .o_notification_content::before {
+    background: rgba(245, 158, 11, 0.14);
+    color: #b45309;
+    content: "\f071";
+}
+
+.o_notification_manager .pmant-notification--danger .o_notification_content::before {
+    background: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+    content: "\f06a";
+}
+
+@media (max-width: 576px) {
+    .o_notification_manager .o_notification.pmant-notification {
+        .o_notification_buttons {
+            justify-content: flex-start !important;
+        }
+    }
+}

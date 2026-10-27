@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_equipo_mantenimiento" model="ir.ui.view">
+            <field name="name">equipment.form.view.form.inherit</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='warranty_date']" position="after">
+                    <field name="plantilla_preguntas"></field>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button invisible="not plantilla_preguntas" class="oe_stat_button" type="object" name="action_view_respuestas" icon="fa-list-alt">
+                        <field string="Respuestas" name="respuestas_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        <record id="inherit_pmant_equipo_qr" model="ir.ui.view">
+            <field name="name">maintenance.equipment.view.form.inherit</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/notebook[2]" position="inside">
+                    <page name="checklist" string="CheckList">
+                        <group>
+                            <field name="qr_checklist_image" string="QR Checklist" widget="image" class="col-sm-2 col-md-3" options="{'preview_image': 'qr_image', 'size': [0, 90]}"/>
+                            <field name="qr_checklist_image_2" string="Descargar QR"/>
+                            <field name="url_checklist" string="URL QR"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>
+
+

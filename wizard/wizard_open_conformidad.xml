@@ -10,26 +10,21 @@
                     <group>
                         <field name="fecha_finalizado"/>
                         <field name="ots_id" invisible="1"
-                               options="{'no_create': True, 'no_open': True}" 
-                               domain="[('stage_id.done', '=', False)]" 
+                               options="{'no_create': True, 'no_open': True}"
+                               domain="[('stage_id.done', '=', False)]"
                                />
                     </group>
-                    
+
                 </sheet>
                 <footer>
-                    <button name="action_generate_acta" 
-                            string="Generar Acta con firma electronica" 
-                            type="object" 
-                            class="btn-primary" 
-                            data-hotkey="q"/>
-                    <button name="action_generate_pdf_acta" 
-                            string="Guardar y descargar PDF" 
-                            type="object" 
-                            class="btn-primary" 
+                    <button name="action_generate_pdf_acta"
+                            string="Descargar PDF"
+                            type="object"
+                            class="btn-primary"
                             data-hotkey="p"/>
-                    <button string="Cancelar" 
-                            class="btn-secondary" 
-                            special="cancel" 
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"
                             data-hotkey="z"/>
                 </footer>
             </form>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_vendor_related_work_orders" model="ir.rule">
+        <field name="name">Vendedor: OT de sus cotizaciones o seguimiento</field>
+        <field name="model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_vendedor'))]"/>
+        <field name="domain_force">['|', ('pmant_commercial_user_ids', 'in', [user.id]), ('pmant_followup_seller_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_vendor_crm_spare_lines" model="ir.rule">
+        <field name="name">Vendedor: repuestos de sus oportunidades</field>
+        <field name="model_id" ref="model_pmant_crm_spare_line"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_vendedor'))]"/>
+        <field name="domain_force">[('lead_id.user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

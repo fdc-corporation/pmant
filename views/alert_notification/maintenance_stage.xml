@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_etapa_mantenimiento" model="ir.ui.view">
+        <field name="name">etapa.tarea.mantenimiento.view.form.inherit</field>
+        <field name="model">etapa.tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.view_etapa_tarea_mantenimiento_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='color_warning']" position="after">
+                <field name="recordatorios_ids" widget="many2many_tags" options="{'no_create': True}" />
+                
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

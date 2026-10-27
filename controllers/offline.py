@@ -42,7 +42,7 @@ class PmantOffline(Controller):
                 if action == "download":
                     orders = request.env["maintenance.request"].search([
                         ("user_id", "=", user.id), ("tarea", "!=", False),
-                        ("company_id", "in", request.env.companies.ids), ("stage_id.sequence", "in", [1, 2]),
+                        ("company_id", "in", request.env.companies.ids), ("stage_id.pmant_code", "in", ["new", "in_progress"]),
                     ], limit=101, order="schedule_date, id")
                     if len(orders) > 100:
                         raise ValidationError("Tiene más de 100 órdenes pendientes; reduzca la asignación antes de descargar.")

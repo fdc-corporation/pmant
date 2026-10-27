@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_provider_work_orders" model="ir.rule">
+        <field name="name">Proveedor: órdenes asignadas</field>
+        <field name="model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_provider_tasks" model="ir.rule">
+        <field name="name">Proveedor: tareas asignadas</field>
+        <field name="model_id" ref="model_tarea_mantenimiento"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_provider_plan_equipment" model="ir.rule">
+        <field name="name">Proveedor: informes de tareas asignadas</field>
+        <field name="model_id" ref="model_planequipo_mantenimiento"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[('tarea.user_id', '=', user.id)]</field>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_provider_plan_processes" model="ir.rule">
+        <field name="name">Proveedor: procesos de tareas asignadas</field>
+        <field name="model_id" ref="model_planequipoproceso_mantenimiento"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[('planequipo.tarea.user_id', '=', user.id)]</field>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_provider_process_images" model="ir.rule">
+        <field name="name">Proveedor: evidencias de tareas asignadas</field>
+        <field name="model_id" ref="model_adjuntoimage_mantenimiento"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[('planequipoproceso.planequipo.tarea.user_id', '=', user.id)]</field>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="rule_provider_equipment_read" model="ir.rule">
+        <field name="name">Proveedor: consulta de equipos</field>
+        <field name="model_id" ref="maintenance.model_maintenance_equipment"/>
+        <field name="groups" eval="[(4, ref('pmant.group_pmant_proveedor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

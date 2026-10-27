@@ -109,7 +109,7 @@ class OfflineTimesheet(models.Model):
             order._kd_offline_check()
         else:
             order._kd_service_check()
-        if order.stage_id.sequence not in (1, 2):
+        if order.stage_id.pmant_code not in ("new", "in_progress"):
             raise ValidationError(_("Solo puede registrar tiempos en órdenes nuevas o en progreso."))
         self.check_access("write")
         self._kd_lock()
@@ -165,7 +165,7 @@ class OfflineTimesheet(models.Model):
                 if any(plan.is_informe_file and not plan.informe_file for plan in order.tarea.planequipo):
                     raise ValidationError(_("Adjunte el informe técnico de cada equipo que usa la opción Subir informe."))
                 values.update(fecha_fin=stamp, es_servicio_finalizado=True)
-                stage = self.env["maintenance.stage"].search([("sequence", "=", 3)], limit=1)
+                stage = self.env["maintenance.stage"].search([("pmant_code", "=", "review")], limit=1)
                 if not stage:
                     raise ValidationError(_("No se encontró la etapa de revisión."))
                 if source == "offline":
@@ -264,7 +264,7 @@ class OfflineOrder(models.Model):
         self.ensure_one()
         self.check_access("read")
         self.tarea.check_access("write")
-        stage = self.env["maintenance.stage"].search([("sequence", "=", 2)], limit=1)
+        stage = self.env["maintenance.stage"].search([("pmant_code", "=", "in_progress")], limit=1)
         if stage and self.stage_id != stage:
             self.write({"stage_id": stage.id})
 
@@ -368,7 +368,7 @@ class OfflineOrder(models.Model):
             error = ValidationError(_("La orden o el informe cambiaron en PMANT. Su borrador se conserva; revise las diferencias antes de enviarlo."))
             error.kd_offline_conflict = True
             raise error
-        if self.stage_id.sequence not in (1, 2):
+        if self.stage_id.pmant_code not in ("new", "in_progress"):
             error = ValidationError(_("La orden cambió de etapa en PMANT. Su borrador se conserva; revise la versión actual."))
             error.kd_offline_conflict = True
             raise error

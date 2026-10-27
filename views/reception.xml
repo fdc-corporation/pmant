@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pmant_reception_list" model="ir.ui.view">
+        <field name="name">pmant.recepcion.mantenimiento.list</field>
+        <field name="model">pmant.recepcion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'inventory'" decoration-success="state == 'received'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="received_at"/>
+                <field name="customer_id"/>
+                <field name="site_id"/>
+                <field name="equipment_ids" widget="many2many_tags"/>
+                <field name="technician_id"/>
+                <field name="equipment_count"/>
+                <field name="active_picking_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="pmant_reception_form" model="ir.ui.view">
+        <field name="name">pmant.recepcion.mantenimiento.form</field>
+        <field name="model">pmant.recepcion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <form string="Recepción de equipos">
+                <header>
+                    <button name="action_confirm" string="Confirmar y crear ingreso" type="object" class="btn-primary" invisible="state != 'draft'" groups="pmant.group_pmant_planner,pmant.group_pmant_admin"/>
+                    <button name="action_view_active_picking" string="Abrir ingreso de inventario" type="object" class="btn-primary" invisible="not active_picking_id or state != 'inventory'" groups="pmant.group_pmant_planner,pmant.group_pmant_admin"/>
+                    <button name="action_set_draft" string="Volver a borrador" type="object" invisible="state not in ('inventory', 'cancelled')" groups="pmant.group_pmant_planner,pmant.group_pmant_admin"/>
+                    <button name="action_cancel" string="Cancelar" type="object" invisible="state not in ('draft', 'inventory')" groups="pmant.group_pmant_planner,pmant.group_pmant_admin"/>
+                    <button name="action_open_create_task_wizard" string="Crear tarea" type="object" class="btn-primary" invisible="state != 'received'" groups="pmant.group_pmant_planner,pmant.group_pmant_admin"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,inventory,received"/>
+                </header>
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="active_picking_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_tasks" type="object" class="oe_stat_button" icon="fa-tasks" invisible="task_count == 0">
+                            <field name="task_count" string="Tareas" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_pickings" type="object" class="oe_stat_button" icon="fa-exchange" invisible="picking_count == 0" groups="pmant.group_pmant_planner,pmant.group_pmant_admin">
+                            <field name="picking_count" string="Ingresos" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="customer_id" readonly="state != 'draft'"/>
+                            <field name="site_id" domain="[('commercial_partner_id', '=', customer_id)]" readonly="state != 'draft'"/>
+                            <field name="equipment_ids" widget="many2many_tags" domain="[('propietario.commercial_partner_id', '=', customer_id), '|', ('ubicacion', '=', site_id), ('ubicacion', '=', False)]" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="technician_id" readonly="state != 'draft'"/>
+                            <field name="received_at" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Recepción">
+                            <group>
+                                <field name="reason" readonly="state != 'draft'"/>
+                                <field name="accessories" readonly="state != 'draft'"/>
+                                <field name="reported_condition" readonly="state != 'draft'"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+                        <page string="Evidencias">
+                            <field name="image_ids" readonly="state == 'received'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="image" widget="image"/>
+                                    <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Firmas">
+                            <group>
+                                <group string="Cliente">
+                                    <field name="customer_signer_name"/>
+                                    <field name="customer_signature" widget="signature"/>
+                                </group>
+                                <group string="Técnico">
+                                    <field name="technician_signer_name"/>
+                                    <field name="technician_signature" widget="signature"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="pmant_reception_search" model="ir.ui.view">
+        <field name="name">pmant.recepcion.mantenimiento.search</field>
+        <field name="model">pmant.recepcion.mantenimiento</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="customer_id"/>
+                <field name="site_id"/>
+                <field name="equipment_ids"/>
+                <field name="technician_id"/>
+                <filter name="draft" string="Borrador" domain="[('state', '=', 'draft')]"/>
+                <filter name="inventory" string="Ingreso pendiente" domain="[('state', '=', 'inventory')]"/>
+                <filter name="received" string="Recepcionado" domain="[('state', '=', 'received')]"/>
+                <separator/>
+                <filter string="Cliente" name="group_customer" context="{'group_by': 'customer_id'}"/>
+                <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="pmant_reception_action" model="ir.actions.act_window">
+        <field name="name">Recepción de equipos</field>
+        <field name="res_model">pmant.recepcion.mantenimiento</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="pmant_reception_search"/>
+    </record>
+
+    <!-- Reubica el menú histórico de recepción como enlace principal de Mantenimiento. -->
+    <record id="recepcion_menu_pmant" model="ir.ui.menu">
+        <field name="name">Recepción de equipos</field>
+        <field name="parent_id" ref="maintenance.menu_maintenance_title"/>
+        <field name="action" ref="pmant_reception_action"/>
+        <field name="sequence">25</field>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('pmant.group_pmant_tecnico'), ref('pmant.group_pmant_planner'), ref('pmant.group_pmant_supervisor'), ref('pmant.group_pmant_admin')])]"/>
+    </record>
+
+    <record id="stock_picking_form_pmant_reception" model="ir.ui.view">
+        <field name="name">stock.picking.form.pmant.reception</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="pmant_reception_id" readonly="1" invisible="not pmant_reception_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="task_form_pmant_reception" model="ir.ui.view">
+        <field name="name">tarea.mantenimiento.form.pmant.reception</field>
+        <field name="model">tarea.mantenimiento</field>
+        <field name="inherit_id" ref="pmant.Tareav_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_reception" type="object" class="oe_stat_button" icon="fa-inbox" invisible="not reception_id">
+                    <span class="o_stat_text">Recepción</span>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='action_servicio']" position="after">
+                <field name="reception_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

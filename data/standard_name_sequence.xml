@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_pmant_task" model="ir.sequence">
+        <field name="name">Secuencia de tareas PMANT</field>
+        <field name="code">pmant.task.sequence</field>
+        <field name="prefix">TAR/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

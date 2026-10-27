@@ -20,6 +20,8 @@ class KdPmantNotificationController(Controller):
             "message": notification.message,
             "type": notification.notification_type,
             "sticky": notification.sticky,
+            "res_model": notification.res_model,
+            "res_id": notification.res_id,
         } for notification in notifications]
 
     @route("/pmant/notify/ack", type="jsonrpc", auth="user", methods=["POST"])

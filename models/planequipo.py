@@ -87,10 +87,23 @@ class PlanEquipo(models.Model):
     informe_file = fields.Binary(string="Informe Técnico", attachment=True)
     informe_filename = fields.Char(string="Nombre del archivo")
     # decibel_equipo_ids = fields.One2many('decibel.equipo', 'planequipo_id', string="Decibel del equipo")
-    require_repuestos = fields.Boolean(string="Requiere repuestos", default=False)
+    require_repuestos = fields.Boolean(
+        string="Requiere repuestos",
+        compute="_compute_require_repuestos",
+        store=True,
+    )
     voltaje_ids = fields.One2many("voltaje.linea","planequipo_id", string="Lecturas de Voltaje")
     amperaje_ids = fields.One2many('amperaje.linea',"planequipo_id", string="Lecturas de Amperaje")
     parametro_ids = fields.One2many("paremetros.operacion","planequipo_id", string="")
+
+    @api.depends("pmant_spare_line_ids", "tarea.requerimientos_ids")
+    def _compute_require_repuestos(self):
+        """Se activa cuando el equipo/plan tiene repuestos asociados."""
+        for record in self:
+            legacy_repuestos = record.tarea.requerimientos_ids if record.tarea else False
+            record.require_repuestos = bool(
+                record.pmant_spare_line_ids or legacy_repuestos
+            )
 
 
 
@@ -189,48 +202,6 @@ class PlanEquipo(models.Model):
    
     def create_certificado_operatividad(self):
         return self.env.ref("pmant.action_reporte_cert_operatividad").report_action(self)
-        # ir_actions_report_sudo = self.env["ir.actions.report"].sudo()
-        # statement_report_action = self.env.ref("pmant.action_reporte_cert_operatividad")
-        # for statement in self:
-        #     statement_report = statement_report_action.sudo()
-        #     content, _content_type = ir_actions_report_sudo._render_qweb_pdf(
-        #         statement_report, res_ids=statement.ids
-        #     )
-
-        #     attachment = self.env["ir.attachment"].create(
-        #         {
-        #             "name": "Certificado " + self.equipo.name,
-        #             "type": "binary",
-        #             "mimetype": "application/pdf",
-        #             "raw": content,
-        #             "res_model": "sign.template", 
-        #             "res_id": None,
-        #         }
-        #     )
-
-        #     vals_template = {
-        #         "name": "Certificado " + self.equipo.name,
-        #         "equipo_id": self.equipo.id,
-        #     }
-
-        #     vals_template.pop("attachment_count", None)
-
-        #     sign_template = self.env["sign.template"].create(vals_template)
-        #     vals_sign_document = {
-        #         "name": f"Certificado {self.equipo.name}",
-        #         "attachment_id": attachment.id,
-        #         "template_id": sign_template.id,
-        #     }
-        #     document_sign = self.env["sign.document"].create(vals_sign_document)
-        #     attachment.res_id = sign_template
-
-        # return {
-        #     "type": "ir.actions.act_window",
-        #     "name": "Certificado " + self.equipo.name,
-        #     "res_model": "sign.template",
-        #     "view_mode": "kanban", 
-        #     "target": "current",
-        # }
 
 
     def create_report_equipo (self) : 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- La función reutiliza etapas existentes por nombre y evita duplicarlas. -->
+    <function model="etapa.tarea.mantenimiento" name="pmant_setup_default_task_stages"/>
+</odoo>

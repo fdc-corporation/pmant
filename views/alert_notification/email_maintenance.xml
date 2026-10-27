@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="template_notification_maintenance_email" model="mail.template">
+        <field name="name">Notificacion Tarea Mantenimiento</field>
+		<field name="model_id" ref="pmant.model_tarea_mantenimiento" />
+        <field name="subject">Recordatorio de Mantenimiento - {{ object.name }}</field>
+		<field name="email_from">{{ (user.email_formatted or object.user_id.email_formatted) }}</field>
+        <field name="email_to">{{ object.create_user.email }}</field>
+        <field name="lang">{{ object.create_user.partner_id.lang }}</field>
+		<field name="body_html" type="html">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding:16px 0 0 0;box-sizing:border-box;caption-side:bottom;padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;" width="100%">
+        <tbody style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                <td align="center" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="590" style="box-sizing: border-box; caption-side: bottom; padding: 24px; background-color: white; color: #454748; border-collapse: separate; font-family: Verdana, Arial, sans-serif;">
+                        <tbody style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+
+                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td align="center" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="box-sizing: border-box; caption-side: bottom; background-color: white; padding: 0px; border-collapse: separate; color: #454748; font-family: Verdana, Arial, sans-serif;">
+                                        <tbody style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td valign="middle" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                    <span style="font-size: 10px;">Se genero su recordatorio para esta tarea de mantenimiento</span><br/>
+                                                    <span style="font-size: 20px; font-weight: bold;">N° de OC : <t t-out="object.name or 'Tarea Mantenimiento'">Tarea Mantenimiento</t> </span>
+                                                </td>
+                                                <td valign="middle" align="right" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                    <img t-attf-src="/logo.png?company={{ object.compania.id }}" style="box-sizing:border-box;vertical-align:middle;padding: 0px; margin: 0px; height: 48px;" t-att-alt="object.compania.name" height="48"/>
+                                                </td>
+                                            </tr>
+                                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td colspan="2" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;text-align:center;">
+                                                    <hr width="100%" style="border-style:none;border-left-width:medium;border-bottom-width:medium;border-right-width:medium;border-top-width:medium;box-sizing: border-box; height: 1px; opacity: 0.25; color: #454748; background-color: #cccccc; border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 4px 0px 32px;"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="590" style="box-sizing: border-box; caption-side: bottom; min-width: 590px; background-color: white; padding: 0px 8px; border-collapse: separate; color: #454748; font-family: Verdana, Arial, sans-serif;">
+                                        <tbody style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                                <td valign="top" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;font-size: 13px;">
+                                                    <div>
+                                                        Hola <t t-out="object.create_user.name and object.create_user.name or ''">
+                                                            Azure Disctic</t>,<br/><br/>
+                                                        
+                                                        Este es un mensaje de recordatorio, su tarea <t t-esc="object.name" /> para el cliente <t t-esc="object.cliente.name or ''"/> esta llegando a su fecha planeada por favor de hacer seguimiento a este registro.<br/><br/>
+                                                        Saludos,<br/>
+                                                        <br/>
+                                                        
+                                                       
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                                <td align="center" style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;min-width: 590px; padding: 0 8px 0 8px; font-size:11px;">
+                                    <hr width="100%" style="border-style:none;border-left-width:medium;border-bottom-width:medium;border-right-width:medium;border-top-width:medium;box-sizing: border-box; height: 1px; opacity: 0.25; color: #454748; background-color: #cccccc; border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 4px;" />
+                                    <b t-out="object.compania.name or ''" style="box-sizing:border-box;font-weight:bolder;">Mi Empresa (San
+                                        Francisco)</b><br/>
+                                    <div style="color: #999999;">
+                                        <t t-out="object.compania.phone or ''">+1 650-123-4567</t>
+                                        <t t-if="object.compania.email">
+                                            | <a t-attf-href="'mailto:%s' % {{ object.compania.email }}" style="box-sizing:border-box;text-decoration:none; color: #999999;" t-out="object.compania.email or ''">info@suempresa.com</a>
+                                        </t>
+                                        <t t-if="object.compania.website">
+                                            | <a t-attf-href="'%s' % {{ object.compania.website }}" style="box-sizing:border-box;text-decoration:none; color: #999999;" t-out="object.compania.website or ''">http://www.ejemplo.com</a>
+                                        </t>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+        </field>
+    </record>
+
+</odoo>
+
+

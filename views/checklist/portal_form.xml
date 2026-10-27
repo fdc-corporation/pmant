@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="checklist_template" name="Formulario de checklist">
+    <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/>
+      <t t-set="body_classname" t-value="'pmant-portal-page'"/><t t-call="pmant.portal_section_nav"/>
+      <main class="pmant-form-page pmant-checklist-form-page">
+        <header class="pmant-form-header"><span class="pmant-eyebrow">CONTROL OPERATIVO</span><h1>Formulario de checklist</h1><p>Complete la inspección de <strong t-esc="equipo.name"/>. Los campos Sí/No son obligatorios.</p></header>
+        <form id="checklist-form" class="pmant-form-card" method="POST" t-att-action="'/checklist/submit/%d/%d' % (equipo.id, plantilla.id)">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="pmant-checklist-progress"><span class="pmant-record-icon"><i class="fa fa-check-square-o"/></span><div><strong t-esc="plantilla.name"/><small><t t-esc="len(plantilla.line_questions)"/> preguntas</small></div></div>
+          <div class="pmant-question-list"><t t-foreach="plantilla.line_questions" t-as="pregunta">
+            <section class="pmant-question-card">
+              <div class="pmant-question-head"><span class="pmant-question-number" t-esc="pregunta_index + 1"/><label t-esc="pregunta.name"/></div>
+              <t t-if="pregunta.tipo_respuesta == 'si_no'"><div class="pmant-answer-options">
+                <input class="btn-check" type="radio" t-att-name="'respuesta_%d_si_no' % pregunta.id" t-att-id="'yn_si_%d' % pregunta.id" value="si" required="required"/><label class="btn btn-outline-success" t-att-for="'yn_si_%d' % pregunta.id"><i class="fa fa-check me-1"/>Sí</label>
+                <input class="btn-check" type="radio" t-att-name="'respuesta_%d_si_no' % pregunta.id" t-att-id="'yn_no_%d' % pregunta.id" value="no" required="required"/><label class="btn btn-outline-danger" t-att-for="'yn_no_%d' % pregunta.id"><i class="fa fa-times me-1"/>No</label>
+              </div></t>
+              <t t-if="pregunta.tipo_respuesta == 'texto'"><textarea class="form-control" t-att-name="'respuesta_%d_texto' % pregunta.id" t-att-id="'txt_%d' % pregunta.id" rows="3" placeholder="Escriba su respuesta..."></textarea></t>
+              <div class="pmant-comment-area"><label class="form-check form-switch"><input class="form-check-input toggle-comentario" type="checkbox" t-att-id="'cmt_chk_%d' % pregunta.id" t-att-data-id="pregunta.id" t-att-name="'comentario_%d' % pregunta.id"/><span>Agregar comentario</span></label><div t-att-id="'cmt_box_%d' % pregunta.id" style="display:none;"><textarea class="form-control" rows="3" t-att-id="'cmt_text_%d' % pregunta.id" t-att-name="'comentario_texto_%d' % pregunta.id" placeholder="Detalle u observación adicional"></textarea></div></div>
+            </section>
+          </t></div>
+          <div class="pmant-form-actions"><a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="btn btn-secondary">Cancelar</a><button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane me-2"/>Registrar respuestas</button></div>
+        </form>
+      </main>
+      <script src="/pmant_checklist/static/src/js/index.js"/>
+    </t>
+  </template>
+</odoo>
+
+

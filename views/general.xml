@@ -108,17 +108,6 @@
 			</p>
 		</field>
 	</record>
-	<record model="ir.actions.act_window" id="recepcion_list_action">
-		<field name="name">Recepciones de equipos</field>
-		<field name="res_model">tarea.mantenimiento</field>
-		<field name="domain">[("is_evaluacion", "=", True)]</field>
-		<field name="view_mode">kanban,list,form</field>
-		<field name="help" type="html">
-			<p class="o_view_nocontent_smiling_face">
-				Crea tu primera Tarea
-			</p>
-		</field>
-	</record>
 	<record model="ir.actions.act_window" id="reporte_tecnico_list_action">
 		<field name="name">Reporte Tecnico</field>
 		<field name="res_model">tarea.mantenimiento</field>
@@ -242,7 +231,6 @@
 				<field name="action_servicio" invisible="1"/>
 				<header>
 					<field name="stage_id" widget="statusbar" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" options="{'clickable': '1'}" />
-					<button name="action_send_email_recepcion" type="object" string="Enviar hoja de recepción" class="oe_highlight" invisible="ots" groups="pmant.group_pmant_admin,pmant.group_pmant_tecnico,pmant.group_pmant_planner" icon="fa-envelope" />
 					<!-- CREAR BOTON DE CREAR OT -->
 					<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
 					<button name="create_ot" string="Crear OT" type="object" invisible="is_tecnico or ots" class="oe_highlight" />
@@ -261,7 +249,7 @@
                             <field string="Servicios" name="count_ots" widget="statinfo"/>
 						</button>
 					</div>
-					<div class="alert alert-warning" role="alert" invisible="ots or is_evaluacion">
+					<div class="alert alert-warning" role="alert" invisible="ots">
 						Alerta: Esta tarea ya puede ser programada / Crea una OT
 					</div>
 					<group>
@@ -275,7 +263,6 @@
 							<field name="tipo" />
 							<field name="is_tecnico" invisible="1" />
 							<field name="ubicacion" domain="[('parent_id','=',cliente)]" />
-							<field name="is_evaluacion" />
 							<field name="sale_order" string="Órdenes de venta" widget="many2many_tags" readonly="1" options="{'no_create': True, 'no_create_edit': True}" />
 						</group>
 					</group>
@@ -292,19 +279,6 @@
 						<page string="Detalles de Venta" name="detalle_venta">
 							<field name="notas" placeholder="Notas de la tarea" widget="html"></field>
 						</page>
-						<page string="Hoja de Recepcion" invisible="not is_evaluacion ">
-							<group>
-								<field name="create_user" />
-								<field name="fecha_entrada" />
-								<field name="adjuntos_evaluaciones">
-									<list editable="bottom">
-										<field name="adjuntoimage" string="Imagen de evaluacion" />
-										<field name="comentario" string="Comentario de la imagen" />
-									</list>
-								</field>
-								<field name="comentario_tecnico" placeholder="Comentario de recepcion" />
-							</group>
-						</page>
 						<page name="firma" string="Firma del cliente">
 							<group>
 								<field name="adjunto" string="Firma" widget="signature" />
@@ -313,13 +287,6 @@
 								<field name="archive" invisible="1" />
 								<field name="id_tipo" invisible="1" />
 								<field name="fecha_hoy" invisible="1" />
-							</group>
-						</page>
-						<page name="firma_tec" string="Firma del Tecnico">
-							<group>
-								<field name="firma_evaluacion" string="Firma" widget="image" />
-								<field name="firmante" />
-								<field name="comentario_firma" />
 							</group>
 						</page>
 						<page string="OTs" invisible="1">
@@ -347,7 +314,5 @@
 			</form>
 		</field>
 	</record>
-	<menuitem id="recepcion_menu_pmant" name="Recepción de Equipos" parent="maintenance.menu_m_request" action="recepcion_list_action" />
 	<menuitem id="tarea_menuv" name="Tareas" parent="maintenance.menu_m_request" action="tarea_list_action" />
-	<menuitem id="tarea_menuv_2" name="Reporte Tecnico" parent="maintenance.menu_maintenance_title" action="reporte_tecnico_list_action" />
 </odoo>

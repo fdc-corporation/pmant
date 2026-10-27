@@ -4,12 +4,14 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 
 const pmantNotifierService = {
-    dependencies: ["notification"],
+    dependencies: ["notification", "action", "bus_service"],
     start(env) {
         const notification = env.services.notification;
+        const action = env.services.action;
+        const busService = env.services.bus_service;
         const seen = new Set();
-        const POLL_DELAY = 2000;
-        const HIDDEN_POLL_DELAY = 10000;
+        const POLL_DELAY = 30000;
+        const HIDDEN_POLL_DELAY = 60000;
         let polling = false;
         let timerId;
         let audioContext;
@@ -48,6 +50,60 @@ const pmantNotifierService = {
             }
         }
 
+        function repairText(value) {
+            if (typeof value !== "string" || !/[\u00c2\u00c3\u00e2]/.test(value)) {
+                return value;
+            }
+            try {
+                const bytes = Uint8Array.from(value, (character) => character.charCodeAt(0));
+                return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+            } catch {
+                return value;
+            }
+        }
+
+        async function acknowledge(ids) {
+            if (!ids.length) {
+                return;
+            }
+            try {
+                await rpc("/pmant/notify/ack", { ids });
+            } catch (error) {
+                console.warn("pmant_notifier: no se pudo confirmar la alerta", error);
+            }
+        }
+
+        function showNotification(item) {
+            if (!item?.id || seen.has(item.id)) {
+                return false;
+            }
+            seen.add(item.id);
+            const type = item.type || "info";
+            const options = {
+                title: repairText(item.title) || "Notificación PMANT",
+                type,
+                sticky: Boolean(item.sticky),
+                className: `pmant-notification pmant-notification--${type}`,
+            };
+            if (item.res_model && item.res_id) {
+                options.buttons = [{
+                    name: "Ver registro",
+                    icon: "fa-external-link",
+                    primary: true,
+                    onClick: () => action.doAction({
+                        type: "ir.actions.act_window",
+                        res_model: item.res_model,
+                        res_id: item.res_id,
+                        views: [[false, "form"]],
+                        target: "current",
+                    }),
+                }];
+            }
+            notification.add(repairText(item.message), options);
+            playNotificationSound();
+            return true;
+        }
+
         function scheduleNextPoll() {
             window.clearTimeout(timerId);
             timerId = window.setTimeout(
@@ -66,21 +122,11 @@ const pmantNotifierService = {
                 if (Array.isArray(result) && result.length) {
                     const ids = [];
                     for (const item of result) {
-                        if (seen.has(item.id)) {
-                            continue;
+                        if (showNotification(item)) {
+                            ids.push(item.id);
                         }
-                        seen.add(item.id);
-                        notification.add(item.message, {
-                            title: item.title || "Notificación PMANT",
-                            type: item.type || "info",
-                            sticky: Boolean(item.sticky),
-                        });
-                        playNotificationSound();
-                        ids.push(item.id);
                     }
-                    if (ids.length) {
-                        await rpc("/pmant/notify/ack", { ids });
-                    }
+                    await acknowledge(ids);
                 }
             } catch (error) {
                 console.warn("pmant_notifier: error durante la consulta", error);
@@ -91,6 +137,12 @@ const pmantNotifierService = {
         }
 
         document.addEventListener("pointerdown", primeAudio, { once: true });
+        busService.subscribe("pmant.notification", (item) => {
+            if (showNotification(item)) {
+                acknowledge([item.id]);
+            }
+        });
+        busService.start();
         window.addEventListener("focus", poll);
         document.addEventListener("visibilitychange", () => {
             if (!document.hidden) {

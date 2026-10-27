@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_pmant_reception_company" model="ir.rule">
+        <field name="name">Recepciones PMANT por compañía</field>
+        <field name="model_id" ref="model_pmant_recepcion_mantenimiento"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('pmant.group_pmant_tecnico'), ref('pmant.group_pmant_planner'), ref('pmant.group_pmant_supervisor'), ref('pmant.group_pmant_admin')])]"/>
+    </record>
+    <record id="rule_pmant_reception_image_company" model="ir.rule">
+        <field name="name">Evidencias de recepción PMANT por compañía</field>
+        <field name="model_id" ref="model_pmant_recepcion_mantenimiento_imagen"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('pmant.group_pmant_tecnico'), ref('pmant.group_pmant_planner'), ref('pmant.group_pmant_supervisor'), ref('pmant.group_pmant_admin')])]"/>
+    </record>
+</odoo>

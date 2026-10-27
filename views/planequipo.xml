@@ -36,14 +36,13 @@
 						<field name="ubicacion" readonly="1"/>
 						<field name="tarea" invisible="1"/>
 						<field name="ots" invisible="1"/>
-						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="equipo" domain="[('ubicacion', '=', ubicacion), ('propietario','=', cliente)]" readonly="not is_admin"/>
 						<!-- <field name="equipo" options="{'no_open': True}"/> -->
-						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" readonly="not is_admin and not tarea.is_evaluacion"/>
+						<field name="plan" string="Plan de mantenimiento" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" readonly="not is_admin"/>
 						<field name="fecha_ejec" invisible="1" readonly="1"/>
 						<field name="fecha_ejec" invisible="1"/>
 						<field name="fecha_ejecprox" string="Próxima Fecha de Mantenimiento"/>
 						<field name="is_informe_file"/>
-						<field name="require_repuestos"/>
 					</group>
 					<notebook>
 						<page string="Informe tecnico" invisible="not is_informe_file" >
@@ -181,5 +180,4 @@
 
 		</field>
 	</record>
-	<menuitem id="planequipo_menuv" name="OTS asignadas" parent="maintenance.menu_maintenance_title" action="planequipo_list_action" />
 </odoo>

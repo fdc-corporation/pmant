@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="maintenance_stage_pmant_code_form" model="ir.ui.view">
+        <field name="name">maintenance.stage.pmant.code.list</field>
+        <field name="model">maintenance.stage</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_stage_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='done']" position="after">
+                <field name="pmant_code" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="maintenance_request_conformity_form" model="ir.ui.view">
+        <field name="name">maintenance.request.conformity.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="pmant.ots_add"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Acta de conformidad" name="pmant_conformity">
+                    <field name="conformity_token" invisible="1"/>
+                    <field name="conformity_planner_notified" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="conformity_state" widget="badge"/>
+                            <field name="conformity_url" widget="url" readonly="1" invisible="1"/>
+                            <field name="conformity_received_at"/>
+                        </group>
+                        <group>
+                            <field name="conformity_qr" widget="image" class="oe_avatar" invisible="1"/>
+                            <button name="action_open_conformity_portal" type="object" string="Abrir portal" class="oe_highlight" groups="pmant.group_pmant_admin,pmant.group_pmant_planner"/>
+                            <button name="action_regenerate_conformity_token" type="object" string="Regenerar enlace" invisible="conformity_state != 'pending'" groups="pmant.group_pmant_admin,pmant.group_pmant_planner"/>
+                            <button name="action_download_conformity_pdf" type="object" string="Descargar PDF" invisible="not conformity_pdf_attachment_id" groups="pmant.group_pmant_admin,pmant.group_pmant_planner,pmant.group_pmant_vendedor"/>
+                            <field name="conformity_pdf_attachment_id" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <template id="portal_conformity_form" name="Carga de acta de conformidad">
+        <t t-call="website.layout">
+            <div class="container py-5" style="max-width: 720px; min-height: 72vh;">
+                <div class="card border-0 shadow-lg overflow-hidden" style="border-radius: 20px;">
+                    <div class="px-4 px-md-5 py-4 text-white" style="background: linear-gradient(135deg, #172554 0%, #2563eb 100%);">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle" style="width: 54px; height: 54px; font-size: 25px;">✓</div>
+                            <div><h1 class="h3 mb-1">Acta de conformidad</h1><p class="mb-0 opacity-75">Carga segura del documento firmado</p></div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                    <div class="rounded-3 p-3 mb-4" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="small text-uppercase fw-semibold text-muted mb-1">Orden de trabajo</div>
+                        <div class="fw-bold fs-5" t-esc="order.name"/>
+                        <div class="text-muted" t-esc="order.empresa.name or ''"/>
+                    </div>
+                    <div t-if="error" class="alert alert-danger" t-esc="error"/>
+                    <div t-if="order.conformity_state == 'pdf'" class="alert alert-success mb-0"><strong>Documento recibido.</strong> El acta ya fue registrada correctamente.</div>
+                    <form t-else="" t-att-action="'/pmant/acta/%s/submit' % token" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <label class="form-label fw-semibold" for="conformity_pdf">Documento firmado</label>
+                        <div class="p-4 mb-4 text-center rounded-3" style="border:2px dashed #93c5fd; background:#eff6ff;">
+                            <div class="fw-semibold mb-2">Seleccione el acta en formato PDF</div>
+                            <input id="conformity_pdf" class="form-control" type="file" name="conformity_pdf" accept="application/pdf,.pdf" required="required"/>
+                            <div class="form-text mt-2">Solo PDF · tamaño máximo 20 MB</div>
+                        </div>
+                        <button class="btn btn-primary btn-lg w-100" type="submit" style="border-radius:12px;">Enviar acta de conformidad</button>
+                    </form>
+                </div></div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_conformity_success" name="Acta de conformidad recibida">
+        <t t-call="website.layout"><div class="container py-5 text-center" style="max-width:680px; min-height:70vh;"><div class="card border-0 shadow-lg p-5" style="border-radius:20px;"><div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle text-white" style="width:72px;height:72px;background:#16a34a;font-size:34px;">✓</div><h1 class="h3">Acta recibida</h1><p class="text-muted mb-0">El PDF fue registrado correctamente y enviado al equipo responsable para su revisión.</p></div></div></t>
+    </template>
+</odoo>

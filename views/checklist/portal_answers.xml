@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="respuestas_pmant" name="Historial de checklist">
+    <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/>
+      <t t-set="body_classname" t-value="'pmant-portal-page'"/><t t-call="pmant.portal_section_nav"/>
+      <div class="main pmant-checklist-history">
+        <section class="pmant-equipment-summary">
+          <div class="pmant-equipment-identity"><span class="pmant-record-icon"><i class="fa fa-check-square-o"/></span><div><span class="pmant-eyebrow">CHECKLIST DEL EQUIPO</span><h1 t-esc="equipo.name"/><p>Inspecciones registradas y respuestas de control.</p></div></div>
+          <div class="pmant-summary-grid">
+            <div><small>Propietario</small><strong t-esc="equipo.propietario.name or 'No registrado'"/></div>
+            <div><small>Ubicación</small><strong t-esc="equipo.ubicacion.name or 'No registrada'"/></div>
+            <div><small>Categoría</small><strong t-esc="equipo.category_id.name or 'Sin categoría'"/></div>
+            <div><small>Fecha asignada</small><strong t-esc="equipo.assign_date.strftime('%d/%m/%Y') if equipo.assign_date else 'No registrada'"/></div>
+          </div>
+        </section>
+        <section class="main-card-sedes pmant-checklist-section">
+          <div class="pmant-section-toolbar"><div><span class="pmant-eyebrow">CONTROL OPERATIVO</span><h2>Historial de checklist</h2><p>Abra un registro para consultar sus preguntas, respuestas y comentarios.</p></div><a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"/>Volver al equipo</a></div>
+          <t t-if="respuestas"><div class="accordion pmant-checklist-accordion" id="accChecklist">
+            <t t-foreach="respuestas" t-as="group" t-key="group.id"><t t-set="acc_id" t-value="'checklist_%s' % group.id"/>
+              <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" t-att-data-bs-target="'#' + acc_id" t-att-aria-controls="acc_id">
+                <span class="pmant-record-icon small"><i class="fa fa-clipboard"/></span><span class="pmant-checklist-title"><strong t-esc="group.name"/><small><i class="fa fa-calendar-o me-1"/><t t-esc="group.create_date.strftime('%d/%m/%Y %H:%M')"/></small></span><span class="pmant-count-badge"><t t-esc="len(group.respuestas_ids)"/> respuestas</span>
+              </button></h2><div class="accordion-collapse collapse" t-att-id="acc_id" data-bs-parent="#accChecklist"><div class="accordion-body"><div class="table-responsive"><table class="pmant-data-table">
+                <thead><tr><th>Pregunta</th><th>Respuesta</th><th>Comentario</th></tr></thead><tbody><t t-foreach="group.respuestas_ids" t-as="answer" t-key="answer.id"><tr>
+                  <td t-esc="answer.question_id.name"/><td><span t-if="answer.respuesta_texto" t-esc="answer.respuesta_texto"/><span t-elif="answer.respuesta_si_no" class="pmant-status success"><i class="fa fa-check"/> Sí</span><span t-else="" class="pmant-status danger"><i class="fa fa-times"/> No</span></td><td t-esc="answer.comentario or 'Sin comentario'"/>
+                </tr></t></tbody>
+              </table></div></div></div></div>
+            </t>
+          </div></t>
+          <div t-else="" class="pmant-empty-state"><span class="pmant-state-icon"><i class="fa fa-clipboard"/></span><h3>Aún no hay checklist registrados</h3><p>Los controles completados para este equipo aparecerán aquí.</p></div>
+        </section>
+      </div>
+    </t>
+  </template>
+</odoo>
+
+

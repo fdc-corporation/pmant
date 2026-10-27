@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="template_checklist_thanks" name="Checklist registrado">
+    <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/><t t-set="no_footer" t-value="True"/>
+      <t t-set="body_classname" t-value="'pmant-portal-page'"/><t t-call="pmant.portal_section_nav"/>
+      <main class="pmant-state-page"><section class="pmant-state-card">
+        <span class="pmant-state-icon pmant-state-success"><i class="fa fa-check"/></span>
+        <span class="pmant-eyebrow">REGISTRO COMPLETADO</span><h1>Checklist enviado correctamente</h1>
+        <p>Las respuestas del equipo <strong t-esc="equipo.name"/> ya están disponibles en su historial.</p>
+        <div class="pmant-state-actions">
+          <a t-att-href="'/my/equipo/%s/checklist/historial' % equipo.id" class="btn btn-primary"><i class="fa fa-history me-2"/>Ver historial</a>
+          <a t-att-href="'/my/equipos/%s/detalles' % equipo.id" class="btn btn-secondary">Volver al equipo</a>
+        </div>
+      </section></main>
+    </t>
+  </template>
+</odoo>
+
+

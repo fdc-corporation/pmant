@@ -16,7 +16,7 @@
         <field name="name">Mantenimiento - Planner</field>
         <field name="sequence">10</field>
         <field name="privilege_id" ref="res_group_pmant_category"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('stock.group_stock_user'))]"/>
         <field name="comment">Usuario planner de mantenimiento.</field>
     </record>
     <record model="res.groups" id="group_pmant_supervisor">
@@ -30,7 +30,7 @@
         <field name="name">Mantenimiento - Admin</field>
         <field name="sequence">20</field>
         <field name="privilege_id" ref="res_group_pmant_category"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('stock.group_stock_user'))]"/>
         <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         <field name="comment">Usuario tecnico de mantenimiento.</field>
     </record>
@@ -45,8 +45,16 @@
         <field name="name">Mantenimiento - Vendedor</field>
         <field name="sequence">40</field>
         <field name="privilege_id" ref="res_group_pmant_category"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('sales_team.group_sale_salesman'))]"/>
         <field name="comment">Usuario vendedor de mantenimiento.</field>
+    </record>
+
+    <record model="res.groups" id="group_pmant_proveedor">
+        <field name="name">Mantenimiento - Proveedor</field>
+        <field name="sequence">50</field>
+        <field name="privilege_id" ref="res_group_pmant_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Proveedor técnico interno con acceso exclusivo a PMANT y a los trabajos que tiene asignados.</field>
     </record>
 
     <record model="res.groups" id="group_pmant_user_notifi_fac">

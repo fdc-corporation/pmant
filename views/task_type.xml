@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tipotarea_mantenimiento_list" model="ir.ui.view">
+        <field name="name">tipotarea.mantenimiento.list.pmant</field>
+        <field name="model">tipotarea.mantenimiento</field>
+        <field name="arch" type="xml">
+            <list string="Tipos de servicio">
+                <field name="name"/>
+                <field name="service_kind"/>
+                <field name="is_inspeccion"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="tipotarea_mantenimiento_form" model="ir.ui.view">
+        <field name="name">tipotarea.mantenimiento.form.pmant</field>
+        <field name="model">tipotarea.mantenimiento</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de servicio">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="service_kind"/>
+                        <field name="is_inspeccion" readonly="1"
+                               invisible="service_kind != 'inspection'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,4 +1,21 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pmant_provider_work_order,Proveedor órdenes asignadas,maintenance.model_maintenance_request,pmant.group_pmant_proveedor,1,1,0,0
+access_pmant_spare_line_technician,Repuestos técnico,model_pmant_spare_line,pmant.group_pmant_tecnico,1,1,1,1
+access_pmant_spare_line_provider,Repuestos proveedor,model_pmant_spare_line,pmant.group_pmant_proveedor,1,1,1,1
+access_pmant_spare_line_planner,Repuestos planner,model_pmant_spare_line,pmant.group_pmant_planner,1,1,1,1
+access_pmant_spare_line_supervisor,Repuestos supervisor,model_pmant_spare_line,pmant.group_pmant_supervisor,1,1,1,1
+access_pmant_spare_line_admin,Repuestos administrador,model_pmant_spare_line,pmant.group_pmant_admin,1,1,1,1
+access_pmant_spare_wizard_user,Asistente solicitud de repuestos,model_pmant_spare_plan_wizard,base.group_user,1,1,1,1
+access_pmant_provider_task,Proveedor tareas asignadas,model_tarea_mantenimiento,pmant.group_pmant_proveedor,1,1,0,0
+access_pmant_provider_plan_equipment,Proveedor informes asignados,model_planequipo_mantenimiento,pmant.group_pmant_proveedor,1,1,0,0
+access_pmant_provider_plan,Proveedor planes,model_plan_mantenimiento,pmant.group_pmant_proveedor,1,0,0,0
+access_pmant_provider_task_type,Proveedor tipos de servicio,model_tipotarea_mantenimiento,pmant.group_pmant_proveedor,1,0,0,0
+access_pmant_provider_process,Proveedor procesos,model_proceso_mantenimiento,pmant.group_pmant_proveedor,1,0,0,0
+access_pmant_provider_process_state,Proveedor estados de proceso,model_estadoproceso_mantenimiento,pmant.group_pmant_proveedor,1,0,0,0
+access_pmant_provider_plan_process,Proveedor ejecución de procesos,model_planequipoproceso_mantenimiento,pmant.group_pmant_proveedor,1,1,0,0
+access_pmant_provider_process_image,Proveedor evidencias,model_adjuntoimage_mantenimiento,pmant.group_pmant_proveedor,1,1,1,0
+access_pmant_provider_equipment,Proveedor consulta de equipos,maintenance.model_maintenance_equipment,pmant.group_pmant_proveedor,1,0,0,0
+access_pmant_provider_attachment,Proveedor adjuntos,model_adjunto_mantenimiento,pmant.group_pmant_proveedor,1,0,0,0
 pmant_tecnico_acc,TECNICO_PLAN_EQUIPO,model_planequipo_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
 pmant_tecnico_acc2,TECNICO_PLAN,model_plan_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
 pmant_tecnico_acc3,TECNICO_TAREA,model_tarea_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
@@ -7,10 +24,8 @@ pmant_tecnico_acc6,TECNICO_PROCESOS,model_proceso_mantenimiento,pmant.group_pman
 pmant_tecnico_acc7,TECNICO_ESTADOPROCESO,model_estadoproceso_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc8,TECNICO_PLANEQUIPOPROCESO,model_planequipoproceso_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
 pmant_tecnico_acc9,TECNICO_OTS,model_maintenance_request,pmant.group_pmant_tecnico,1,0,0,0
-pmant_tecnico_acc10,TECNICO_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc11,TECNICO_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc12,TECNICO_ADJUNTO,model_adjunto_mantenimiento,pmant.group_pmant_tecnico,1,1,1,1
-pmant_tecnico_acc13,TECNICO_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_tecnico,1,0,0,0
 pmant_tecnico_acc14,TECNICO_IMAGENES,model_adjuntoimage_mantenimiento,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc15,TECNICO_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_tecnico,1,1,1,1
 pmant_tecnico_acc16,TECNICO_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_tecnico,1,1,0,0
@@ -40,8 +55,6 @@ pmant_admin_acc9,ADMIN_OTS,model_maintenance_request,pmant.group_pmant_admin,1,1
 pmant_admin_acc10,ADMIN_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc11,ADMIN_GRUPO_PROCESO,model_grupoproceso_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc12,ADMIN_PRIORIDAD,model_prioridad_mantenimiento,pmant.group_pmant_admin,1,1,1,1
-pmant_admin_acc13,ADMIN_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_admin,1,1,1,1
-pmant_admin_acc14,ADMIN_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc15,ADMIN_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_admin,1,1,1,1
 pmant_admin_acc17,ADMIN_mantenimento_equipo_otros,model_mantenimento_equipo_otros,pmant.group_pmant_admin,1,1,1,1
@@ -63,8 +76,6 @@ pmant_supervisor_acc9,SUPERVISOR_OTS,model_maintenance_request,pmant.group_pmant
 pmant_supervisor_acc10,SUPERVISOR_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
 pmant_supervisor_acc11,SUPERVISOR_GRUPO_PROCESO,model_grupoproceso_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
 pmant_supervisor_acc12,SUPERVISOR_PRIORIDAD,model_prioridad_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
-pmant_supervisor_acc13,SUPERVISOR_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
-pmant_supervisor_acc14,SUPERVISOR_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
 pmant_supervisor_acc15,SUPERVISOR_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_supervisor,1,1,1,1
 pmant_supervisor_acc１６,SUPERVISOR_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_supervisor,1,1,1,1
 pmant_supervisor_acc17,SUPERVISOR_mantenimento_equipo_otros,model_mantenimento_equipo_otros,pmant.group_pmant_supervisor,1,1,1,1
@@ -89,8 +100,6 @@ pmant_planner_acc9,ADMIN_OTS,model_maintenance_request,pmant.group_pmant_planner
 pmant_planner_acc10,ADMIN_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc11,ADMIN_GRUPO_PROCESO,model_grupoproceso_mantenimiento,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc12,ADMIN_PRIORIDAD,model_prioridad_mantenimiento,pmant.group_pmant_planner,1,1,1,1
-pmant_planner_acc13,ADMIN_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_planner,1,1,1,1
-pmant_planner_acc14,ADMIN_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc15,ADMIN_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc16,ADMIN_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_planner,1,1,1,1
 pmant_planner_acc17,ADMIN_OTROS_MANTENIMIENTOS,model_mantenimento_equipo_otros,pmant.group_pmant_planner,1,1,1,1
@@ -111,12 +120,14 @@ pmant_vendedor_acc10,VENDEDOR_PLANEQUIPOPROCESO,model_planequipoproceso_mantenim
 pmant_vendedor_acc11,VENDEDOR_TIPO_PLAN,model_tipoplan_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc12,VENDEDOR_GRUPO_PROCESO,model_grupoproceso_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc13,VENDEDOR_PRIORIDAD,model_prioridad_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
-pmant_vendedor_acc14,VENDEDOR_PLANTILLA,model_plantilla_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
-pmant_vendedor_acc15,VENDEDOR_PLANTILLA_TICKET,model_plantillaticket_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc16,VENDEDOR_WIZARD_SHARE,model_wizard_share,pmant.group_pmant_vendedor,1,1,1,1
 pmant_vendedor_acc17,VENDEDOR_PROGRAMACION_MANTENIMIENTO,model_programacion_mantenimiento,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc18,VENDEDOR_MNATNEIMIENTO_OTROS,model_mantenimento_equipo_otros,pmant.group_pmant_vendedor,1,1,0,0
 pmant_vendedor_acc_20,VENDEDOR_MANTENIMIENTO_EQUIPOS,model_maintenance_equipment,pmant.group_pmant_vendedor,1,1,1,1
+pmant_vendedor_ot_read,VENDEDOR_OT_LECTURA,maintenance.model_maintenance_request,pmant.group_pmant_vendedor,1,0,0,0
+pmant_vendedor_crm_spare,VENDEDOR_REPUESTOS_CRM,model_pmant_crm_spare_line,pmant.group_pmant_vendedor,1,0,0,0
+pmant_planner_crm_spare,PLANNER_REPUESTOS_CRM,model_pmant_crm_spare_line,pmant.group_pmant_planner,1,1,1,1
+pmant_admin_crm_spare,ADMIN_REPUESTOS_CRM,model_pmant_crm_spare_line,pmant.group_pmant_admin,1,1,1,1
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
@@ -147,3 +158,20 @@ access_pmant_session_supervisor,Tramos Supervisor,model_pmant_work_session,pmant
 access_pmant_session_planner,Tramos Planner,model_pmant_work_session,pmant.group_pmant_planner,1,0,0,0
 access_pmant_session_admin,Tramos Administrador,model_pmant_work_session,pmant.group_pmant_admin,1,0,0,0
 access_pmant_receipt_admin,Recepciones offline Administrador,model_pmant_sync_receipt,pmant.group_pmant_admin,1,0,0,0
+access_checklist_user,Checklist User,model_pmant_checklist,base.group_user,1,1,1,1
+access_question_user,Question User,model_pmant_checklist_question,base.group_user,1,1,1,1
+access_respuesta_user,Respuesta User,model_pmant_checklist_respuesta,base.group_user,1,1,1,1
+access_pmant_checklist_group_user,Checklist Group User,model_pmant_checklist_group,base.group_user,1,1,1,1
+access_conf_pmant_ubicacion_user,access.conf.pmant.ubicacion.user,model_conf_pmant_ubicacion,base.group_user,1,1,1,1
+access_requerimientos,access_requerimientos.user,model_requerimientos_stock,base.group_user,1,1,1,1
+access_wizard_consumible,access_wixard_consumible.user,model_wizard_repuesto_consumido,base.group_user,1,1,1,1
+access_pmant_reception_technician,Recepción técnico,model_pmant_recepcion_mantenimiento,pmant.group_pmant_tecnico,1,1,1,0
+access_pmant_reception_planner,Recepción planner,model_pmant_recepcion_mantenimiento,pmant.group_pmant_planner,1,1,1,1
+access_pmant_reception_supervisor,Recepción supervisor,model_pmant_recepcion_mantenimiento,pmant.group_pmant_supervisor,1,1,1,0
+access_pmant_reception_admin,Recepción administrador,model_pmant_recepcion_mantenimiento,pmant.group_pmant_admin,1,1,1,1
+access_pmant_reception_image_technician,Evidencia recepción técnico,model_pmant_recepcion_mantenimiento_imagen,pmant.group_pmant_tecnico,1,1,1,0
+access_pmant_reception_image_planner,Evidencia recepción planner,model_pmant_recepcion_mantenimiento_imagen,pmant.group_pmant_planner,1,1,1,1
+access_pmant_reception_image_supervisor,Evidencia recepción supervisor,model_pmant_recepcion_mantenimiento_imagen,pmant.group_pmant_supervisor,1,1,1,0
+access_pmant_reception_image_admin,Evidencia recepción administrador,model_pmant_recepcion_mantenimiento_imagen,pmant.group_pmant_admin,1,1,1,1
+access_pmant_reception_wizard,Crear tarea desde recepción,model_pmant_reception_task_wizard,base.group_user,1,1,1,1
+access_pmant_conformity_image_user,Fotografías acta de conformidad,model_pmant_conformity_image,base.group_user,1,1,1,1

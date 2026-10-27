@@ -5,19 +5,65 @@
 		<field name="model">maintenance.equipment</field>
 		<field name="inherit_id" ref="maintenance.hr_equipment_view_kanban" />
 		<field name="arch" type="xml">
-			
-			<xpath expr="//field[@name='serial_no']" position="after">
-				<div class="mt-2" style="display: flex; flex-direction: column;">
-					<div t-if="record.propietario.raw_value">
-						<strong>Propietario:</strong> <field name="propietario" />
+			<xpath expr="//t[@t-name='card']" position="replace">
+				<t t-name="card">
+					<field name="service_in_progress" invisible="1"/>
+					<field name="active_service_count" invisible="1"/>
+					<div class="position-relative h-100 d-flex flex-column" style="min-height: 190px;">
+						<div t-if="record.service_in_progress.raw_value"
+							 class="text-bg-warning fw-bold text-center text-uppercase py-1 px-2 mb-3 rounded-top"
+							 style="letter-spacing: .04em; margin: -8px -8px 0 -8px;">
+							<i class="fa fa-wrench me-1" title="Servicio en ejecución"/>
+							Servicio en ejecución
+						</div>
+						<div class="d-flex gap-3 align-items-start">
+							<div class="flex-shrink-0 rounded border bg-light d-flex align-items-center justify-content-center overflow-hidden"
+								 style="width: 64px; height: 64px;">
+								<field name="image" widget="image" options="{'img_class': 'object-fit-cover w-100 h-100'}"
+									   t-if="record.image.raw_value"/>
+								<i t-else="" class="fa fa-cogs fa-2x text-muted" title="Equipo"/>
+							</div>
+							<div class="flex-grow-1 overflow-hidden">
+								<div class="fw-bold fs-5 text-truncate" title="Nombre del equipo">
+									<field name="name"/>
+								</div>
+								<div t-if="record.model.raw_value" class="text-muted text-truncate">
+									<field name="model"/>
+								</div>
+								<div t-if="record.serial_no.raw_value" class="small font-monospace text-truncate">
+									<field name="serial_no"/>
+								</div>
+							</div>
+						</div>
+						<div class="mt-3 small d-grid gap-1">
+							<div t-if="record.propietario.raw_value" class="text-truncate">
+								<i class="fa fa-building-o text-muted me-2" title="Propietario"/>
+								<strong>Propietario:</strong> <field name="propietario"/>
+							</div>
+							<div t-if="record.ubicacion.raw_value" class="text-truncate">
+								<i class="fa fa-map-marker text-muted me-2" title="Ubicación"/>
+								<strong>Ubicación:</strong> <field name="ubicacion"/>
+							</div>
+							<div t-if="record.area.raw_value" class="text-truncate">
+								<i class="fa fa-sitemap text-muted me-2" title="Área"/>
+								<strong>Área:</strong> <field name="area"/>
+							</div>
+							<div t-if="record.service_in_progress.raw_value" class="text-warning-emphasis text-truncate mt-1">
+								<i class="fa fa-play-circle me-2" title="Servicio activo"/>
+								<field name="active_service_name"/>
+								<span t-if="record.active_service_count.raw_value &gt; 1">
+									(+<field name="active_service_count"/> activos)
+								</span>
+							</div>
+						</div>
+						<footer class="mt-auto pt-3 border-top">
+							<div class="d-flex ms-auto align-items-center">
+								<field name="activity_ids" widget="kanban_activity"/>
+								<field name="owner_user_id" widget="many2one_avatar_user" class="ms-1"/>
+							</div>
+						</footer>
 					</div>
-					<div t-if="record.ubicacion.raw_value">
-						<strong>Ubicacion:</strong> <field name="ubicacion" />
-					</div>
-					<div t-if="record.area.raw_value">
-						<strong>Área:</strong> <field name="area" />
-					</div>
-				</div>
+				</t>
 			</xpath>
 		</field>
 	</record>
@@ -31,9 +77,6 @@
 				<button class="oe_stat_button" type="object"  name="action_view_cotizaciones"
 				icon="fa-pencil-square-o">
 				<field string="Cotizacion" name="cotizacion_cantidad" widget="statinfo"/>
-				</button>
-				<button class="oe_stat_button" type="object" name="action_view_certificados" icon="fa-file-text-o">
-					<field string="Documentos y certificados" name="cantidad_certificados" widget="statinfo"/>
 				</button>
 				<button class="oe_stat_button" type="object" name="action_view_prox_mant" icon="fa-file-text-o">
 					<field string="Proximos mantenimiento" name="count_recordatorios" widget="statinfo"/>
@@ -151,15 +194,6 @@
 						</field>
 					</page>
 					<page string="Certificados">
-						<field name="certificados" string="Certificados" >
-							<!-- <list>
-								<field name="name" string="Nombre del archivo"/>
-								<field name="type" string="Tipo de archivo"/>
-								<field name="mimetype" string="Tipo de archivo"/>
-								<field name="write_date" string="Fecha Generada"/>
-							</list> -->
-							 
-						</field>
 						<separator string="Certificados PDF firmados"/>
 						<field name="certificados_manuales" context="{'default_equipo_id': id}">
 							<list editable="bottom">
@@ -217,6 +251,25 @@
 				<attribute name="invisible">
 					True
 				</attribute>
+			</xpath>
+			<!-- Campos estándar que PMANT no utiliza en la ficha del equipo. -->
+			<xpath expr="//field[@name='scrap_date']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			<xpath expr="//field[@name='location_id']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			<xpath expr="//field[@name='partner_id']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			<xpath expr="//field[@name='fecha_compra']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			<xpath expr="//field[@name='effective_date']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			<xpath expr="//field[@name='cost']" position="attributes">
+				<attribute name="invisible">True</attribute>
 			</xpath>
 			<!-- Add image field below title -->
 			<xpath expr="//div[@class='oe_title']" position="after">

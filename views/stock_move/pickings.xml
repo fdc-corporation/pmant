@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_move_stock_pmant" model="ir.ui.view">
+        <field name="name">stock.picking.view.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                    <button invisible="not tarea_id" name="action_view_tarea" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                        <field name="len_tarea" string="Tarea mantenimiento" widget="statinfo"/>
+                    </button>
+                    <field name="tarea_id" invisible="1"></field>
+                    <field name="len_tarea" invisible="1"></field>
+            </xpath>
+            <xpath expr="//field[@name='sale_id']" position="after">
+                <field name="len_tarea" invisible="1"/>
+                <field name="is_requerimiento" invisible="1"/>
+                <field name="is_devolucion_repuesto" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="stock_scrap_view_form" model="ir.ui.view">
+        <field name="name">stock.scrap.view.form.inherit</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="tarea_id" invisible="1"/>
+                
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

@@ -110,9 +110,6 @@ class Equipo(models.Model):
     fecha_prox = fields.Date(string="Proximo Mantenimiento",
                              compute="_generate_qr_code", store=True, readonly=False)
     image = fields.Binary("Image", attachment=True)
-    certificados = fields.One2many(
-        "sign.request", "equipo_id", domain=[("state", "=", "signed")], string="Certificados de operatividad"
-    )
     certificados_manuales = fields.One2many(
         "pmant.certificado.operatividad",
         "equipo_id",
@@ -126,8 +123,6 @@ class Equipo(models.Model):
 
     solicitudes_servicio = fields.One2many(
         "servicio.solicitud", "equipo_id", string="Solicitudes de Mantenimiento")
-    cantidad_certificados = fields.Integer(
-        compute="_get_certificados", string="Cantidad de Certificados")
     otros_mantenimientos = fields.One2many(
         "mantenimento.equipo.otros", "equipo", string="Otros mantenimientos")
     count_recordatorios = fields.Integer(
@@ -137,24 +132,30 @@ class Equipo(models.Model):
         compute="_compute_count_programacion", string="Cantidad de Programaciones"
     )
     serial_no = fields.Char(string="Número de serie", copy=False, index=True)
+    service_in_progress = fields.Boolean(
+        string="Servicio en ejecución",
+        compute="_compute_service_in_progress",
+        compute_sudo=True,
+    )
+    active_service_name = fields.Char(
+        string="Servicio activo",
+        compute="_compute_service_in_progress",
+        compute_sudo=True,
+    )
+    active_service_count = fields.Integer(
+        string="Servicios activos",
+        compute="_compute_service_in_progress",
+        compute_sudo=True,
+    )
 
-    def action_view_certificados(self):
-        self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Documentos y certificados de firma",
-            "res_model": "sign.template",
-            "view_mode": "kanban,form",
-            "target": "current",  # O usa 'new' si deseas que se abra como ventana modal
-            "domain": [
-                "|",
-                ("equipo_id", "=", self.id),
-                ("ot_id.tarea.planequipo.equipo", "=", self.id),
-            ],
-            "context": {
-                "default_equipo_id": self.id,
-            },
-        }
+    @api.depends("planequipo.tarea.action_servicio", "planequipo.tarea.name")
+    def _compute_service_in_progress(self):
+        """Resume en el equipo las tareas cuyo servicio fue iniciado y no finalizado."""
+        for equipment in self:
+            active_tasks = equipment.planequipo.mapped("tarea").filtered("action_servicio")
+            equipment.service_in_progress = bool(active_tasks)
+            equipment.active_service_count = len(active_tasks)
+            equipment.active_service_name = active_tasks[:1].display_name if active_tasks else False
 
     @api.model
     def create(self, vals):
@@ -172,16 +173,6 @@ class Equipo(models.Model):
         for equipo in registros:
             # Aquí va tu lógica para generar el QR o buscar la OC
             equipo._generate_qr_code()
-
-    def _get_certificados(self):
-        for equipment in self:
-            equipment.cantidad_certificados = self.env["sign.template"].search_count(
-                [
-                    "|",
-                    ("equipo_id", "=", equipment.id),
-                    ("ot_id.tarea.planequipo.equipo", "=", equipment.id),
-                ]
-            )
 
     def action_view_cotizaciones(self):
         for record in self:

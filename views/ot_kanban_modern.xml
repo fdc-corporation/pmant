@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="maintenance_request_kanban_modern" model="ir.ui.view">
+        <field name="name">maintenance.request.kanban.modern.pmant</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="pmant.view_form_kanban_ot_id"/>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='card']" position="replace">
+                <t t-name="card">
+                    <field name="pmant_service_in_progress" invisible="1"/>
+                    <field name="require_repuestos" invisible="1"/>
+                    <field name="archive" invisible="1"/>
+                    <div class="position-relative h-100 d-flex flex-column" style="min-height: 220px;">
+                        <div t-if="record.pmant_service_in_progress.raw_value"
+                             class="text-bg-success fw-bold text-center text-uppercase py-1 px-2 mb-3 rounded-top"
+                             style="letter-spacing: .04em; margin: -8px -8px 0 -8px;">
+                            <i class="fa fa-play-circle me-1" title="Servicio en ejecución"/> Servicio en ejecución
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <div class="overflow-hidden">
+                                <div class="fw-bold fs-5 text-truncate"><field name="pmant_kanban_reference"/></div>
+                                <div class="text-muted small text-truncate" t-if="record.pmant_service_type_id.raw_value">
+                                    <i class="fa fa-wrench me-1" title="Tipo de servicio"/>
+                                    <field name="pmant_service_type_id"/>
+                                </div>
+                            </div>
+                            <field name="stage_id" widget="badge"/>
+                        </div>
+
+                        <div class="small d-grid gap-2 mt-1">
+                            <div class="d-flex align-items-center gap-2 text-truncate">
+                                <i class="fa fa-building-o text-muted" title="Cliente"/>
+                                <span t-if="record.empresa.raw_value"><field name="empresa"/></span>
+                                <span t-else="" class="text-muted">Cliente no definido</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-truncate">
+                                <i class="fa fa-map-marker text-muted" title="Ubicación"/>
+                                <span t-if="record.ubicacion.raw_value"><field name="ubicacion"/></span>
+                                <span t-else="" class="text-muted">Ubicación no definida</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-truncate">
+                                <i class="fa fa-user-circle-o text-muted" title="Técnico responsable"/>
+                                <span t-if="record.user_id.raw_value"><field name="user_id"/></span>
+                                <span t-else="" class="text-muted">Técnico no asignado</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mt-2 small">
+                            <div class="col-7">
+                                <div class="text-muted">Programación</div>
+                                <div class="text-truncate">
+                                    <i class="fa fa-calendar me-1" title="Fecha programada"/>
+                                    <span t-if="record.schedule_date.raw_value"><field name="schedule_date"/></span>
+                                    <span t-else="" class="text-muted">Pendiente</span>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="text-muted">Duración</div>
+                                <div>
+                                    <i class="fa fa-clock-o me-1" title="Duración"/>
+                                    <span t-if="record.duration.raw_value"><field name="duration" widget="float_time"/></span>
+                                    <span t-else="" class="text-muted">Pendiente</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-1 mt-3">
+                            <span class="badge text-bg-warning" t-if="record.require_repuestos.raw_value">
+                                <i class="fa fa-cubes me-1" title="Repuestos"/> Repuestos
+                            </span>
+                            <span class="badge text-bg-danger" t-if="record.archive.raw_value">Cancelado</span>
+                        </div>
+
+                        <footer class="mt-auto pt-3 border-top">
+                            <div class="d-flex align-items-center">
+                                <field name="priority" widget="priority"/>
+                                <field name="activity_ids" widget="kanban_activity" class="ms-3"/>
+                            </div>
+                            <div class="d-flex ms-auto align-items-center">
+                                <field name="kanban_state" widget="state_selection" class="ms-1"/>
+                                <field name="user_id" widget="many2one_avatar_user" class="ms-1"/>
+                            </div>
+                        </footer>
+                    </div>
+                </t>
+            </xpath>
+        </field>
+    </record>
+</odoo>

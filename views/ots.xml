@@ -3,6 +3,7 @@
 
 
 	  <!-- Definición de la Secuencia -->
+	<data noupdate="1">
 	  <record id="seq_ot_mantenimiento" model="ir.sequence">
 		<field name="name">OT mantenimiento</field>
 		<field name="code">ot.mantenimiento.sequence</field>
@@ -11,6 +12,7 @@
 		<field name="number_next">1</field>
 		<field name="number_increment">1</field>
 	</record>
+	</data>
 
 
 
@@ -25,18 +27,13 @@
 				<button name="action_print_report"  type="object" string="Generar Reporte" class="oe_highlight" />
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Enviar correo a la Empresa" name="send_report_empresa" type="object" />
 				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  string="Enviar correo a la Sucursal" name="send_report_sucursal" type="object" />
-				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="crm_oportunidad_create" invisible="stage_id in (1, 2)" type="object" string="Crear Oportunidad" class="oe_highlight" />
-				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="set_firma_cliente_mantenimiento"  type="object" string="Solicitar firma del Servicio" class="oe_highlight" />
-				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  name="open_wizard_firma_empresa_acta" type="object" string="Solicitar firma de Acta" class="oe_highlight" />
-				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_stat_button"
-						type="object"
-						name="action_open_wizard"
-						icon="fa-whatsapp"
-						context="{'default_partner_id': empresa.id, 'full_name': True}">
-					<span class="o_stat_info">Enviar</span>
-				</button>
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner,pmant.group_pmant_vendedor" name="crm_oportunidad_create" invisible="not pmant_can_create_opportunity" type="object" string="Crear Oportunidad" class="oe_highlight" />
+				<button groups="pmant.group_pmant_admin,pmant.group_pmant_planner" name="open_wizard_acta_pdf" type="object" string="Descargar Acta PDF" class="oe_highlight" />
 				<button name="action_fech_up" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" invisible="stage_id != 3"  type="object" string="Actualizar Fecha Ejec." class="oe_highlight" />
 
+			</xpath>
+			<xpath expr="//button[@name='archive_equipment_request']" position="attributes">
+				<attribute name="invisible">True</attribute>
 			</xpath>
 			<xpath expr="//div[@class='oe_title']" position="before">
                 <widget name="web_ribbon" title="Requiere Repuestos" bg_color="text-bg-warning" invisible="not require_repuestos"/>
@@ -52,6 +49,9 @@
 				<field name="empresa" readonly="1" />
 				<field name="ubicacion" readonly="1" />
 				<field name="oportunidad" readonly="1"/>
+				<field name="pmant_can_create_opportunity" invisible="1"/>
+				<field name="pmant_commercial_user_ids" invisible="1"/>
+				<field name="pmant_followup_seller_id" groups="pmant.group_pmant_admin,pmant.group_pmant_planner" options="{'no_create': True}"/>
 				<field name="is_tecnico" invisible="1"/>
 				<!-- <field name="order_compra" invisible="is_tecnico"  options="{'no_quick_create': true, 'no_create_edit': true}"  domain="['|', ('cliente', '=', empresa), ('cliente', '=', ubicacion)]" /> -->
 				<!-- <field name="not_oc" /> -->
@@ -102,14 +102,6 @@
 				<!-- <page string="Acta firmado">
 					<field name="acta_firmado" widget="pdf_viewer"/>
 				</page> -->
-			</xpath>
-			<xpath expr="//sheet/div[@invisible='not archive']" position="before">
-				<div groups="pmant.group_pmant_admin,pmant.group_pmant_planner"  class="oe_button_box" name="button_box">
-						<button class="oe_stat_button" type="object" name="action_view_documentos"
-								icon="fa-file-text-o">
-								<field string="Documentos de firma" name="document_count" widget="statinfo"/>
-						</button>
-				</div>
 			</xpath>
 
 			<!-- LIMITRAR VISIVILIDA DE CAMPOSEN ORDENER DE TRABAJO -->
